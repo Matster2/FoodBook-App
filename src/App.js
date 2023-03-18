@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Link, Outlet } from 'react-router-dom';
 import { ThemeProvider, BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
 import { Restore as RestoreIcon, Favorite as FavoriteIcon, LocationOn as LocationOnIcon } from '@mui/icons-material';
 import { createTheme } from '@mui/material/styles';
@@ -12,6 +12,7 @@ import RecipeList from './pages/RecipeList';
 import SignIn from './pages/SignIn';
 import Register from './pages/Register';
 import ForgottenPassword from './pages/ForgottenPassword';
+import Settings from './pages/Settings';
 
 const App = () => {
   const { initialized, setInitialized } = useContext(AppContext);
@@ -21,6 +22,42 @@ const App = () => {
   }, []);
 
   const theme = createTheme({
+    typography: {
+      fontFamily: `"Urbanist", sans-serif`,
+      fontSize: 14,
+      fontWeightLight: 300,
+      fontWeightRegular: 400,
+      fontWeightMedium: 500,
+      h1: {
+        fontSize: ['1.6rem', '!important'],
+        fontWeight: 'bold',
+      },
+      h2: {
+        fontSize: ['1.5rem', '!important'],
+        fontWeight: 'bold',
+      },
+      h3: {
+        fontSize: ['1.4rem', '!important'],
+        fontWeight: 'bold',
+      },
+      h4: {
+        fontSize: ['1.3rem', '!important'],
+        fontWeight: 'bold',
+      },
+      h5: {
+        fontSize: ['1.2rem', '!important'],
+        fontWeight: 'bold',
+      },
+      h6: {
+        fontSize: ['1.0rem', '!important'],
+        fontWeight: 'bold',
+        marginBottom: '0.4rem',
+      },
+      subtitle2: {
+        fontSize: ['0.8rem', '!important'],
+        fontWeight: 'normal',
+      },
+    },
     palette: {
       background: {
         default: '#f5f5f5',
@@ -38,54 +75,72 @@ const App = () => {
           },
         },
       },
+      MuiChip: {
+        styleOverrides: {
+          colorPrimary: {
+            backgroundColor: '#ffffff',
+            color: '#757B7A',
+            borderRadius: 4,
+          },
+          colorSecondary: {
+            backgroundColor: '#ffffff',
+          },
+        },
+      },
     },
   });
 
   const router = createBrowserRouter([
     {
-      path: '/',
-      element: <Homepage />,
-    },
-    {
-      path: '/sign-in',
-      element: <SignIn />,
-    },
-    {
-      path: '/forgotten-password',
-      element: <ForgottenPassword />,
-    },
-    {
-      path: '/register',
-      element: <Register />,
-    },
-    {
-      path: '/recipes',
-      element: <RecipeList />,
-    },
-    {
-      path: '/recipes/:id',
-      element: <Recipe />,
+      element: <Layout />,
+      children: [
+        {
+          path: '/',
+          element: <Homepage />,
+        },
+        {
+          path: '/sign-in',
+          element: <SignIn />,
+        },
+        {
+          path: '/forgotten-password',
+          element: <ForgottenPassword />,
+        },
+        {
+          path: '/register',
+          element: <Register />,
+        },
+        {
+          path: '/recipes',
+          element: <RecipeList />,
+        },
+        {
+          path: '/recipes/:id',
+          element: <Recipe />,
+        },
+        {
+          path: '/settings',
+          element: <Settings />,
+        },
+      ],
     },
   ]);
 
-  return (
-    <ThemeProvider theme={theme}>
-      {initialized && (
-        <>
-          <RouterProvider router={router} />
-
-          <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-            <BottomNavigation showLabels>
-              <BottomNavigationAction label="Home" icon={<RestoreIcon />} />
-              <BottomNavigationAction label="Discover" icon={<FavoriteIcon />} />
-              <BottomNavigationAction label="Favourites" icon={<LocationOnIcon />} />
-              <BottomNavigationAction label="Settings" icon={<LocationOnIcon />} />
-            </BottomNavigation>
-          </Box>
-        </>
-      )}
-    </ThemeProvider>
-  );
+  return <ThemeProvider theme={theme}>{initialized && <RouterProvider router={router} />}</ThemeProvider>;
 };
+
+const Layout = () => (
+  <>
+    <Outlet />
+    <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 99999 }} elevation={3}>
+      <BottomNavigation showLabels className="buttom-nav">
+        <BottomNavigationAction component={Link} to="/" label="Home" icon={<RestoreIcon />} />
+        <BottomNavigationAction component={Link} to="/recipes" label="Discover" icon={<FavoriteIcon />} />
+        <BottomNavigationAction component={Link} to="/recipes" label="Favourites" icon={<LocationOnIcon />} />
+        <BottomNavigationAction component={Link} to="/settings" label="Settings" icon={<LocationOnIcon />} />
+      </BottomNavigation>
+    </Box>
+  </>
+);
 
 export default App;

@@ -86,6 +86,7 @@ export default () => {
       <Box
         sx={{
           marginTop: 8,
+          marginBottom: 5,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -93,7 +94,6 @@ export default () => {
       >
         <Box
           sx={{
-            marginBottom: 4,
             width: 80,
             height: 80,
             display: 'flex',
@@ -103,61 +103,76 @@ export default () => {
         >
           <img className={styles.logo} src={logo} alt="foodbook" />
         </Box>
+      </Box>
 
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Box component="form" noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+        }}
+      >
+        <Typography variant="h1">Sign In</Typography>
+      </Box>
 
-          <Box
-            sx={{
-              marginBottom: 4,
-              display: 'flex',
-              justifyContent: 'flex-end',
-            }}
-          >
-            <Link href="/forgotten-password" variant="body2">
-              Forgot password?
+      <Box sx={{ mt: 1 }}>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="Email Address"
+          name="email"
+          autoComplete="email"
+          autoFocus
+          value={email}
+          onChange={onEmailChange}
+          error={!isUndefined(inputErrors.email)}
+          helperText={inputErrors.email}
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          name="password"
+          label="Password"
+          type="password"
+          id="password"
+          autoComplete="current-password"
+          value={password}
+          onChange={onPasswordChange}
+          error={!isUndefined(inputErrors.password)}
+          helperText={inputErrors.password}
+        />
+
+        <Box
+          sx={{
+            marginBottom: 4,
+            display: 'flex',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <Link href="/forgotten-password" variant="body2">
+            Forgot password?
+          </Link>
+        </Box>
+
+        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          Sign In
+        </Button>
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <Typography variant="body2">
+            Don&apos;t have an account?
+            <Link sx={{ ml: 1 }} href="/register" variant="body2">
+              Sign Up
             </Link>
-          </Box>
-
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign In
-          </Button>
-
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography variant="body2">
-              Don&apos;t have an account?
-              <Link sx={{ ml: 1 }} href="register" variant="body2">
-                Sign Up
-              </Link>
-            </Typography>
-          </Box>
+          </Typography>
         </Box>
       </Box>
     </Container>

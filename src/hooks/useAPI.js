@@ -58,6 +58,17 @@ const useAPI = () => {
     });
   };
 
+  const getIngredients = async (parameters = {}) => {
+    const url = new URL(`${process.env.REACT_APP_API_URL}/ingredients`);
+    url.search = new URLSearchParams(parameters);
+
+    return axios.get(url.href, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
   return {
     queryEmail,
     forgotPassword,
@@ -65,6 +76,7 @@ const useAPI = () => {
     getMe,
     getRecipes,
     getRecipe,
+    getIngredients,
   };
 };
 

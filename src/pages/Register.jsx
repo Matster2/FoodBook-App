@@ -153,7 +153,9 @@ export default () => {
           justifyContent: 'flex-start',
         }}
       >
-        <Typography variant="h5">Create an account</Typography>
+        <Typography sx={{ fontWeight: 'bold' }} variant="h1">
+          Create an account
+        </Typography>
       </Box>
 
       <Box
@@ -216,7 +218,7 @@ export default () => {
       >
         <Typography variant="body2">
           Already have an account?
-          <Link sx={{ ml: 1 }} href="register" variant="body2">
+          <Link sx={{ ml: 1 }} href="/sign-in" variant="body2">
             Sign In
           </Link>
         </Typography>

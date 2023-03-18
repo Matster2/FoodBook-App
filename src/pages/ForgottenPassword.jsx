@@ -101,7 +101,7 @@ export default () => {
           justifyContent: 'flex-start',
         }}
       >
-        <Typography variant="h5">Forgotten Password</Typography>
+        <Typography variant="h1">Forgotten Password</Typography>
       </Box>
 
       <Box
@@ -135,7 +135,7 @@ export default () => {
         }}
       >
         <Typography variant="body2">
-          <Link sx={{ ml: 1 }} href="register" variant="body2">
+          <Link sx={{ ml: 1 }} href="/sign-in" variant="body2">
             Return to Sign In
           </Link>
         </Typography>

@@ -38,12 +38,12 @@ export default () => {
       <Grid container spacing={1}>
         <Grid item xs={6}>
           {recipes.map((recipe) => (
-            <RecipeTile recipe={recipe} onClick={handleRecipeClick} />
+            <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
           ))}
         </Grid>
         <Grid item xs={6}>
           {recipes.map((recipe) => (
-            <RecipeTile recipe={recipe} onClick={handleRecipeClick} />
+            <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
           ))}
         </Grid>
       </Grid>

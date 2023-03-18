@@ -1,7 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Grid, Card, Typography, Stack, Box } from '@mui/material';
+import {
+  AccessTime as AccessTimeIcon,
+  PeopleOutline as PeopleOutlineIcon,
+  Star as StarIcon,
+} from '@mui/icons-material';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from './RecipeTile.module.css';
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
 
 const RecipeTile = ({ recipe, onClick }) => {
   const handleClick = () => {
@@ -9,38 +17,42 @@ const RecipeTile = ({ recipe, onClick }) => {
   };
 
   return (
-    <Card onClick={handleClick}>
-      <div className={styles.imageContainer}>
-        <CardMedia
-          className={styles.img}
-          component="img"
-          sx={{ p: 1, maxWidth: 150, maxHeight: 150 }}
-          image="https://www.acouplecooks.com/wp-content/uploads/2021/03/Cheese-Tortellini-011.jpg"
-          alt="recipe"
-        />
-      </div>
-      <CardContent>
-        <Grid xs={12} container justifyContent="space-between" alignItems="center">
-          <Grid
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-start',
-            }}
-          >
+    <Card sx={{ p: 1 }} className={styles.card} onClick={handleClick}>
+      <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper}>
+        {recipe.images.map((image) => (
+          <SwiperSlide className={styles.imageContainer}>
+            <img className={styles.image} src={image} alt="recipe" />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+      <Box>
+        <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
+          <Grid item>
             <Typography className={styles.name}>{recipe.name}</Typography>
           </Grid>
-          <Grid
-            sx={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-            }}
-          >
-            <Typography>{recipe.rating}</Typography>
+          <Grid item>
+            <Stack direction="row" alignItems="center" gap={0.4}>
+              <StarIcon sx={{ color: '#FFB900' }} className={styles.icon} />
+              <Typography>{recipe.rating}</Typography>
+            </Stack>
           </Grid>
         </Grid>
 
-        <Typography>{recipe.totalTime}</Typography>
-      </CardContent>
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Grid item>
+            <Stack direction="row" alignItems="center" gap={0.4}>
+              <AccessTimeIcon className={styles.icon} />
+              <Typography>{recipe.totalTime} mins</Typography>
+            </Stack>
+          </Grid>
+          <Grid item>
+            <Stack direction="row" alignItems="center" gap={0.4}>
+              <PeopleOutlineIcon className={styles.icon} />
+              <Typography>{recipe.servings} servings</Typography>
+            </Stack>
+          </Grid>
+        </Grid>
+      </Box>
     </Card>
   );
 };
@@ -51,6 +63,7 @@ RecipeTile.propTypes = {
     name: PropTypes.string.isRequired,
     rating: PropTypes.number.isRequired,
     totalTime: PropTypes.number.isRequired,
+    images: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   onClick: PropTypes.func,
 };

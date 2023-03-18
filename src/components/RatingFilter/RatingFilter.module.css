@@ -1,0 +1,16 @@
+.component {
+    background-color: white;
+    color: #757B7A;
+    padding: 10px 20px;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid transparent;
+}
+
+.selected {
+    border: 1px solid #fb6b1c;
+    color: #fb6b1c;
+    background-color: #FFF5EF;
+}

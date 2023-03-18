@@ -1,14 +1,40 @@
+.card {
+  font-size: 12px !important;
+  border-radius: 10px !important;
+}
+
+.card p {
+  font-size: 10px !important;  
+}
 
 .name {
   font-weight: bold !important;
-  font-size: 11px;
+  font-size: 12px !important;
+}
+
+.swiper {
+  overflow: hidden;
+  height: 110px;
+  margin-bottom: 10px;
 }
 
 .imageContainer {
-  display: flex;
-  justify-content: center;
+  border-radius: 10px !important;
+  overflow: hidden;
 }
 
-.img {
-  border-radius: 15px !important;
+.image {
+  border-radius: 10px !important;
+  max-width: 100%;
+  height: auto;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.icon {
+  font-size: 15px !important;  
 }
