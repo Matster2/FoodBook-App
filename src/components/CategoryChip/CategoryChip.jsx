@@ -15,7 +15,7 @@ const CategoryChip = ({ category, onClick }) => {
 };
 
 CategoryChip.propTypes = {
-  category: PropTypes.objectOf({
+  category: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,

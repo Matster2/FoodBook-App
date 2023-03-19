@@ -32,7 +32,7 @@ const RecipeTile = ({ recipe, onClick }) => {
           </Grid>
           <Grid item>
             <Stack direction="row" alignItems="center" gap={0.4}>
-              <StarIcon sx={{ color: '#FFB900' }} className={styles.icon} />
+              <StarIcon sx={{ color: recipe.rating > 0 ? '#FFB900' : 'lightgrey' }} className={styles.icon} />
               <Typography>{recipe.rating}</Typography>
             </Stack>
           </Grid>
@@ -58,12 +58,13 @@ const RecipeTile = ({ recipe, onClick }) => {
 };
 
 RecipeTile.propTypes = {
-  recipe: PropTypes.objectOf({
+  recipe: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     rating: PropTypes.number.isRequired,
     totalTime: PropTypes.number.isRequired,
     images: PropTypes.arrayOf(PropTypes.string),
+    servings: PropTypes.number.isRequired,
   }).isRequired,
   onClick: PropTypes.func,
 };

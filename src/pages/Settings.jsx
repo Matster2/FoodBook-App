@@ -1,6 +1,85 @@
 import React from 'react';
-import { Container } from '@mui/material';
+import NiceModal from '@ebay/nice-modal-react';
+import { Container, List, ListItem, ListItemButton, ListItemText, Box, Typography } from '@mui/material';
+import useAuth from '../hooks/useAuth';
+import styles from './Settings.module.css';
+import logo from '../assets/logo.svg';
 
 export default () => {
-  return <Container />;
+  const { authenticated } = useAuth();
+
+  const handleSignInClick = () => {
+    NiceModal.show('authentication-modal');
+  };
+
+  return (
+    <Container>
+      <List>
+        {!authenticated && (
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }} onClick={handleSignInClick}>
+              <ListItemText primary="Sign In" />
+            </ListItemButton>
+          </ListItem>
+        )}
+
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="Contact Us" />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="Privacy Policy" />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemText primary="Terms of Service" />
+          </ListItemButton>
+        </ListItem>
+
+        {authenticated && (
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }}>
+              <ListItemText primary="Log Out" />
+            </ListItemButton>
+          </ListItem>
+        )}
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            m: 2,
+          }}
+        >
+          <Box
+            sx={{
+              width: 50,
+              height: 50,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              mb: 1,
+            }}
+          >
+            <img className={styles.logo} src={logo} alt="foodbook" />
+          </Box>
+          <Typography variant="body2">Version {process.env.REACT_APP_VERSION}</Typography>
+        </Box>
+
+        {authenticated && (
+          <ListItem disablePadding>
+            <ListItemButton sx={{ textAlign: 'center' }}>
+              <ListItemText primary="Delete account" />
+            </ListItemButton>
+          </ListItem>
+        )}
+      </List>
+    </Container>
+  );
 };

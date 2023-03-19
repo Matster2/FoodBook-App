@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import NiceModal from '@ebay/nice-modal-react';
 import PropTypes from 'prop-types';
 import {
   CssBaseline,
@@ -59,7 +60,7 @@ Section.propTypes = {
 export default () => {
   const navigate = useNavigate();
 
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(true);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   const { results: recentlyViewedRecipes } = usePagedFetch(`${process.env.REACT_APP_API_URL}/recipes`);
   const { results: recommendedRecipes } = usePagedFetch(`${process.env.REACT_APP_API_URL}/recipes`);
@@ -91,6 +92,10 @@ export default () => {
       name: 'Fast',
     },
   ];
+
+  const handleAvatarClick = () => {
+    NiceModal.show('authentication-modal');
+  };
 
   const handleCategoryClick = (id) => {
     navigate(`/recipes`);
@@ -143,7 +148,9 @@ export default () => {
             <Typography variant="h3">What would you like to cook today?</Typography>
           </Grid>
           <Grid xs="auto">
-            <Avatar sx={{ bgcolor: '#fb6b1c' }}>M</Avatar>
+            <Avatar sx={{ bgcolor: '#fb6b1c' }} onClick={handleAvatarClick}>
+              M
+            </Avatar>
           </Grid>
         </Grid>
       </Box>

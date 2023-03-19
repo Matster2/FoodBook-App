@@ -9,10 +9,9 @@ import { AppContext } from './contexts/AppContext';
 import Homepage from './pages/Homepage';
 import Recipe from './pages/Recipe';
 import RecipeList from './pages/RecipeList';
-import SignIn from './pages/SignIn';
-import Register from './pages/Register';
-import ForgottenPassword from './pages/ForgottenPassword';
 import Settings from './pages/Settings';
+
+import AuthenticationModal from './modals/AuthenticationModal';
 
 const App = () => {
   const { initialized, setInitialized } = useContext(AppContext);
@@ -99,28 +98,48 @@ const App = () => {
           element: <Homepage />,
         },
         {
-          path: '/sign-in',
-          element: <SignIn />,
-        },
-        {
-          path: '/forgotten-password',
-          element: <ForgottenPassword />,
-        },
-        {
-          path: '/register',
-          element: <Register />,
-        },
-        {
           path: '/recipes',
           element: <RecipeList />,
         },
         {
-          path: '/recipes/:id',
-          element: <Recipe />,
+          path: '/favourites',
+          element: <RecipeList />,
         },
         {
           path: '/settings',
           element: <Settings />,
+        },
+      ],
+    },
+    {
+      children: [
+        // {
+        //   path: '/sign-in',
+        //   element: (
+        //     <UnAuthRoute>
+        //       <SignIn />
+        //     </UnAuthRoute>
+        //   ),
+        // },
+        // {
+        //   path: '/forgotten-password',
+        //   element: (
+        //     <UnAuthRoute>
+        //       <ForgottenPassword />
+        //     </UnAuthRoute>
+        //   ),
+        // },
+        // {
+        //   path: '/register',
+        //   element: (
+        //     <UnAuthRoute>
+        //       <Register />
+        //     </UnAuthRoute>
+        //   ),
+        // },
+        {
+          path: '/recipes/:id',
+          element: <Recipe />,
         },
       ],
     },
@@ -129,18 +148,23 @@ const App = () => {
   return <ThemeProvider theme={theme}>{initialized && <RouterProvider router={router} />}</ThemeProvider>;
 };
 
-const Layout = () => (
-  <>
-    <Outlet />
-    <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 99999 }} elevation={3}>
-      <BottomNavigation showLabels className="buttom-nav">
-        <BottomNavigationAction component={Link} to="/" label="Home" icon={<RestoreIcon />} />
-        <BottomNavigationAction component={Link} to="/recipes" label="Discover" icon={<FavoriteIcon />} />
-        <BottomNavigationAction component={Link} to="/recipes" label="Favourites" icon={<LocationOnIcon />} />
-        <BottomNavigationAction component={Link} to="/settings" label="Settings" icon={<LocationOnIcon />} />
-      </BottomNavigation>
-    </Box>
-  </>
-);
+const Layout = () => {
+  return (
+    <>
+      <AuthenticationModal id="authentication-modal" />
+
+      <Outlet />
+
+      <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 999 }} elevation={3}>
+        <BottomNavigation showLabels className="buttom-nav">
+          <BottomNavigationAction component={Link} to="/" label="Home" icon={<RestoreIcon />} />
+          <BottomNavigationAction component={Link} to="/recipes" label="Discover" icon={<FavoriteIcon />} />
+          <BottomNavigationAction component={Link} to="/favourites" label="Favourites" icon={<LocationOnIcon />} />
+          <BottomNavigationAction component={Link} to="/settings" label="Settings" icon={<LocationOnIcon />} />
+        </BottomNavigation>
+      </Box>
+    </>
+  );
+};
 
 export default App;

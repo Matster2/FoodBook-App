@@ -12,9 +12,14 @@ import {
 } from '@mui/material';
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
 import { BottomSheet } from 'react-spring-bottom-sheet';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import useAPI from '../hooks/useAPI';
 
+import styles from './Recipe.module.css';
 import 'react-spring-bottom-sheet/dist/style.css';
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
+
 import { isUndefined } from '../utils/utils';
 
 export default () => {
@@ -53,11 +58,17 @@ export default () => {
 
   return (
     <Container>
-      <div>
-        <Typography variant="h1" />
-      </div>
+      <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.Swiper}>
+        {recipe.images.map((image) => (
+          <SwiperSlide>
+            <img src={image} alt="recipe" />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
       <BottomSheet
         open
+        blocking={false}
         defaultSnap={({ snapPoints, lastSnap }) => Math.max(...snapPoints)}
         snapPoints={({ maxHeight }) => [maxHeight - maxHeight / 10, maxHeight * 0.1]}
       >

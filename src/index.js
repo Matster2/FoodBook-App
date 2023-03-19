@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import NiceModal from '@ebay/nice-modal-react';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -8,7 +9,9 @@ import Providers from './contexts/Providers';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Providers>
-    <App />
+    <NiceModal.Provider>
+      <App />
+    </NiceModal.Provider>
   </Providers>
 );
 

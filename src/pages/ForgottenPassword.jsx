@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import { CssBaseline, Container, Typography, Link, TextField, Button, Box } from '@mui/material';
+import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
 import useInput from '../hooks/useInput';
 import useAPI from '../hooks/useAPI';
 import { isUndefined, isEmptyOrWhiteSpace } from '../utils/utils';
 import styles from './ForgottenPassword.module.css';
 import logo from '../assets/logo.svg';
 
-export default () => {
+const ForgottenPassword = ({ onSignInClick, onComplete }) => {
   const navigate = useNavigate();
   const api = useAPI();
 
@@ -49,7 +50,7 @@ export default () => {
 
       await api.forgotPassword(email);
 
-      navigate('/sign-in');
+      onComplete();
 
       // addToast(translate('admin.requests.brands.update.success'), {
       //   appearance: 'success',
@@ -135,11 +136,21 @@ export default () => {
         }}
       >
         <Typography variant="body2">
-          <Link sx={{ ml: 1 }} href="/sign-in" variant="body2">
+          {/* <Link sx={{ ml: 1 }} href="/sign-in" variant="body2">
             Return to Sign In
-          </Link>
+          </Link> */}
+          <Typography sx={{ ml: 0.5 }} display="inline" className="link" onClick={onSignInClick}>
+            Sign In
+          </Typography>
         </Typography>
       </Box>
     </Container>
   );
 };
+
+ForgottenPassword.propTypes = {
+  onSignInClick: PropTypes.func.isRequired,
+  onComplete: PropTypes.func.isRequired,
+};
+
+export default ForgottenPassword;

@@ -43,3 +43,9 @@ a:visited {
 .buttom-nav a:visited {
   color: #828282;
 }
+
+.link {
+  color: #fb6b1c;
+  text-decoration: none !important;
+  font-weight: bold;
+}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { CssBaseline, Container, Typography, Link, TextField, Button, Box } from '@mui/material';
+import PropTypes from 'prop-types';
+import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
 import useInput from '../hooks/useInput';
 import useAPI from '../hooks/useAPI';
 import useAuth from '../hooks/useAuth';
@@ -7,7 +8,7 @@ import { isUndefined, isEmptyOrWhiteSpace, isValidEmail } from '../utils/utils';
 import styles from './SignIn.module.css';
 import logo from '../assets/logo.svg';
 
-export default () => {
+const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
   const api = useAPI();
   const auth = useAuth();
 
@@ -55,13 +56,15 @@ export default () => {
     return isUndefined(newInputErrors.email) && isUndefined(newInputErrors.password);
   };
 
-  const login = async () => {
+  const handleSignInClick = async () => {
     if (!validateInputs()) {
       return;
     }
 
     try {
       await auth.login(email, password);
+
+      onComplete();
     } catch (e) {
       if (!isUndefined(e.response) && e.response.status === 400) {
         setErrorMessage('invalid login');
@@ -152,12 +155,15 @@ export default () => {
             justifyContent: 'flex-end',
           }}
         >
-          <Link href="/forgotten-password" variant="body2">
+          {/* <Link href="/forgotten-password" variant="body2">
             Forgot password?
-          </Link>
+          </Link> */}
+          <Typography inline className="link" onClick={onForgottenPasswordClick}>
+            Forgot password?
+          </Typography>
         </Box>
 
-        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+        <Button type="button" onClick={handleSignInClick} fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
           Sign In
         </Button>
 
@@ -169,12 +175,23 @@ export default () => {
         >
           <Typography variant="body2">
             Don&apos;t have an account?
-            <Link sx={{ ml: 1 }} href="/register" variant="body2">
+            {/* <Link sx={{ ml: 1 }} href="/register" variant="body2">
               Sign Up
-            </Link>
+            </Link> */}
+            <Typography sx={{ ml: 0.5 }} display="inline" className="link" onClick={onSignUpClick}>
+              Sign Up
+            </Typography>
           </Typography>
         </Box>
       </Box>
     </Container>
   );
 };
+
+SignIn.propTypes = {
+  onSignUpClick: PropTypes.func.isRequired,
+  onForgottenPasswordClick: PropTypes.func.isRequired,
+  onComplete: PropTypes.func.isRequired,
+};
+
+export default SignIn;

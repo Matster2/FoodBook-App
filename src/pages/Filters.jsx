@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { CssBaseline, Container, Typography, Button, TextField, Autocomplete, Chip, Box, Grid } from '@mui/material';
+import {
+  CssBaseline,
+  Container,
+  Typography,
+  Button,
+  TextField,
+  Autocomplete,
+  Chip,
+  Box,
+  Grid,
+  DialogTitle,
+  IconButton,
+} from '@mui/material';
+import { Close as CloseIcon } from '@mui/icons-material';
 import useFilters from '../hooks/useFilters';
 import RatingFilter from '../components/RatingFilter';
 import useAPI from '../hooks/useAPI';
+import styles from './Fitlers.module.css';
 
 const Filters = ({ onApply }) => {
   const api = useAPI();
@@ -13,6 +27,7 @@ const Filters = ({ onApply }) => {
     rating: undefined,
   });
   const [ingredients, setIngredients] = useState([]);
+  const [searchIngredients, setSearchIngredients] = useState([]);
 
   const [ingredientSearch, setIngredientSearch] = useState('');
 
@@ -20,7 +35,7 @@ const Filters = ({ onApply }) => {
   const times = ['Fast', 'Medium', 'Long'];
 
   const removeIngredient = (id) => {
-    const ingredientIds = filters.ingredientIds.filters((x) => x !== id);
+    const ingredientIds = filters.ingredientIds.filter((x) => x !== id);
     setFilter('ingredientIds', ingredientIds);
 
     const newIngredients = ingredients.filter((x) => x.id !== id);
@@ -32,6 +47,11 @@ const Filters = ({ onApply }) => {
     setFilter('rating', newRating);
   };
 
+  const handleAddIngredient = (ingredient) => {
+    setIngredients([...ingredients, ingredient]);
+    setFilter('ingredientIds', [...filters.ingredientIds, ingredient.id]);
+  };
+
   const handleApplyClick = () => {
     onApply();
   };
@@ -41,7 +61,7 @@ const Filters = ({ onApply }) => {
       const {
         data: { results },
       } = await api.getIngredients({ search: ingredientSearch, pageSize: 50, sortBy: 'name' });
-      setIngredients(results);
+      setSearchIngredients(results);
     }, 3000);
 
     return () => clearTimeout(delayDebounce);
@@ -50,6 +70,11 @@ const Filters = ({ onApply }) => {
   return (
     <Container component="main" maxWidth="lg" sx={{ pt: 5 }}>
       <CssBaseline />
+      <DialogTitle disableTypography className={styles.dialogTitle}>
+        <IconButton>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
 
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6">Type</Typography>
@@ -69,14 +94,21 @@ const Filters = ({ onApply }) => {
         <Typography variant="h6">Ingredients</Typography>
 
         <Autocomplete
-          disablePortal
-          id="combo-box-demo"
-          options={ingredients.map((ingredient) => ({ label: ingredient.name, id: ingredient.id }))}
+          options={searchIngredients
+            .filter(
+              (ingredient) => !ingredients.some((filteredIngredients) => filteredIngredients.id === ingredient.id)
+            )
+            .map((ingredient) => ({ label: ingredient.name, ingredient }))}
           // eslint-disable-next-line react/jsx-props-no-spreading
           renderInput={(params) => <TextField {...params} label="Add Ingredient" />}
+          value={ingredientSearch}
           inputValue={ingredientSearch}
           onInputChange={(event, newValue) => {
             setIngredientSearch(newValue);
+          }}
+          onChange={(event, value) => {
+            setIngredientSearch('');
+            handleAddIngredient(value.ingredient);
           }}
         />
 

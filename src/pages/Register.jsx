@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { CssBaseline, Container, Typography, Link, TextField, Button, Box } from '@mui/material';
+import PropTypes from 'prop-types';
+import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import styles from './Register.module.css';
 import useInput from '../hooks/useInput';
@@ -7,7 +8,7 @@ import useAPI from '../hooks/useAPI';
 import { isUndefined, isEmptyOrWhiteSpace, isValidEmail } from '../utils/utils';
 import logo from '../assets/logo.svg';
 
-export default () => {
+const Register = ({ onSignInClick, onComplete }) => {
   const navigate = useNavigate();
   const api = useAPI();
 
@@ -101,7 +102,7 @@ export default () => {
 
       await api.register(email, password);
 
-      navigate('/sign-in');
+      onComplete();
 
       // addToast(translate('admin.requests.brands.update.success'), {
       //   appearance: 'success',
@@ -218,11 +219,21 @@ export default () => {
       >
         <Typography variant="body2">
           Already have an account?
-          <Link sx={{ ml: 1 }} href="/sign-in" variant="body2">
+          {/* <Link sx={{ ml: 1 }} href="/sign-in" variant="body2">
             Sign In
-          </Link>
+          </Link> */}
+          <Typography sx={{ ml: 0.5 }} display="inline" className="link" onClick={onSignInClick}>
+            Sign In
+          </Typography>
         </Typography>
       </Box>
     </Container>
   );
 };
+
+Register.propTypes = {
+  onSignInClick: PropTypes.func.isRequired,
+  onComplete: PropTypes.func.isRequired,
+};
+
+export default Register;
