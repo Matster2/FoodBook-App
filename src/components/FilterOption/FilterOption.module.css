@@ -1,0 +1,16 @@
+.component {
+    background-color: white;
+    color: #757B7A;
+    padding: 8px 20px;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    display: inline-block;
+    width:fit-content !important;
+}
+
+.active {
+    border: 1px solid #fb6b1c;
+    color: #fb6b1c;
+    background-color: #FFF5EF;
+}

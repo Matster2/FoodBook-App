@@ -8,7 +8,6 @@ import {
   Box,
   TextField,
   InputAdornment,
-  IconButton,
   Grid,
   Avatar,
   Stack,
@@ -17,9 +16,10 @@ import {
   Slide,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { AccountCircle, Alarm as AlarmIcon } from '@mui/icons-material';
+import { AccountCircle } from '@mui/icons-material';
 import Filters from './Filters';
 import RecipeTile from '../components/RecipeTile';
+import FilterButton from '../components/FilterButton';
 import CategoryChip from '../components/CategoryChip';
 import usePagedFetch from '../hooks/usePagedFetch';
 
@@ -156,19 +156,24 @@ export default () => {
       </Box>
 
       <Box sx={{ mb: 3 }}>
-        <TextField
-          id="input-with-icon-adornment"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <AccountCircle />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <IconButton onClick={handleAdvancedFiltersClick}>
-          <AlarmIcon />
-        </IconButton>
+        <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
+          <Grid item xs>
+            <TextField
+              fullWidth
+              id="input-with-icon-adornment"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid xs="auto">
+            <FilterButton onClick={handleAdvancedFiltersClick} />
+          </Grid>
+        </Grid>
       </Box>
 
       <Section title="Categories">

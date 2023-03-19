@@ -12,10 +12,12 @@ import {
   Grid,
   DialogTitle,
   IconButton,
+  Stack,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import useFilters from '../hooks/useFilters';
 import RatingFilter from '../components/RatingFilter';
+import FilterOption from '../components/FilterOption';
 import useAPI from '../hooks/useAPI';
 import styles from './Fitlers.module.css';
 
@@ -25,6 +27,8 @@ const Filters = ({ onApply }) => {
   const { filters, setFilter } = useFilters({
     ingredientIds: [],
     rating: undefined,
+    time: undefined,
+    types: [],
   });
   const [ingredients, setIngredients] = useState([]);
   const [searchIngredients, setSearchIngredients] = useState([]);
@@ -40,6 +44,21 @@ const Filters = ({ onApply }) => {
 
     const newIngredients = ingredients.filter((x) => x.id !== id);
     setIngredients(newIngredients);
+  };
+
+  const handleTypeClick = (type) => {
+    const newTypes = filters.types.filter((x) => x !== type);
+
+    if (!filters.types.some((x) => x === type)) {
+      newTypes.push(type);
+    }
+
+    setFilter('types', newTypes);
+  };
+
+  const handleTimeClick = (time) => {
+    const newTime = filters.time !== time ? time : undefined;
+    setFilter('time', newTime);
   };
 
   const handleRatingClick = (rating) => {
@@ -78,16 +97,27 @@ const Filters = ({ onApply }) => {
 
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6">Type</Typography>
-        {types.map((type) => (
-          <Button variant="text">{type}</Button>
-        ))}
+
+        <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
+          {types.map((type) => (
+            <FilterOption
+              label={type}
+              value={type}
+              onClick={handleTypeClick}
+              active={filters.types.some((x) => x === type)}
+            />
+          ))}
+        </Stack>
       </Box>
 
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6">Time</Typography>
-        {times.map((time) => (
-          <Button variant="text">{time}</Button>
-        ))}
+
+        <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
+          {times.map((time) => (
+            <FilterOption label={time} value={time} onClick={handleTimeClick} active={filters.time === time} />
+          ))}
+        </Stack>
       </Box>
 
       <Box sx={{ mb: 3 }}>
@@ -112,11 +142,13 @@ const Filters = ({ onApply }) => {
           }}
         />
 
-        {filters.ingredientIds.map((ingredientId) => {
-          const ingredient = ingredients.find((x) => x.id === ingredientId);
+        <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
+          {filters.ingredientIds.map((ingredientId) => {
+            const ingredient = ingredients.find((x) => x.id === ingredientId);
 
-          return <Chip label={ingredient.name} onDelete={() => removeIngredient(ingredient.id)} />;
-        })}
+            return <Chip label={ingredient.name} onDelete={() => removeIngredient(ingredient.id)} />;
+          })}
+        </Stack>
       </Box>
 
       <Box sx={{ mb: 3 }}>
