@@ -43,7 +43,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
         return undefined;
       })(),
       password: (() => {
-        if (isEmptyOrWhiteSpace(email)) {
+        if (isEmptyOrWhiteSpace(password)) {
           return 'Password is required';
         }
 

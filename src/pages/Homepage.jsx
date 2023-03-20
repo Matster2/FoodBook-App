@@ -45,8 +45,6 @@ const Section = ({ title, children }) => (
     <List style={{ overflow: 'auto' }}>
       <Stack direction="row" alignItems="center" gap={2}>
         {children}
-        {children}
-        {children}
       </Stack>
     </List>
   </Box>
@@ -62,36 +60,17 @@ export default () => {
 
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  const { results: recentlyViewedRecipes } = usePagedFetch(`${process.env.REACT_APP_API_URL}/recipes`);
-  const { results: recommendedRecipes } = usePagedFetch(`${process.env.REACT_APP_API_URL}/recipes`);
-  const { results: favouriteRecipes } = usePagedFetch(`${process.env.REACT_APP_API_URL}/recipes`);
+  const { results: categories } = usePagedFetch(`${process.env.REACT_APP_API_URL}/tags?random=true&pageSize=10`);
 
-  const categories = [
-    {
-      id: 1,
-      name: 'Vegetables',
-    },
-    {
-      id: 1,
-      name: 'Fish',
-    },
-    {
-      id: 1,
-      name: 'Meat',
-    },
-    {
-      id: 1,
-      name: 'Desserts',
-    },
-    {
-      id: 1,
-      name: 'Soups',
-    },
-    {
-      id: 1,
-      name: 'Fast',
-    },
-  ];
+  const { results: recentlyViewedRecipes } = usePagedFetch(
+    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
+  );
+  const { results: recommendedRecipes } = usePagedFetch(
+    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
+  );
+  const { results: favouriteRecipes } = usePagedFetch(
+    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
+  );
 
   const handleAvatarClick = () => {
     NiceModal.show('authentication-modal');

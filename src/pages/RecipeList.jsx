@@ -3,6 +3,7 @@ import { Container, Grid, TextField, Box, InputAdornment, CssBaseline, Dialog, S
 import { AccountCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import RecipeTile from '../components/RecipeTile';
+import Header from '../components/Header';
 import Filters from './Filters';
 import FilterButton from '../components/FilterButton';
 import useAPI from '../hooks/useAPI';
@@ -67,8 +68,9 @@ export default () => {
         <Filters onApply={handleFiltersApplied} />
       </Dialog>
 
-      <h1>Recipe List</h1>
-      <Box sx={{ mb: 3 }}>
+      <Header />
+
+      <Box sx={{ mb: 3, mt: 5 }}>
         <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
           <Grid item xs>
             <TextField

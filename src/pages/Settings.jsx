@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import NiceModal from '@ebay/nice-modal-react';
 import { Container, List, ListItem, ListItemButton, ListItemText, Box, Typography } from '@mui/material';
 import useAuth from '../hooks/useAuth';
@@ -24,7 +25,7 @@ export default () => {
         )}
 
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton component={Link} to="/contact-us">
             <ListItemText primary="Contact Us" />
           </ListItemButton>
         </ListItem>
