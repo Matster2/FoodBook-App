@@ -1,3 +1,31 @@
 .swiper {
   max-height: 50%;
 }
+
+.ingredientList {
+  font-size: 20px;
+  color: #555555;
+  padding-left: 2rem;
+  margin-top: 0px;
+}
+
+.ingredientList li {
+  padding: 0.1rem 0rem;
+}
+
+.ingredientList li > span {
+    font-size: 14px;
+}
+
+.ingredientName {
+  font-weight: bold;
+}
+
+.showMoreLink {
+  font-weight: bold;
+}
+
+.showLessLink {
+  font-weight: bold;
+  color: #555555;
+}

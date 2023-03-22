@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import NiceModal from '@ebay/nice-modal-react';
 import PropTypes from 'prop-types';
 import {
@@ -22,24 +22,29 @@ import RecipeTile from '../components/RecipeTile';
 import FilterButton from '../components/FilterButton';
 import CategoryChip from '../components/CategoryChip';
 import usePagedFetch from '../hooks/usePagedFetch';
+import { TagContext } from '../contexts/TagContext';
+import { UserContext } from '../contexts/UserContext';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
+import { isUndefined } from '../utils/utils';
 
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <Slide direction="left" ref={ref} {...props} />;
 });
 
-const Section = ({ title, children }) => (
+const Section = ({ title, seeAll, children }) => (
   <Box sx={{ mb: 2 }}>
     <Grid item xs={12} container justifyContent="space-between" alignItems="center">
       <Grid item xs>
         <Typography variant="h5">{title}</Typography>
       </Grid>
-      <Grid item xs="auto">
-        <Link to="/recipes">See all</Link>
-      </Grid>
+      {seeAll && (
+        <Grid item xs="auto">
+          <Link to="/recipes">See all</Link>
+        </Grid>
+      )}
     </Grid>
 
     <List style={{ overflow: 'auto' }}>
@@ -52,32 +57,51 @@ const Section = ({ title, children }) => (
 
 Section.propTypes = {
   title: PropTypes.string.isRequired,
+  seeAll: PropTypes.bool,
   children: PropTypes.node.isRequired,
+};
+
+Section.defaultProps = {
+  seeAll: true,
 };
 
 export default () => {
   const navigate = useNavigate();
 
+  const { setTags } = useContext(TagContext);
+  const { user } = useContext(UserContext);
+
+  const [filters] = useState({});
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  const { results: categories } = usePagedFetch(`${process.env.REACT_APP_API_URL}/tags?random=true&pageSize=10`);
+  const { results: categories, totalResults: totalCategories } = usePagedFetch(
+    `${process.env.REACT_APP_API_URL}/tags?random=true&pageSize=10`
+  );
 
-  const { results: recentlyViewedRecipes } = usePagedFetch(
+  const { results: recentlyViewedRecipes, totalResults: totalRecentlyViewedRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
   );
-  const { results: recommendedRecipes } = usePagedFetch(
+  const { results: recommendedRecipes, totalResults: totalRecommendedRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
   );
-  const { results: favouriteRecipes } = usePagedFetch(
+  const { results: favouriteRecipes, totalResults: totalFavouriteRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
   );
+
+  const { results: tags } = usePagedFetch(`${process.env.REACT_APP_API_URL}/tags`);
 
   const handleAvatarClick = () => {
     NiceModal.show('authentication-modal');
   };
 
   const handleCategoryClick = (id) => {
-    navigate(`/recipes`);
+    navigate(`/recipes`, {
+      state: {
+        filters: {
+          tagIds: [id],
+        },
+      },
+    });
   };
 
   const handleRecipeClick = (id) => {
@@ -88,8 +112,25 @@ export default () => {
     setShowAdvancedFilters(true);
   };
 
-  const handleFiltersApplied = () => {
+  const handleFiltersApplied = (newFilters) => {
     setShowAdvancedFilters(false);
+    navigate(`/recipes`, {
+      state: {
+        filters: newFilters,
+      },
+    });
+  };
+
+  useEffect(() => {
+    setTags(tags);
+  }, [tags]);
+
+  const getWelcomeMessage = () => {
+    if (user?.firstName) {
+      return `Welcome, ${user.firstName}`;
+    }
+
+    return 'Welcome';
   };
 
   const renderRecipeTile = (recipe) => (
@@ -123,13 +164,11 @@ export default () => {
       <Box sx={{ mb: 3, mt: 5 }}>
         <Grid item xs={12} container justifyContent="space-between" alignItems="center">
           <Grid item xs>
-            <Typography variant="subtitle2">Welcome, Matthew</Typography>
+            <Typography variant="subtitle2">{getWelcomeMessage()}</Typography>
             <Typography variant="h3">What would you like to cook today?</Typography>
           </Grid>
           <Grid xs="auto">
-            <Avatar sx={{ bgcolor: '#fb6b1c' }} onClick={handleAvatarClick}>
-              M
-            </Avatar>
+            <Avatar sx={{ bgcolor: !isUndefined(user) ? '#fb6b1c' : 'grey' }} onClick={handleAvatarClick} />
           </Grid>
         </Grid>
       </Box>
@@ -155,22 +194,28 @@ export default () => {
         </Grid>
       </Box>
 
-      <Section title="Categories">
+      <Section title="Categories" seeAll={categories.length < totalCategories}>
         {categories.map((category) => (
           <CategoryChip category={category} onClick={handleCategoryClick} />
         ))}
       </Section>
 
       {recommendedRecipes.length > 0 && (
-        <Section title="Recommendations">{recommendedRecipes.map((recipe) => renderRecipeTile(recipe))}</Section>
+        <Section title="Recommendations" seeAll={recommendedRecipes.length < totalRecommendedRecipes}>
+          {recommendedRecipes.map((recipe) => renderRecipeTile(recipe))}
+        </Section>
       )}
 
       {favouriteRecipes.length > 0 && (
-        <Section title="Favourite Recipes">{favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}</Section>
+        <Section title="Favourite Recipes" seeAll={favouriteRecipes.length < totalFavouriteRecipes}>
+          {favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}
+        </Section>
       )}
 
       {recentlyViewedRecipes.length > 0 && (
-        <Section title="Recently Viewed">{recentlyViewedRecipes.map((recipe) => renderRecipeTile(recipe))}</Section>
+        <Section title="Recently Viewed" seeAll={recentlyViewedRecipes.length < totalRecentlyViewedRecipes}>
+          {recentlyViewedRecipes.map((recipe) => renderRecipeTile(recipe))}
+        </Section>
       )}
     </Container>
   );

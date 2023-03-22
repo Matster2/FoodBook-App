@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   CssBaseline,
@@ -18,25 +18,48 @@ import { Close as CloseIcon } from '@mui/icons-material';
 import useFilters from '../hooks/useFilters';
 import RatingFilter from '../components/RatingFilter';
 import FilterOption from '../components/FilterOption';
+import { TagContext } from '../contexts/TagContext';
 import useAPI from '../hooks/useAPI';
 import styles from './Fitlers.module.css';
+import { isUndefined } from '../utils/utils';
 
-const Filters = ({ onApply }) => {
+const Filters = ({ filters: originalFilters, onApply }) => {
   const api = useAPI();
+
+  const { tags } = useContext(TagContext);
 
   const { filters, setFilter } = useFilters({
     ingredientIds: [],
     rating: undefined,
     time: undefined,
     types: [],
+    tagIds: [],
+    ...originalFilters,
   });
   const [ingredients, setIngredients] = useState([]);
   const [searchIngredients, setSearchIngredients] = useState([]);
 
   const [ingredientSearch, setIngredientSearch] = useState('');
+  const [selectedTime, setSelectedTime] = useState();
 
-  const types = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
-  const times = ['Fast', 'Medium', 'Long'];
+  const types = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Drink'];
+  const timeOptions = [
+    {
+      label: 'Fast',
+      minTotalTime: undefined,
+      maxTotalTime: 15,
+    },
+    {
+      label: 'Medium',
+      minTotalTime: 15,
+      maxTotalTime: 45,
+    },
+    {
+      label: 'Slow',
+      minTotalTime: 45,
+      maxTotalTime: undefined,
+    },
+  ];
 
   const removeIngredient = (id) => {
     const ingredientIds = filters.ingredientIds.filter((x) => x !== id);
@@ -57,8 +80,30 @@ const Filters = ({ onApply }) => {
   };
 
   const handleTimeClick = (time) => {
-    const newTime = filters.time !== time ? time : undefined;
-    setFilter('time', newTime);
+    const selectedTimeOption = timeOptions.find((x) => x.label === time);
+    const newTime = selectedTime !== selectedTimeOption.label ? selectedTimeOption.label : undefined;
+    setSelectedTime(newTime);
+
+    let newMinTotalTime;
+    let newMaxTotalTime;
+
+    if (!isUndefined(newTime)) {
+      newMinTotalTime = selectedTimeOption.minTotalTime;
+      newMaxTotalTime = selectedTimeOption.maxTotalTime;
+    }
+
+    setFilter('minTotalTime', newMinTotalTime);
+    setFilter('maxTotalTime', newMaxTotalTime);
+  };
+
+  const handleTagClick = (tagId) => {
+    const newTagIds = filters.tagIds.filter((x) => x !== tagId);
+
+    if (!filters.tagIds.some((x) => x === tagId)) {
+      newTagIds.push(tagId);
+    }
+
+    setFilter('tagIds', newTagIds);
   };
 
   const handleRatingClick = (rating) => {
@@ -72,7 +117,7 @@ const Filters = ({ onApply }) => {
   };
 
   const handleApplyClick = () => {
-    onApply();
+    onApply(filters);
   };
 
   useEffect(() => {
@@ -114,8 +159,28 @@ const Filters = ({ onApply }) => {
         <Typography variant="h6">Time</Typography>
 
         <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
-          {times.map((time) => (
-            <FilterOption label={time} value={time} onClick={handleTimeClick} active={filters.time === time} />
+          {timeOptions.map((timeOption) => (
+            <FilterOption
+              label={timeOption.label}
+              value={timeOption.label}
+              onClick={handleTimeClick}
+              active={selectedTime === timeOption.label}
+            />
+          ))}
+        </Stack>
+      </Box>
+
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h6">Tags</Typography>
+
+        <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
+          {tags.map((tag) => (
+            <FilterOption
+              label={tag.name}
+              value={tag.id}
+              onClick={handleTagClick}
+              active={filters.tagIds.some((x) => x === tag.id)}
+            />
           ))}
         </Stack>
       </Box>
@@ -186,8 +251,12 @@ const Filters = ({ onApply }) => {
 
 Filters.propTypes = {
   onApply: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  filters: PropTypes.object,
 };
 
-Filters.defaultProps = {};
+Filters.defaultProps = {
+  filters: {},
+};
 
 export default Filters;

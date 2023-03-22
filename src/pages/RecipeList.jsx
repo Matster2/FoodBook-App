@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Container, Grid, TextField, Box, InputAdornment, CssBaseline, Dialog, Slide } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import RecipeTile from '../components/RecipeTile';
 import Header from '../components/Header';
 import Filters from './Filters';
 import FilterButton from '../components/FilterButton';
 import useAPI from '../hooks/useAPI';
+import { isUndefined } from '../utils/utils';
+import { TagContext } from '../contexts/TagContext';
 
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -16,18 +18,47 @@ const Transition = React.forwardRef((props, ref) => {
 export default () => {
   const api = useAPI();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const { setTags } = useContext(TagContext);
 
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
+  const [filters, setFilters] = useState({});
+
+  const [loadingTags, setLoadingTags] = useState(false);
   const [loadingRecipes, setLoadingRecipes] = useState(false);
   const [recipes, setRecipes] = useState([]);
+
+  const fetchTags = async () => {
+    setLoadingTags(true);
+    try {
+      setLoadingTags(true);
+      const { data } = await api.getTags();
+      setTags(data.results);
+    } catch {
+      console.log('error fetching tags');
+    }
+    setLoadingTags(false);
+  };
+
+  useEffect(() => {
+    if (!isUndefined(location?.state?.filters)) {
+      setFilters({
+        ...location.state.filters,
+        pageSize: 40,
+      });
+    }
+
+    fetchTags();
+  }, []);
 
   useEffect(() => {
     const fetchRecipes = async () => {
       setLoadingRecipes(true);
       try {
         setLoadingRecipes(true);
-        const { data } = await api.getRecipes();
+        const { data } = await api.getRecipes(filters);
         setRecipes(data.results);
       } catch {
         console.log('error fetching recipes');
@@ -36,7 +67,7 @@ export default () => {
     };
 
     fetchRecipes();
-  }, []);
+  }, [filters]);
 
   const handleAdvancedFiltersClick = () => {
     setShowAdvancedFilters(true);
@@ -93,14 +124,18 @@ export default () => {
 
       <Grid container spacing={1}>
         <Grid item xs={6}>
-          {recipes.map((recipe) => (
-            <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-          ))}
+          {recipes
+            .filter((_, index) => !(index % 2))
+            .map((recipe) => (
+              <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+            ))}
         </Grid>
         <Grid item xs={6}>
-          {recipes.map((recipe) => (
-            <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-          ))}
+          {recipes
+            .filter((_, index) => index % 2)
+            .map((recipe) => (
+              <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+            ))}
         </Grid>
       </Grid>
     </Container>
