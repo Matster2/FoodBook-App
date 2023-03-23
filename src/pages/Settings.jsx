@@ -1,12 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+
 import NiceModal from '@ebay/nice-modal-react';
 import { Container, List, ListItem, ListItemButton, ListItemText, Box, Typography } from '@mui/material';
 import useAuth from '../hooks/useAuth';
 import styles from './Settings.module.css';
 import logo from '../assets/logo.svg';
+import Header from '../components/Header';
 
 export default () => {
+  const navigate = useNavigate();
+
   const { authenticated } = useAuth();
 
   const handleSignInClick = () => {
@@ -15,6 +19,8 @@ export default () => {
 
   return (
     <Container>
+      <Header title="" onBackClick={() => navigate(-1)} />
+
       <List>
         {!authenticated && (
           <ListItem disablePadding>

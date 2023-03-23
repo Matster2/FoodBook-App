@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Container, Grid, TextField, Box, InputAdornment, CssBaseline, Dialog, Slide } from '@mui/material';
-import { AccountCircle } from '@mui/icons-material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import RecipeTile from '../components/RecipeTile';
 import Header from '../components/Header';
@@ -9,6 +8,8 @@ import FilterButton from '../components/FilterButton';
 import useAPI from '../hooks/useAPI';
 import { isUndefined } from '../utils/utils';
 import { TagContext } from '../contexts/TagContext';
+import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
+import styles from './Recipes.module.css';
 
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -96,21 +97,22 @@ export default () => {
           },
         }}
       >
-        <Filters onApply={handleFiltersApplied} />
+        <Filters filters={filters} onApply={handleFiltersApplied} onClose={() => setShowAdvancedFilters(false)} />
       </Dialog>
 
-      <Header />
+      <Header title="Recipes" onBackClick={() => navigate(-1)} />
 
-      <Box sx={{ mb: 3, mt: 5 }}>
+      <Box sx={{ mb: 3 }}>
         <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
           <Grid item xs>
             <TextField
               fullWidth
               id="input-with-icon-adornment"
+              placeholder="Search recipes"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <AccountCircle />
+                    <SearchIcon className={styles.searchIcon} />
                   </InputAdornment>
                 ),
               }}

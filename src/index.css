@@ -37,15 +37,12 @@ a:visited {
   text-decoration: none;
 }
 
-.buttom-nav a {
-  color: #828282;
-}
-.buttom-nav a:visited {
-  color: #828282;
-}
-
 .link {
   color: #fb6b1c;
   text-decoration: none !important;
   font-weight: bold;
+}
+
+.MuiInputBase-root {
+  background-color: white !important;
 }

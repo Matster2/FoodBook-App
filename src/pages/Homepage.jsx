@@ -16,7 +16,6 @@ import {
   Slide,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { AccountCircle } from '@mui/icons-material';
 import Filters from './Filters';
 import RecipeTile from '../components/RecipeTile';
 import FilterButton from '../components/FilterButton';
@@ -28,6 +27,8 @@ import { UserContext } from '../contexts/UserContext';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import { isUndefined } from '../utils/utils';
+import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
+import styles from './Homepage.module.css';
 
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -144,7 +145,7 @@ export default () => {
   );
 
   return (
-    <Container>
+    <Container sx={{ pb: 7 }}>
       <CssBaseline />
 
       <Dialog
@@ -158,7 +159,7 @@ export default () => {
           },
         }}
       >
-        <Filters onApply={handleFiltersApplied} />
+        <Filters onApply={handleFiltersApplied} onClose={() => setShowAdvancedFilters(false)} />
       </Dialog>
 
       <Box sx={{ mb: 3, mt: 5 }}>
@@ -179,10 +180,11 @@ export default () => {
             <TextField
               fullWidth
               id="input-with-icon-adornment"
+              placeholder="Search recipes"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <AccountCircle />
+                    <SearchIcon className={styles.searchIcon} />
                   </InputAdornment>
                 ),
               }}

@@ -1,8 +1,9 @@
 import React, { useContext, useEffect } from 'react';
 import axios from 'axios';
-import { createBrowserRouter, RouterProvider, Link, Outlet } from 'react-router-dom';
+import classnames from 'classnames';
+import { Toaster } from 'react-hot-toast';
+import { createBrowserRouter, RouterProvider, Link, Outlet, useLocation, matchPath } from 'react-router-dom';
 import { ThemeProvider, BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
-import { Restore as RestoreIcon, Favorite as FavoriteIcon, LocationOn as LocationOnIcon } from '@mui/icons-material';
 import { createTheme } from '@mui/material/styles';
 
 import { AppContext } from './contexts/AppContext';
@@ -11,12 +12,19 @@ import useAuth from './hooks/useAuth';
 
 import Homepage from './pages/Homepage';
 import Recipe from './pages/Recipe';
-import RecipeList from './pages/RecipeList';
+import Recipes from './pages/Recipes';
+import Favourites from './pages/Favourites';
 import Settings from './pages/Settings';
 import ContactUs from './pages/ContactUs';
 
 import AuthenticationModal from './modals/AuthenticationModal';
 import useAPI from './hooks/useAPI';
+
+import styles from './App.module.css';
+import { ReactComponent as HomeIcon } from './assets/icons/home.svg';
+import { ReactComponent as DiscoverIcon } from './assets/icons/discover.svg';
+import { ReactComponent as HeartIcon } from './assets/icons/heart.svg';
+import { ReactComponent as SettingsIcon } from './assets/icons/cog.svg';
 
 const App = () => {
   const {
@@ -136,6 +144,9 @@ const App = () => {
       },
     },
     palette: {
+      divider: {
+        background: 'white',
+      },
       background: {
         default: '#f5f5f5',
       },
@@ -164,6 +175,14 @@ const App = () => {
           },
         },
       },
+      MuiInputAdornment: {
+        styleOverrides: {
+          root: {
+            backgroundColor: 'white',
+            background: 'white',
+          },
+        },
+      },
     },
   });
 
@@ -177,11 +196,11 @@ const App = () => {
         },
         {
           path: '/recipes',
-          element: <RecipeList />,
+          element: <Recipes />,
         },
         {
           path: '/favourites',
-          element: <RecipeList />,
+          element: <Favourites />,
         },
         {
           path: '/settings',
@@ -227,10 +246,60 @@ const App = () => {
     },
   ]);
 
-  return <ThemeProvider theme={theme}>{initialized && <RouterProvider router={router} />}</ThemeProvider>;
+  return (
+    <ThemeProvider theme={theme}>
+      {initialized && <RouterProvider router={router} />}
+      <Toaster />
+    </ThemeProvider>
+  );
 };
 
 const Layout = () => {
+  const { pathname } = useLocation();
+
+  const isHomeActive = () => {
+    if (matchPath('/home', pathname)) {
+      return true;
+    }
+
+    if (matchPath('/', pathname)) {
+      return true;
+    }
+
+    if (matchPath('', pathname)) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const isDiscoverActive = () => {
+    if (matchPath('/recipes*', pathname)) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const isFavouritesActive = () => {
+    if (matchPath('/favourites*', pathname)) {
+      return true;
+    }
+    return false;
+  };
+
+  const isSettingsActive = () => {
+    if (matchPath('/settings*', pathname)) {
+      return true;
+    }
+
+    if (matchPath('/contact-us*', pathname)) {
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <>
       <AuthenticationModal id="authentication-modal" />
@@ -238,11 +307,37 @@ const Layout = () => {
       <Outlet />
 
       <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 999 }} elevation={3}>
-        <BottomNavigation showLabels className="buttom-nav">
-          <BottomNavigationAction component={Link} to="/" label="Home" icon={<RestoreIcon />} />
-          <BottomNavigationAction component={Link} to="/recipes" label="Discover" icon={<FavoriteIcon />} />
-          <BottomNavigationAction component={Link} to="/favourites" label="Favourites" icon={<LocationOnIcon />} />
-          <BottomNavigationAction component={Link} to="/settings" label="Settings" icon={<LocationOnIcon />} />
+        <BottomNavigation showLabels className={styles.bottomNav}>
+          <BottomNavigationAction
+            component={Link}
+            to="/"
+            label="Home"
+            icon={<HomeIcon className={classnames(styles.navOption, isHomeActive() && styles.navOptionSelected)} />}
+          />
+          <BottomNavigationAction
+            component={Link}
+            to="/recipes"
+            label="Discover"
+            icon={
+              <DiscoverIcon className={classnames(styles.navOption, isDiscoverActive() && styles.navOptionSelected)} />
+            }
+          />
+          <BottomNavigationAction
+            component={Link}
+            to="/favourites"
+            label="Favourites"
+            icon={
+              <HeartIcon className={classnames(styles.navOption, isFavouritesActive() && styles.navOptionSelected)} />
+            }
+          />
+          <BottomNavigationAction
+            component={Link}
+            to="/settings"
+            label="Settings"
+            icon={
+              <SettingsIcon className={classnames(styles.navOption, isSettingsActive() && styles.navOptionSelected)} />
+            }
+          />
         </BottomNavigation>
       </Box>
     </>

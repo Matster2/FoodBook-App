@@ -1,6 +1,19 @@
 import axios from 'axios';
 
 import useAuth from './useAuth';
+import { isNullOrEmpty, isUndefined } from '../utils/utils';
+
+const getSearchParams = (parameters) => {
+  const filters = parameters;
+  Object.keys(filters).forEach((key) => {
+    const value = filters[key];
+    if (isNullOrEmpty(value) || isUndefined(value) || (Array.isArray(value) && value.length === 0)) {
+      delete filters[key];
+    }
+  });
+
+  return new URLSearchParams(filters);
+};
 
 const useAPI = () => {
   const { tokens } = useAuth();
@@ -41,7 +54,7 @@ const useAPI = () => {
 
   const getRecipes = async (parameters = {}) => {
     const url = new URL(`${process.env.REACT_APP_API_URL}/recipes`);
-    url.search = new URLSearchParams(parameters);
+    url.search = getSearchParams(parameters);
 
     return axios.get(url.href, {
       headers: {
@@ -60,7 +73,7 @@ const useAPI = () => {
 
   const getIngredients = async (parameters = {}) => {
     const url = new URL(`${process.env.REACT_APP_API_URL}/ingredients`);
-    url.search = new URLSearchParams(parameters);
+    url.search = getSearchParams(parameters);
 
     return axios.get(url.href, {
       headers: {
@@ -71,13 +84,36 @@ const useAPI = () => {
 
   const getTags = async (parameters = {}) => {
     const url = new URL(`${process.env.REACT_APP_API_URL}/tags`);
-    url.search = new URLSearchParams(parameters);
+    url.search = getSearchParams(parameters);
 
     return axios.get(url.href, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
       },
     });
+  };
+
+  const favouriteRecipe = async (recipeId) => {
+    return axios.post(`${process.env.REACT_APP_API_URL}/${recipeId}/favourite`);
+  };
+
+  const unfavouriteRecipe = async (recipeId) => {
+    return axios.post(`${process.env.REACT_APP_API_URL}/${recipeId}/unfavourite`);
+  };
+
+  const contactUs = async (email, message) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/contact-us`,
+      {
+        email,
+        message,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
   };
 
   return {
@@ -89,6 +125,9 @@ const useAPI = () => {
     getRecipe,
     getIngredients,
     getTags,
+    favouriteRecipe,
+    unfavouriteRecipe,
+    contactUs,
   };
 };
 

@@ -10,20 +10,17 @@ import {
   Chip,
   Box,
   Grid,
-  DialogTitle,
-  IconButton,
   Stack,
 } from '@mui/material';
-import { Close as CloseIcon } from '@mui/icons-material';
 import useFilters from '../hooks/useFilters';
 import RatingFilter from '../components/RatingFilter';
 import FilterOption from '../components/FilterOption';
 import { TagContext } from '../contexts/TagContext';
 import useAPI from '../hooks/useAPI';
-import styles from './Fitlers.module.css';
 import { isUndefined } from '../utils/utils';
+import Header from '../components/Header';
 
-const Filters = ({ filters: originalFilters, onApply }) => {
+const Filters = ({ filters: originalFilters, onApply, onClose }) => {
   const api = useAPI();
 
   const { tags } = useContext(TagContext);
@@ -132,13 +129,10 @@ const Filters = ({ filters: originalFilters, onApply }) => {
   }, [ingredientSearch]);
 
   return (
-    <Container component="main" maxWidth="lg" sx={{ pt: 5 }}>
+    <Container component="main" maxWidth="lg">
       <CssBaseline />
-      <DialogTitle disableTypography className={styles.dialogTitle}>
-        <IconButton>
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
+
+      <Header title="Filters" onBackClick={onClose} />
 
       <Box sx={{ mb: 3 }}>
         <Typography variant="h6">Type</Typography>
@@ -253,6 +247,7 @@ Filters.propTypes = {
   onApply: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   filters: PropTypes.object,
+  onClose: PropTypes.func.isRequired,
 };
 
 Filters.defaultProps = {

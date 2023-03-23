@@ -1,12 +1,16 @@
 import React from 'react';
-import { Grid, Typography, Icon, IconButton } from '@mui/material';
+import PropTypes from 'prop-types';
+import { Grid, Typography, IconButton } from '@mui/material';
 import { ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
 import styles from './Header.module.css';
-import HeartIcon from '../../assets/icons/heart.svg';
 
-const Header = () => {
+const Header = ({ title, onBackClick }) => {
+  const handleBackClick = () => {
+    onBackClick();
+  };
+
   return (
-    <Grid container justifyContent="space-between" alignItems="center" sx={{ mt: 4 }}>
+    <Grid container justifyContent="space-between" alignItems="center" sx={{ mt: 4, mb: 2 }}>
       <Grid
         item
         xs={1}
@@ -16,13 +20,13 @@ const Header = () => {
           justifyContent: 'flex-end',
         }}
       >
-        <IconButton>
+        <IconButton onClick={handleBackClick}>
           <ChevronLeftIcon />
         </IconButton>
       </Grid>
       <Grid item xs="auto">
         <Typography variant="h6" className={styles.title}>
-          Recipe List
+          {title}
         </Typography>
       </Grid>
       <Grid
@@ -34,7 +38,7 @@ const Header = () => {
           justifyContent: 'flex-end',
         }}
       >
-        <IconButton>
+        {/* <IconButton>
           <Icon style={{ fill: 'green' }} sx={{ color: 'black' }}>
             <img
               style={{ fill: 'green' }}
@@ -45,14 +49,19 @@ const Header = () => {
               width={22}
             />
           </Icon>
-        </IconButton>
+        </IconButton> */}
       </Grid>
     </Grid>
   );
 };
 
-Header.propTypes = {};
+Header.propTypes = {
+  title: PropTypes.string,
+  onBackClick: PropTypes.func.isRequired,
+};
 
-Header.defaultProps = {};
+Header.defaultProps = {
+  title: '',
+};
 
 export default Header;

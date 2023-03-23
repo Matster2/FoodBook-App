@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
   Typography,
@@ -10,22 +10,31 @@ import {
   Accordion,
   AccordionSummary,
   Box,
+  Grid,
+  IconButton,
+  Icon,
 } from '@mui/material';
-import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
+
+import { ExpandMore as ExpandMoreIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
 import { BottomSheet } from 'react-spring-bottom-sheet';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useAPI from '../hooks/useAPI';
+import useAuth from '../hooks/useAuth';
 
 import styles from './Recipe.module.css';
 import 'react-spring-bottom-sheet/dist/style.css';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
-import { isUndefined } from '../utils/utils';
+import { isUndefined, isNull } from '../utils/utils';
 import Fraction from '../utils/fraction';
+import HeartIcon from '../assets/icons/heart.svg';
 
 export default () => {
+  const navigate = useNavigate();
   const { id } = useParams();
+
+  const { isAuthenticated } = useAuth();
 
   const api = useAPI();
 
@@ -34,6 +43,34 @@ export default () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const [open, setOpen] = useState(false);
+
+  const handleFavoriteClick = async () => {
+    try {
+      if (isNull(recipe.favourited)) {
+        return;
+      }
+
+      if (!recipe.favourited) {
+        await api.favouriteRecipe(recipe.id);
+        setRecipe({
+          ...recipe,
+          favourited: true,
+        });
+      } else {
+        await api.unfavouriteRecipe(recipe.id);
+        setRecipe({
+          ...recipe,
+          favourited: false,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleBackClick = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     setOpen(true);
@@ -124,7 +161,51 @@ export default () => {
   }
 
   return (
-    <Container>
+    <>
+      <Grid
+        className={styles.header}
+        container
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ mt: 4, mb: 2 }}
+      >
+        <Grid
+          item
+          xs={1}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <IconButton onClick={handleBackClick}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </Grid>
+        <Grid item xs="auto">
+          <Typography variant="h6" className={styles.title}>
+            Recipe
+          </Typography>
+        </Grid>
+        <Grid
+          item
+          xs={1}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+          }}
+        >
+          {isAuthenticated && (
+            <IconButton onClick={handleFavoriteClick}>
+              <Icon>
+                <img className={styles.icon} alt="favourite" src={HeartIcon} height={22} width={22} />
+              </Icon>
+            </IconButton>
+          )}
+        </Grid>
+      </Grid>
+
       <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.Swiper}>
         {recipe.images.map((image) => (
           <SwiperSlide>
@@ -133,53 +214,55 @@ export default () => {
         ))}
       </Swiper>
 
-      <BottomSheet
-        open
-        blocking={false}
-        defaultSnap={({ snapPoints, lastSnap }) => Math.max(...snapPoints)}
-        snapPoints={({ maxHeight }) => [maxHeight - maxHeight / 10, maxHeight * 0.1]}
-      >
-        <Container>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6">{recipe.name}</Typography>
-            {renderDescriptionText(recipe.description)}
-          </Box>
+      <Container>
+        <BottomSheet
+          open
+          blocking={false}
+          defaultSnap={({ snapPoints, lastSnap }) => Math.max(...snapPoints)}
+          snapPoints={({ maxHeight }) => [maxHeight - maxHeight / 10, maxHeight * 0.1]}
+        >
+          <Container>
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="h6">{recipe.name}</Typography>
+              {renderDescriptionText(recipe.description)}
+            </Box>
 
-          <Box sx={{ mt: 2 }}>
-            <Accordion defaultExpanded>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-                <Typography variant="h6">Ingredients</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <ul className={styles.ingredientList}>
-                  {recipe.ingredients.map((ingredient) => (
-                    <li>
-                      <span>{renderIngredientText(ingredient)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </AccordionDetails>
-            </Accordion>
-          </Box>
+            <Box sx={{ mt: 2 }}>
+              <Accordion defaultExpanded>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+                  <Typography variant="h6">Ingredients</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <ul className={styles.ingredientList}>
+                    {recipe.ingredients.map((ingredient) => (
+                      <li>
+                        <span>{renderIngredientText(ingredient)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionDetails>
+              </Accordion>
+            </Box>
 
-          <Box sx={{ mt: 2 }}>
-            <Accordion defaultExpanded sx={{ mt: 2 }}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-                <Typography variant="h6">Directions</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Stepper orientation="vertical">
-                  {recipe.instructions.map((instruction, index) => (
-                    <Step>
-                      <StepLabel>{instruction}</StepLabel>
-                    </Step>
-                  ))}
-                </Stepper>
-              </AccordionDetails>
-            </Accordion>
-          </Box>
-        </Container>
-      </BottomSheet>
-    </Container>
+            <Box sx={{ mt: 2 }}>
+              <Accordion defaultExpanded sx={{ mt: 2 }}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+                  <Typography variant="h6">Directions</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Stepper orientation="vertical">
+                    {recipe.instructions.map((instruction, index) => (
+                      <Step>
+                        <StepLabel>{instruction}</StepLabel>
+                      </Step>
+                    ))}
+                  </Stepper>
+                </AccordionDetails>
+              </Accordion>
+            </Box>
+          </Container>
+        </BottomSheet>
+      </Container>
+    </>
   );
 };

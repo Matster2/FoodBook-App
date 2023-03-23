@@ -1,0 +1,36 @@
+.bottomNav {
+    border-top-right-radius: 10px !important;
+    border-top-left-radius: 10px !important;
+    -webkit-box-shadow: 0px -3px 4px rgba(50, 50, 50, 0.1);
+    -moz-box-shadow: 0px -3px 4px rgba(50, 50, 50, 0.1);
+    box-shadow: 0px -3px 4px rgba(50, 50, 50, 0.1);
+    height: 60px !important;
+}
+
+.bottomNav a {
+    color: #828282 !important;
+}
+
+.bottomNav a:visited {
+    color: #828282 !important;
+}
+
+.navOption {
+    width: 18px;
+    height: auto;
+    margin: 3px 0px;
+    padding: 0px;
+    fill: rgba(50, 50, 50, 0);
+    stroke: #747474;
+    color: #747474;
+}
+
+.navOptionSelected {
+    width: 18px;
+    height: auto;
+    margin: 3px 0px;
+    padding: 0px;
+    fill: #fb6b1c;
+    stroke: rgba(50, 50, 50, 0);
+    color: #fb6b1c;
+}

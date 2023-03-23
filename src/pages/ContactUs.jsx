@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
-import { Container, TextField, Button, Box } from '@mui/material';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { Container, TextField, Button, Box, Typography } from '@mui/material';
 import useInput from '../hooks/useInput';
 import { isUndefined, isEmptyOrWhiteSpace, isValidEmail } from '../utils/utils';
+import Header from '../components/Header';
 
 import 'react-spring-bottom-sheet/dist/style.css';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
+import useAPI from '../hooks/useAPI';
 
 export default () => {
+  const navigate = useNavigate();
+
+  const api = useAPI();
+
   const { value: email, onChange: onEmailChange } = useInput('');
   const { value: message, onChange: onMessageChange } = useInput('');
 
@@ -16,6 +24,8 @@ export default () => {
     password: undefined,
   });
   const [errorMessage, setErrorMessage] = useState(undefined);
+
+  const [messageSent, setMessageSent] = useState(false);
 
   const clearErrors = () => {
     setInputErrors({
@@ -40,7 +50,7 @@ export default () => {
       })(),
       message: (() => {
         if (isEmptyOrWhiteSpace(message)) {
-          return 'Password is required';
+          return 'Message is required';
         }
 
         return undefined;
@@ -54,65 +64,65 @@ export default () => {
 
   const handleSendClick = async () => {
     try {
-      // if (!validateInputs()) {
-      // }
-      // addToast(translate('admin.requests.brands.update.success'), {
-      //   appearance: 'success',
-      //   autoDismiss: true,
-      //   pauseOnHover: false,
-      // });
+      if (!validateInputs()) {
+        return;
+      }
+
+      await api.contactUs(email, message);
+      toast.success('Message sent');
     } catch {
-      // addToast(translate('admin.requests.brands.update.failed'), {
-      //   appearance: 'error',
-      //   autoDismiss: true,
-      //   pauseOnHover: false,
-      // });
+      toast.error('Unable to send message. \n Please try again later');
     }
   };
-
   return (
     <Container>
-      <Box>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="email"
-          label="Email Address"
-          name="email"
-          autoComplete="email"
-          autoFocus
-          value={email}
-          onChange={onEmailChange}
-          error={!isUndefined(inputErrors.email)}
-          helperText={inputErrors.email}
-        />
+      <Header title="" onBackClick={() => navigate(-1)} />
 
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="message"
-          label="Message"
-          multiline
-          rows={5}
-          maxRows={5}
-          value={message}
-          onChange={onMessageChange}
-          error={!isUndefined(inputErrors.message)}
-          helperText={inputErrors.message}
-        />
-        <Button
-          type="button"
-          onClick={handleSendClick}
-          disabled={isEmptyOrWhiteSpace(email) || isEmptyOrWhiteSpace(message)}
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
-          Send
-        </Button>
-      </Box>
+      {messageSent && <Typography>Thank you for your message</Typography>}
+
+      {!messageSent && (
+        <Box>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            value={email}
+            onChange={onEmailChange}
+            error={!isUndefined(inputErrors.email)}
+            helperText={inputErrors.email}
+          />
+
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="message"
+            label="Message"
+            multiline
+            rows={5}
+            maxRows={5}
+            value={message}
+            onChange={onMessageChange}
+            error={!isUndefined(inputErrors.message)}
+            helperText={inputErrors.message}
+          />
+          <Button
+            type="button"
+            onClick={handleSendClick}
+            disabled={isEmptyOrWhiteSpace(email) || isEmptyOrWhiteSpace(message)}
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Send
+          </Button>
+        </Box>
+      )}
     </Container>
   );
 };
