@@ -13,9 +13,15 @@ import {
   Grid,
   IconButton,
   Icon,
+  Stack,
 } from '@mui/material';
 
-import { ExpandMore as ExpandMoreIcon, ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
+import {
+  ExpandMore as ExpandMoreIcon,
+  ChevronLeft as ChevronLeftIcon,
+  AccessTime as AccessTimeIcon,
+  Star as StarIcon,
+} from '@mui/icons-material';
 import { BottomSheet } from 'react-spring-bottom-sheet';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useAPI from '../hooks/useAPI';
@@ -34,7 +40,7 @@ export default () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { isAuthenticated } = useAuth();
+  const { authenticated } = useAuth();
 
   const api = useAPI();
 
@@ -71,10 +77,6 @@ export default () => {
   const handleBackClick = () => {
     navigate(-1);
   };
-
-  useEffect(() => {
-    setOpen(true);
-  }, []);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -196,7 +198,7 @@ export default () => {
             justifyContent: 'flex-end',
           }}
         >
-          {isAuthenticated && (
+          {authenticated && (
             <IconButton onClick={handleFavoriteClick}>
               <Icon>
                 <img className={styles.icon} alt="favourite" src={HeartIcon} height={22} width={22} />
@@ -222,11 +224,24 @@ export default () => {
           snapPoints={({ maxHeight }) => [maxHeight - maxHeight / 10, maxHeight * 0.1]}
         >
           <Container>
+            <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+              <Grid item>
+                <Stack direction="row" alignItems="center" gap={0.4}>
+                  <AccessTimeIcon className={styles.icon} />
+                  <Typography sx={{ fontSize: 15 }}>{recipe.totalTime} mins</Typography>
+                </Stack>
+              </Grid>
+              <Grid item>
+                <Stack direction="row" alignItems="center" gap={0.4}>
+                  <StarIcon sx={{ color: recipe.rating > 0 ? '#FFB900' : 'lightgrey' }} className={styles.icon} />
+                  <Typography sx={{ fontSize: 15 }}>{recipe.rating}</Typography>
+                </Stack>
+              </Grid>
+            </Grid>
             <Box sx={{ mb: 2 }}>
               <Typography variant="h6">{recipe.name}</Typography>
               {renderDescriptionText(recipe.description)}
             </Box>
-
             <Box sx={{ mt: 2 }}>
               <Accordion defaultExpanded>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
@@ -243,7 +258,6 @@ export default () => {
                 </AccordionDetails>
               </Accordion>
             </Box>
-
             <Box sx={{ mt: 2 }}>
               <Accordion defaultExpanded sx={{ mt: 2 }}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">

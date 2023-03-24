@@ -26,9 +26,9 @@ import { UserContext } from '../contexts/UserContext';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-import { isUndefined } from '../utils/utils';
 import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
 import styles from './Homepage.module.css';
+import useAuth from '../hooks/useAuth';
 
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -68,6 +68,7 @@ Section.defaultProps = {
 
 export default () => {
   const navigate = useNavigate();
+  const { authenticated } = useAuth();
 
   const { setTags } = useContext(TagContext);
   const { user } = useContext(UserContext);
@@ -92,7 +93,11 @@ export default () => {
   const { results: tags } = usePagedFetch(`${process.env.REACT_APP_API_URL}/tags`);
 
   const handleAvatarClick = () => {
-    NiceModal.show('authentication-modal');
+    if (authenticated) {
+      navigate('/settings');
+    } else {
+      NiceModal.show('authentication-modal');
+    }
   };
 
   const handleCategoryClick = (id) => {
@@ -169,7 +174,7 @@ export default () => {
             <Typography variant="h3">What would you like to cook today?</Typography>
           </Grid>
           <Grid xs="auto">
-            <Avatar sx={{ bgcolor: !isUndefined(user) ? '#fb6b1c' : 'grey' }} onClick={handleAvatarClick} />
+            <Avatar sx={{ bgcolor: authenticated ? '#fb6b1c' : 'grey' }} onClick={handleAvatarClick} />
           </Grid>
         </Grid>
       </Box>
@@ -198,7 +203,7 @@ export default () => {
 
       <Section title="Categories" seeAll={categories.length < totalCategories}>
         {categories.map((category) => (
-          <CategoryChip category={category} onClick={handleCategoryClick} />
+          <CategoryChip key={category.id} category={category} onClick={handleCategoryClick} />
         ))}
       </Section>
 

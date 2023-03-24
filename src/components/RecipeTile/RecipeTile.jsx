@@ -1,11 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Card, Typography, Stack, Box } from '@mui/material';
-import {
-  AccessTime as AccessTimeIcon,
-  PeopleOutline as PeopleOutlineIcon,
-  Star as StarIcon,
-} from '@mui/icons-material';
+import { AccessTime as AccessTimeIcon, Star as StarIcon } from '@mui/icons-material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from './RecipeTile.module.css';
 import 'swiper/swiper-bundle.min.css';
@@ -30,12 +26,6 @@ const RecipeTile = ({ recipe, onClick }) => {
           <Grid item>
             <Typography className={styles.name}>{recipe.name}</Typography>
           </Grid>
-          <Grid item>
-            <Stack direction="row" alignItems="center" gap={0.4}>
-              <StarIcon sx={{ color: recipe.rating > 0 ? '#FFB900' : 'lightgrey' }} className={styles.icon} />
-              <Typography>{recipe.rating}</Typography>
-            </Stack>
-          </Grid>
         </Grid>
 
         <Grid container justifyContent="space-between" alignItems="center">
@@ -45,10 +35,16 @@ const RecipeTile = ({ recipe, onClick }) => {
               <Typography>{recipe.totalTime} mins</Typography>
             </Stack>
           </Grid>
-          <Grid item>
+          {/* <Grid item>
             <Stack direction="row" alignItems="center" gap={0.4}>
               <PeopleOutlineIcon className={styles.icon} />
               <Typography>{recipe.servings} servings</Typography>
+            </Stack>
+          </Grid> */}
+          <Grid item>
+            <Stack direction="row" alignItems="center" gap={0.4}>
+              <StarIcon sx={{ color: recipe.rating > 0 ? '#FFB900' : 'lightgrey' }} className={styles.icon} />
+              <Typography>{recipe.rating}</Typography>
             </Stack>
           </Grid>
         </Grid>

@@ -5,9 +5,9 @@ import { Navigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
 const AuthRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { authenticated } = useAuth();
 
-  if (!isAuthenticated) {
+  if (!authenticated) {
     return <Navigate to="/sign-in" />;
   }
 

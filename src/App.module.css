@@ -32,5 +32,11 @@
     padding: 0px;
     fill: #fb6b1c;
     stroke: rgba(50, 50, 50, 0);
-    color: #fb6b1c;
+    color: #fb6b1c !important;
+}
+
+
+.navOptionSelected span {
+    font-weight: bold;
+    color: #fb6b1c !important;
 }

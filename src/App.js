@@ -16,6 +16,8 @@ import Recipes from './pages/Recipes';
 import Favourites from './pages/Favourites';
 import Settings from './pages/Settings';
 import ContactUs from './pages/ContactUs';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import AdminAddRecipe from './pages/Admin/AddRecipe';
 
 import AuthenticationModal from './modals/AuthenticationModal';
 import useAPI from './hooks/useAPI';
@@ -25,13 +27,10 @@ import { ReactComponent as HomeIcon } from './assets/icons/home.svg';
 import { ReactComponent as DiscoverIcon } from './assets/icons/discover.svg';
 import { ReactComponent as HeartIcon } from './assets/icons/heart.svg';
 import { ReactComponent as SettingsIcon } from './assets/icons/cog.svg';
+import TermsOfService from './pages/TermsOfService';
 
 const App = () => {
-  const {
-    claims: { userId },
-    logout,
-    refreshTokens,
-  } = useAuth();
+  const { authenticated, refreshTokens } = useAuth();
   const api = useAPI();
 
   const { initialized, setInitialized } = useContext(AppContext);
@@ -102,9 +101,14 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetchUser();
     setInitialized(true);
   }, []);
+
+  useEffect(() => {
+    if (authenticated) {
+      fetchUser();
+    }
+  }, [authenticated]);
 
   const theme = createTheme({
     typography: {
@@ -210,6 +214,10 @@ const App = () => {
           path: '/contact-us',
           element: <ContactUs />,
         },
+        {
+          path: '/admin/recipes/add',
+          element: <AdminAddRecipe />,
+        },
       ],
     },
     {
@@ -241,6 +249,14 @@ const App = () => {
         {
           path: '/recipes/:id',
           element: <Recipe />,
+        },
+        {
+          path: '/privacy-policy',
+          element: <PrivacyPolicy />,
+        },
+        {
+          path: '/terms-of-service',
+          element: <TermsOfService />,
         },
       ],
     },
@@ -309,12 +325,14 @@ const Layout = () => {
       <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 999 }} elevation={3}>
         <BottomNavigation showLabels className={styles.bottomNav}>
           <BottomNavigationAction
+            className={isHomeActive() && styles.navOptionSelected}
             component={Link}
             to="/"
             label="Home"
             icon={<HomeIcon className={classnames(styles.navOption, isHomeActive() && styles.navOptionSelected)} />}
           />
           <BottomNavigationAction
+            className={isDiscoverActive() && styles.navOptionSelected}
             component={Link}
             to="/recipes"
             label="Discover"
@@ -323,6 +341,7 @@ const Layout = () => {
             }
           />
           <BottomNavigationAction
+            className={isFavouritesActive() && styles.navOptionSelected}
             component={Link}
             to="/favourites"
             label="Favourites"
@@ -331,6 +350,7 @@ const Layout = () => {
             }
           />
           <BottomNavigationAction
+            className={isSettingsActive() && styles.navOptionSelected}
             component={Link}
             to="/settings"
             label="Settings"

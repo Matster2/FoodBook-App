@@ -93,6 +93,17 @@ const useAPI = () => {
     });
   };
 
+  const getUnitOfMeasurements = async (parameters = {}) => {
+    const url = new URL(`${process.env.REACT_APP_API_URL}/unit-of-measurements`);
+    url.search = getSearchParams(parameters);
+
+    return axios.get(url.href, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
   const favouriteRecipe = async (recipeId) => {
     return axios.post(`${process.env.REACT_APP_API_URL}/${recipeId}/favourite`);
   };
@@ -116,6 +127,14 @@ const useAPI = () => {
     );
   };
 
+  const deleteMyUser = async () => {
+    return axios.delete(`${process.env.REACT_APP_API_URL}/me`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
   return {
     queryEmail,
     forgotPassword,
@@ -125,9 +144,11 @@ const useAPI = () => {
     getRecipe,
     getIngredients,
     getTags,
+    getUnitOfMeasurements,
     favouriteRecipe,
     unfavouriteRecipe,
     contactUs,
+    deleteMyUser,
   };
 };
 
