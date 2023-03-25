@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
+import * as yup from 'yup';
 import PropTypes from 'prop-types';
+import { Formik, Form, Field, FieldArray } from 'formik';
 import {
   CssBaseline,
   Container,
@@ -14,27 +16,33 @@ import {
   Typography,
   Stack,
   Autocomplete,
+  IconButton,
 } from '@mui/material';
+import { Clear as ClearIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import useInput from '../../hooks/useInput';
 import useAPI from '../../hooks/useAPI';
 import Header from '../../components/Header';
 import FilterOption from '../../components/FilterOption';
-import { isUndefined, isEmptyOrWhiteSpace } from '../../utils/utils';
+import RecipeImageControl from '../../components/RecipeImageControl';
 import { UnitOfMeasurementContext } from '../../contexts/UnitOfMeasurementContext';
 import { TagContext } from '../../contexts/TagContext';
 
-const RecipeIngredient = ({ recipeIngredient }) => {
+const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
   const { unitOfMeasurements } = useContext(UnitOfMeasurementContext);
 
-  const [unitOfMeasurement, setUnitOfMeasurements] = useState();
+  const handleChange = (e) => {
+    onChange({
+      ...recipeIngredient,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   return (
-    <div>
-      <Stack direction="row" spacing={1}>
-        <FormControl>
+    <Box sx={{ border: 1, borderColor: 'grey.500', p: 2 }}>
+      <Grid container spacing={1} justifyContent="space-between">
+        <Grid item xs={9} sx={{ mb: 1 }}>
           <TextField
-            margin="normal"
+            fullWidth
             required
             id="name"
             label="Name"
@@ -43,33 +51,39 @@ const RecipeIngredient = ({ recipeIngredient }) => {
             value={recipeIngredient.ingredient.name}
             disabled
           />
-        </FormControl>
+        </Grid>
+        <Grid item xs="auto">
+          <IconButton onClick={() => onDelete(recipeIngredient)}>
+            <ClearIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
 
-        <FormControl sx={{ pt: 2 }} width="auto">
-          <InputLabel id="type-label">Type</InputLabel>
-          <Select labelId="type-label" id="type" value={unitOfMeasurement} label="Type">
-            {unitOfMeasurements.map((value) => (
-              <MenuItem value={value.id}>{value.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <FormControl>
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          <FormControl fullWidth>
+            <InputLabel id="type-label">Type</InputLabel>
+            <Select margin="normal" id="id" name="unitOfMeasurementId" labelId="type-label" label="Type">
+              {unitOfMeasurements.map((unitOfMeasurement) => (
+                <MenuItem value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={6}>
           <TextField
-            margin="normal"
+            fullWidth
             required
             id="amount"
             label="Amount"
             name="amount"
             autoFocus
-            // value={name}
-            // onChange={onNameChange}
-            // error={!isUndefined(inputErrors.name)}
-            // helperText={inputErrors.name}
+            value={recipeIngredient.amount}
+            onChange={handleChange}
           />
-        </FormControl>
-      </Stack>
-    </div>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
@@ -78,7 +92,40 @@ RecipeIngredient.propTypes = {
     ingredient: PropTypes.shape({
       name: PropTypes.string,
     }),
+    unitOfMeasurementId: PropTypes.string,
+    amount: PropTypes.number,
   }).isRequired,
+  onChange: PropTypes.func,
+  onDelete: PropTypes.func,
+};
+
+RecipeIngredient.defaultProps = {
+  onChange: () => {},
+  onDelete: () => {},
+};
+
+const initialRecipeValue = {
+  name: '',
+  description: '',
+  type: undefined,
+  prepTime: undefined,
+  cookTime: undefined,
+  totalTime: undefined,
+  servings: undefined,
+  instructions: [],
+  ingredients: [],
+  nutrition: {
+    kcals: undefined,
+    fats: undefined,
+    saturates: undefined,
+    carbs: undefined,
+    sugars: undefined,
+    fibre: undefined,
+    protien: undefined,
+    salt: undefined,
+  },
+  tagIds: [],
+  images: [],
 };
 
 export default () => {
@@ -93,86 +140,27 @@ export default () => {
   const [ingredientSearch, setIngredientSearch] = useState('');
   const [searchIngredients, setSearchIngredients] = useState([]);
 
-  const { value: name, onChange: onNameChange } = useInput('');
-  const { value: description, onChange: onDescriptionChange } = useInput('');
-  const [type, setType] = useState();
-  const [prepTime, setPrepTime] = useState();
-  const [cookingTime, setCookingTime] = useState();
-  const [totalTime, setTotalTime] = useState();
-  const [recipeIngredients, setRecipeIngredients] = useState([]);
-  const [instructions, setInstructions] = useState([]);
+  const [recipe, setRecipe] = useState(initialRecipeValue);
 
-  const [inputErrors, setInputErrors] = useState({
-    name: undefined,
-    description: undefined,
-    type: undefined,
+  const recipeSchema = yup.object({
+    name: yup.string().required(),
+    description: yup.string().required(),
+    type: yup.string().required(),
+    prepTime: yup.number().integer().required(),
+    cookTime: yup.number().integer().required(),
+    totalTime: yup.number().integer().required(),
+    servings: yup.number().integer().required(),
+    nutrition: yup.object({
+      kcals: yup.number().integer().required(),
+      fats: yup.number().integer(),
+      saturates: yup.number().integer(),
+      carbs: yup.number().integer(),
+      sugars: yup.number().integer(),
+      fibre: yup.number().integer(),
+      protien: yup.number().integer(),
+      salt: yup.number().integer(),
+    }),
   });
-  const [errorMessage, setErrorMessage] = useState(undefined);
-
-  const clearErrors = () => {
-    setInputErrors({
-      name: undefined,
-      description: undefined,
-      type: undefined,
-    });
-    setErrorMessage(undefined);
-  };
-
-  const validateInputs = () => {
-    const newInputErrors = {
-      name: (() => {
-        if (isEmptyOrWhiteSpace(name)) {
-          return 'Name is required';
-        }
-
-        return undefined;
-      })(),
-      description: (() => {
-        if (isEmptyOrWhiteSpace(description)) {
-          return 'Description is required';
-        }
-
-        return undefined;
-      })(),
-      type: (() => {
-        if (isUndefined(type)) {
-          return 'Type is required';
-        }
-
-        return undefined;
-      })(),
-    };
-
-    setInputErrors(newInputErrors);
-
-    return isUndefined(newInputErrors.name) && isUndefined(newInputErrors.description);
-  };
-
-  const handleCreateClick = async () => {
-    if (!validateInputs()) {
-      return;
-    }
-
-    try {
-      // await auth.login(email, password);
-      // onComplete();
-    } catch (e) {
-      if (!isUndefined(e.response) && e.response.status === 400) {
-        setErrorMessage('invalid login');
-      } else {
-        // presentAlert({
-        //   header: 'Alert',
-        //   subHeader: 'Something went wrong',
-        //   message: 'Please try again later',
-        //   buttons: ['OK'],
-        // });
-      }
-    }
-  };
-
-  const handleTypeChange = (value) => {
-    setType(value);
-  };
 
   const handleAddIngredient = (ingredient) => {
     const recipeIngredient = {
@@ -182,15 +170,89 @@ export default () => {
       optional: false,
     };
 
-    const newRecipeIngredients = recipeIngredients;
+    const newRecipeIngredients = recipe.ingredients.slice();
     newRecipeIngredients.push(recipeIngredient);
-    setRecipeIngredients(newRecipeIngredients);
+
+    setRecipe((state) => ({
+      ...state,
+      ingredients: newRecipeIngredients,
+    }));
   };
 
   const handleAddIntructionClick = () => {
-    const newInstructions = instructions.slice();
+    const newInstructions = recipe.instructions.slice();
     newInstructions.push('');
-    setInstructions(newInstructions);
+
+    setRecipe((state) => ({
+      ...state,
+      instructions: newInstructions,
+    }));
+  };
+
+  const handleTagClick = (tagId) => {
+    const newTagIds = recipe.tagIds.filter((x) => x !== tagId);
+
+    if (!recipe.tagIds.some((x) => x === tagId)) {
+      newTagIds.push(tagId);
+    }
+
+    setRecipe((state) => ({
+      ...state,
+      tagIds: newTagIds,
+    }));
+  };
+
+  const handleUploadFile = (e) => {
+    const newImages = recipe.images;
+    const url = URL.createObjectURL(e.target.files[0]);
+    newImages.push(url);
+
+    setRecipe((state) => ({
+      ...state,
+      images: newImages,
+    }));
+  };
+
+  const handleSubmit = async (values) => {
+    const data = {
+      ...recipe,
+      ...values,
+    };
+
+    console.log(data);
+  };
+
+  const handleRecipeIngredientChange = (newRecipeIngredient) => {
+    const newRecipeIngredients = recipe.ingredients;
+
+    const index = newRecipeIngredients.findIndex((x) => x.ingredient.id === newRecipeIngredient.ingredient.id);
+
+    newRecipeIngredients[index] = newRecipeIngredient;
+
+    setRecipe((state) => ({
+      ...state,
+      ingredients: newRecipeIngredients,
+    }));
+  };
+
+  const handleDeleteRecipeIngredient = (newRecipeIngredient) => {
+    const newRecipeIngredients = recipe.ingredients.filter(
+      (x) => x.ingredient.id !== newRecipeIngredient.ingredient.id
+    );
+
+    setRecipe((state) => ({
+      ...state,
+      ingredients: newRecipeIngredients,
+    }));
+  };
+
+  const handleDeleteImageClick = (src) => {
+    const images = recipe.images.filter((x) => x !== src);
+
+    setRecipe((state) => ({
+      ...state,
+      images,
+    }));
   };
 
   const fetchUnitOfMeasurements = async () => {
@@ -236,219 +298,304 @@ export default () => {
         <FormControlLabel label="Add Multiple" control={<Checkbox defaultChecked />} />
       </Box> */}
 
-      <Box>
-        <FormControl fullWidth>
-          <TextField
-            margin="normal"
-            required
-            id="name"
-            label="Name"
-            name="name"
-            autoFocus
-            value={name}
-            onChange={onNameChange}
-            error={!isUndefined(inputErrors.name)}
-            helperText={inputErrors.name}
-          />
-        </FormControl>
+      <Stack direction="row" gap={2} sx={{ mb: 2 }}>
+        {recipe.images.map((image) => (
+          <RecipeImageControl src={image} onDeleteClick={handleDeleteImageClick} />
+        ))}
+      </Stack>
 
-        <FormControl fullWidth>
-          <TextField
-            multiline
-            rows={2}
-            margin="normal"
-            required
-            name="description"
-            label="description"
-            id="description"
-            value={description}
-            onChange={onDescriptionChange}
-            error={!isUndefined(inputErrors.description)}
-            helperText={inputErrors.description}
-          />
-        </FormControl>
+      <input type="file" onChange={handleUploadFile} />
 
-        <FormControl fullWidth sx={{ mt: 2, mb: 1 }}>
-          <InputLabel id="type-label">Type</InputLabel>
-          <Select labelId="type-label" id="type" value={type} label="Type" onChange={handleTypeChange}>
-            {types.map((t) => (
-              <MenuItem value={t}>{t}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+      <Formik
+        initialValues={recipe}
+        validationSchema={recipeSchema}
+        onSubmit={async (values, { resetForm }) => {
+          handleSubmit(values);
+          console.log(values);
+        }}
+      >
+        {(formik) => {
+          const { errors, touched, values } = formik;
+          return (
+            <Form>
+              <Box fullWidth>
+                <Field
+                  as={TextField}
+                  required
+                  fullWidth
+                  margin="normal"
+                  id="name"
+                  name="name"
+                  label="Name"
+                  autoFocus
+                  error={errors.name && touched.name}
+                  helperText={touched.name && errors.name}
+                />
 
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <TextField
-                margin="normal"
-                required
-                id="prep-time"
-                label="Prep Time"
-                name="prep-time"
-                type="number"
-                autoFocus
-                value={prepTime}
-                onChange={(e) => setPrepTime(e.target.value)}
-                error={!isUndefined(inputErrors.prepTime)}
-                helperText={inputErrors.prepTime}
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <TextField
-                margin="normal"
-                required
-                id="cooking-time"
-                label="Cooking Time"
-                name="cooking-time"
-                type="number"
-                autoFocus
-                value={cookingTime}
-                onChange={(e) => setCookingTime(e.target.value)}
-                error={!isUndefined(inputErrors.cookingTime)}
-                helperText={inputErrors.cookingTime}
-              />
-            </FormControl>
-          </Grid>
-        </Grid>
+                <Field
+                  as={TextField}
+                  required
+                  fullWidth
+                  margin="normal"
+                  id="description"
+                  name="description"
+                  multiline
+                  rows={2}
+                  label="description"
+                  error={errors.description && touched.description}
+                  helperText={touched.description && errors.description}
+                />
 
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <TextField
-                margin="normal"
-                required
-                id="total-time"
-                label="Total Time"
-                name="total-time"
-                type="number"
-                autoFocus
-                value={totalTime}
-                onChange={(e) => setTotalTime(e.target.value)}
-                error={!isUndefined(inputErrors.totalTime)}
-                helperText={inputErrors.totalTime}
-              />
-            </FormControl>
-          </Grid>
-        </Grid>
+                <FormControl fullWidth sx={{ mt: 2, mb: 1 }}>
+                  <InputLabel id="type-label">Type</InputLabel>
+                  <Field as={Select} margin="normal" id="id" name="type" labelId="type-label" label="Type">
+                    {types.map((t) => (
+                      <MenuItem value={t}>{t}</MenuItem>
+                    ))}
+                  </Field>
+                </FormControl>
 
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <TextField
-                margin="normal"
-                required
-                id="servings"
-                label="Servings"
-                name="servings"
-                type="number"
-                autoFocus
-                value={name}
-                onChange={onNameChange}
-                error={!isUndefined(inputErrors.name)}
-                helperText={inputErrors.name}
-              />
-            </FormControl>
-          </Grid>
-        </Grid>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <Field
+                      as={TextField}
+                      margin="normal"
+                      id="prepTime"
+                      name="prepTime"
+                      required
+                      label="Prep Time"
+                      type="number"
+                      autoFocus
+                      error={errors.prepTime && touched.prepTime}
+                      helperText={touched.description && errors.description}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Field
+                      as={TextField}
+                      margin="normal"
+                      id="cookTime"
+                      name="cookTime"
+                      required
+                      label="Cooking Time"
+                      type="number"
+                      autoFocus
+                      // error={!isUndefined(errors.cookTime)}
+                      // helperText={errors.cookTime?.message}
+                    />
+                  </Grid>
+                </Grid>
 
-        <Box sx={{ mt: 2, mb: 3 }}>
-          <Typography variant="h6">Ingredients</Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <Field
+                      as={TextField}
+                      margin="normal"
+                      id="totalTime"
+                      name="totalTime"
+                      required
+                      label="Total Time"
+                      type="number"
+                      autoFocus
+                      // error={!isUndefined(errors.totalTime)}
+                      // helperText={errors.totalTime?.message}
+                    />
+                  </Grid>
+                </Grid>
 
-          <Autocomplete
-            options={searchIngredients
-              .filter(
-                (ingredient) =>
-                  !recipeIngredients.some((filteredIngredients) => filteredIngredients.id === ingredient.id)
-              )
-              .map((ingredient) => ({ label: ingredient.name, ingredient }))}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            renderInput={(params) => <TextField {...params} label="Add Ingredient" />}
-            value={ingredientSearch}
-            inputValue={ingredientSearch}
-            onInputChange={(event, newValue) => {
-              setIngredientSearch(newValue);
-            }}
-            onChange={(event, value) => {
-              setIngredientSearch('');
-              handleAddIngredient(value.ingredient);
-            }}
-          />
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <Field
+                      as={TextField}
+                      margin="normal"
+                      id="servings"
+                      name="servings"
+                      required
+                      label="Servings"
+                      type="number"
+                      autoFocus
+                      // error={!isUndefined(errors.servings)}
+                      // helperText={errors.servings?.message}
+                    />
+                  </Grid>
+                </Grid>
 
-          <Box sx={{ mt: 2 }}>
-            {recipeIngredients.map((recipeIngredient) => (
-              <RecipeIngredient recipeIngredient={recipeIngredient} />
-            ))}
-          </Box>
-        </Box>
+                <Box sx={{ mt: 2, mb: 3 }}>
+                  <Typography variant="h6">Ingredients</Typography>
 
-        <Box sx={{ mt: 1 }}>
-          <Typography variant="h6">Tags</Typography>
+                  <Autocomplete
+                    options={searchIngredients
+                      .filter(
+                        (ingredient) =>
+                          !recipe.ingredients.some(
+                            (recipeIngredient) => recipeIngredient.ingredient.id === ingredient.id
+                          )
+                      )
+                      .map((ingredient) => ({ label: ingredient.name, ingredient }))}
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    renderInput={(params) => <TextField {...params} label="Add Ingredient" />}
+                    value={ingredientSearch}
+                    inputValue={ingredientSearch}
+                    onInputChange={(event, newValue) => {
+                      setIngredientSearch(newValue);
+                    }}
+                    onChange={(event, value) => {
+                      setIngredientSearch('');
+                      handleAddIngredient(value.ingredient);
+                    }}
+                  />
 
-          <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
-            {tags.map((tag) => (
-              <FilterOption
-                label={tag.name}
-                value={tag.id}
-                // onClick={handleTagClick}
-                // active={filters.tagIds.some((x) => x === tag.id)}
-              />
-            ))}
-          </Stack>
-        </Box>
+                  <Box sx={{ mt: 2 }}>
+                    {recipe.ingredients.map((recipeIngredient) => (
+                      <RecipeIngredient
+                        recipeIngredient={recipeIngredient}
+                        onChange={handleRecipeIngredientChange}
+                        onDelete={handleDeleteRecipeIngredient}
+                      />
+                    ))}
+                  </Box>
+                </Box>
 
-        <Box sx={{ mt: 2, mb: 3 }}>
-          <Typography variant="h6">Instructions</Typography>
+                <Box sx={{ mt: 2, mb: 3 }}>
+                  <Typography variant="h6">Instructions</Typography>
 
-          {instructions.map((instruction) => (
-            <FormControl fullWidth>
-              <TextField
-                multiline
-                rows={2}
-                margin="normal"
-                required
-                name="instruction"
-                label="instruction"
-                id="instruction"
-                value={instruction}
-              />
-            </FormControl>
-          ))}
+                  <FieldArray
+                    name="instructions"
+                    render={(arrayHelpers) => (
+                      <div>
+                        {values.instructions.map((_, index) => (
+                          <Stack direction="row" gap={1}>
+                            <TextField
+                              margin="normal"
+                              fullWidth
+                              multiline
+                              rows={2}
+                              required
+                              name={`instructions.${index}`}
+                              label="instruction"
+                              id="instruction"
+                            />
 
-          <Button type="button" onClick={handleAddIntructionClick} variant="contained">
-            Add Instruction
-          </Button>
-        </Box>
+                            <IconButton onClick={() => arrayHelpers.remove(index)}>
+                              <ClearIcon />
+                            </IconButton>
+                          </Stack>
+                        ))}
+                        <Button type="button" onClick={() => arrayHelpers.push('')} variant="contained">
+                          Add Instruction
+                        </Button>
+                      </div>
+                    )}
+                  />
+                </Box>
 
-        <Box sx={{ mt: 1 }}>
-          <Typography variant="h6">Tags</Typography>
+                <Box sx={{ mt: 2 }}>
+                  <Typography variant="h6">Nutriton</Typography>
 
-          <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
-            {tags.map((tag) => (
-              <FilterOption
-                label={tag.name}
-                value={tag.id}
-                // onClick={handleTagClick}
-                // active={filters.tagIds.some((x) => x === tag.id)}
-              />
-            ))}
-          </Stack>
-        </Box>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <Field
+                        as={TextField}
+                        margin="normal"
+                        id="kcals"
+                        name="nutrition.kcals"
+                        value={recipe.nutrition.kcals}
+                        required
+                        label="kcals"
+                      />
+                      <Field
+                        as={TextField}
+                        margin="normal"
+                        id="sugars"
+                        name="nutrition.sugars"
+                        value={recipe.nutrition.sugars}
+                        label="sugars"
+                      />
+                      <Field
+                        as={TextField}
+                        margin="normal"
+                        id="fats"
+                        name="nutrition.fats"
+                        value={recipe.nutrition.fats}
+                        label="fats"
+                      />
+                      <Field
+                        as={TextField}
+                        margin="normal"
+                        id="saturates"
+                        name="nutrition.saturates"
+                        value={recipe.nutrition.saturates}
+                        label="saturates"
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Field
+                        as={TextField}
+                        margin="normal"
+                        id="carbs"
+                        name="nutrition.carbs"
+                        value={recipe.nutrition.carbs}
+                        label="carbs"
+                      />
+                      <Field
+                        as={TextField}
+                        margin="normal"
+                        id="fiber"
+                        name="nutrition.fiber"
+                        value={recipe.nutrition.fiber}
+                        label="fiber"
+                      />
+                      <Field
+                        as={TextField}
+                        margin="normal"
+                        id="protien"
+                        name="nutrition.protien"
+                        value={recipe.nutrition.protien}
+                        label="protien"
+                      />
+                      <Field
+                        as={TextField}
+                        margin="normal"
+                        id="salt"
+                        name="nutrition.salt"
+                        value={recipe.nutrition.salt}
+                        label="salt"
+                      />
+                    </Grid>
+                  </Grid>
+                </Box>
 
-        <Box
-          sx={{
-            marginBottom: 4,
-            display: 'flex',
-            justifyContent: 'flex-end',
-          }}
-        >
-          <Button type="button" onClick={handleCreateClick} fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Create
-          </Button>
-        </Box>
-      </Box>
+                <Box sx={{ mt: 1 }}>
+                  <Typography variant="h6">Tags</Typography>
+
+                  <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
+                    {tags.map((tag) => (
+                      <FilterOption
+                        label={tag.name}
+                        value={tag.id}
+                        onClick={handleTagClick}
+                        active={recipe.tagIds.some((x) => x === tag.id)}
+                      />
+                    ))}
+                  </Stack>
+                </Box>
+
+                <Box
+                  sx={{
+                    marginBottom: 4,
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                  }}
+                >
+                  <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                    Create
+                  </Button>
+                </Box>
+              </Box>
+            </Form>
+          );
+        }}
+      </Formik>
     </Container>
   );
 };
