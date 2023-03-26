@@ -43,6 +43,18 @@ export default () => {
     setLoadingTags(false);
   };
 
+  const fetchRecipes = async () => {
+    setLoadingRecipes(true);
+    try {
+      setLoadingRecipes(true);
+      const { data } = await api.getRecipes(filters);
+      setRecipes(data.results);
+    } catch {
+      console.log('error fetching recipes');
+    }
+    setLoadingRecipes(false);
+  };
+
   useEffect(() => {
     if (!isUndefined(location?.state?.filters)) {
       setFilters({
@@ -50,24 +62,11 @@ export default () => {
         pageSize: 40,
       });
     }
-
-    fetchTags();
   }, []);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      setLoadingRecipes(true);
-      try {
-        setLoadingRecipes(true);
-        const { data } = await api.getRecipes(filters);
-        setRecipes(data.results);
-      } catch {
-        console.log('error fetching recipes');
-      }
-      setLoadingRecipes(false);
-    };
-
     fetchRecipes();
+    fetchTags();
   }, [filters]);
 
   const handleAdvancedFiltersClick = () => {

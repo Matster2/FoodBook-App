@@ -1,6 +1,7 @@
 .card {
   font-size: 12px !important;
   border-radius: 10px !important;
+  position: relative;
 }
 
 .card p {
@@ -37,4 +38,13 @@
 
 .icon {
   font-size: 15px !important;  
+}
+
+.favourite {
+  z-index: 2;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  margin-top: 12px;
+  margin-right: 12px;
 }

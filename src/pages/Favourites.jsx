@@ -1,11 +1,24 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Container, Grid, TextField, Box, InputAdornment, CssBaseline, Dialog, Slide } from '@mui/material';
+import NiceModal from '@ebay/nice-modal-react';
+import {
+  Container,
+  Grid,
+  TextField,
+  Box,
+  InputAdornment,
+  CssBaseline,
+  Dialog,
+  Slide,
+  Typography,
+  Button,
+} from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import RecipeTile from '../components/RecipeTile';
 import Header from '../components/Header';
 import Filters from './Filters';
 import FilterButton from '../components/FilterButton';
 import useAPI from '../hooks/useAPI';
+import useAuth from '../hooks/useAuth';
 import { isUndefined } from '../utils/utils';
 import { TagContext } from '../contexts/TagContext';
 import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
@@ -21,11 +34,13 @@ export default () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { authenticated } = useAuth();
+
   const { setTags } = useContext(TagContext);
 
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState(undefined);
 
   const [loadingTags, setLoadingTags] = useState(false);
   const [loadingRecipes, setLoadingRecipes] = useState(false);
@@ -43,10 +58,28 @@ export default () => {
     setLoadingTags(false);
   };
 
+  const fetchRecipes = async () => {
+    setLoadingRecipes(true);
+    try {
+      setLoadingRecipes(true);
+      const { data } = await api.getRecipes(filters);
+      setRecipes(data.results);
+    } catch {
+      console.log('error fetching recipes');
+    }
+    setLoadingRecipes(false);
+  };
+
   useEffect(() => {
     if (!isUndefined(location?.state?.filters)) {
       setFilters({
         ...location.state.filters,
+        favourited: true,
+        pageSize: 40,
+      });
+    } else {
+      setFilters({
+        favourited: true,
         pageSize: 40,
       });
     }
@@ -55,19 +88,11 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      setLoadingRecipes(true);
-      try {
-        setLoadingRecipes(true);
-        const { data } = await api.getRecipes(filters);
-        setRecipes(data.results);
-      } catch {
-        console.log('error fetching recipes');
-      }
-      setLoadingRecipes(false);
-    };
-
-    fetchRecipes();
+    console.log(filters);
+    if (authenticated && !isUndefined(filters)) {
+      fetchRecipes();
+    }
+    fetchTags();
   }, [filters]);
 
   const handleAdvancedFiltersClick = () => {
@@ -81,6 +106,26 @@ export default () => {
   const handleRecipeClick = (id) => {
     navigate(`/recipes/${id}`);
   };
+
+  if (!authenticated) {
+    return (
+      <Container>
+        <Box textAlign="center" sx={{ marginTop: '30%' }}>
+          <Typography>You must be signed in to see your favourites</Typography>
+
+          <Button
+            variant="contained"
+            sx={{ mt: 4 }}
+            onClick={() => {
+              NiceModal.show('authentication-modal');
+            }}
+          >
+            Sign In
+          </Button>
+        </Box>
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -123,6 +168,12 @@ export default () => {
           </Grid>
         </Grid>
       </Box>
+
+      {!loadingRecipes && recipes.length === 0 && (
+        <Box textAlign="center" sx={{ marginTop: '20%' }}>
+          <Typography>No favourited recipes</Typography>
+        </Box>
+      )}
 
       <Grid container spacing={1}>
         <Grid item xs={6}>

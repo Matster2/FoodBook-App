@@ -105,11 +105,27 @@ const useAPI = () => {
   };
 
   const favouriteRecipe = async (recipeId) => {
-    return axios.post(`${process.env.REACT_APP_API_URL}/${recipeId}/favourite`);
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/recipes/${recipeId}/favourite`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
   };
 
   const unfavouriteRecipe = async (recipeId) => {
-    return axios.post(`${process.env.REACT_APP_API_URL}/${recipeId}/unfavourite`);
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/recipes/${recipeId}/unfavourite`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
   };
 
   const contactUs = async (email, message) => {
@@ -135,6 +151,36 @@ const useAPI = () => {
     });
   };
 
+  const rateRecipe = async (recipeId, rating) => {
+    return axios.put(
+      `${process.env.REACT_APP_API_URL}/recipes/${recipeId}/rate`,
+      {
+        rating,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
+  const getUserRecipeRating = async (recipeId, userId) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}/rating/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
+  const getRecipeRating = async (recipeId) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}/rating`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
   return {
     queryEmail,
     forgotPassword,
@@ -149,6 +195,9 @@ const useAPI = () => {
     unfavouriteRecipe,
     contactUs,
     deleteMyUser,
+    rateRecipe,
+    getUserRecipeRating,
+    getRecipeRating,
   };
 };
 

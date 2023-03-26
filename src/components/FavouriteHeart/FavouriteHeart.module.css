@@ -1,0 +1,17 @@
+.button {
+  background: #ffffff !important;
+  border-radius: 10px !important;
+  stroke: black;
+  fill: none;
+  padding: 20% !important;
+}
+
+.favourited {
+  background: #F46273 !important;
+  stroke: #F46273;
+  fill: white;
+}
+
+.icon {
+  width: 100%;
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -12,10 +13,10 @@ import {
   Box,
   Grid,
   IconButton,
-  Icon,
   Stack,
+  Dialog,
+  Slide,
 } from '@mui/material';
-
 import {
   ExpandMore as ExpandMoreIcon,
   ChevronLeft as ChevronLeftIcon,
@@ -26,7 +27,8 @@ import { BottomSheet } from 'react-spring-bottom-sheet';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useAPI from '../hooks/useAPI';
 import useAuth from '../hooks/useAuth';
-
+import CookingTime from '../components/CookingTime';
+import RatingFilter from '../components/RatingFilter';
 import styles from './Recipe.module.css';
 import 'react-spring-bottom-sheet/dist/style.css';
 import 'swiper/swiper-bundle.min.css';
@@ -34,13 +36,21 @@ import 'swiper/swiper.min.css';
 
 import { isUndefined, isNull } from '../utils/utils';
 import Fraction from '../utils/fraction';
-import HeartIcon from '../assets/icons/heart.svg';
+import FavouriteHeart from '../components/FavouriteHeart';
+
+const Transition = React.forwardRef((props, ref) => {
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return <Slide direction="left" ref={ref} {...props} />;
+});
 
 export default () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { authenticated } = useAuth();
+  const {
+    authenticated,
+    claims: { userId },
+  } = useAuth();
 
   const api = useAPI();
 
@@ -48,7 +58,9 @@ export default () => {
   const [loadingRecipe, setLoadingRecipe] = useState();
   const [showFullDescription, setShowFullDescription] = useState(false);
 
-  const [open, setOpen] = useState(false);
+  const [rating, setRating] = useState(undefined);
+
+  const [showRatingModal, setShowRatingModal] = useState(false);
 
   const handleFavoriteClick = async () => {
     try {
@@ -62,15 +74,20 @@ export default () => {
           ...recipe,
           favourited: true,
         });
+
+        toast.success('Recipe favourited!');
       } else {
         await api.unfavouriteRecipe(recipe.id);
         setRecipe({
           ...recipe,
           favourited: false,
         });
+
+        toast.success('Recipe unfavourited!');
       }
     } catch (e) {
       console.log(e);
+      toast.error('Something went wrong. \n Please try again later');
     }
   };
 
@@ -78,21 +95,59 @@ export default () => {
     navigate(-1);
   };
 
-  useEffect(() => {
-    const fetchRecipe = async () => {
-      setLoadingRecipe(true);
-      try {
-        setLoadingRecipe(true);
-        const { data } = await api.getRecipe(id);
-        setRecipe(data);
-      } catch {
-        console.log('error fetching recipe');
-      }
-      setLoadingRecipe(false);
-    };
+  const handleRatingClick = async (newRating) => {
+    try {
+      await api.rateRecipe(recipe.id, newRating);
+      setRating(newRating);
+      toast.success('Recipe rated!');
 
+      try {
+        const { data } = await api.getRecipeRating(id);
+        setRecipe((state) => ({
+          ...state,
+          rating: data.rating,
+        }));
+      } catch {
+        console.log('error fetching recipe rating');
+      }
+
+      setShowRatingModal(false);
+    } catch {
+      toast.error('Unable to rate recipe. \n Please try again later');
+    }
+  };
+
+  const fetchRecipe = async () => {
+    setLoadingRecipe(true);
+    try {
+      setLoadingRecipe(true);
+      const { data } = await api.getRecipe(id);
+      setRecipe(data);
+    } catch {
+      console.log('error fetching recipe');
+    }
+    setLoadingRecipe(false);
+  };
+
+  const fetchRecipeRating = async () => {
+    try {
+      const { data } = await api.getUserRecipeRating(id, userId);
+      setRating(data.rating);
+    } catch {
+      console.log('error fetching recipe rating');
+    }
+  };
+
+  // useEffect(() => {
+  //   fetchRecipe();
+  // }, []);
+
+  useEffect(() => {
+    if (authenticated) {
+      fetchRecipeRating();
+    }
     fetchRecipe();
-  }, []);
+  }, [authenticated]);
 
   const truncateText = (value, maxLength) => {
     const trimmedString = value.substr(0, maxLength);
@@ -132,7 +187,7 @@ export default () => {
       <>
         <Typography variant="body2">
           {text}
-          {showFullDescription ? ' ' : '... '}
+          {showFullDescription ? ' ' : '...  '}
           {!showFullDescription && (
             <Typography
               display="inline"
@@ -164,6 +219,43 @@ export default () => {
 
   return (
     <>
+      {authenticated && (
+        <Dialog
+          open={showRatingModal}
+          onClose={() => {
+            setShowRatingModal(false);
+          }}
+          TransitionComponent={Transition}
+          PaperProps={{
+            style: {
+              backgroundColor: '#F6F6F6',
+            },
+          }}
+        >
+          <Box sx={{ p: 4 }}>
+            <Typography variant="h5" sx={{ mb: 1 }}>
+              Rate
+            </Typography>
+
+            <Grid container justifyContent="space-between" sx={{ mb: 1 }} spacing={1}>
+              {Array.from(Array(5).keys()).map((value) => {
+                const ratingValue = value + 1;
+                return (
+                  <Grid item xs={2}>
+                    <RatingFilter
+                      style={{ background: 'none' }}
+                      rating={ratingValue}
+                      onClick={() => handleRatingClick(ratingValue)}
+                      selected={rating === ratingValue}
+                    />
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </Box>
+        </Dialog>
+      )}
+
       <Grid
         className={styles.header}
         container
@@ -198,12 +290,8 @@ export default () => {
             justifyContent: 'flex-end',
           }}
         >
-          {authenticated && (
-            <IconButton onClick={handleFavoriteClick}>
-              <Icon>
-                <img className={styles.icon} alt="favourite" src={HeartIcon} height={22} width={22} />
-              </Icon>
-            </IconButton>
+          {authenticated && recipe.favourited != null && (
+            <FavouriteHeart width={36} favourited={recipe.favourited} onClick={handleFavoriteClick} />
           )}
         </Grid>
       </Grid>
@@ -231,23 +319,44 @@ export default () => {
                   <Typography sx={{ fontSize: 15 }}>{recipe.totalTime} mins</Typography>
                 </Stack>
               </Grid>
-              <Grid item>
-                <Stack direction="row" alignItems="center" gap={0.4}>
-                  <StarIcon sx={{ color: recipe.rating > 0 ? '#FFB900' : 'lightgrey' }} className={styles.icon} />
+              <Grid
+                item
+                onClick={() => {
+                  setShowRatingModal(true);
+                }}
+              >
+                <Stack direction="row" alignItems="center" gap={0.2}>
+                  <StarIcon
+                    sx={{ width: 25, color: recipe.rating > 0 ? '#FFB900' : 'lightgrey' }}
+                    className={styles.icon}
+                  />
                   <Typography sx={{ fontSize: 15 }}>{recipe.rating}</Typography>
                 </Stack>
               </Grid>
             </Grid>
-            <Box sx={{ mb: 2 }}>
+            <Box sx={{ mb: 1 }}>
               <Typography variant="h6">{recipe.name}</Typography>
               {renderDescriptionText(recipe.description)}
             </Box>
+
+            <Grid container justifyContent="space-between" sx={{ p: 1 }}>
+              <Grid item xs={4} sx={{ p: 1 }}>
+                <CookingTime type="prep" time={recipe.prepTime} />
+              </Grid>
+              <Grid item xs={4} sx={{ p: 1 }}>
+                <CookingTime type="cook" time={recipe.cookTime} />
+              </Grid>
+              <Grid item xs={4} sx={{ p: 1 }}>
+                <CookingTime type="total" time={recipe.totalTime} />
+              </Grid>
+            </Grid>
+
             <Box sx={{ mt: 2 }}>
               <Accordion defaultExpanded>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
                   <Typography variant="h6">Ingredients</Typography>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails sx={{ mt: -3 }}>
                   <ul className={styles.ingredientList}>
                     {recipe.ingredients.map((ingredient) => (
                       <li>
@@ -258,12 +367,13 @@ export default () => {
                 </AccordionDetails>
               </Accordion>
             </Box>
+
             <Box sx={{ mt: 2 }}>
               <Accordion defaultExpanded sx={{ mt: 2 }}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
                   <Typography variant="h6">Directions</Typography>
                 </AccordionSummary>
-                <AccordionDetails>
+                <AccordionDetails sx={{ mt: -3 }}>
                   <Stepper orientation="vertical">
                     {recipe.instructions.map((instruction, index) => (
                       <Step>

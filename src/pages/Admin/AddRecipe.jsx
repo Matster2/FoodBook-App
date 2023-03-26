@@ -63,7 +63,14 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
         <Grid item xs={6}>
           <FormControl fullWidth>
             <InputLabel id="type-label">Type</InputLabel>
-            <Select margin="normal" id="id" name="unitOfMeasurementId" labelId="type-label" label="Type">
+            <Select
+              margin="normal"
+              id="id"
+              name="unitOfMeasurementId"
+              labelId="type-label"
+              label="Type"
+              onChange={handleChange}
+            >
               {unitOfMeasurements.map((unitOfMeasurement) => (
                 <MenuItem value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
               ))}
@@ -120,7 +127,7 @@ const initialRecipeValue = {
     saturates: undefined,
     carbs: undefined,
     sugars: undefined,
-    fibre: undefined,
+    fiber: undefined,
     protien: undefined,
     salt: undefined,
   },
@@ -156,16 +163,17 @@ export default () => {
       saturates: yup.number().integer(),
       carbs: yup.number().integer(),
       sugars: yup.number().integer(),
-      fibre: yup.number().integer(),
+      fiber: yup.number().integer(),
       protien: yup.number().integer(),
       salt: yup.number().integer(),
     }),
+    instructions: yup.array(yup.string()),
   });
 
   const handleAddIngredient = (ingredient) => {
     const recipeIngredient = {
       ingredient,
-      unitOfMeasurement: undefined,
+      unitOfMeasurementId: undefined,
       amount: undefined,
       optional: false,
     };
@@ -176,16 +184,6 @@ export default () => {
     setRecipe((state) => ({
       ...state,
       ingredients: newRecipeIngredients,
-    }));
-  };
-
-  const handleAddIntructionClick = () => {
-    const newInstructions = recipe.instructions.slice();
-    newInstructions.push('');
-
-    setRecipe((state) => ({
-      ...state,
-      instructions: newInstructions,
     }));
   };
 
@@ -214,9 +212,18 @@ export default () => {
   };
 
   const handleSubmit = async (values) => {
+    console.log(recipe.ingredients);
+
     const data = {
       ...recipe,
       ...values,
+      tagIds: recipe.tagIds,
+      ingredients: recipe.ingredients.map((recipeIngredient) => ({
+        ingredientId: recipeIngredient.ingredient.id,
+        unitOfMeasurementId: recipeIngredient.unitOfMeasurementId,
+        amount: recipeIngredient.amount,
+        optional: recipeIngredient.optional,
+      })),
     };
 
     console.log(data);
@@ -311,7 +318,6 @@ export default () => {
         validationSchema={recipeSchema}
         onSubmit={async (values, { resetForm }) => {
           handleSubmit(values);
-          console.log(values);
         }}
       >
         {(formik) => {
@@ -465,7 +471,8 @@ export default () => {
                       <div>
                         {values.instructions.map((_, index) => (
                           <Stack direction="row" gap={1}>
-                            <TextField
+                            <Field
+                              as={TextField}
                               margin="normal"
                               fullWidth
                               multiline

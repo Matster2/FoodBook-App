@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import styles from './RecipeTile.module.css';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
+import FavouriteHeart from '../FavouriteHeart';
 
 const RecipeTile = ({ recipe, onClick }) => {
   const handleClick = () => {
@@ -14,6 +15,12 @@ const RecipeTile = ({ recipe, onClick }) => {
 
   return (
     <Card sx={{ p: 1 }} className={styles.card} onClick={handleClick}>
+      {recipe?.favourited && (
+        <div className={styles.favourite}>
+          <FavouriteHeart width={25} favourited={recipe.favourited} />
+        </div>
+      )}
+
       <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper}>
         {recipe.images.map((image) => (
           <SwiperSlide className={styles.imageContainer}>
@@ -61,6 +68,7 @@ RecipeTile.propTypes = {
     totalTime: PropTypes.number.isRequired,
     images: PropTypes.arrayOf(PropTypes.string),
     servings: PropTypes.number.isRequired,
+    favourited: PropTypes.bool,
   }).isRequired,
   onClick: PropTypes.func,
 };

@@ -6,10 +6,9 @@ export const getClaims = (accessToken) => {
   const decoded = jwtDecode(accessToken);
 
   const claims = {
-    userId: parseInt(decoded[claimTypes.userId], 10),
+    userId: decoded[claimTypes.userId],
     email: decoded[claimTypes.email],
     role: decoded[claimTypes.role],
-    accountId: decoded[claimTypes.accountId],
   };
 
   return claims;

@@ -69,6 +69,7 @@ export default () => {
       }
 
       await api.contactUs(email, message);
+      setMessageSent(true);
       toast.success('Message sent');
     } catch {
       toast.error('Unable to send message. \n Please try again later');
@@ -78,7 +79,21 @@ export default () => {
     <Container>
       <Header title="" onBackClick={() => navigate(-1)} />
 
-      {messageSent && <Typography>Thank you for your message</Typography>}
+      {messageSent && (
+        <Box textAlign="center" sx={{ marginTop: '30%' }}>
+          <Typography>Thank you for your message</Typography>
+
+          <Button
+            variant="contained"
+            sx={{ mt: 4 }}
+            onClick={() => {
+              navigate('/');
+            }}
+          >
+            Continue Cooking!
+          </Button>
+        </Box>
+      )}
 
       {!messageSent && (
         <Box>
