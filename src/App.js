@@ -29,6 +29,8 @@ import { ReactComponent as HeartIcon } from './assets/icons/heart.svg';
 import { ReactComponent as SettingsIcon } from './assets/icons/cog.svg';
 import TermsOfService from './pages/TermsOfService';
 
+import '@fancyapps/ui/dist/fancybox/fancybox.css';
+
 const App = () => {
   const { authenticated, refreshTokens } = useAuth();
   const api = useAPI();
@@ -148,9 +150,6 @@ const App = () => {
       },
     },
     palette: {
-      divider: {
-        background: 'white',
-      },
       background: {
         default: '#f5f5f5',
       },

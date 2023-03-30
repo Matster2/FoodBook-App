@@ -37,6 +37,7 @@ import 'swiper/swiper.min.css';
 import { isUndefined, isNull } from '../utils/utils';
 import Fraction from '../utils/fraction';
 import FavouriteHeart from '../components/FavouriteHeart';
+import NutritionTable from '../components/NutritionTable';
 
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -60,6 +61,7 @@ export default () => {
 
   const [rating, setRating] = useState(undefined);
 
+  const [showImageModal, setShowImageModal] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
 
   const handleFavoriteClick = async () => {
@@ -115,6 +117,10 @@ export default () => {
     } catch {
       toast.error('Unable to rate recipe. \n Please try again later');
     }
+  };
+
+  const handleImageClick = (url) => {
+    setShowImageModal(true);
   };
 
   const fetchRecipe = async () => {
@@ -219,6 +225,26 @@ export default () => {
 
   return (
     <>
+      <Dialog
+        fullScreen
+        open={showImageModal}
+        onClose={() => {}}
+        // TransitionComponent={Transition}
+        PaperProps={{
+          style: {
+            backgroundColor: '#F6F6F6',
+          },
+        }}
+      >
+        <Swiper className={styles.swiper}>
+          {recipe.images.map((image) => (
+            <SwiperSlide className={styles.swiperSlide} onDoubleClick={() => setShowImageModal(false)}>
+              <img className={styles.slideImage} src={image} alt="recipe" />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </Dialog>
+
       {authenticated && (
         <Dialog
           open={showRatingModal}
@@ -272,8 +298,8 @@ export default () => {
             justifyContent: 'flex-end',
           }}
         >
-          <IconButton onClick={handleBackClick}>
-            <ChevronLeftIcon />
+          <IconButton className={styles.backButton} onClick={handleBackClick}>
+            <ChevronLeftIcon className={styles.backIcon} />
           </IconButton>
         </Grid>
         <Grid item xs="auto">
@@ -296,10 +322,10 @@ export default () => {
         </Grid>
       </Grid>
 
-      <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.Swiper}>
+      <Swiper className={styles.swiper}>
         {recipe.images.map((image) => (
-          <SwiperSlide>
-            <img src={image} alt="recipe" />
+          <SwiperSlide className={styles.swiperSlide} onDoubleClick={() => handleImageClick(image)}>
+            <img src={image} className={styles.slideImage} alt="recipe" />
           </SwiperSlide>
         ))}
       </Swiper>
@@ -309,7 +335,7 @@ export default () => {
           open
           blocking={false}
           defaultSnap={({ snapPoints, lastSnap }) => Math.max(...snapPoints)}
-          snapPoints={({ maxHeight }) => [maxHeight - maxHeight / 10, maxHeight * 0.1]}
+          snapPoints={({ maxHeight }) => [maxHeight - maxHeight / 10, maxHeight - maxHeight / 4, maxHeight / 2]}
         >
           <Container>
             <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
@@ -350,6 +376,10 @@ export default () => {
                 <CookingTime type="total" time={recipe.totalTime} />
               </Grid>
             </Grid>
+
+            <Box sx={{ mt: 2 }}>
+              <NutritionTable nutrition={recipe.nutrition} />
+            </Box>
 
             <Box sx={{ mt: 2 }}>
               <Accordion defaultExpanded>

@@ -62,11 +62,11 @@ export default () => {
         pageSize: 40,
       });
     }
+    fetchTags();
   }, []);
 
   useEffect(() => {
     fetchRecipes();
-    fetchTags();
   }, [filters]);
 
   const handleAdvancedFiltersClick = () => {

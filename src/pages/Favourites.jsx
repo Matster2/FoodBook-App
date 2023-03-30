@@ -88,11 +88,9 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    console.log(filters);
     if (authenticated && !isUndefined(filters)) {
       fetchRecipes();
     }
-    fetchTags();
   }, [filters]);
 
   const handleAdvancedFiltersClick = () => {

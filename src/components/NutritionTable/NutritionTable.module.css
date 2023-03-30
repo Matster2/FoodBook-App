@@ -1,0 +1,13 @@
+.row td {
+    color: black !important;
+    padding: 5px 20px !important;
+}
+
+.name {
+    font-weight: bold;
+    flex: 1;
+}
+
+.disabled td {
+    color: rgb(182, 182, 182) !important;
+}

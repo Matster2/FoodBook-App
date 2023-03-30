@@ -7,7 +7,34 @@
 }
 
 .swiper {
-  max-height: 50%;
+  width: 100%;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.swiperSlide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  background-color: black;
+}
+
+.slideImage {
+  width: 100%;
 }
 
 .ingredientList {
@@ -40,4 +67,19 @@
 
 .icon {
   font-size: 18px !important;  
+}
+
+.backButton {
+  background: #ffffff !important;
+  border-radius: 10px !important;
+  stroke: black;
+  fill: none;
+  padding: 1px !important;
+}
+
+.backIcon {
+  stroke-width: 0 !important;
+  font-size: 35px !important;
+  margin: 0px;
+  padding: 0px;
 }

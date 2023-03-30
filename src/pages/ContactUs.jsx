@@ -77,7 +77,7 @@ export default () => {
   };
   return (
     <Container>
-      <Header title="" onBackClick={() => navigate(-1)} />
+      <Header title="Contact Us" onBackClick={() => navigate(-1)} />
 
       {messageSent && (
         <Box textAlign="center" sx={{ marginTop: '30%' }}>
