@@ -18,6 +18,8 @@ import Settings from './pages/Settings';
 import ContactUs from './pages/ContactUs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import AdminAddRecipe from './pages/Admin/AddRecipe';
+import AdminIngredient from './pages/Admin/Ingredients';
+import AdminAddIngredient from './pages/Admin/AddIngredient';
 
 import AuthenticationModal from './modals/AuthenticationModal';
 import useAPI from './hooks/useAPI';
@@ -166,6 +168,16 @@ const App = () => {
           },
         },
       },
+      MuiTableCell: {
+        styleOverrides: {
+          head: {
+            fontWeight: 'normal',
+            background: '#fb6b1c',
+            color: 'white',
+            borderBottom: '1px solid white',
+          },
+        },
+      },
       MuiChip: {
         styleOverrides: {
           colorPrimary: {
@@ -216,6 +228,14 @@ const App = () => {
         {
           path: '/admin/recipes/add',
           element: <AdminAddRecipe />,
+        },
+        {
+          path: '/admin/ingredients',
+          element: <AdminIngredient />,
+        },
+        {
+          path: '/admin/ingredients/add',
+          element: <AdminAddIngredient />,
         },
       ],
     },
@@ -316,7 +336,7 @@ const Layout = () => {
   };
 
   return (
-    <>
+    <Box sx={{ pb: 4 }}>
       <AuthenticationModal id="authentication-modal" />
 
       <Outlet />
@@ -359,7 +379,7 @@ const Layout = () => {
           />
         </BottomNavigation>
       </Box>
-    </>
+    </Box>
   );
 };
 

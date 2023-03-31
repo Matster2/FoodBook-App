@@ -181,6 +181,46 @@ const useAPI = () => {
     });
   };
 
+  const createIngredient = async (ingredient) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/ingredients`,
+      {
+        ...ingredient,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
+  const createRecipe = async (recipe) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/recipes`,
+      {
+        ...recipe,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
+  const uploadRecipeImage = async (recipeId, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return axios.post(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}/images`, formData, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  };
+
   return {
     queryEmail,
     forgotPassword,
@@ -198,6 +238,9 @@ const useAPI = () => {
     rateRecipe,
     getUserRecipeRating,
     getRecipeRating,
+    createIngredient,
+    createRecipe,
+    uploadRecipeImage,
   };
 };
 

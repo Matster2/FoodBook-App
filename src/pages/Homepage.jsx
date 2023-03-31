@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useMemo, useEffect, useContext, useState } from 'react';
 import NiceModal from '@ebay/nice-modal-react';
 import PropTypes from 'prop-types';
 import {
@@ -80,14 +80,20 @@ export default () => {
     `${process.env.REACT_APP_API_URL}/tags?random=true&pageSize=10`
   );
 
-  const { results: recentlyViewedRecipes, totalResults: totalRecentlyViewedRecipes } = usePagedFetch(
+  const sevenDaysAgo = useMemo(() => {
+    const date = new Date();
+    date.setDate(date.getDate() - 7);
+    return date;
+  }, []);
+
+  const { results: recentlyAddedRecipes, totalResults: totalRecentlyAddedRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
   );
   const { results: recommendedRecipes, totalResults: totalRecommendedRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
   );
   const { results: favouriteRecipes, totalResults: totalFavouriteRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
+    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&publishedAfter=${sevenDaysAgo.toISOString()}`
   );
 
   const { results: tags } = usePagedFetch(`${process.env.REACT_APP_API_URL}/tags`);
@@ -213,15 +219,15 @@ export default () => {
         </Section>
       )}
 
-      {favouriteRecipes.length > 0 && (
-        <Section title="Favourite Recipes" seeAll={favouriteRecipes.length < totalFavouriteRecipes}>
-          {favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}
+      {recentlyAddedRecipes.length > 0 && (
+        <Section title="Recently Added" seeAll={recentlyAddedRecipes.length < totalRecentlyAddedRecipes}>
+          {recentlyAddedRecipes.map((recipe) => renderRecipeTile(recipe))}
         </Section>
       )}
 
-      {recentlyViewedRecipes.length > 0 && (
-        <Section title="Recently Viewed" seeAll={recentlyViewedRecipes.length < totalRecentlyViewedRecipes}>
-          {recentlyViewedRecipes.map((recipe) => renderRecipeTile(recipe))}
+      {favouriteRecipes.length > 0 && (
+        <Section title="Favourite Recipes" seeAll={favouriteRecipes.length < totalFavouriteRecipes}>
+          {favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}
         </Section>
       )}
     </Container>

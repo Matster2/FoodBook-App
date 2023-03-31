@@ -3,17 +3,20 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { Table, TableBody, TableCell, TableContainer, TableRow, Paper } from '@mui/material';
 import styles from './NutritionTable.module.css';
-import { isUndefined } from '../../utils/utils';
+import { isNull, isUndefined } from '../../utils/utils';
 
-const NutritionTable = ({ nutrition: { kcals, carbs, saturates, sugars, protien, soduim, fiber } }) => {
+const NutritionTable = ({
+  nutrition: { calories, sugar, fat, saturatedFat, sodium, protein, carbohydrates, fiber },
+}) => {
   const getNutritionRows = () => {
     return [
-      { name: 'Calories', amount: kcals },
-      { name: 'Carbs', amount: carbs },
-      { name: 'Saturated Fat', saturates },
-      { name: 'Sugars', amount: sugars },
-      { name: 'Protien', amount: protien },
-      { name: 'Sodium', amount: soduim },
+      { name: 'Calories', amount: calories },
+      { name: 'Sugar', amount: sugar },
+      { name: 'Fat', amount: fat },
+      { name: 'Saturated Fat', amount: saturatedFat },
+      { name: 'Sodium', amount: sodium },
+      { name: 'Protein', amount: protein },
+      { name: 'Carbohydrates', amount: carbohydrates },
       { name: 'Fiber', amount: fiber },
     ];
   };
@@ -24,7 +27,7 @@ const NutritionTable = ({ nutrition: { kcals, carbs, saturates, sugars, protien,
         <TableBody>
           {getNutritionRows().map((row) => (
             <TableRow
-              className={classnames(styles.row, isUndefined(row.amount) && styles.disabled)}
+              className={classnames(styles.row, (isUndefined(row.amount) || isNull(row.amount)) && styles.disabled)}
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
@@ -40,12 +43,13 @@ const NutritionTable = ({ nutrition: { kcals, carbs, saturates, sugars, protien,
 
 NutritionTable.propTypes = {
   nutrition: PropTypes.shape({
-    kcals: PropTypes.number,
-    carbs: PropTypes.number,
-    saturates: PropTypes.number,
-    sugars: PropTypes.number,
-    protien: PropTypes.number,
-    soduim: PropTypes.number,
+    calories: PropTypes.number,
+    sugar: PropTypes.number,
+    fat: PropTypes.number,
+    saturatedFat: PropTypes.number,
+    sodium: PropTypes.number,
+    protein: PropTypes.number,
+    carbohydrates: PropTypes.number,
     fiber: PropTypes.number,
   }).isRequired,
 };

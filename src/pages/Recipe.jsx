@@ -337,7 +337,7 @@ export default () => {
           defaultSnap={({ snapPoints, lastSnap }) => Math.max(...snapPoints)}
           snapPoints={({ maxHeight }) => [maxHeight - maxHeight / 10, maxHeight - maxHeight / 4, maxHeight / 2]}
         >
-          <Container>
+          <Container sx={{ pb: 5 }}>
             <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
               <Grid item>
                 <Stack direction="row" alignItems="center" gap={0.4}>

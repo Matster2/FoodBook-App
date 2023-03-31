@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useRef, useContext, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field, FieldArray } from 'formik';
@@ -121,21 +122,24 @@ const initialRecipeValue = {
   servings: undefined,
   instructions: [],
   ingredients: [],
+  referenceUrl: '',
   nutrition: {
-    kcals: undefined,
-    fats: undefined,
-    saturates: undefined,
-    carbs: undefined,
-    sugars: undefined,
+    calories: undefined,
+    sugar: undefined,
+    fat: undefined,
+    saturatedFat: undefined,
+    sodium: undefined,
+    protein: undefined,
+    carbohydrates: undefined,
     fiber: undefined,
-    protien: undefined,
-    salt: undefined,
   },
   tagIds: [],
   images: [],
 };
 
 export default () => {
+  const formRef = useRef();
+
   const navigate = useNavigate();
   const api = useAPI();
 
@@ -146,6 +150,8 @@ export default () => {
 
   const [ingredientSearch, setIngredientSearch] = useState('');
   const [searchIngredients, setSearchIngredients] = useState([]);
+
+  const [filesToUpload, setFilesToUpload] = useState([]);
 
   const [recipe, setRecipe] = useState(initialRecipeValue);
 
@@ -158,14 +164,14 @@ export default () => {
     totalTime: yup.number().integer().required(),
     servings: yup.number().integer().required(),
     nutrition: yup.object({
-      kcals: yup.number().integer().required(),
-      fats: yup.number().integer(),
-      saturates: yup.number().integer(),
-      carbs: yup.number().integer(),
-      sugars: yup.number().integer(),
+      calories: yup.number().integer().required(),
+      sugar: yup.number().integer(),
+      fat: yup.number().integer(),
+      saturatedFat: yup.number().integer(),
+      sodium: yup.number().integer(),
+      protein: yup.number().integer(),
+      carbohydrates: yup.number().integer(),
       fiber: yup.number().integer(),
-      protien: yup.number().integer(),
-      salt: yup.number().integer(),
     }),
     instructions: yup.array(yup.string()),
   });
@@ -201,14 +207,14 @@ export default () => {
   };
 
   const handleUploadFile = (e) => {
-    const newImages = recipe.images;
-    const url = URL.createObjectURL(e.target.files[0]);
-    newImages.push(url);
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
 
     setRecipe((state) => ({
       ...state,
-      images: newImages,
+      images: [...recipe.images, url],
     }));
+    setFilesToUpload((state) => [...state, file]);
   };
 
   const handleSubmit = async (values) => {
@@ -226,7 +232,20 @@ export default () => {
       })),
     };
 
-    console.log(data);
+    try {
+      const {
+        data: { id },
+      } = await api.createRecipe(data);
+
+      filesToUpload.forEach(async (file) => {
+        await api.uploadRecipeImage(id, file);
+      });
+
+      toast.success('Recipe successfully created');
+      formRef.current?.resetForm();
+    } catch (e) {
+      toast.error('Unable to create recipe');
+    }
   };
 
   const handleRecipeIngredientChange = (newRecipeIngredient) => {
@@ -314,6 +333,7 @@ export default () => {
       <input type="file" onChange={handleUploadFile} />
 
       <Formik
+        innerRef={formRef}
         initialValues={recipe}
         validationSchema={recipeSchema}
         onSubmit={async (values, { resetForm }) => {
@@ -373,7 +393,7 @@ export default () => {
                       type="number"
                       autoFocus
                       error={errors.prepTime && touched.prepTime}
-                      helperText={touched.description && errors.description}
+                      helperText={touched.prepTime && errors.prepTime}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -504,45 +524,61 @@ export default () => {
                       <Field
                         as={TextField}
                         margin="normal"
-                        id="kcals"
-                        name="nutrition.kcals"
-                        value={recipe.nutrition.kcals}
+                        id="calories"
+                        name="nutrition.calories"
+                        value={recipe.nutrition.calories}
                         required
-                        label="kcals"
+                        label="Calories"
                       />
                       <Field
                         as={TextField}
                         margin="normal"
-                        id="sugars"
-                        name="nutrition.sugars"
-                        value={recipe.nutrition.sugars}
-                        label="sugars"
+                        id="sugar"
+                        name="nutrition.sugar"
+                        value={recipe.nutrition.sugar}
+                        label="Sugar"
                       />
                       <Field
                         as={TextField}
                         margin="normal"
-                        id="fats"
-                        name="nutrition.fats"
-                        value={recipe.nutrition.fats}
-                        label="fats"
+                        id="fat"
+                        name="nutrition.fat"
+                        value={recipe.nutrition.fat}
+                        label="Fat"
                       />
                       <Field
                         as={TextField}
                         margin="normal"
-                        id="saturates"
-                        name="nutrition.saturates"
-                        value={recipe.nutrition.saturates}
-                        label="saturates"
+                        id="saturatedFat"
+                        name="nutrition.saturatedFat"
+                        value={recipe.nutrition.saturatedFat}
+                        label="Saturated Fat"
                       />
                     </Grid>
                     <Grid item xs={6}>
                       <Field
                         as={TextField}
                         margin="normal"
-                        id="carbs"
-                        name="nutrition.carbs"
-                        value={recipe.nutrition.carbs}
-                        label="carbs"
+                        id="sodium"
+                        name="nutrition.sodium"
+                        value={recipe.nutrition.sodium}
+                        label="Sodium"
+                      />
+                      <Field
+                        as={TextField}
+                        margin="normal"
+                        id="protein"
+                        name="nutrition.protein"
+                        value={recipe.nutrition.protein}
+                        label="Protein"
+                      />
+                      <Field
+                        as={TextField}
+                        margin="normal"
+                        id="carbohydrates"
+                        name="nutrition.carbohydrates"
+                        value={recipe.nutrition.carbohydrates}
+                        label="Carbohydrates"
                       />
                       <Field
                         as={TextField}
@@ -550,23 +586,7 @@ export default () => {
                         id="fiber"
                         name="nutrition.fiber"
                         value={recipe.nutrition.fiber}
-                        label="fiber"
-                      />
-                      <Field
-                        as={TextField}
-                        margin="normal"
-                        id="protien"
-                        name="nutrition.protien"
-                        value={recipe.nutrition.protien}
-                        label="protien"
-                      />
-                      <Field
-                        as={TextField}
-                        margin="normal"
-                        id="salt"
-                        name="nutrition.salt"
-                        value={recipe.nutrition.salt}
-                        label="salt"
+                        label="Fiber"
                       />
                     </Grid>
                   </Grid>
@@ -585,6 +605,20 @@ export default () => {
                       />
                     ))}
                   </Stack>
+                </Box>
+
+                <Box>
+                  <Field
+                    as={TextField}
+                    fullWidth
+                    margin="normal"
+                    id="referenceUrl"
+                    name="referenceUrl"
+                    label="Reference URL"
+                    autoFocus
+                    error={errors.referenceUrl && touched.referenceUrl}
+                    helperText={touched.referenceUrl && errors.referenceUrl}
+                  />
                 </Box>
 
                 <Box
