@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import axios from 'axios';
 import classnames from 'classnames';
 import { Toaster } from 'react-hot-toast';
-import { createBrowserRouter, RouterProvider, Link, Outlet, useLocation, matchPath } from 'react-router-dom';
+import { RouterProvider, Link, Outlet, useLocation, matchPath, createHashRouter } from 'react-router-dom';
 import { ThemeProvider, BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 
@@ -202,7 +202,7 @@ const App = () => {
     },
   });
 
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
       element: <Layout />,
       children: [
