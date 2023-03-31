@@ -207,6 +207,10 @@ const App = () => {
       element: <Layout />,
       children: [
         {
+          path: '/*',
+          element: <Homepage />,
+        },
+        {
           path: '/',
           element: <Homepage />,
         },
