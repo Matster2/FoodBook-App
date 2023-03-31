@@ -20,6 +20,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import AdminAddRecipe from './pages/Admin/AddRecipe';
 import AdminIngredient from './pages/Admin/Ingredients';
 import AdminAddIngredient from './pages/Admin/AddIngredient';
+import AdminAddTag from './pages/Admin/AddTag';
 
 import AuthenticationModal from './modals/AuthenticationModal';
 import useAPI from './hooks/useAPI';
@@ -236,6 +237,10 @@ const App = () => {
         {
           path: '/admin/ingredients/add',
           element: <AdminAddIngredient />,
+        },
+        {
+          path: '/admin/tags/add',
+          element: <AdminAddTag />,
         },
       ],
     },

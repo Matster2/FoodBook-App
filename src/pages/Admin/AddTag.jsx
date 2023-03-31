@@ -7,8 +7,9 @@ import { useNavigate } from 'react-router-dom';
 import useAPI from '../../hooks/useAPI';
 import Header from '../../components/Header';
 
-const initialIngredientValue = {
+const initialTagValue = {
   name: '',
+  icon: null,
 };
 
 export default () => {
@@ -17,33 +18,34 @@ export default () => {
 
   const formRef = useRef();
 
-  const [ingredient, setIngredient] = useState(initialIngredientValue);
+  const [tag, setTag] = useState(initialTagValue);
 
-  const ingredientSchema = yup.object({
+  const tagSchema = yup.object({
     name: yup.string().required(),
+    icon: yup.string(),
   });
 
   const handleSubmit = async (values) => {
     const data = {
-      ...ingredient,
+      ...tag,
       ...values,
     };
 
     try {
       const {
         data: { results },
-      } = await api.getIngredients({ search: values.name, sortBy: 'name' });
+      } = await api.getTags({ search: values.name, sortBy: 'name' });
 
       if (results.filter((x) => x.name.toLowerCase() === data.name.toLowerCase()).length > 0) {
-        toast.error('An ingredient already exists with this name');
+        toast.error('A tag already exists with this name');
         return;
       }
 
-      await api.createIngredient(data);
-      toast.success('Ingredient successfully created');
+      await api.createTag(data);
+      toast.success('Tag successfully created');
       formRef.current?.resetForm();
     } catch (e) {
-      toast.error('Unable to create ingredient');
+      toast.error('Unable to create tag');
     }
   };
 
@@ -58,8 +60,8 @@ export default () => {
 
       <Formik
         innerRef={formRef}
-        initialValues={ingredient}
-        validationSchema={ingredientSchema}
+        initialValues={tag}
+        validationSchema={tagSchema}
         onSubmit={async (values, { resetForm }) => {
           handleSubmit(values);
         }}
@@ -79,6 +81,18 @@ export default () => {
                 autoFocus
                 error={errors.name && touched.name}
                 helperText={touched.name && errors.name}
+              />
+              <Field
+                as={TextField}
+                required
+                fullWidth
+                margin="normal"
+                id="icon"
+                name="icon"
+                label="Icon"
+                autoFocus
+                error={errors.icon && touched.icon}
+                helperText={touched.icon && errors.icon}
               />
 
               <Box

@@ -221,6 +221,20 @@ const useAPI = () => {
     });
   };
 
+  const createTag = async (tag) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/tags`,
+      {
+        ...tag,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
   return {
     queryEmail,
     forgotPassword,
@@ -241,6 +255,7 @@ const useAPI = () => {
     createIngredient,
     createRecipe,
     uploadRecipeImage,
+    createTag,
   };
 };
 
