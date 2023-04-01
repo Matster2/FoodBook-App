@@ -87,13 +87,15 @@ export default () => {
   }, []);
 
   const { results: recentlyAddedRecipes, totalResults: totalRecentlyAddedRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
+    `${
+      process.env.REACT_APP_API_URL
+    }/recipes?random=true&pageSize=25&publishedAfter=${sevenDaysAgo.toISOString()}&sortBy=datepublished&sortDesc=true`
   );
   const { results: recommendedRecipes, totalResults: totalRecommendedRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
   );
   const { results: favouriteRecipes, totalResults: totalFavouriteRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&publishedAfter=${sevenDaysAgo.toISOString()}`
+    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&favoruited=true`
   );
 
   const { results: tags } = usePagedFetch(`${process.env.REACT_APP_API_URL}/tags`);

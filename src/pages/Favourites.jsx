@@ -40,7 +40,11 @@ export default () => {
 
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  const [filters, setFilters] = useState(undefined);
+  const [filters, setFilters] = useState({
+    ...location?.state?.filters,
+    favourited: true,
+    pageSize: 40,
+  });
 
   const [loadingTags, setLoadingTags] = useState(false);
   const [loadingRecipes, setLoadingRecipes] = useState(false);
@@ -69,23 +73,6 @@ export default () => {
     }
     setLoadingRecipes(false);
   };
-
-  useEffect(() => {
-    if (!isUndefined(location?.state?.filters)) {
-      setFilters({
-        ...location.state.filters,
-        favourited: true,
-        pageSize: 40,
-      });
-    } else {
-      setFilters({
-        favourited: true,
-        pageSize: 40,
-      });
-    }
-
-    fetchTags();
-  }, []);
 
   useEffect(() => {
     if (authenticated && !isUndefined(filters)) {
@@ -178,14 +165,18 @@ export default () => {
           {recipes
             .filter((_, index) => !(index % 2))
             .map((recipe) => (
-              <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+              <Box sx={{ mb: 1 }}>
+                <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+              </Box>
             ))}
         </Grid>
         <Grid item xs={6}>
           {recipes
             .filter((_, index) => index % 2)
             .map((recipe) => (
-              <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+              <Box sx={{ mb: 1 }}>
+                <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+              </Box>
             ))}
         </Grid>
       </Grid>

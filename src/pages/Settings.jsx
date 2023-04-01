@@ -84,6 +84,14 @@ export default () => {
             </ListItem>
           )}
 
+          {authenticated && (
+            <ListItem disablePadding>
+              <ListItemButton component={Link} to="/admin/settings">
+                <ListItemText primary="Admin" />
+              </ListItemButton>
+            </ListItem>
+          )}
+
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/contact-us">
               <ListItemText primary="Contact Us" />

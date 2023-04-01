@@ -6,7 +6,6 @@ import Header from '../components/Header';
 import Filters from './Filters';
 import FilterButton from '../components/FilterButton';
 import useAPI from '../hooks/useAPI';
-import { isUndefined } from '../utils/utils';
 import { TagContext } from '../contexts/TagContext';
 import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
 import styles from './Recipes.module.css';
@@ -25,7 +24,10 @@ export default () => {
 
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({
+    ...location?.state?.filters,
+    pageSize: 40,
+  });
 
   const [loadingTags, setLoadingTags] = useState(false);
   const [loadingRecipes, setLoadingRecipes] = useState(false);
@@ -54,16 +56,6 @@ export default () => {
     }
     setLoadingRecipes(false);
   };
-
-  useEffect(() => {
-    if (!isUndefined(location?.state?.filters)) {
-      setFilters({
-        ...location.state.filters,
-        pageSize: 40,
-      });
-    }
-    fetchTags();
-  }, []);
 
   useEffect(() => {
     fetchRecipes();
@@ -128,14 +120,18 @@ export default () => {
           {recipes
             .filter((_, index) => !(index % 2))
             .map((recipe) => (
-              <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+              <Box sx={{ mb: 1 }}>
+                <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+              </Box>
             ))}
         </Grid>
         <Grid item xs={6}>
           {recipes
             .filter((_, index) => index % 2)
             .map((recipe) => (
-              <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+              <Box sx={{ mb: 1 }}>
+                <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+              </Box>
             ))}
         </Grid>
       </Grid>

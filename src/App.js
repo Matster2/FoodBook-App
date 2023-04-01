@@ -23,6 +23,7 @@ import AdminAddRecipe from './pages/Admin/AddRecipe';
 import AdminIngredient from './pages/Admin/Ingredients';
 import AdminAddIngredient from './pages/Admin/AddIngredient';
 import AdminAddTag from './pages/Admin/AddTag';
+import AdminSettings from './pages/Admin/Settings';
 
 import AuthenticationModal from './modals/AuthenticationModal';
 import useAPI from './hooks/useAPI';
@@ -231,6 +232,14 @@ const App = () => {
         {
           path: '/contact-us',
           element: <ContactUs />,
+        },
+        {
+          path: '/admin/settings',
+          element: (
+            <AuthRoute>
+              <AdminSettings />
+            </AuthRoute>
+          ),
         },
         {
           path: '/admin/recipes/add',
