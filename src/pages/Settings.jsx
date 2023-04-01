@@ -25,11 +25,10 @@ import Header from '../components/Header';
 
 export default () => {
   const navigate = useNavigate();
-  const auth = useAuth();
 
   const api = useAPI();
 
-  const { authenticated } = useAuth();
+  const { logout, authenticated, claims } = useAuth();
 
   const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] = useState(false);
 
@@ -38,7 +37,7 @@ export default () => {
   };
 
   const handleLogoutClick = () => {
-    auth.logout();
+    logout();
     localStorage.clear();
     toast('You have been logged out');
   };
@@ -46,7 +45,7 @@ export default () => {
   const handleDeleteAccountClick = async () => {
     setDeleteAccountDialogOpen(false);
     await api.deleteMyUser();
-    auth.logout();
+    logout();
     toast('Your account has been deleted');
     navigate('/');
   };
@@ -84,7 +83,7 @@ export default () => {
             </ListItem>
           )}
 
-          {authenticated && (
+          {authenticated && claims?.role === 'Administrator' && (
             <ListItem disablePadding>
               <ListItemButton component={Link} to="/admin/settings">
                 <ListItemText primary="Admin" />

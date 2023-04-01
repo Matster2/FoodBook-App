@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
 import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
 import useInput from '../hooks/useInput';
@@ -14,6 +15,9 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
 
   const { value: email, onChange: onEmailChange } = useInput('');
   const { value: password, onChange: onPasswordChange } = useInput('');
+
+  const [signingIn, setSigningIn] = useState(false);
+  const [signedIn, setSignedin] = useState(false);
 
   const [inputErrors, setInputErrors] = useState({
     email: undefined,
@@ -57,6 +61,8 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
   };
 
   const handleSignInClick = async () => {
+    setSigningIn(true);
+
     if (!validateInputs()) {
       return;
     }
@@ -64,19 +70,18 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
     try {
       await auth.login(email, password);
 
+      setSignedin(true);
+      toast.success('Signed In Successfully');
       onComplete();
     } catch (e) {
       if (!isUndefined(e.response) && e.response.status === 400) {
-        setErrorMessage('invalid login');
+        toast.error('Invalid login');
       } else {
-        // presentAlert({
-        //   header: 'Alert',
-        //   subHeader: 'Something went wrong',
-        //   message: 'Please try again later',
-        //   buttons: ['OK'],
-        // });
+        toast.error('Unable to sign in. \n Please try again later');
       }
     }
+
+    setSigningIn(true);
   };
 
   useEffect(() => {
@@ -128,6 +133,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           name="email"
           autoComplete="email"
           autoFocus
+          disable={signedIn || signingIn}
           value={email}
           onChange={onEmailChange}
           error={!isUndefined(inputErrors.email)}
@@ -142,6 +148,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           type="password"
           id="password"
           autoComplete="current-password"
+          disable={signedIn || signingIn}
           value={password}
           onChange={onPasswordChange}
           error={!isUndefined(inputErrors.password)}
@@ -163,7 +170,14 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           </Typography>
         </Box>
 
-        <Button type="button" onClick={handleSignInClick} fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+        <Button
+          disable={signedIn || signingIn}
+          type="button"
+          onClick={handleSignInClick}
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
           Sign In
         </Button>
 

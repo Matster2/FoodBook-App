@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
 import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +16,9 @@ const Register = ({ onSignInClick, onComplete }) => {
   const { value: email, onChange: onEmailChange } = useInput('');
   const { value: password, onChange: onPasswordChange } = useInput('');
   const { value: confirmPassword, onChange: onConfirmPasswordChange } = useInput('');
+
+  const [registering, setRegistering] = useState(false);
+  const [registrationComplete, setRegistrationComplete] = useState(false);
 
   const [inputErrors, setInputErrors] = useState({
     email: undefined,
@@ -80,6 +84,8 @@ const Register = ({ onSignInClick, onComplete }) => {
   };
 
   const handleRegisterClick = async () => {
+    setRegistering(true);
+
     try {
       if (!validateInputs()) {
         return;
@@ -102,20 +108,14 @@ const Register = ({ onSignInClick, onComplete }) => {
 
       await api.register(email, password);
 
+      setRegistrationComplete(true);
+      toast.success('Account created');
       onComplete();
-
-      // addToast(translate('admin.requests.brands.update.success'), {
-      //   appearance: 'success',
-      //   autoDismiss: true,
-      //   pauseOnHover: false,
-      // });
     } catch {
-      // addToast(translate('admin.requests.brands.update.failed'), {
-      //   appearance: 'error',
-      //   autoDismiss: true,
-      //   pauseOnHover: false,
-      // });
+      toast.error('Unable to register account. \n Please try again later');
     }
+
+    setRegistering(false);
   };
 
   useEffect(() => {
@@ -173,6 +173,7 @@ const Register = ({ onSignInClick, onComplete }) => {
           name="email"
           autoComplete="email"
           autoFocus
+          disable={registering || registrationComplete}
           value={email}
           onChange={onEmailChange}
           error={!isUndefined(inputErrors.email)}
@@ -187,6 +188,7 @@ const Register = ({ onSignInClick, onComplete }) => {
           type="password"
           id="password"
           autoComplete="current-password"
+          disable={registering || registrationComplete}
           value={password}
           onChange={onPasswordChange}
           error={!isUndefined(inputErrors.password)}
@@ -201,12 +203,20 @@ const Register = ({ onSignInClick, onComplete }) => {
           type="password"
           id="confirm-password"
           autoComplete="current-password"
+          disable={registering || registrationComplete}
           value={confirmPassword}
           onChange={onConfirmPasswordChange}
           error={!isUndefined(inputErrors.confirmPassword)}
           helperText={inputErrors.confirmPassword}
         />
-        <Button type="button" onClick={handleRegisterClick} fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+        <Button
+          disable={registering || registrationComplete}
+          type="button"
+          onClick={handleRegisterClick}
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
           Sign Up
         </Button>
       </Box>

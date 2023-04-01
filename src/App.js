@@ -10,7 +10,7 @@ import { AppContext } from './contexts/AppContext';
 import { UserContext } from './contexts/UserContext';
 import useAuth from './hooks/useAuth';
 
-import AuthRoute from './routings/AuthRoute';
+import AdminRoute from './routings/AdminRoute';
 
 import Homepage from './pages/Homepage';
 import Recipe from './pages/Recipe';
@@ -236,41 +236,41 @@ const App = () => {
         {
           path: '/admin/settings',
           element: (
-            <AuthRoute>
+            <AdminRoute>
               <AdminSettings />
-            </AuthRoute>
+            </AdminRoute>
           ),
         },
         {
           path: '/admin/recipes/add',
           element: (
-            <AuthRoute>
+            <AdminRoute>
               <AdminAddRecipe />
-            </AuthRoute>
+            </AdminRoute>
           ),
         },
         {
           path: '/admin/ingredients',
           element: (
-            <AuthRoute>
+            <AdminRoute>
               <AdminIngredient />
-            </AuthRoute>
+            </AdminRoute>
           ),
         },
         {
           path: '/admin/ingredients/add',
           element: (
-            <AuthRoute>
+            <AdminRoute>
               <AdminAddIngredient />
-            </AuthRoute>
+            </AdminRoute>
           ),
         },
         {
           path: '/admin/tags/add',
           element: (
-            <AuthRoute>
+            <AdminRoute>
               <AdminAddTag />
-            </AuthRoute>
+            </AdminRoute>
           ),
         },
       ],

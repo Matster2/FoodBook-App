@@ -43,7 +43,7 @@ export default () => {
 
       await api.createTag(data);
       toast.success('Tag successfully created');
-      formRef.current?.resetForm();
+      formRef.current?.resetForm({ values: initialTagValue });
     } catch (e) {
       toast.error('Unable to create tag');
     }
