@@ -160,26 +160,47 @@ export default () => {
     return trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
   };
 
-  const renderIngredientText = (ingredient) => {
-    const fraction = Fraction(ingredient.amount);
-    const isWholeNumber = fraction.denominator === 1;
+  const getUnitName = (unitOfMeasurement, amount) => {
+    if (unitOfMeasurement.name.toLowerCase() === 'unit') {
+      return '';
+    }
 
-    if (fraction.numerator === 33 && fraction.denominator === 100) {
+    return amount > 1 ? `${unitOfMeasurement.pluralName} ` : `${unitOfMeasurement.name} `;
+  };
+
+  const getAmountString = (amount) => {
+    const isWholeNumber = amount % 1 === 0;
+
+    if (isWholeNumber) {
+      return amount;
+    }
+
+    const integer = Math.trunc(amount);
+    const decimal = amount - Math.floor(amount);
+
+    const fraction = Fraction(decimal);
+
+    if (integer === 0) {
+      return `${fraction.numerator}/${fraction.denominator}`;
+    }
+
+    if (decimal === 0.33) {
       fraction.numerator = 1;
       fraction.denominator = 3;
     }
 
-    const amount = isWholeNumber ? `${ingredient.amount}` : `${fraction.numerator}/${fraction.denominator}`;
+    return `${integer} ${fraction.numerator}/${fraction.denominator}`;
+  };
 
-    let unit = '';
-    if (ingredient.unitOfMeasurement.name.toLowerCase() !== 'unit') {
-      unit = amount > 1 ? `${ingredient.unitOfMeasurement.pluralName} ` : `${ingredient.unitOfMeasurement.name} `;
-    }
+  const renderIngredientText = (ingredient) => {
+    const amount = getAmountString(ingredient.amount);
+    const unit = getUnitName(ingredient.unitOfMeasurement, ingredient.amount);
+
+    const ingredientName = amount === 1 ? ingredient.name : ingredient.pluralName;
 
     return (
       <span>
-        {amount} {unit}
-        <span className={styles.ingredientName}>{ingredient.name}</span>
+        {`${amount} ${unit}`.trim()} <span className={styles.ingredientName}>{ingredientName}</span>
       </span>
     );
   };

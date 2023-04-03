@@ -80,7 +80,7 @@ export default () => {
             {ingredients.map((ingredient) => (
               <TableRow key={ingredient.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component="th" scope="row">
-                  {ingredient.name}
+                  {`${ingredient.name} (${ingredient.pluralName})`}
                 </TableCell>
               </TableRow>
             ))}

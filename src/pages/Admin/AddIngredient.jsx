@@ -9,6 +9,7 @@ import Header from '../../components/Header';
 
 const initialIngredientValue = {
   name: '',
+  pluralName: '',
 };
 
 export default () => {
@@ -21,6 +22,7 @@ export default () => {
 
   const ingredientSchema = yup.object({
     name: yup.string().required(),
+    pluralName: yup.string().required(),
   });
 
   const handleSubmit = async (values) => {
@@ -79,6 +81,18 @@ export default () => {
                 autoFocus
                 error={errors.name && touched.name}
                 helperText={touched.name && errors.name}
+              />
+              <Field
+                as={TextField}
+                required
+                fullWidth
+                margin="normal"
+                id="pluralName"
+                name="pluralName"
+                label="Plural Name"
+                autoFocus
+                error={errors.pluralName && touched.pluralName}
+                helperText={touched.pluralName && errors.pluralName}
               />
 
               <Box

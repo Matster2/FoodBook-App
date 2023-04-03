@@ -18,6 +18,7 @@ import {
   Stack,
   Autocomplete,
   IconButton,
+  List,
 } from '@mui/material';
 import { Clear as ClearIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -283,7 +284,7 @@ export default () => {
 
   const fetchUnitOfMeasurements = async () => {
     try {
-      const { data } = await api.getUnitOfMeasurements();
+      const { data } = await api.getUnitOfMeasurements({ sortBy: 'name' });
       setUnitOfMeasurements(data.results);
     } catch {
       console.log('error fetching unit of measurements');
@@ -324,11 +325,13 @@ export default () => {
         <FormControlLabel label="Add Multiple" control={<Checkbox defaultChecked />} />
       </Box> */}
 
-      <Stack direction="row" gap={2} sx={{ mb: 2 }}>
-        {recipe.images.map((image) => (
-          <RecipeImageControl src={image} onDeleteClick={handleDeleteImageClick} />
-        ))}
-      </Stack>
+      <List style={{ overflow: 'auto' }}>
+        <Stack direction="row" gap={2} sx={{ mb: 2 }}>
+          {recipe.images.map((image) => (
+            <RecipeImageControl src={image} onDeleteClick={handleDeleteImageClick} />
+          ))}
+        </Stack>
+      </List>
 
       <input type="file" onChange={handleUploadFile} />
 

@@ -25,16 +25,18 @@ const NutritionTable = ({
     <TableContainer component={Paper}>
       <Table>
         <TableBody>
-          {getNutritionRows().map((row) => (
-            <TableRow
-              className={classnames(styles.row, (isUndefined(row.amount) || isNull(row.amount)) && styles.disabled)}
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell className={styles.name}>{row.name}</TableCell>
-              <TableCell>{row.amount}</TableCell>
-            </TableRow>
-          ))}
+          {getNutritionRows()
+            // .filter((row) => !isUndefined(row.amount) && !isNull(row.amount))
+            .map((row) => (
+              <TableRow
+                className={classnames(styles.row, (isUndefined(row.amount) || isNull(row.amount)) && styles.disabled)}
+                key={row.name}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell className={styles.name}>{row.name}</TableCell>
+                <TableCell>{row.amount}</TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>

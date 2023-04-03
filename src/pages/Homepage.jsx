@@ -95,7 +95,7 @@ export default () => {
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
   );
   const { results: favouriteRecipes, totalResults: totalFavouriteRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&favoruited=true`
+    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&favourited=true`
   );
 
   const { results: tags } = usePagedFetch(`${process.env.REACT_APP_API_URL}/tags`);
