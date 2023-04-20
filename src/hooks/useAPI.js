@@ -26,22 +26,20 @@ const useAPI = () => {
     });
   };
 
-  const forgotPassword = async (email) => {
-    return axios.post(
-      `${process.env.REACT_APP_API_URL}/auth/forgot-password`,
-      {
-        email,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${tokens.accessToken}`,
-        },
-      }
-    );
-  };
-
   const register = async (email, password) => {
     return axios.post(`${process.env.REACT_APP_API_URL}/register`, { email, password });
+  };
+
+  const forgotPassword = async (email) => {
+    return axios.post(`${process.env.REACT_APP_API_URL}/forgot-password`, { email });
+  };
+
+  const resetPassword = async (email, resetToken, newPassword) => {
+    return axios.post(`${process.env.REACT_APP_API_URL}/forgot-password`, {
+      email,
+      resetToken,
+      newPassword,
+    });
   };
 
   const getMe = async () => {
@@ -238,6 +236,7 @@ const useAPI = () => {
   return {
     queryEmail,
     forgotPassword,
+    resetPassword,
     register,
     getMe,
     getRecipes,

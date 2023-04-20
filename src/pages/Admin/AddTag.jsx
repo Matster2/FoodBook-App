@@ -52,7 +52,7 @@ export default () => {
   return (
     <Container sx={{ pb: 7 }}>
       <CssBaseline />
-      <Header title="Add Ingredient" onBackClick={() => navigate(-1)} />
+      <Header title="Add Tag" onBackClick={() => navigate(-1)} />
 
       {/* <Box>
         <FormControlLabel label="Add Multiple" control={<Checkbox defaultChecked />} />

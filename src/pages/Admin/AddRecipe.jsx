@@ -134,7 +134,7 @@ const initialRecipeValue = {
     carbohydrates: undefined,
     fiber: undefined,
   },
-  tagIds: [],
+  tags: [],
   images: [],
 };
 
@@ -195,15 +195,17 @@ export default () => {
   };
 
   const handleTagClick = (tagId) => {
-    const newTagIds = recipe.tagIds.filter((x) => x !== tagId);
+    const newTags = recipe.tags.filter((x) => x.id !== tagId);
 
-    if (!recipe.tagIds.some((x) => x === tagId)) {
-      newTagIds.push(tagId);
+    if (!recipe.tags.some((x) => x.id === tagId)) {
+      newTags.push({
+        id: tagId,
+      });
     }
 
     setRecipe((state) => ({
       ...state,
-      tagIds: newTagIds,
+      tags: newTags,
     }));
   };
 
@@ -224,7 +226,7 @@ export default () => {
     const data = {
       ...recipe,
       ...values,
-      tagIds: recipe.tagIds,
+      tags: recipe.tags,
       ingredients: recipe.ingredients.map((recipeIngredient) => ({
         ingredientId: recipeIngredient.ingredient.id,
         unitOfMeasurementId: recipeIngredient.unitOfMeasurementId,
@@ -604,7 +606,7 @@ export default () => {
                         label={tag.name}
                         value={tag.id}
                         onClick={handleTagClick}
-                        active={recipe.tagIds.some((x) => x === tag.id)}
+                        active={recipe.tags.some((x) => x.id === tag.id)}
                       />
                     ))}
                   </Stack>
