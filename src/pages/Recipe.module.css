@@ -83,3 +83,8 @@
   margin: 0px;
   padding: 0px;
 }
+
+.plannerIcon {
+  fill: grey;
+  width: 20px;
+}

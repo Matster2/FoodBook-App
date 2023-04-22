@@ -1,0 +1,20 @@
+.option {
+    border-radius: 4px;
+}
+
+.past {
+    color: rgb(149, 149, 149);
+}
+
+.active {
+    color: white;
+    background: #FB6B1C;
+}
+
+.day {
+    font-size: 14px;
+}
+
+.date {
+    font-size: 16px;
+}

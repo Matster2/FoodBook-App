@@ -29,6 +29,7 @@ import useAPI from '../hooks/useAPI';
 import useAuth from '../hooks/useAuth';
 import CookingTime from '../components/CookingTime';
 import RatingFilter from '../components/RatingFilter';
+import PlanRecipeDialog from '../dialogs/PlanRecipeDialog';
 import styles from './Recipe.module.css';
 import 'react-spring-bottom-sheet/dist/style.css';
 import 'swiper/swiper-bundle.min.css';
@@ -38,6 +39,7 @@ import { isUndefined, isNull } from '../utils/utils';
 import Fraction from '../utils/fraction';
 import FavouriteHeart from '../components/FavouriteHeart';
 import NutritionTable from '../components/NutritionTable';
+import { ReactComponent as PlannerIcon } from '../assets/icons/planner.svg';
 
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -63,6 +65,7 @@ export default () => {
 
   const [showImageModal, setShowImageModal] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showPlannerModal, setShowPlannerModal] = useState(false);
 
   const handleFavoriteClick = async () => {
     try {
@@ -121,6 +124,10 @@ export default () => {
 
   const handleImageClick = (url) => {
     setShowImageModal(true);
+  };
+
+  const handlePlannerClick = () => {
+    setShowPlannerModal(true);
   };
 
   const fetchRecipe = async () => {
@@ -303,6 +310,16 @@ export default () => {
         </Dialog>
       )}
 
+      {authenticated && (
+        <PlanRecipeDialog
+          open={showPlannerModal}
+          onClose={() => {
+            setShowPlannerModal(false);
+          }}
+          TransitionComponent={Transition}
+        />
+      )}
+
       <Grid
         className={styles.header}
         container
@@ -382,7 +399,15 @@ export default () => {
               </Grid>
             </Grid>
             <Box sx={{ mb: 1 }}>
-              <Typography variant="h6">{recipe.name}</Typography>
+              <Grid container justifyContent="space-between" alignItems="center">
+                <Grid item>
+                  <Typography variant="h6">{recipe.name}</Typography>
+                </Grid>
+                <Grid item>
+                  <PlannerIcon onClick={handlePlannerClick} className={styles.plannerIcon} />
+                </Grid>
+              </Grid>
+
               {renderDescriptionText(recipe.description)}
             </Box>
 

@@ -233,6 +233,17 @@ const useAPI = () => {
     );
   };
 
+  const getUserPlanner = async (userId, parameters) => {
+    const url = new URL(`${process.env.REACT_APP_API_URL}/users/${userId}/planner`);
+    url.search = getSearchParams(parameters);
+
+    return axios.get(url.href, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
   return {
     queryEmail,
     forgotPassword,
@@ -255,6 +266,7 @@ const useAPI = () => {
     createRecipe,
     uploadRecipeImage,
     createTag,
+    getUserPlanner,
   };
 };
 

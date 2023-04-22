@@ -24,6 +24,7 @@ import AdminIngredient from './pages/Admin/Ingredients';
 import AdminAddIngredient from './pages/Admin/AddIngredient';
 import AdminAddTag from './pages/Admin/AddTag';
 import AdminSettings from './pages/Admin/Settings';
+import Planner from './pages/Planner';
 
 import AuthenticationModal from './modals/AuthenticationModal';
 import useAPI from './hooks/useAPI';
@@ -31,6 +32,7 @@ import useAPI from './hooks/useAPI';
 import styles from './App.module.css';
 import { ReactComponent as HomeIcon } from './assets/icons/home.svg';
 import { ReactComponent as DiscoverIcon } from './assets/icons/discover.svg';
+import { ReactComponent as PlannerIcon } from './assets/icons/planner.svg';
 import { ReactComponent as HeartIcon } from './assets/icons/heart.svg';
 import { ReactComponent as SettingsIcon } from './assets/icons/cog.svg';
 import TermsOfService from './pages/TermsOfService';
@@ -234,6 +236,10 @@ const App = () => {
           element: <ContactUs />,
         },
         {
+          path: '/planner',
+          element: <Planner />,
+        },
+        {
           path: '/admin/settings',
           element: (
             <AdminRoute>
@@ -352,6 +358,13 @@ const Layout = () => {
     return false;
   };
 
+  const isPlannerActive = () => {
+    if (matchPath('/planner*', pathname)) {
+      return true;
+    }
+    return false;
+  };
+
   const isFavouritesActive = () => {
     if (matchPath('/favourites*', pathname)) {
       return true;
@@ -393,6 +406,15 @@ const Layout = () => {
             label="Discover"
             icon={
               <DiscoverIcon className={classnames(styles.navOption, isDiscoverActive() && styles.navOptionSelected)} />
+            }
+          />
+          <BottomNavigationAction
+            className={isPlannerActive() && styles.navOptionSelected}
+            component={Link}
+            to="/planner"
+            label="Planner"
+            icon={
+              <PlannerIcon className={classnames(styles.navOption, isPlannerActive() && styles.navOptionSelected)} />
             }
           />
           <BottomNavigationAction
