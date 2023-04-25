@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, CssBaseline, Stack, List } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
 import useAPI from '../hooks/useAPI';
 import useAuth from '../hooks/useAuth';
 import DatePickerOption from '../components/DatePickerOption/DatePickerOption';
@@ -59,6 +60,8 @@ export default () => {
   return (
     <Container>
       <CssBaseline />
+
+      <Header title="Planner" onBackClick={() => navigate(-1)} />
 
       <List style={{ overflow: 'auto' }}>
         <Stack direction="row" alignItems="center" gap={1}>

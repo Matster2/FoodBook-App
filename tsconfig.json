@@ -23,12 +23,14 @@
     "useUnknownInCatchVariables": false,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
+    "globals.d.ts",
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
 }

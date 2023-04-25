@@ -5,12 +5,10 @@
     "es2021": true
   },
   "plugins": [
-    "@typescript-eslint",
     "prettier"
   ],
   "extends": [
     "airbnb",
-    "airbnb-typescript",
     "airbnb/hooks",
     "prettier"
   ],

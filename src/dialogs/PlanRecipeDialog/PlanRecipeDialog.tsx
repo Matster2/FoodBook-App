@@ -8,6 +8,8 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 import { TransitionProps } from "@mui/material/transitions";
 
+import styles from './PlanRecipeDialog.module.css';
+
 interface CustomPickerDayProps extends PickersDayProps<Dayjs> {
   selected: boolean
 }
@@ -80,6 +82,7 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent} : PlanRecipeDial
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DateCalendar
+            className={styles.calendar}
             value={value}
             onChange={(newValue) => setValue(newValue)}
             slots={{ day: Day }}
