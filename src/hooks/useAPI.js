@@ -244,6 +244,20 @@ const useAPI = () => {
     });
   };
 
+  const planRecipe = async (userId, recipeId, servings, dates) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/users/${userId}/planner`,
+      {
+        recipeId, servings, dates
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
   return {
     queryEmail,
     forgotPassword,
@@ -267,6 +281,7 @@ const useAPI = () => {
     uploadRecipeImage,
     createTag,
     getUserPlanner,
+    planRecipe,
   };
 };
 

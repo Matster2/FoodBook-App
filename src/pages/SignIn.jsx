@@ -171,7 +171,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
         </Box>
 
         <Button
-          disable={signedIn || signingIn}
+          disabled={signedIn || signingIn}
           type="button"
           onClick={handleSignInClick}
           fullWidth

@@ -317,6 +317,10 @@ export default () => {
             setShowPlannerModal(false);
           }}
           TransitionComponent={Transition}
+          recipe={{
+            id: recipe.id,
+            servings: recipe.servings
+          }}
         />
       )}
 

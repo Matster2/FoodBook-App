@@ -1,0 +1,50 @@
+.card {
+  font-size: 12px;
+  border-radius: 10px !important;
+  position: relative;
+}
+
+.card p {
+  font-size: 10px;  
+}
+
+.name {
+  font-weight: bold !important;
+  font-size: 12px !important;
+}
+
+.swiper {
+  overflow: hidden;
+  width: 100%;
+  height: 80px;
+}
+
+.imageContainer {
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
+.image {
+  border-radius: 10px !important;
+  max-width: 100%;
+  height: auto;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.icon {
+  font-size: 15px !important;  
+}
+
+.favourite {
+  z-index: 2;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  margin-top: 12px;
+  margin-right: 12px;
+}

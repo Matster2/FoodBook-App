@@ -7,5 +7,15 @@
 }
 
 .calendar {
-    width: 100%;
+    max-width: 100%;
+}
+
+.selectedText {
+    font-size: 14px !important;
+}
+
+.servings {
+    color: black !important;
+    border: none !important;
+    min-width: 50px !important;
 }
