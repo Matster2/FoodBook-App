@@ -23,12 +23,17 @@
     "useUnknownInCatchVariables": false,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ],
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "globals.d.ts",
+    "src/dialogs/PlannerIngredientListDialog/PlannerIngredientListDialog.jsx",
   ],
   "exclude": [
     "node_modules"

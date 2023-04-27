@@ -1,20 +1,24 @@
-import React, { useState, useRef } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
 import { Formik, Form, Field } from 'formik';
-import { CssBaseline, Container, Box, TextField, Button } from '@mui/material';
+import { CssBaseline, Container, Box, TextField, Button, FormControl, Select, InputLabel, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useAPI from '../../hooks/useAPI';
 import Header from '../../components/Header';
+import { UnitOfMeasurementContext } from '../../contexts/UnitOfMeasurementContext';
 
 const initialIngredientValue = {
   name: '',
   pluralName: '',
+  defaultUnitOfMeasurementId: undefined
 };
 
 export default () => {
   const navigate = useNavigate();
   const api = useAPI();
+
+  const { unitOfMeasurements, setUnitOfMeasurements } = useContext(UnitOfMeasurementContext);
 
   const formRef = useRef();
 
@@ -48,6 +52,19 @@ export default () => {
       toast.error('Unable to create ingredient');
     }
   };
+
+  const fetchUnitOfMeasurements = async () => {
+    try {
+      const { data } = await api.getUnitOfMeasurements({ sortBy: 'name' });
+      setUnitOfMeasurements(data.results);
+    } catch {
+      console.log('error fetching unit of measurements');
+    }
+  };
+
+  useEffect(() => {
+    fetchUnitOfMeasurements();
+  }, []);
 
   return (
     <Container sx={{ pb: 7 }}>
@@ -94,6 +111,15 @@ export default () => {
                 error={errors.pluralName && touched.pluralName}
                 helperText={touched.pluralName && errors.pluralName}
               />
+
+              <FormControl fullWidth sx={{ mt: 2, mb: 1 }}>
+                <InputLabel id="defaultUnitOfMeasurementId-label">Default Unit Of Measurement</InputLabel>
+                <Field as={Select} margin="normal" id="id" name="defaultUnitOfMeasurementId" labelId="defaultUnitOfMeasurementId-label" label="Default Unit Of Measurement">
+                  {unitOfMeasurements.map((unitOfMeasurement) => (
+                    <MenuItem value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
+                  ))}
+                </Field>
+              </FormControl>
 
               <Box
                 sx={{

@@ -55,12 +55,12 @@ interface PlanRecipeDialogProps {
   recipe: Recipe
 }
 
-interface Recipe { 
+interface Recipe {
   id: string,
   servings: number
 }
 
-const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe } : PlanRecipeDialogProps) => {
+const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRecipeDialogProps) => {
   const {
     claims: { userId },
   } = useAuth();
@@ -82,7 +82,7 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe } : PlanR
     }
 
     setSelectedDays(newSelectedDays);
-  };  
+  };
 
   const handleIncrementServings = () => {
     setServings(state => state + 1);
@@ -94,7 +94,7 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe } : PlanR
 
   const handleAddToPlannerClick = async () => {
     try {
-      var dates = selectedDays.map((x) => (x.toISOString().substring(0, 10)))
+      var dates = selectedDays.map((x) => (x.format('YYYY-MM-DD')))
       await api.planRecipe(userId, recipe.id, servings, dates);
       toast.success('Recipe added to planner');
 
@@ -135,12 +135,10 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe } : PlanR
         </LocalizationProvider>
 
         {selectedDays.length > 1 && (
-          <Box sx={{ mb: 1}}>
+          <Box sx={{ mb: 1 }}>
             <Typography textAlign="right" className={styles.selectedText}>{selectedDays.length} days selected</Typography>
           </Box>
         )}
-
-
 
         <Box
           sx={{
@@ -161,7 +159,7 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe } : PlanR
         </Box>
 
         {selectedDays.length === 0 && (
-          <Box sx={{ mb: 1}}>
+          <Box sx={{ mb: 1 }}>
             <Typography textAlign="center" className={styles.selectedText}>Select the days you would like to add this recipe to</Typography>
           </Box>
         )}

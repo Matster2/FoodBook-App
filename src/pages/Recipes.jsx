@@ -48,7 +48,6 @@ export default () => {
   const fetchRecipes = async () => {
     setLoadingRecipes(true);
     try {
-      setLoadingRecipes(true);
       const { data } = await api.getRecipes(filters);
       setRecipes(data.results);
     } catch {
@@ -80,7 +79,7 @@ export default () => {
       <Dialog
         fullScreen
         open={showAdvancedFilters}
-        onClose={() => {}}
+        onClose={() => { }}
         TransitionComponent={Transition}
         PaperProps={{
           style: {

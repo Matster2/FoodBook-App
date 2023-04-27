@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, CssBaseline, Stack, List, Box, Typography } from '@mui/material';
+import { Container, CssBaseline, Stack, List, Box, Button, Typography, Slide } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import PlannedRecipe from '../components/PlannedRecipe';
@@ -7,8 +7,14 @@ import useAPI from '../hooks/useAPI';
 import useAuth from '../hooks/useAuth';
 import DatePickerOption from '../components/DatePickerOption/DatePickerOption';
 import { areDatesTheSameDay, getDayName, getMonthName } from '../utils/utils';
+import PlannerIngredientListDialog from '../dialogs/PlannerIngredientListDialog';
 
 import styles from './Planner.module.css';
+
+const Transition = React.forwardRef((props, ref) => {
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  return <Slide direction="left" ref={ref} {...props} />;
+});
 
 export default () => {
   const api = useAPI();
@@ -23,6 +29,8 @@ export default () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const [planner, setPlanner] = useState();
+
+  const [showIngredientListModal, setShowIngredientListModal] = useState(false);
 
   useEffect(() => {
     const dateToday = new Date();
@@ -60,6 +68,10 @@ export default () => {
     setSelectedDate(date);
   };
 
+  const handlePlannedRecipeClick = (plannedRecipe) => {
+    navigate(`/recipes/${plannedRecipe.recipe.id}`);
+  };
+
   const recipeTypes = ["Breakfast", "Lunch", "Dinner", "Dessert", "Snack", "Drink"]
 
   const getDateString = () => {
@@ -69,6 +81,19 @@ export default () => {
   return (
     <Container>
       <CssBaseline />
+
+      <PlannerIngredientListDialog
+        open={showIngredientListModal}
+        onClose={() => {
+          setShowIngredientListModal(false);
+        }}
+        TransitionComponent={Transition}
+        userId={userId}
+        filters={{
+          dateFrom: selectedDate.toISOString().split('T')[0],
+          dateTo: selectedDate.toISOString().split('T')[0],
+        }}
+      />
 
       <Header title="Planner" onBackClick={() => navigate(-1)} />
 
@@ -80,7 +105,15 @@ export default () => {
         </Stack>
       </List>
 
-      <Typography variant="h5" sx={{ mb: 1 }} className={styles.date}>{getDateString()}</Typography>
+      <Button
+        sx={{ mb: 1 }}
+        variant='contained'
+        onClick={() => { setShowIngredientListModal(true) }}
+      >
+        Show Ingredient List
+      </Button>
+
+      <Typography variant="h5" sx={{ mb: 2 }} className={styles.date}>{getDateString()}</Typography>
 
       {planner !== undefined && (
         <>
@@ -95,11 +128,14 @@ export default () => {
               <Box sx={{ mb: 2 }}>
                 <Typography variant='h6'>{recipeType}</Typography>
 
-                {plannedRecipes.map((plannedRecipe) => (
-                  <PlannedRecipe
-                    plannedRecipe={plannedRecipe}
-                  />
-                ))}
+                <Stack direction="column" gap={1}>
+                  {plannedRecipes.map((plannedRecipe) => (
+                    <PlannedRecipe
+                      plannedRecipe={plannedRecipe}
+                      onClick={() => handlePlannedRecipeClick(plannedRecipe)}
+                    />
+                  ))}
+                </Stack>
               </Box>
             )
           })}

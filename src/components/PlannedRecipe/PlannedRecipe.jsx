@@ -14,7 +14,7 @@ const PlannedRecipe = ({ plannedRecipe, onClick }) => {
   };
 
   return (
-    <Card sx={{ p: 1 }} className={styles.card} onClick={handleClick}>
+    <Card sx={{ p: 1, pr: 2 }} className={styles.card} onClick={handleClick}>
       {/* {recipe?.favourited && (
         <div className={styles.favourite}>
           <FavouriteHeart width={25} favourited={recipe.favourited} />
@@ -31,18 +31,23 @@ const PlannedRecipe = ({ plannedRecipe, onClick }) => {
             ))}
           </Swiper>
         </Grid>
-        <Grid item>
-          <Box>
+        <Grid item xs display="flex" alignItems="center">
+          <Box display="flex" flexDirection="column" width="100%">
+            <Typography className={styles.name} sx={{ mb: 0.5 }}>{plannedRecipe.recipe.name}</Typography>
+
             <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
-              <Grid item>
-                <Typography className={styles.name}>{plannedRecipe.recipe.name}</Typography>
+              <Grid item xs={6}>
+                <Stack direction="row" alignItems="center" gap={0.4}>
+                  <Typography>{plannedRecipe.servings} servings</Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={6}>
+                <Stack direction="row" alignItems="center" gap={0.4}>
+                  <AccessTimeIcon className={styles.icon} />
+                  <Typography>{plannedRecipe.recipe.totalTime} mins</Typography>
+                </Stack>
               </Grid>
             </Grid>
-
-            <Stack direction="row" alignItems="center" gap={0.4}>
-              <AccessTimeIcon className={styles.icon} />
-              <Typography>{plannedRecipe.recipe.totalTime} mins</Typography>
-            </Stack>
           </Box>
         </Grid>
       </Grid>
@@ -64,7 +69,7 @@ PlannedRecipe.propTypes = {
 };
 
 PlannedRecipe.defaultProps = {
-  onClick: () => {},
+  onClick: () => { },
 };
 
 export default PlannedRecipe;
