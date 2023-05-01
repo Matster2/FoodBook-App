@@ -7,9 +7,6 @@ import {
   Stepper,
   Step,
   StepLabel,
-  AccordionDetails,
-  Accordion,
-  AccordionSummary,
   Box,
   Grid,
   IconButton,
@@ -27,24 +24,36 @@ import { BottomSheet } from 'react-spring-bottom-sheet';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import useAPI from '../hooks/useAPI';
 import useAuth from '../hooks/useAuth';
-import CookingTime from '../components/CookingTime';
 import RatingFilter from '../components/RatingFilter';
+import FavouriteHeart from '../components/FavouriteHeart';
+import IngredientList from '../components/IngredientList';
+import ServingsIncrementor from '../components/ServingsIncrementor';
+import NutritionList from '../components/NutritionList';
+import RecipeAttributeWidget from '../components/RecipeAttributeWidget';
 import PlanRecipeDialog from '../dialogs/PlanRecipeDialog';
+
+import { isUndefined, isNull } from '../utils/utils';
+import { ReactComponent as PlannerIcon } from '../assets/icons/planner.svg';
+import { ReactComponent as PrepIcon } from '../assets/icons/prep.svg';
+import { ReactComponent as CookIcon } from '../assets/icons/cook.svg';
+
 import styles from './Recipe.module.css';
 import 'react-spring-bottom-sheet/dist/style.css';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
-import { isUndefined, isNull } from '../utils/utils';
-import Fraction from '../utils/fraction';
-import FavouriteHeart from '../components/FavouriteHeart';
-import NutritionTable from '../components/NutritionTable';
-import { ReactComponent as PlannerIcon } from '../assets/icons/planner.svg';
-
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <Slide direction="left" ref={ref} {...props} />;
 });
+
+const CollapsibleSection = ({ title, collapse, children }) => (
+  <Box sx={{ mb: 3 }}>
+    <Typography variant='h6'>{title}</Typography>
+
+    {children}
+  </Box>
+)
 
 export default () => {
   const navigate = useNavigate();
@@ -62,6 +71,7 @@ export default () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const [rating, setRating] = useState(undefined);
+  const [servings, setServings] = useState(undefined)
 
   const [showImageModal, setShowImageModal] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
@@ -122,6 +132,10 @@ export default () => {
     }
   };
 
+  const onServingsChange = (newServings) => {
+    setServings(newServings);
+  }
+
   const handleImageClick = (url) => {
     setShowImageModal(true);
   };
@@ -151,10 +165,6 @@ export default () => {
     }
   };
 
-  // useEffect(() => {
-  //   fetchRecipe();
-  // }, []);
-
   useEffect(() => {
     if (authenticated) {
       fetchRecipeRating();
@@ -162,58 +172,38 @@ export default () => {
     fetchRecipe();
   }, [authenticated]);
 
+  useEffect(() => {
+    if (!isUndefined(recipe)) {
+      setServings(recipe.servings)
+    }
+  }, [recipe]);
+
+  Number.prototype.countDecimals = function () {
+    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
+    return this.toString().split(".")[1].length || 0;
+  }
+
+  const getIngredients = () => {
+    return recipe.ingredients.map(ingredient => {
+      var amount = ((ingredient.amount / recipe.servings) * servings);
+      if (amount.countDecimals() > 2) {
+        amount = amount.toFixed(2);
+      }
+
+      return ({
+        ...ingredient,
+        amount,
+      })
+    })
+  }
+
   const truncateText = (value, maxLength) => {
     const trimmedString = value.substr(0, maxLength);
     return trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
   };
 
-  const getUnitName = (unitOfMeasurement, amount) => {
-    if (unitOfMeasurement.name.toLowerCase() === 'unit') {
-      return '';
-    }
-
-    return amount > 1 ? `${unitOfMeasurement.pluralName} ` : `${unitOfMeasurement.name} `;
-  };
-
-  const getAmountString = (amount) => {
-    const isWholeNumber = amount % 1 === 0;
-
-    if (isWholeNumber) {
-      return amount;
-    }
-
-    const integer = Math.trunc(amount);
-    const decimal = amount - Math.floor(amount);
-
-    const fraction = Fraction(decimal);
-
-    if (integer === 0) {
-      return `${fraction.numerator}/${fraction.denominator}`;
-    }
-
-    if (decimal === 0.33) {
-      fraction.numerator = 1;
-      fraction.denominator = 3;
-    }
-
-    return `${integer} ${fraction.numerator}/${fraction.denominator}`;
-  };
-
-  const renderIngredientText = (ingredient) => {
-    const amount = getAmountString(ingredient.amount);
-    const unit = getUnitName(ingredient.unitOfMeasurement, ingredient.amount);
-
-    const ingredientName = amount === 1 ? ingredient.name : ingredient.pluralName;
-
-    return (
-      <span>
-        {`${amount} ${unit}`.trim()} <span className={styles.ingredientName}>{ingredientName}</span>
-      </span>
-    );
-  };
-
   const renderDescriptionText = (description) => {
-    const maxLength = 100;
+    const maxLength = 90;
 
     const text = showFullDescription ? description : truncateText(description, maxLength);
 
@@ -247,6 +237,23 @@ export default () => {
     );
   };
 
+  const renderTime = (totalMinutes) => {
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+
+    const parts = []
+
+    if (hours > 0) {
+      parts.push(`${hours} h`)
+    }
+
+    if (mins > 0) {
+      parts.push(mins > 1 ? `${mins} mins` : `${mins} min`)
+    }
+
+    return parts.join(" ");
+  }
+
   if (isUndefined(recipe)) {
     return <div />;
   }
@@ -256,7 +263,7 @@ export default () => {
       <Dialog
         fullScreen
         open={showImageModal}
-        onClose={() => {}}
+        onClose={() => { }}
         // TransitionComponent={Transition}
         PaperProps={{
           style: {
@@ -336,7 +343,6 @@ export default () => {
           xs={1}
           sx={{
             display: 'flex',
-            flexDirection: 'row',
             justifyContent: 'flex-end',
           }}
         >
@@ -354,7 +360,6 @@ export default () => {
           xs={1}
           sx={{
             display: 'flex',
-            flexDirection: 'row',
             justifyContent: 'flex-end',
           }}
         >
@@ -372,101 +377,115 @@ export default () => {
         ))}
       </Swiper>
 
-      <Container>
-        <BottomSheet
-          open
-          blocking={false}
-          defaultSnap={({ snapPoints, lastSnap }) => Math.max(...snapPoints)}
-          snapPoints={({ maxHeight }) => [maxHeight - maxHeight / 10, maxHeight - maxHeight / 4, maxHeight / 2]}
-        >
-          <Container sx={{ pb: 5 }}>
-            <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+      <BottomSheet
+        open
+        blocking={false}
+        defaultSnap={({ snapPoints, lastSnap }) => Math.max(...snapPoints)}
+        snapPoints={({ maxHeight }) => [maxHeight - maxHeight / 10, maxHeight - maxHeight / 4, maxHeight / 2]}
+      >
+        <Container sx={{ mb: 5 }}>
+          <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+            <Grid item>
+              <Stack direction="row" alignItems="center" gap={0.4}>
+                <AccessTimeIcon className={styles.icon} />
+                <Typography sx={{ fontSize: 15 }}>{recipe.totalTime} mins</Typography>
+              </Stack>
+            </Grid>
+            <Grid
+              item
+              onClick={() => {
+                setShowRatingModal(true);
+              }}
+            >
+              <Stack direction="row" alignItems="center" gap={0.2}>
+                <StarIcon
+                  sx={{ width: 25, color: recipe.rating > 0 ? '#FFB900' : 'lightgrey' }}
+                  className={styles.icon}
+                />
+                <Typography sx={{ fontSize: 15 }}>{recipe.rating}</Typography>
+              </Stack>
+            </Grid>
+          </Grid>
+          <Box sx={{ mb: 1 }}>
+            <Grid container justifyContent="space-between" alignItems="center">
               <Grid item>
-                <Stack direction="row" alignItems="center" gap={0.4}>
-                  <AccessTimeIcon className={styles.icon} />
-                  <Typography sx={{ fontSize: 15 }}>{recipe.totalTime} mins</Typography>
-                </Stack>
+                <Typography variant="h6">{recipe.name}</Typography>
               </Grid>
-              <Grid
-                item
-                onClick={() => {
-                  setShowRatingModal(true);
-                }}
-              >
-                <Stack direction="row" alignItems="center" gap={0.2}>
-                  <StarIcon
-                    sx={{ width: 25, color: recipe.rating > 0 ? '#FFB900' : 'lightgrey' }}
-                    className={styles.icon}
-                  />
-                  <Typography sx={{ fontSize: 15 }}>{recipe.rating}</Typography>
-                </Stack>
-              </Grid>
-            </Grid>
-            <Box sx={{ mb: 1 }}>
-              <Grid container justifyContent="space-between" alignItems="center">
-                <Grid item>
-                  <Typography variant="h6">{recipe.name}</Typography>
-                </Grid>
-                <Grid item>
-                  <PlannerIcon onClick={handlePlannerClick} className={styles.plannerIcon} />
-                </Grid>
-              </Grid>
-
-              {renderDescriptionText(recipe.description)}
-            </Box>
-
-            <Grid container justifyContent="space-between" sx={{ p: 1 }}>
-              <Grid item xs={4} sx={{ p: 1 }}>
-                <CookingTime type="prep" time={recipe.prepTime} />
-              </Grid>
-              <Grid item xs={4} sx={{ p: 1 }}>
-                <CookingTime type="cook" time={recipe.cookTime} />
-              </Grid>
-              <Grid item xs={4} sx={{ p: 1 }}>
-                <CookingTime type="total" time={recipe.totalTime} />
+              <Grid item>
+                <PlannerIcon onClick={handlePlannerClick} className={styles.plannerIcon} />
               </Grid>
             </Grid>
 
-            <Box sx={{ mt: 2 }}>
-              <NutritionTable nutrition={recipe.nutrition} />
-            </Box>
+            {renderDescriptionText(recipe.description)}
+          </Box>
 
-            <Box sx={{ mt: 2 }}>
-              <Accordion defaultExpanded>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-                  <Typography variant="h6">Ingredients</Typography>
-                </AccordionSummary>
-                <AccordionDetails sx={{ mt: -3 }}>
-                  <ul className={styles.ingredientList}>
-                    {recipe.ingredients.map((ingredient) => (
-                      <li>
-                        <span>{renderIngredientText(ingredient)}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
+          <Stack
+            sx={{ my: 2 }}
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <RecipeAttributeWidget
+              type="calories"
+              value={recipe.nutrition.calories}
+            />
+          </Stack>
 
-            <Box sx={{ mt: 2 }}>
-              <Accordion defaultExpanded sx={{ mt: 2 }}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-                  <Typography variant="h6">Directions</Typography>
-                </AccordionSummary>
-                <AccordionDetails sx={{ mt: -3 }}>
-                  <Stepper orientation="vertical">
-                    {recipe.instructions.map((instruction, index) => (
-                      <Step>
-                        <StepLabel>{instruction}</StepLabel>
-                      </Step>
-                    ))}
-                  </Stepper>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
-          </Container>
-        </BottomSheet>
-      </Container>
+          <Grid container sx={{ mt: 2, mb: 3 }} >
+            <Grid item xs={6} display="flex" alignItems="center" justifyContent="center">
+              <PrepIcon className={styles.cookTimeIcon} />
+              <Typography display="inline" className={styles.cookTimeHeading}>Prep Time</Typography>
+              <Typography display="inline" className={styles.cookTimeValue}>{renderTime(recipe.prepTime)}</Typography>
+            </Grid>
+            <Grid item xs={6} display="flex" alignItems="center" justifyContent="center">
+              <CookIcon className={styles.cookTimeIcon} />
+              <Typography display="inline" className={styles.cookTimeHeading}>Cooking Time</Typography>
+              <Typography display="inline" className={styles.cookTimeValue}>{renderTime(recipe.cookTime)}</Typography>
+            </Grid>
+          </Grid>
+
+          <Box sx={{ mb: 1 }} display="flex" alignItems="center" justifyContent="center">
+            <ServingsIncrementor
+              recipeServings={recipe.servings}
+              defaultValue={servings}
+              onChange={onServingsChange}
+              suffixText="Servings"
+              min={1}
+              max={100}
+            />
+          </Box>
+
+          <CollapsibleSection
+            title="Ingredients"
+          >
+            {!isUndefined(servings) && (
+              <IngredientList
+                ingredients={getIngredients()}
+              />
+            )}
+          </CollapsibleSection>
+
+          <CollapsibleSection
+            title="Directions"
+          >
+            <Stepper orientation="vertical">
+              {recipe.instructions.map((instruction, index) => (
+                <Step>
+                  <StepLabel>{instruction}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+          </CollapsibleSection>
+
+          <CollapsibleSection
+            title="Nutrition"
+          >
+            <NutritionList
+              nutrition={recipe.nutrition}
+            />
+          </CollapsibleSection>
+        </Container>
+      </BottomSheet>
     </>
   );
 };

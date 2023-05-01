@@ -1,0 +1,28 @@
+.button {
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  background-color: #FB6B1C;
+  color: white;
+  border: none;
+  font-size: 22px;
+  line-height: 23px;
+  text-align: center;
+  font-weight: normal;
+  padding: 0;
+  margin: 5px;
+}
+
+.button:active {
+  background-color: #b13e00;
+}
+
+.disabled {
+  background-color: grey;
+}
+
+.text {
+  font-size: 14px !important;
+  width: 80px;
+  text-align: center;
+}
