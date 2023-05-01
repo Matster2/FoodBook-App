@@ -64,12 +64,12 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
     setSigningIn(true);
 
     if (!validateInputs()) {
+      setSigningIn(false);
       return;
     }
 
     try {
       await auth.login(email, password);
-
       setSignedin(true);
       toast.success('Signed In Successfully');
       onComplete();
@@ -81,7 +81,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
       }
     }
 
-    setSigningIn(true);
+    setSigningIn(false);
   };
 
   useEffect(() => {
@@ -133,7 +133,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           name="email"
           autoComplete="email"
           autoFocus
-          disable={signedIn || signingIn}
+          disabled={signedIn || signingIn}
           value={email}
           onChange={onEmailChange}
           error={!isUndefined(inputErrors.email)}
@@ -148,7 +148,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           type="password"
           id="password"
           autoComplete="current-password"
-          disable={signedIn || signingIn}
+          disabled={signedIn || signingIn}
           value={password}
           onChange={onPasswordChange}
           error={!isUndefined(inputErrors.password)}

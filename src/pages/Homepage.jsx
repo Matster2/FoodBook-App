@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import Filters from './Filters';
+import useInput from '../hooks/useInput';
 import RecipeTile from '../components/RecipeTile';
 import FilterButton from '../components/FilterButton';
 import CategoryChip from '../components/CategoryChip';
@@ -73,6 +74,7 @@ export default () => {
   const { setTags } = useContext(TagContext);
   const { user } = useContext(UserContext);
 
+  const { value: search, onChange: onSearchChange } = useInput('');
   const [filters] = useState({});
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
@@ -87,8 +89,7 @@ export default () => {
   }, []);
 
   const { results: recentlyAddedRecipes, totalResults: totalRecentlyAddedRecipes } = usePagedFetch(
-    `${
-      process.env.REACT_APP_API_URL
+    `${process.env.REACT_APP_API_URL
     }/recipes?random=true&pageSize=25&publishedAfter=${sevenDaysAgo.toISOString()}&sortBy=datepublished&sortDesc=true`
   );
   const { results: recommendedRecipes, totalResults: totalRecommendedRecipes } = usePagedFetch(
@@ -107,6 +108,16 @@ export default () => {
       NiceModal.show('authentication-modal');
     }
   };
+
+  const handleApplySearch = () => {
+    navigate(`/recipes`, {
+      state: {
+        filters: {
+          search: search,
+        },
+      },
+    });
+  }
 
   const handleCategoryClick = (id) => {
     navigate(`/recipes`, {
@@ -164,7 +175,7 @@ export default () => {
       <Dialog
         fullScreen
         open={showAdvancedFilters}
-        onClose={() => {}}
+        onClose={() => { }}
         TransitionComponent={Transition}
         PaperProps={{
           style: {
@@ -200,6 +211,13 @@ export default () => {
                     <SearchIcon className={styles.searchIcon} />
                   </InputAdornment>
                 ),
+              }}
+              value={search}
+              onChange={onSearchChange}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  handleApplySearch();
+                }
               }}
             />
           </Grid>

@@ -1,5 +1,24 @@
-.date { 
+.date {
   color: black;
   font-weight: bold;
   font-size: 18px;
+}
+
+
+.ingredientsButton {
+  border-radius: 10px !important;
+  stroke: black;
+  fill: none;
+  padding: 7px !important;
+  width: 35px;
+  background: #FB6B1C !important;
+}
+
+.ingredientsIcon {
+  stroke-width: 0 !important;
+  font-size: 35px !important;
+  margin: 0px;
+  padding: 0px;
+  stroke: white !important;
+  fill: white !important;
 }

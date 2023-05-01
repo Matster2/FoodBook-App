@@ -414,7 +414,7 @@ const Layout = () => {
             to="/planner"
             label="Planner"
             icon={
-              <PlannerIcon className={classnames(styles.navOption, isPlannerActive() && styles.navOptionSelected)} />
+              <PlannerIcon className={classnames(styles.navOption, styles.planner, isPlannerActive() && styles.navOptionSelected)} />
             }
           />
           <BottomNavigationAction

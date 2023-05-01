@@ -109,8 +109,8 @@ RecipeIngredient.propTypes = {
 };
 
 RecipeIngredient.defaultProps = {
-  onChange: () => {},
-  onDelete: () => {},
+  onChange: () => { },
+  onDelete: () => { },
 };
 
 const initialRecipeValue = {
@@ -411,8 +411,8 @@ export default () => {
                       label="Cooking Time"
                       type="number"
                       autoFocus
-                      // error={!isUndefined(errors.cookTime)}
-                      // helperText={errors.cookTime?.message}
+                    // error={!isUndefined(errors.cookTime)}
+                    // helperText={errors.cookTime?.message}
                     />
                   </Grid>
                 </Grid>
@@ -428,8 +428,8 @@ export default () => {
                       label="Total Time"
                       type="number"
                       autoFocus
-                      // error={!isUndefined(errors.totalTime)}
-                      // helperText={errors.totalTime?.message}
+                    // error={!isUndefined(errors.totalTime)}
+                    // helperText={errors.totalTime?.message}
                     />
                   </Grid>
                 </Grid>
@@ -445,8 +445,8 @@ export default () => {
                       label="Servings"
                       type="number"
                       autoFocus
-                      // error={!isUndefined(errors.servings)}
-                      // helperText={errors.servings?.message}
+                    // error={!isUndefined(errors.servings)}
+                    // helperText={errors.servings?.message}
                     />
                   </Grid>
                 </Grid>
@@ -472,7 +472,9 @@ export default () => {
                     }}
                     onChange={(event, value) => {
                       setIngredientSearch('');
-                      handleAddIngredient(value.ingredient);
+                      if (value) {
+                        handleAddIngredient(value.ingredient);
+                      }
                     }}
                   />
 

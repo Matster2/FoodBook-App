@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Container, Grid, TextField, Box, InputAdornment, CssBaseline, Dialog, Slide } from '@mui/material';
+import { Container, CircularProgress, Grid, TextField, Box, InputAdornment, CssBaseline, Dialog, Slide } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import RecipeTile from '../components/RecipeTile';
 import Header from '../components/Header';
 import Filters from './Filters';
 import FilterButton from '../components/FilterButton';
 import useAPI from '../hooks/useAPI';
+import useInput from '../hooks/useInput';
 import { TagContext } from '../contexts/TagContext';
 import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
 import styles from './Recipes.module.css';
@@ -24,6 +25,7 @@ export default () => {
 
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
+  const { value: search, onChange: onSearchChange } = useInput(location?.state?.filters?.search);
   const [filters, setFilters] = useState({
     ...location?.state?.filters,
     pageSize: 40,
@@ -59,6 +61,14 @@ export default () => {
   useEffect(() => {
     fetchRecipes();
   }, [filters]);
+
+
+  const handleApplySearch = () => {
+    setFilters((value) => ({
+      ...filters,
+      search
+    }))
+  }
 
   const handleAdvancedFiltersClick = () => {
     setShowAdvancedFilters(true);
@@ -106,6 +116,14 @@ export default () => {
                   </InputAdornment>
                 ),
               }}
+              value={search}
+              onChange={onSearchChange}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  handleApplySearch();
+                }
+              }}
+              onBlur={handleApplySearch}
             />
           </Grid>
           <Grid xs="auto">
@@ -113,6 +131,13 @@ export default () => {
           </Grid>
         </Grid>
       </Box>
+
+
+      {loadingRecipes && (
+        <Box sx={{ mt: 2 }} display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
+      )}
 
       <Grid container spacing={1}>
         <Grid item xs={6}>

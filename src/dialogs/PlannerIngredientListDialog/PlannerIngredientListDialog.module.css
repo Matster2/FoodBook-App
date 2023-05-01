@@ -1,21 +1,43 @@
-.chip {
-    color: #151515 !important;
+.header {
+    position: fixed;
+    width: inherit;
 }
 
-.icon {
-    height: 100%;
+.content {
+    overflow-y: scroll;
 }
 
-.calendar {
-    max-width: 100%;
-}
-
-.selectedText {
+.recipeName {
     font-size: 14px !important;
+    font-weight: bold !important;
 }
 
-.servings {
-    color: black !important;
-    border: none !important;
-    min-width: 50px !important;
+.recipeServings {
+    font-size: 12px !important;
+    font-weight: bold !important;
+    color: #FB6B1C !important;
+}
+
+
+.viewButton {
+    border-radius: 10px !important;
+    stroke: black;
+    fill: none;
+    padding: 7px !important;
+    width: 30px !important;
+    background: #FB6B1C !important;
+}
+
+.viewIcon {
+    stroke-width: 0 !important;
+    font-size: 30px !important;
+    margin: 0px;
+    max-height: 15px !important;
+    padding: 0px;
+    stroke: white !important;
+    fill: white !important;
+}
+
+.title {
+    font-size: 24px !important;
 }

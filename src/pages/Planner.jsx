@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, CssBaseline, Stack, List, Box, Button, Typography, Slide } from '@mui/material';
+import { Container, CircularProgress, Grid, CssBaseline, Stack, List, Box, Button, Typography, IconButton, Slide } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import PlannedRecipe from '../components/PlannedRecipe';
@@ -9,6 +9,7 @@ import DatePickerOption from '../components/DatePickerOption/DatePickerOption';
 import { areDatesTheSameDay, getDayName, getMonthName } from '../utils/utils';
 import PlannerIngredientListDialog from '../dialogs/PlannerIngredientListDialog';
 
+import { ReactComponent as IngredientsIcon } from '../assets/icons/ingredients.svg';
 import styles from './Planner.module.css';
 
 const Transition = React.forwardRef((props, ref) => {
@@ -29,6 +30,7 @@ export default () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   const [planner, setPlanner] = useState();
+  const [loadingPlanner, setLoadingPlanner] = useState(false);
 
   const [showIngredientListModal, setShowIngredientListModal] = useState(false);
 
@@ -49,6 +51,8 @@ export default () => {
   }, []);
 
   const fetchPlanner = async () => {
+    setLoadingPlanner(true);
+
     try {
       const { data } = await api.getUserPlanner(userId, {
         dateFrom: selectedDate.toISOString().split('T')[0],
@@ -58,6 +62,8 @@ export default () => {
     } catch (e) {
       console.log(e);
     }
+
+    setLoadingPlanner(false);
   };
 
   useEffect(() => {
@@ -69,17 +75,21 @@ export default () => {
   };
 
   const handlePlannedRecipeClick = (plannedRecipe) => {
-    navigate(`/recipes/${plannedRecipe.recipe.id}`);
+    navigate(`/recipes/${plannedRecipe.recipe.id}`, {
+      state: {
+        servings: plannedRecipe.servings
+      }
+    });
   };
 
   const recipeTypes = ["Breakfast", "Lunch", "Dinner", "Dessert", "Snack", "Drink"]
 
   const getDateString = () => {
-    return `${getDayName(selectedDate)}, ${selectedDate.getDay()} ${getMonthName(selectedDate)}`
+    return `${getDayName(selectedDate)}, ${selectedDate.getDate()} ${getMonthName(selectedDate)}`
   }
 
   return (
-    <Container>
+    <Container sx={{ pb: 10 }}>
       <CssBaseline />
 
       <PlannerIngredientListDialog
@@ -97,7 +107,7 @@ export default () => {
 
       <Header title="Planner" onBackClick={() => navigate(-1)} />
 
-      <List sx={{ mb: 4 }} style={{ overflow: 'auto' }}>
+      <List sx={{ mb: 2 }} style={{ overflow: 'auto' }}>
         <Stack direction="row" alignItems="center" gap={1}>
           {availableDates.map((date) => (
             <DatePickerOption date={date} active={areDatesTheSameDay(date, selectedDate)} onClick={handleDateClick} />
@@ -105,15 +115,25 @@ export default () => {
         </Stack>
       </List>
 
-      <Button
-        sx={{ mb: 1 }}
-        variant='contained'
-        onClick={() => { setShowIngredientListModal(true) }}
-      >
-        Show Ingredient List
-      </Button>
+      <Box>
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Grid item alignItems="flex-start">
+            <Typography variant="h5" sx={{ mb: 2 }} className={styles.date}>{getDateString()}</Typography>
+          </Grid>
+          <Grid item alignItems="center" justifyContent="center">
+            <IconButton className={styles.ingredientsButton} onClick={() => { setShowIngredientListModal(true) }}>
+              <IngredientsIcon className={styles.ingredientsIcon} />
+            </IconButton>
+          </Grid>
+        </Grid>
+      </Box>
 
-      <Typography variant="h5" sx={{ mb: 2 }} className={styles.date}>{getDateString()}</Typography>
+
+      {loadingPlanner && (
+        <Box sx={{ mt: 2 }} display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
+      )}
 
       {planner !== undefined && (
         <>

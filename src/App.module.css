@@ -31,11 +31,14 @@
     height: auto;
     margin: 3px 0px;
     padding: 0px;
-    fill: #fb6b1c;
+    fill: #fb6b1c !important;
     stroke: rgba(50, 50, 50, 0);
     color: #fb6b1c !important;
 }
 
+.planner {
+    fill: #747474;
+}
 
 .navOptionSelected span {
     font-weight: bold;

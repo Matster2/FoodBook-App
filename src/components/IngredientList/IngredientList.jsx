@@ -13,6 +13,20 @@ const IngredientList = ({ ingredients }) => {
     return amount > 1 ? `${unitOfMeasurement.pluralName} ` : `${unitOfMeasurement.name} `;
   };
 
+  function compare(ingredient1, ingredient2) {
+    if (ingredient1.unitOfMeasurement.name.toLowerCase() === 'unit') {
+      return -1;
+    }
+
+    if (ingredient1.unitOfMeasurement.name < ingredient2.unitOfMeasurement.name) {
+      return -1;
+    }
+    if (ingredient1.unitOfMeasurement.name > ingredient2.unitOfMeasurement.name) {
+      return 1;
+    }
+    return 0;
+  }
+
   const getAmountString = (amount) => {
     const isWholeNumber = amount % 1 === 0;
 
@@ -53,7 +67,9 @@ const IngredientList = ({ ingredients }) => {
 
   return (
     <>
-      {ingredients.map((ingredient) => renderIngredient(ingredient))}
+      {ingredients
+        .sort(compare)
+        .map((ingredient) => renderIngredient(ingredient))}
     </>
   );
 };

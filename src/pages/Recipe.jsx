@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import {
   Container,
   Typography,
@@ -57,6 +57,7 @@ const CollapsibleSection = ({ title, collapse, children }) => (
 
 export default () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
 
   const {
@@ -71,7 +72,7 @@ export default () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
 
   const [rating, setRating] = useState(undefined);
-  const [servings, setServings] = useState(undefined)
+  const [servings, setServings] = useState(location?.state?.servings);
 
   const [showImageModal, setShowImageModal] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
@@ -173,7 +174,7 @@ export default () => {
   }, [authenticated]);
 
   useEffect(() => {
-    if (!isUndefined(recipe)) {
+    if (!isUndefined(recipe) && !location?.state?.servings) {
       setServings(recipe.servings)
     }
   }, [recipe]);
@@ -431,7 +432,7 @@ export default () => {
             />
           </Stack>
 
-          <Grid container sx={{ mt: 2, mb: 3 }} >
+          <Grid container sx={{ mt: 2, mb: 2 }} >
             <Grid item xs={6} display="flex" alignItems="center" justifyContent="center">
               <PrepIcon className={styles.cookTimeIcon} />
               <Typography display="inline" className={styles.cookTimeHeading}>Prep Time</Typography>
