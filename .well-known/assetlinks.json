@@ -1,0 +1,6 @@
+[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target" : { "namespace": "android_app", "package_name": "com.foodbook",
+                     "sha256_cert_fingerprints": ["D0:CD:30:C6:2B:32:F2:B7:7D:A3:6F:6D:E9:87:85:72:E4:0E:CF:0A:A1:AA:F8:D7:C0:99:0E:48:57:66:05:13"] }
+      }
+]
