@@ -9,6 +9,7 @@ import { createTheme } from '@mui/material/styles';
 import { AppContext } from './contexts/AppContext';
 import { UserContext } from './contexts/UserContext';
 import useAuth from './hooks/useAuth';
+import useAPI from './hooks/useAPI';
 
 import AdminRoute from './routings/AdminRoute';
 
@@ -25,18 +26,17 @@ import AdminAddIngredient from './pages/Admin/AddIngredient';
 import AdminAddTag from './pages/Admin/AddTag';
 import AdminSettings from './pages/Admin/Settings';
 import Planner from './pages/Planner';
+import TermsOfService from './pages/TermsOfService';
 
 import AuthenticationModal from './modals/AuthenticationModal';
-import useAPI from './hooks/useAPI';
 
-import styles from './App.module.css';
 import { ReactComponent as HomeIcon } from './assets/icons/home.svg';
 import { ReactComponent as DiscoverIcon } from './assets/icons/discover.svg';
 import { ReactComponent as PlannerIcon } from './assets/icons/planner.svg';
 import { ReactComponent as HeartIcon } from './assets/icons/heart.svg';
 import { ReactComponent as SettingsIcon } from './assets/icons/cog.svg';
-import TermsOfService from './pages/TermsOfService';
 
+import styles from './App.module.css';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 
 const App = () => {

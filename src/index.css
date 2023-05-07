@@ -1,10 +1,10 @@
 :root {
-  --pimary-background-colour: #f5f5f5;
-  --pimary-colour: #fb6b1c;
+  --primary-background-colour: #f5f5f5;
+  --primary-colour: #fb6b1c;
 
 
   --rsbs-backdrop-bg: rgba(0, 0, 0, 0);
-  --rsbs-bg: var(--pimary-background-colour);
+  --rsbs-bg: var(--primary-background-colour);
   --rsbs-handle-bg: #CFCFCF;
   --rsbs-max-w: auto;
   --rsbs-ml: env(safe-area-inset-left);
@@ -20,7 +20,7 @@ body {
   font-family: 'Urbanist', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--pimary-background-colour);
+  background-color: var(--primary-background-colour);
 }
 
 code {
@@ -32,6 +32,7 @@ a {
   color: #fb6b1c;
   text-decoration: none !important;
 }
+
 a:visited {
   color: #fb6b1c;
   text-decoration: none;
