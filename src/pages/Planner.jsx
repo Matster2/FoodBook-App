@@ -6,7 +6,7 @@ import PlannedRecipe from '../components/PlannedRecipe';
 import useAPI from '../hooks/useAPI';
 import useAuth from '../hooks/useAuth';
 import DatePickerOption from '../components/DatePickerOption/DatePickerOption';
-import { areDatesTheSameDay, getDayName, getMonthName } from '../utils/utils';
+import { areDatesTheSameDay, getDayName, getMonthName, isUndefined } from '../utils/utils';
 import PlannerIngredientListDialog from '../dialogs/PlannerIngredientListDialog';
 
 import { ReactComponent as IngredientsIcon } from '../assets/icons/ingredients.svg';
@@ -120,11 +120,14 @@ export default () => {
           <Grid item alignItems="flex-start">
             <Typography variant="h5" sx={{ mb: 2 }} className={styles.date}>{getDateString()}</Typography>
           </Grid>
-          <Grid item alignItems="center" justifyContent="center">
-            <IconButton className={styles.ingredientsButton} onClick={() => { setShowIngredientListModal(true) }}>
-              <IngredientsIcon className={styles.ingredientsIcon} />
-            </IconButton>
-          </Grid>
+
+          {!isUndefined(planner) && planner.plannedRecipe.length > 0 && (
+            <Grid item alignItems="center" justifyContent="center">
+              <IconButton className={styles.ingredientsButton} onClick={() => { setShowIngredientListModal(true) }}>
+                <IngredientsIcon className={styles.ingredientsIcon} />
+              </IconButton>
+            </Grid>
+          )}
         </Grid>
       </Box>
 
@@ -132,6 +135,12 @@ export default () => {
       {loadingPlanner && (
         <Box sx={{ mt: 2 }} display="flex" justifyContent="center">
           <CircularProgress />
+        </Box>
+      )}
+
+      {isUndefined(planner) && !loadingPlanner && (
+        <Box>
+          <Typography>No recipes planned on this day.</Typography>
         </Box>
       )}
 
