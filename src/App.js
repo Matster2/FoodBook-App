@@ -20,10 +20,13 @@ import Favourites from './pages/Favourites';
 import Settings from './pages/Settings';
 import ContactUs from './pages/ContactUs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
-import AdminAddRecipe from './pages/Admin/AddRecipe';
-import AdminIngredient from './pages/Admin/Ingredients';
-import AdminAddIngredient from './pages/Admin/AddIngredient';
+import AdminTags from './pages/Admin/Tags';
 import AdminAddTag from './pages/Admin/AddTag';
+import AdminIngredients from './pages/Admin/Ingredients';
+import AdminAddIngredient from './pages/Admin/AddIngredient';
+import AdminAuthors from './pages/Admin/Authors';
+import AdminAddAuthor from './pages/Admin/AddAuthor';
+import AdminAddRecipe from './pages/Admin/AddRecipe';
 import AdminSettings from './pages/Admin/Settings';
 import Planner from './pages/Planner';
 import TermsOfService from './pages/TermsOfService';
@@ -248,10 +251,18 @@ const App = () => {
           ),
         },
         {
-          path: '/admin/recipes/add',
+          path: '/admin/tags',
           element: (
             <AdminRoute>
-              <AdminAddRecipe />
+              <AdminTags />
+            </AdminRoute>
+          ),
+        },
+        {
+          path: '/admin/tags/add',
+          element: (
+            <AdminRoute>
+              <AdminAddTag />
             </AdminRoute>
           ),
         },
@@ -259,7 +270,7 @@ const App = () => {
           path: '/admin/ingredients',
           element: (
             <AdminRoute>
-              <AdminIngredient />
+              <AdminIngredients />
             </AdminRoute>
           ),
         },
@@ -272,10 +283,26 @@ const App = () => {
           ),
         },
         {
-          path: '/admin/tags/add',
+          path: '/admin/authors',
           element: (
             <AdminRoute>
-              <AdminAddTag />
+              <AdminAuthors />
+            </AdminRoute>
+          ),
+        },
+        {
+          path: '/admin/authors/add',
+          element: (
+            <AdminRoute>
+              <AdminAddAuthor />
+            </AdminRoute>
+          ),
+        },
+        {
+          path: '/admin/recipes/add',
+          element: (
+            <AdminRoute>
+              <AdminAddRecipe />
             </AdminRoute>
           ),
         },

@@ -13,13 +13,16 @@ import {
   Box,
   CircularProgress,
   Typography,
-  Button
+  Button,
+  Icon
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useAPI from '../../hooks/useAPI';
 import useFilters from '../../hooks/useFilters';
 import useInput from '../../hooks/useInput';
 import Header from '../../components/Header';
+
+import categoryIcons from '../../config/categoryIcons';
 
 export default () => {
   const navigate = useNavigate();
@@ -31,32 +34,32 @@ export default () => {
   });
 
   const { value: search, onChange: onSearchChange } = useInput('');
-  const [loadingIngredients, setLoadingIngredients] = useState(false);
-  const [ingredients, setIngredients] = useState([]);
+  const [loadingTags, setLoadingTags] = useState(false);
+  const [tags, setTags] = useState([]);
 
-  const fetchIngredients = async () => {
-    setLoadingIngredients(true);
+  const fetchTags = async () => {
+    setLoadingTags(true);
 
     try {
       const {
         data: { results },
-      } = await api.getIngredients(filters);
-      setIngredients(results);
+      } = await api.getTags(filters);
+      setTags(results);
     } catch (e) {
       console.log(e);
     }
 
-    setLoadingIngredients(false);
+    setLoadingTags(false);
   };
 
   /* Handlers */
   const handleAddClick = () => {
-    navigate("/admin/ingredients/add")
+    navigate("/admin/tags/add")
   }
 
   /* Effects */
   useEffect(() => {
-    fetchIngredients();
+    fetchTags();
   }, [filters]);
 
   useEffect(() => {
@@ -71,7 +74,7 @@ export default () => {
   return (
     <Container sx={{ pb: 7 }}>
       <CssBaseline />
-      <Header title="Ingredients" onBackClick={() => navigate(-1)} />
+      <Header title="Tags" onBackClick={() => navigate(-1)} />
 
       <Box
         sx={{ display: "flex", justifyContent: "right" }}
@@ -97,13 +100,13 @@ export default () => {
         onChange={onSearchChange}
       />
 
-      {ingredients.length === 0 && !loadingIngredients && (
+      {tags.length === 0 && !loadingTags && (
         <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
-          <Typography>No Ingredients Found</Typography>
+          <Typography>No Tags Found</Typography>
         </Box>
       )}
 
-      {ingredients.length > 0 && (
+      {tags.length > 0 && (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }}>
             <TableHead>
@@ -112,10 +115,19 @@ export default () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {ingredients.map((ingredient) => (
-                <TableRow key={ingredient.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              {tags.map((tag) => (
+                <TableRow key={tag.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
-                    {`${ingredient.name} (${ingredient.pluralName})`}
+                    <Typography
+                      sx={{
+                        display: 'flex',
+                      }}
+                    >
+                      <Icon sx={{ mr: 1 }}>
+                        <img style={{ height: '100%' }} alt={tag.name} src={categoryIcons[tag.icon.toLowerCase()]} />
+                      </Icon>
+                      {tag.name}
+                    </Typography>
                   </TableCell>
                 </TableRow>
               ))}
@@ -124,7 +136,7 @@ export default () => {
         </TableContainer>
       )}
 
-      {loadingIngredients && (
+      {loadingTags && (
         <Box sx={{ mt: 2 }} display="flex" justifyContent="center">
           <CircularProgress />
         </Box>

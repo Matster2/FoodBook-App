@@ -233,6 +233,20 @@ const useAPI = () => {
     );
   };
 
+  const createAuthor = async (author) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/authors`,
+      {
+        ...author,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
   const getUserPlanner = async (userId, parameters) => {
     const url = new URL(`${process.env.REACT_APP_API_URL}/users/${userId}/planner`);
     url.search = getSearchParams(parameters);
@@ -268,6 +282,25 @@ const useAPI = () => {
       },
     });
   };
+  
+  const getAuthor = async (id) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/authors/${id}`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+  
+  const getAuthors = async (parameters = {}) => {
+    const url = new URL(`${process.env.REACT_APP_API_URL}/authors`);
+    url.search = getSearchParams(parameters);
+
+    return axios.get(url.href, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
 
   return {
     queryEmail,
@@ -291,9 +324,12 @@ const useAPI = () => {
     createRecipe,
     uploadRecipeImage,
     createTag,
+    createAuthor,
     getUserPlanner,
     planRecipe,
     getPlannerIngredientList,
+    getAuthor,
+    getAuthors,
   };
 };
 

@@ -31,32 +31,32 @@ export default () => {
   });
 
   const { value: search, onChange: onSearchChange } = useInput('');
-  const [loadingIngredients, setLoadingIngredients] = useState(false);
-  const [ingredients, setIngredients] = useState([]);
+  const [loadingAuthors, setLoadingAuthors] = useState(false);
+  const [authors, setAuthors] = useState([]);
 
-  const fetchIngredients = async () => {
-    setLoadingIngredients(true);
+  const fetchAuthors = async () => {
+    setLoadingAuthors(true);
 
     try {
       const {
         data: { results },
-      } = await api.getIngredients(filters);
-      setIngredients(results);
+      } = await api.getAuthors(filters);
+      setAuthors(results);
     } catch (e) {
       console.log(e);
     }
 
-    setLoadingIngredients(false);
+    setLoadingAuthors(false);
   };
 
   /* Handlers */
   const handleAddClick = () => {
-    navigate("/admin/ingredients/add")
+    navigate("/admin/authors/add")
   }
 
   /* Effects */
   useEffect(() => {
-    fetchIngredients();
+    fetchAuthors();
   }, [filters]);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export default () => {
   return (
     <Container sx={{ pb: 7 }}>
       <CssBaseline />
-      <Header title="Ingredients" onBackClick={() => navigate(-1)} />
+      <Header title="Authors" onBackClick={() => navigate(-1)} />
 
       <Box
         sx={{ display: "flex", justifyContent: "right" }}
@@ -97,13 +97,13 @@ export default () => {
         onChange={onSearchChange}
       />
 
-      {ingredients.length === 0 && !loadingIngredients && (
+      {authors.length === 0 && !loadingAuthors && (
         <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
-          <Typography>No Ingredients Found</Typography>
+          <Typography>No Authors Found</Typography>
         </Box>
       )}
 
-      {ingredients.length > 0 && (
+      {authors.length > 0 && (
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }}>
             <TableHead>
@@ -112,10 +112,10 @@ export default () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {ingredients.map((ingredient) => (
-                <TableRow key={ingredient.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              {authors.map((author) => (
+                <TableRow key={author.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
-                    {`${ingredient.name} (${ingredient.pluralName})`}
+                    {`${author.name}`}
                   </TableCell>
                 </TableRow>
               ))}
@@ -124,7 +124,7 @@ export default () => {
         </TableContainer>
       )}
 
-      {loadingIngredients && (
+      {loadingAuthors && (
         <Box sx={{ mt: 2 }} display="flex" justifyContent="center">
           <CircularProgress />
         </Box>

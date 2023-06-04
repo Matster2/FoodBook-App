@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import NiceModal from '@ebay/nice-modal-react';
 import { Container, CircularProgress, Grid, CssBaseline, Stack, List, Box, Button, Typography, IconButton, Slide } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
@@ -23,6 +24,7 @@ export default () => {
   const location = useLocation();
 
   const {
+    authenticated,
     claims: { userId },
   } = useAuth();
 
@@ -67,7 +69,9 @@ export default () => {
   };
 
   useEffect(() => {
-    fetchPlanner();
+    if (authenticated) {
+      fetchPlanner();
+    }
   }, [selectedDate]);
 
   const handleDateClick = (date) => {
@@ -86,6 +90,26 @@ export default () => {
 
   const getDateString = () => {
     return `${getDayName(selectedDate)}, ${selectedDate.getDate()} ${getMonthName(selectedDate)}`
+  }
+
+  if (!authenticated) {
+    return (
+      <Container>
+        <Box textAlign="center" sx={{ marginTop: '30%' }}>
+          <Typography>You must be signed in to see your planner</Typography>
+
+          <Button
+            variant="contained"
+            sx={{ mt: 4 }}
+            onClick={() => {
+              NiceModal.show('authentication-modal');
+            }}
+          >
+            Sign In
+          </Button>
+        </Box>
+      </Container>
+    );
   }
 
   return (
@@ -121,7 +145,7 @@ export default () => {
             <Typography variant="h5" sx={{ mb: 2 }} className={styles.date}>{getDateString()}</Typography>
           </Grid>
 
-          {!isUndefined(planner) && planner.plannedRecipe.length > 0 && (
+          {!isUndefined(planner) && planner.plannedRecipes.length > 0 && (
             <Grid item alignItems="center" justifyContent="center">
               <IconButton className={styles.ingredientsButton} onClick={() => { setShowIngredientListModal(true) }}>
                 <IngredientsIcon className={styles.ingredientsIcon} />
@@ -131,14 +155,7 @@ export default () => {
         </Grid>
       </Box>
 
-
-      {loadingPlanner && (
-        <Box sx={{ mt: 2 }} display="flex" justifyContent="center">
-          <CircularProgress />
-        </Box>
-      )}
-
-      {isUndefined(planner) && !loadingPlanner && (
+      {!isUndefined(planner) && planner.plannedRecipes.length === 0 && (
         <Box>
           <Typography>No recipes planned on this day.</Typography>
         </Box>
@@ -169,6 +186,12 @@ export default () => {
             )
           })}
         </>
+      )}
+
+      {loadingPlanner && (
+        <Box sx={{ mt: 2 }} display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
       )}
     </Container>
   );

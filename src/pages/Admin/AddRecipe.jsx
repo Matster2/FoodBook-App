@@ -28,6 +28,7 @@ import FilterOption from '../../components/FilterOption';
 import RecipeImageControl from '../../components/RecipeImageControl';
 import { UnitOfMeasurementContext } from '../../contexts/UnitOfMeasurementContext';
 import { TagContext } from '../../contexts/TagContext';
+import { isUndefined } from '../../utils/utils';
 
 const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
   const { unitOfMeasurements } = useContext(UnitOfMeasurementContext);
@@ -146,11 +147,14 @@ export default () => {
 
   const types = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Drink'];
 
-  const { unitOfMeasurements, setUnitOfMeasurements } = useContext(UnitOfMeasurementContext);
+  const { setUnitOfMeasurements } = useContext(UnitOfMeasurementContext);
   const { tags, setTags } = useContext(TagContext);
 
   const [ingredientSearch, setIngredientSearch] = useState('');
   const [searchIngredients, setSearchIngredients] = useState([]);
+
+  const [authorSearch, setAuthorSearch] = useState('');
+  const [searchAuthors, setSearchAuthors] = useState([]);
 
   const [filesToUpload, setFilesToUpload] = useState([]);
 
@@ -176,6 +180,20 @@ export default () => {
     }),
     instructions: yup.array(yup.string()),
   });
+
+  const handleSetAuthor = (author) => {
+    setRecipe({
+      ...recipe,
+      author: author
+    })
+  }
+
+  const handleRemoveAuthorClick = () => {
+    setRecipe({
+      ...recipe,
+      author: undefined
+    })
+  }
 
   const handleAddIngredient = (ingredient) => {
     const recipeIngredient = {
@@ -221,8 +239,6 @@ export default () => {
   };
 
   const handleSubmit = async (values) => {
-    console.log(recipe.ingredients);
-
     const data = {
       ...recipe,
       ...values,
@@ -233,6 +249,7 @@ export default () => {
         amount: recipeIngredient.amount,
         optional: recipeIngredient.optional,
       })),
+      authorId: recipe?.author?.id
     };
 
     try {
@@ -306,6 +323,17 @@ export default () => {
     fetchUnitOfMeasurements();
     fetchTags();
   }, []);
+
+  useEffect(() => {
+    const delayDebounce = setTimeout(async () => {
+      const {
+        data: { results },
+      } = await api.getAuthors({ search: authorSearch, pageSize: 50, sortBy: 'name' });
+      setSearchAuthors(results);
+    }, 3000);
+
+    return () => clearTimeout(delayDebounce);
+  }, [authorSearch]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(async () => {
@@ -450,6 +478,42 @@ export default () => {
                     />
                   </Grid>
                 </Grid>
+
+                <Box sx={{ mt: 2, mb: 3 }}>
+                  <Typography variant="h6">Author</Typography>
+
+                  {!isUndefined(recipe.author) && (
+                    <Box>
+                      <Stack direction="row" justifyContent="space-between">
+                        <Typography>{recipe.author.name}</Typography>
+
+                        <IconButton onClick={handleRemoveAuthorClick}>
+                          <ClearIcon />
+                        </IconButton>
+                      </Stack>
+                    </Box>
+                  )}
+
+                  {isUndefined(recipe.author) && (
+                    <Autocomplete
+                      options={searchAuthors.map((author) => ({ label: author.name, author }))}
+                      // eslint-disable-next-line react/jsx-props-no-spreading
+                      renderInput={(params) => <TextField {...params} label="Author" />}
+                      value={authorSearch}
+                      inputValue={authorSearch}
+                      onInputChange={(event, newValue) => {
+                        setAuthorSearch(newValue);
+                      }}
+                      onChange={(event, value) => {
+                        setAuthorSearch('');
+                        if (value) {
+                          handleSetAuthor(value.author);
+                        }
+                      }}
+                    />
+                  )}
+                </Box>
+
 
                 <Box sx={{ mt: 2, mb: 3 }}>
                   <Typography variant="h6">Ingredients</Typography>
