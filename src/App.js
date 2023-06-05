@@ -378,7 +378,7 @@ const Layout = () => {
   };
 
   const isDiscoverActive = () => {
-    if (matchPath('/recipes*', pathname)) {
+    if (matchPath('/recipes/*', pathname)) {
       return true;
     }
 
@@ -386,25 +386,25 @@ const Layout = () => {
   };
 
   const isPlannerActive = () => {
-    if (matchPath('/planner*', pathname)) {
+    if (matchPath('/planner/*', pathname)) {
       return true;
     }
     return false;
   };
 
   const isFavouritesActive = () => {
-    if (matchPath('/favourites*', pathname)) {
+    if (matchPath('/favourites/*', pathname)) {
       return true;
     }
     return false;
   };
 
   const isSettingsActive = () => {
-    if (matchPath('/settings*', pathname)) {
+    if (matchPath('/settings/*', pathname)) {
       return true;
     }
 
-    if (matchPath('/contact-us*', pathname)) {
+    if (matchPath('/contact-us/*', pathname)) {
       return true;
     }
 
@@ -420,46 +420,46 @@ const Layout = () => {
       <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 999 }} elevation={3}>
         <BottomNavigation showLabels className={styles.bottomNav}>
           <BottomNavigationAction
-            className={isHomeActive() && styles.navOptionSelected}
+            className={isHomeActive() ? styles.navOptionSelected : ''}
             component={Link}
             to="/"
             label="Home"
-            icon={<HomeIcon className={classnames(styles.navOption, isHomeActive() && styles.navOptionSelected)} />}
+            icon={<HomeIcon className={classnames(styles.navOption, isHomeActive() ? styles.navOptionSelected : '')} />}
           />
           <BottomNavigationAction
-            className={isDiscoverActive() && styles.navOptionSelected}
+            className={isDiscoverActive() ? styles.navOptionSelected : ''}
             component={Link}
             to="/recipes"
             label="Discover"
             icon={
-              <DiscoverIcon className={classnames(styles.navOption, isDiscoverActive() && styles.navOptionSelected)} />
+              <DiscoverIcon className={classnames(styles.navOption, isDiscoverActive() ? styles.navOptionSelected : '')} />
             }
           />
           <BottomNavigationAction
-            className={isPlannerActive() && styles.navOptionSelected}
+            className={isPlannerActive() ? styles.navOptionSelected : ''}
             component={Link}
             to="/planner"
             label="Planner"
             icon={
-              <PlannerIcon className={classnames(styles.navOption, styles.planner, isPlannerActive() && styles.navOptionSelected)} />
+              <PlannerIcon className={classnames(styles.navOption, styles.planner, isPlannerActive() ? styles.navOptionSelected : '')} />
             }
           />
           <BottomNavigationAction
-            className={isFavouritesActive() && styles.navOptionSelected}
+            className={isFavouritesActive() ? styles.navOptionSelected : ''}
             component={Link}
             to="/favourites"
             label="Favourites"
             icon={
-              <HeartIcon className={classnames(styles.navOption, isFavouritesActive() && styles.navOptionSelected)} />
+              <HeartIcon className={classnames(styles.navOption, isFavouritesActive() ? styles.navOptionSelected : '')} />
             }
           />
           <BottomNavigationAction
-            className={isSettingsActive() && styles.navOptionSelected}
+            className={isSettingsActive() ? styles.navOptionSelected : ''}
             component={Link}
             to="/settings"
             label="Settings"
             icon={
-              <SettingsIcon className={classnames(styles.navOption, isSettingsActive() && styles.navOptionSelected)} />
+              <SettingsIcon className={classnames(styles.navOption, isSettingsActive() ? styles.navOptionSelected : '')} />
             }
           />
         </BottomNavigation>

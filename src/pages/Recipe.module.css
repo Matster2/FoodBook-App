@@ -37,6 +37,10 @@
   width: 100%;
 }
 
+.author {
+  font-size: 12px !important;
+}
+
 .ingredientList {
   font-size: 20px;
   color: #555555;

@@ -7,7 +7,7 @@ export default () => {
   const navigate = useNavigate();
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container>
       <CssBaseline />
       <Header title="" onBackClick={() => navigate(-1)} />
 

@@ -64,23 +64,6 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
 
       <Grid container spacing={1}>
         <Grid item xs={6}>
-          <FormControl fullWidth>
-            <InputLabel id="type-label">Type</InputLabel>
-            <Select
-              margin="normal"
-              id="id"
-              name="unitOfMeasurementId"
-              labelId="type-label"
-              label="Type"
-              onChange={handleChange}
-            >
-              {unitOfMeasurements.map((unitOfMeasurement) => (
-                <MenuItem value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={6}>
           <TextField
             fullWidth
             required
@@ -91,6 +74,22 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
             value={recipeIngredient.amount}
             onChange={handleChange}
           />
+        </Grid>
+        <Grid item xs={6}>
+          <FormControl fullWidth>
+            <InputLabel id="type-label">Type</InputLabel>
+            <Select
+              id="id"
+              name="unitOfMeasurementId"
+              labelId="type-label"
+              label="Type"
+              onChange={handleChange}
+            >
+              {unitOfMeasurements.map((unitOfMeasurement) => (
+                <MenuItem key={unitOfMeasurement.id} value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Grid>
       </Grid>
     </Box>
@@ -375,9 +374,10 @@ export default () => {
       >
         {(formik) => {
           const { errors, touched, values } = formik;
+
           return (
             <Form>
-              <Box fullWidth>
+              <Box>
                 <Field
                   as={TextField}
                   required
@@ -407,18 +407,18 @@ export default () => {
 
                 <FormControl fullWidth sx={{ mt: 2, mb: 1 }}>
                   <InputLabel id="type-label">Type</InputLabel>
-                  <Field as={Select} margin="normal" id="id" name="type" labelId="type-label" label="Type">
+                  <Field as={Select} id="id" name="type" labelId="type-label" label="Type" defaultValue=''>
                     {types.map((t) => (
-                      <MenuItem value={t}>{t}</MenuItem>
+                      <MenuItem key={t} value={t}>{t}</MenuItem>
                     ))}
                   </Field>
                 </FormControl>
 
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                  <Grid item xs={6} md={3} lg={2}>
                     <Field
                       as={TextField}
-                      margin="normal"
+                      fullWidth
                       id="prepTime"
                       name="prepTime"
                       required
@@ -429,10 +429,11 @@ export default () => {
                       helperText={touched.prepTime && errors.prepTime}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+
+                  <Grid item xs={6} md={3} lg={2}>
                     <Field
                       as={TextField}
-                      margin="normal"
+                      fullWidth
                       id="cookTime"
                       name="cookTime"
                       required
@@ -443,13 +444,11 @@ export default () => {
                     // helperText={errors.cookTime?.message}
                     />
                   </Grid>
-                </Grid>
 
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
+                  <Grid item xs={6} md={3} lg={2}>
                     <Field
                       as={TextField}
-                      margin="normal"
+                      fullWidth
                       id="totalTime"
                       name="totalTime"
                       required
@@ -462,11 +461,11 @@ export default () => {
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                  <Grid item xs={6} md={3} lg={2}>
                     <Field
                       as={TextField}
-                      margin="normal"
+                      fullWidth
                       id="servings"
                       name="servings"
                       required
@@ -479,7 +478,7 @@ export default () => {
                   </Grid>
                 </Grid>
 
-                <Box sx={{ mt: 2, mb: 3 }}>
+                <Box sx={{ mt: 3, mb: 3 }}>
                   <Typography variant="h6">Author</Typography>
 
                   {!isUndefined(recipe.author) && (
@@ -514,8 +513,7 @@ export default () => {
                   )}
                 </Box>
 
-
-                <Box sx={{ mt: 2, mb: 3 }}>
+                <Box sx={{ mt: 3, mb: 3 }}>
                   <Typography variant="h6">Ingredients</Typography>
 
                   <Autocomplete
@@ -542,7 +540,7 @@ export default () => {
                     }}
                   />
 
-                  <Box sx={{ mt: 2 }}>
+                  <Box sx={{ mt: 3 }}>
                     {recipe.ingredients.map((recipeIngredient) => (
                       <RecipeIngredient
                         recipeIngredient={recipeIngredient}
@@ -553,7 +551,7 @@ export default () => {
                   </Box>
                 </Box>
 
-                <Box sx={{ mt: 2, mb: 3 }}>
+                <Box sx={{ mt: 3, mb: 3 }}>
                   <Typography variant="h6">Instructions</Typography>
 
                   <FieldArray
@@ -587,73 +585,85 @@ export default () => {
                   />
                 </Box>
 
-                <Box sx={{ mt: 2 }}>
+                <Box sx={{ mt: 3 }}>
                   <Typography variant="h6">Nutriton</Typography>
 
                   <Grid container spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
-                        margin="normal"
+                        fullWidth
                         id="calories"
                         name="nutrition.calories"
                         value={recipe.nutrition.calories}
                         required
                         label="Calories"
                       />
+                    </Grid>
+                    <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
-                        margin="normal"
+                        fullWidth
                         id="sugar"
                         name="nutrition.sugar"
                         value={recipe.nutrition.sugar}
                         label="Sugar"
                       />
+                    </Grid>
+                    <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
-                        margin="normal"
+                        fullWidth
                         id="fat"
                         name="nutrition.fat"
                         value={recipe.nutrition.fat}
                         label="Fat"
                       />
+                    </Grid>
+                    <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
-                        margin="normal"
+                        fullWidth
                         id="saturatedFat"
                         name="nutrition.saturatedFat"
                         value={recipe.nutrition.saturatedFat}
                         label="Saturated Fat"
                       />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
-                        margin="normal"
+                        fullWidth
                         id="sodium"
                         name="nutrition.sodium"
                         value={recipe.nutrition.sodium}
                         label="Sodium"
                       />
+                    </Grid>
+                    <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
-                        margin="normal"
+                        fullWidth
                         id="protein"
                         name="nutrition.protein"
                         value={recipe.nutrition.protein}
                         label="Protein"
                       />
+                    </Grid>
+                    <Grid item xs={6} md={3}>
                       <Field
                         as={TextField}
-                        margin="normal"
+                        fullWidth
                         id="carbohydrates"
                         name="nutrition.carbohydrates"
                         value={recipe.nutrition.carbohydrates}
                         label="Carbohydrates"
                       />
+                    </Grid>
+                    <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
-                        margin="normal"
+                        fullWidth
                         id="fiber"
                         name="nutrition.fiber"
                         value={recipe.nutrition.fiber}
@@ -663,12 +673,13 @@ export default () => {
                   </Grid>
                 </Box>
 
-                <Box sx={{ mt: 1 }}>
+                <Box sx={{ mt: 3 }}>
                   <Typography variant="h6">Tags</Typography>
 
-                  <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
+                  <Stack direction="row" alignItems="center" gap={2} sx={{ mt: 1, flexWrap: 'wrap', gap: 1 }}>
                     {tags.map((tag) => (
                       <FilterOption
+                        key={tag.id}
                         label={tag.name}
                         value={tag.id}
                         onClick={handleTagClick}

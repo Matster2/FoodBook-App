@@ -2,6 +2,10 @@
     color: #151515 !important;
 }
 
+.clip:hover {
+    cursor: pointer !important;
+}
+
 .icon {
     height: 100%;
 }

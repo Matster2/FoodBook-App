@@ -420,6 +420,15 @@ export default () => {
             {renderDescriptionText(recipe.description)}
           </Box>
 
+          {recipe.author && (
+            <Box>
+              <Typography className={styles.author}>
+                <span style={{ fontWeight: 'bold' }}>Author: </span>
+                {recipe.author.name}
+              </Typography>
+            </Box>
+          )}
+
           <Stack
             sx={{ my: 2 }}
             direction="row"
@@ -432,18 +441,22 @@ export default () => {
             />
           </Stack>
 
-          <Grid container sx={{ mt: 2, mb: 2 }} >
-            <Grid item xs={6} display="flex" alignItems="center" justifyContent="center">
-              <PrepIcon className={styles.cookTimeIcon} />
-              <Typography display="inline" className={styles.cookTimeHeading}>Prep Time</Typography>
-              <Typography display="inline" className={styles.cookTimeValue}>{renderTime(recipe.prepTime)}</Typography>
-            </Grid>
-            <Grid item xs={6} display="flex" alignItems="center" justifyContent="center">
-              <CookIcon className={styles.cookTimeIcon} />
-              <Typography display="inline" className={styles.cookTimeHeading}>Cooking Time</Typography>
-              <Typography display="inline" className={styles.cookTimeValue}>{renderTime(recipe.cookTime)}</Typography>
-            </Grid>
-          </Grid>
+          <Stack direction="row" display="flex" justifyContent="center" sx={{ mt: 2, mb: 2 }} gap={2}>
+            {recipe.prepTime > 0 && (
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <PrepIcon className={styles.cookTimeIcon} />
+                <Typography display="inline" className={styles.cookTimeHeading}>Prep Time</Typography>
+                <Typography display="inline" className={styles.cookTimeValue}>{renderTime(recipe.prepTime)}</Typography>
+              </Box>
+            )}
+            {recipe.cookTime > 0 && (
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <CookIcon className={styles.cookTimeIcon} />
+                <Typography display="inline" className={styles.cookTimeHeading}>Cooking Time</Typography>
+                <Typography display="inline" className={styles.cookTimeValue}>{renderTime(recipe.cookTime)}</Typography>
+              </Box>
+            )}
+          </Stack>
 
           <Box sx={{ mb: 1 }} display="flex" alignItems="center" justifyContent="center">
             <ServingsIncrementor

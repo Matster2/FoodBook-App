@@ -6,7 +6,8 @@
     border-radius: 10px;
     border: 1px solid transparent;
     display: inline-block;
-    width:fit-content !important;
+    width: fit-content !important;
+    cursor: pointer !important;
 }
 
 .active {
