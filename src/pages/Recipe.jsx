@@ -187,9 +187,6 @@ export default () => {
   const getIngredients = () => {
     return recipe.ingredients.map(ingredient => {
       var amount = ((ingredient.amount / recipe.servings) * servings);
-      if (amount.countDecimals() > 2) {
-        amount = amount.toFixed(2);
-      }
 
       return ({
         ...ingredient,

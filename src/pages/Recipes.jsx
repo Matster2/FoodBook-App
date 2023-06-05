@@ -60,6 +60,7 @@ export default () => {
 
   useEffect(() => {
     fetchRecipes();
+    console.log(filters)
   }, [filters]);
 
 
@@ -74,7 +75,11 @@ export default () => {
     setShowAdvancedFilters(true);
   };
 
-  const handleFiltersApplied = () => {
+  const handleFiltersApplied = (newFilters) => {
+    setFilters((value) => ({
+      ...value,
+      ...newFilters,
+    }))
     setShowAdvancedFilters(false);
   };
 

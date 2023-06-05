@@ -4,6 +4,8 @@ import Fraction from '../../utils/fraction';
 import { Box, Typography } from '@mui/material';
 import styles from './IngredientList.module.css';
 
+const unitOfMeasurementsThatMustBeAWholeNumber = ['milligram', 'milliliter'];
+
 const IngredientList = ({ ingredients }) => {
   const getUnitName = (unitOfMeasurement, amount) => {
     if (unitOfMeasurement.name.toLowerCase() === 'unit') {
@@ -27,7 +29,11 @@ const IngredientList = ({ ingredients }) => {
     return 0;
   }
 
-  const getAmountString = (amount) => {
+  const getAmountString = (amount, unitOfMeasurement) => {
+    if (unitOfMeasurementsThatMustBeAWholeNumber.includes(unitOfMeasurement.name.toLowerCase())) {
+      return amount;
+    }
+
     const isWholeNumber = amount % 1 === 0;
 
     if (isWholeNumber) {
@@ -35,24 +41,24 @@ const IngredientList = ({ ingredients }) => {
     }
 
     const integer = Math.trunc(amount);
-    const decimal = Number(amount - integer).toFixed(2);
+    const decimal = Number(amount - integer);
 
     const fraction = Fraction(decimal);
 
-    if (integer === 0) {
-      return `${fraction.numerator}/${fraction.denominator}`;
-    }
-
-    if (decimal === 0.33) {
+    if (Number(decimal).toFixed(2) === "0.33") {
       fraction.numerator = 1;
       fraction.denominator = 3;
+    }
+
+    if (integer === 0) {
+      return `${fraction.numerator}/${fraction.denominator}`;
     }
 
     return `${integer} ${fraction.numerator}/${fraction.denominator}`;
   };
 
   const renderIngredient = (ingredient) => {
-    const amount = getAmountString(ingredient.amount);
+    const amount = getAmountString(ingredient.amount, ingredient.unitOfMeasurement);
     const unit = getUnitName(ingredient.unitOfMeasurement, ingredient.amount);
 
     const ingredientName = amount === 1 ? ingredient.name : ingredient.pluralName;

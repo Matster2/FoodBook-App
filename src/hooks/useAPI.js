@@ -12,7 +12,20 @@ const getSearchParams = (parameters) => {
     }
   });
 
-  return new URLSearchParams(filters);
+  var searchParameters = new URLSearchParams(filters);
+
+  Object.keys(filters).forEach((key) => {
+    const value = filters[key];
+    if (Array.isArray(value)) {
+      searchParameters.delete(key);
+
+      value.forEach((arrayValue) => {
+        searchParameters.append(key, arrayValue);
+      });
+    }
+  });
+
+  return searchParameters;
 };
 
 const useAPI = () => {
