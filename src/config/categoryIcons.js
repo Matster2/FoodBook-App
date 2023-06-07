@@ -16,6 +16,7 @@ import SoupIcon from '../assets/icons/icon8/soup-plate-96.png';
 import IceCreamIcon from '../assets/icons/icon8/ice-cream-cone-96.png';
 import LasagnaIcon from '../assets/icons/icon8/lasagna-96.png';
 import SpaghettiIcon from '../assets/icons/icon8/spaghetti-96.png';
+import MealPrepIcon from '../assets/icons/icon8/plastic-food-container-96.png';
 
 export default {
     default: DefaultIcon,
@@ -36,4 +37,5 @@ export default {
     'ice-cream': IceCreamIcon,
     lasagna: LasagnaIcon,
     spaghetti: SpaghettiIcon,
+    'meal-prep': MealPrepIcon,
 };
