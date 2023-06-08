@@ -78,6 +78,25 @@ export default () => {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showPlannerModal, setShowPlannerModal] = useState(false);
 
+  const [activeInstructionStep, setActiveInstructionStep] = useState(0);
+
+  const onServingsChange = (newServings) => {
+    setServings(newServings);
+  }
+
+  const fetchRecipe = async () => {
+    setLoadingRecipe(true);
+    try {
+      setLoadingRecipe(true);
+      const { data } = await api.getRecipe(id);
+      setRecipe(data);
+    } catch {
+      console.log('error fetching recipe');
+    }
+    setLoadingRecipe(false);
+  };
+
+  /* Handlers */
   const handleFavoriteClick = async () => {
     try {
       if (isNull(recipe.favourited)) {
@@ -133,10 +152,6 @@ export default () => {
     }
   };
 
-  const onServingsChange = (newServings) => {
-    setServings(newServings);
-  }
-
   const handleImageClick = (url) => {
     setShowImageModal(true);
   };
@@ -145,17 +160,9 @@ export default () => {
     setShowPlannerModal(true);
   };
 
-  const fetchRecipe = async () => {
-    setLoadingRecipe(true);
-    try {
-      setLoadingRecipe(true);
-      const { data } = await api.getRecipe(id);
-      setRecipe(data);
-    } catch {
-      console.log('error fetching recipe');
-    }
-    setLoadingRecipe(false);
-  };
+  const handleInstructionClick = (index) => {
+    setActiveInstructionStep(index + 1);
+  }
 
   const fetchRecipeRating = async () => {
     try {
@@ -166,6 +173,7 @@ export default () => {
     }
   };
 
+  /* Effects */
   useEffect(() => {
     if (authenticated) {
       fetchRecipeRating();
@@ -179,6 +187,7 @@ export default () => {
     }
   }, [recipe]);
 
+  /* Rendering */
   Number.prototype.countDecimals = function () {
     if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
     return this.toString().split(".")[1].length || 0;
@@ -350,7 +359,7 @@ export default () => {
         </Grid>
         <Grid item xs="auto">
           <Typography variant="h6" className={styles.title}>
-            Recipe
+            {recipe.name}
           </Typography>
         </Grid>
         <Grid
@@ -479,9 +488,9 @@ export default () => {
           <CollapsibleSection
             title="Directions"
           >
-            <Stepper orientation="vertical">
+            <Stepper orientation="vertical" activeStep={activeInstructionStep}>
               {recipe.instructions.map((instruction, index) => (
-                <Step>
+                <Step onClick={() => handleInstructionClick(index)}>
                   <StepLabel>{instruction}</StepLabel>
                 </Step>
               ))}

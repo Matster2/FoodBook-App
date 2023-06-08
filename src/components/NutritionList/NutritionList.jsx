@@ -13,7 +13,7 @@ const NutritionList = ({ nutrition: { calories, sugar, fat, saturatedFat, sodium
       { name: 'Saturated Fat', amount: saturatedFat, unit: 'g' },
       { name: 'Sodium', amount: sodium, unit: 'mg' },
       { name: 'Protein', amount: protein, unit: 'g' },
-      { name: 'Carbohydrates', amount: carbohydrates, unit: 'mg' },
+      { name: 'Carbohydrates', amount: carbohydrates, unit: 'g' },
       { name: 'Fiber', amount: fiber, unit: 'g' },
     ];
   };

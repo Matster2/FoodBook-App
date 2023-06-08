@@ -68,6 +68,16 @@ export default () => {
   }, [search]);
 
   /* Rendering */
+  const getIngredientText = (ingredient) => {
+    const parts = [ingredient.name];
+
+    if (ingredient.name !== ingredient.pluralName) {
+      parts.push(`(${ingredient.pluralName})`);
+    }
+
+    return parts.join(" ");
+  }
+
   return (
     <Container sx={{ pb: 7 }}>
       <CssBaseline />
@@ -115,7 +125,7 @@ export default () => {
               {ingredients.map((ingredient) => (
                 <TableRow key={ingredient.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" scope="row">
-                    {`${ingredient.name} (${ingredient.pluralName})`}
+                    {getIngredientText(ingredient)}
                   </TableCell>
                 </TableRow>
               ))}

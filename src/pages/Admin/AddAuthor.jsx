@@ -105,7 +105,7 @@ export default () => {
 
   const authorSchema = yup.object({
     name: yup.string().required(),
-    biography: yup.string().required(),
+    biography: yup.string(),
   });
 
   const handleAddLink = () => {
