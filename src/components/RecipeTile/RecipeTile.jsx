@@ -74,7 +74,7 @@ RecipeTile.propTypes = {
 };
 
 RecipeTile.defaultProps = {
-  onClick: () => {},
+  onClick: () => { },
 };
 
 export default RecipeTile;

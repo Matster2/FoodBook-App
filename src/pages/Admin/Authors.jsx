@@ -15,6 +15,7 @@ import {
   Typography,
   Button
 } from '@mui/material';
+import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useNavigate } from 'react-router-dom';
 import useAPI from '../../hooks/useAPI';
 import useFilters from '../../hooks/useFilters';
@@ -50,6 +51,10 @@ export default () => {
   };
 
   /* Handlers */
+  const handleRefresh = async () => {
+    fetchAuthors();
+  }
+
   const handleAddClick = () => {
     navigate("/admin/authors/add")
   }
@@ -97,38 +102,40 @@ export default () => {
         onChange={onSearchChange}
       />
 
-      {authors.length === 0 && !loadingAuthors && (
-        <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
-          <Typography>No Authors Found</Typography>
-        </Box>
-      )}
+      <PullToRefresh onRefresh={handleRefresh}>
+        {authors.length === 0 && !loadingAuthors && (
+          <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
+            <Typography>No Authors Found</Typography>
+          </Box>
+        )}
 
-      {authors.length > 0 && (
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {authors.map((author) => (
-                <TableRow key={author.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell component="th" scope="row">
-                    {`${author.name}`}
-                  </TableCell>
+        {loadingAuthors && (
+          <Box sx={{ mt: 2, mb: 4 }} display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        )}
+
+        {authors.length > 0 && (
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
-
-      {loadingAuthors && (
-        <Box sx={{ mt: 2 }} display="flex" justifyContent="center">
-          <CircularProgress />
-        </Box>
-      )}
+              </TableHead>
+              <TableBody>
+                {authors.map((author) => (
+                  <TableRow key={author.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">
+                      {`${author.name}`}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      </PullToRefresh>
     </Container>
   );
 };

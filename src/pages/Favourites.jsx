@@ -4,6 +4,7 @@ import {
   Container,
   Grid,
   TextField,
+  CircularProgress,
   Box,
   InputAdornment,
   CssBaseline,
@@ -12,6 +13,7 @@ import {
   Typography,
   Button,
 } from '@mui/material';
+import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useLocation, useNavigate } from 'react-router-dom';
 import RecipeTile from '../components/RecipeTile';
 import Header from '../components/Header';
@@ -74,11 +76,10 @@ export default () => {
     setLoadingRecipes(false);
   };
 
-  useEffect(() => {
-    if (authenticated && !isUndefined(filters)) {
-      fetchRecipes();
-    }
-  }, [filters]);
+  /* Handlers */
+  const handleRefresh = async () => {
+    fetchRecipes();
+  }
 
   const handleAdvancedFiltersClick = () => {
     setShowAdvancedFilters(true);
@@ -92,6 +93,14 @@ export default () => {
     navigate(`/recipes/${id}`);
   };
 
+  /* Effects */
+  useEffect(() => {
+    if (authenticated && !isUndefined(filters)) {
+      fetchRecipes();
+    }
+  }, [filters]);
+
+  /* Rendering */
   if (!authenticated) {
     return (
       <Container>
@@ -119,7 +128,7 @@ export default () => {
       <Dialog
         fullScreen
         open={showAdvancedFilters}
-        onClose={() => {}}
+        onClose={() => { }}
         TransitionComponent={Transition}
         PaperProps={{
           style: {
@@ -154,32 +163,40 @@ export default () => {
         </Grid>
       </Box>
 
-      {!loadingRecipes && recipes.length === 0 && (
-        <Box textAlign="center" sx={{ marginTop: '20%' }}>
-          <Typography>No favourited recipes</Typography>
-        </Box>
-      )}
+      <PullToRefresh onRefresh={handleRefresh}>
+        {!loadingRecipes && recipes.length === 0 && (
+          <Box textAlign="center" sx={{ marginTop: '20%' }}>
+            <Typography>No favourited recipes</Typography>
+          </Box>
+        )}
 
-      <Grid container spacing={1}>
-        <Grid item xs={6}>
-          {recipes
-            .filter((_, index) => !(index % 2))
-            .map((recipe) => (
-              <Box sx={{ mb: 1 }}>
-                <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-              </Box>
-            ))}
+        {loadingRecipes && (
+          <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        )}
+
+        <Grid container spacing={1}>
+          <Grid item xs={6}>
+            {recipes
+              .filter((_, index) => !(index % 2))
+              .map((recipe) => (
+                <Box sx={{ mb: 1 }}>
+                  <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+                </Box>
+              ))}
+          </Grid>
+          <Grid item xs={6}>
+            {recipes
+              .filter((_, index) => index % 2)
+              .map((recipe) => (
+                <Box sx={{ mb: 1 }}>
+                  <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+                </Box>
+              ))}
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          {recipes
-            .filter((_, index) => index % 2)
-            .map((recipe) => (
-              <Box sx={{ mb: 1 }}>
-                <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-              </Box>
-            ))}
-        </Grid>
-      </Grid>
+      </PullToRefresh>
     </Container>
   );
 };

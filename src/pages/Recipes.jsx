@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Container, CircularProgress, Grid, TextField, Box, InputAdornment, CssBaseline, Dialog, Slide } from '@mui/material';
+import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useLocation, useNavigate } from 'react-router-dom';
 import RecipeTile from '../components/RecipeTile';
 import Header from '../components/Header';
@@ -58,11 +59,11 @@ export default () => {
     setLoadingRecipes(false);
   };
 
-  useEffect(() => {
+  /* Handlers */
+  const handleRefresh = async () => {
+    fetchTags();
     fetchRecipes();
-    console.log(filters)
-  }, [filters]);
-
+  }
 
   const handleApplySearch = () => {
     setFilters((value) => ({
@@ -87,6 +88,13 @@ export default () => {
     navigate(`/recipes/${id}`);
   };
 
+  /* Effects */
+  useEffect(() => {
+    fetchRecipes();
+    console.log(filters)
+  }, [filters]);
+
+  /* Rendering */
   return (
     <Container>
       <CssBaseline />
@@ -137,33 +145,34 @@ export default () => {
         </Grid>
       </Box>
 
+      <PullToRefresh onRefresh={handleRefresh}>
+        {loadingRecipes && (
+          <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        )}
 
-      {loadingRecipes && (
-        <Box sx={{ mt: 2 }} display="flex" justifyContent="center">
-          <CircularProgress />
-        </Box>
-      )}
-
-      <Grid container spacing={1}>
-        <Grid item xs={6}>
-          {recipes
-            .filter((_, index) => !(index % 2))
-            .map((recipe) => (
-              <Box sx={{ mb: 1 }}>
-                <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-              </Box>
-            ))}
+        <Grid container spacing={1}>
+          <Grid item xs={6}>
+            {recipes
+              .filter((_, index) => !(index % 2))
+              .map((recipe) => (
+                <Box sx={{ mb: 1 }}>
+                  <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+                </Box>
+              ))}
+          </Grid>
+          <Grid item xs={6}>
+            {recipes
+              .filter((_, index) => index % 2)
+              .map((recipe) => (
+                <Box sx={{ mb: 1 }}>
+                  <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+                </Box>
+              ))}
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          {recipes
-            .filter((_, index) => index % 2)
-            .map((recipe) => (
-              <Box sx={{ mb: 1 }}>
-                <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-              </Box>
-            ))}
-        </Grid>
-      </Grid>
+      </PullToRefresh>
     </Container>
   );
 };

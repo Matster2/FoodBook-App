@@ -3,6 +3,7 @@ import NiceModal from '@ebay/nice-modal-react';
 import PropTypes from 'prop-types';
 import {
   CssBaseline,
+  CircularProgress,
   Container,
   Typography,
   Box,
@@ -16,6 +17,7 @@ import {
   Slide,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import PullToRefresh from 'react-simple-pull-to-refresh';
 import Filters from './Filters';
 import useInput from '../hooks/useInput';
 import RecipeTile from '../components/RecipeTile';
@@ -36,13 +38,13 @@ const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="left" ref={ref} {...props} />;
 });
 
-const Section = ({ title, seeAll, children }) => (
+const Section = ({ title, loading, showSeeAllLink, children }) => (
   <Box sx={{ mb: 2 }}>
     <Grid item xs={12} container justifyContent="space-between" alignItems="center">
       <Grid item xs>
         <Typography variant="h5">{title}</Typography>
       </Grid>
-      {seeAll && (
+      {showSeeAllLink && (
         <Grid item xs="auto">
           <Link to="/recipes">See all</Link>
         </Grid>
@@ -51,6 +53,12 @@ const Section = ({ title, seeAll, children }) => (
 
     <List style={{ overflow: 'auto' }}>
       <Stack direction="row" alignItems="center" gap={2}>
+        {loading && (
+          <Box>
+            <CircularProgress />
+          </Box>
+        )}
+
         {children}
       </Stack>
     </List>
@@ -59,12 +67,14 @@ const Section = ({ title, seeAll, children }) => (
 
 Section.propTypes = {
   title: PropTypes.string.isRequired,
-  seeAll: PropTypes.bool,
+  loading: PropTypes.bool,
+  showSeeAllLink: PropTypes.bool,
   children: PropTypes.node.isRequired,
 };
 
 Section.defaultProps = {
-  seeAll: true,
+  loading: false,
+  showSeeAllLink: true,
 };
 
 export default () => {
@@ -88,18 +98,26 @@ export default () => {
     return date;
   }, []);
 
-  const { results: recentlyAddedRecipes, totalResults: totalRecentlyAddedRecipes } = usePagedFetch(
+  const { results: recentlyAddedRecipes, totalResults: totalRecentlyAddedRecipes, loading: loadingRecentlyAddedRecipes, refetch: refetchRecentlyAddedRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL
     }/recipes?random=true&pageSize=25&publishedAfter=${sevenDaysAgo.toISOString()}&sortBy=datepublished&sortDesc=true`
   );
-  const { results: recommendedRecipes, totalResults: totalRecommendedRecipes } = usePagedFetch(
+  const { results: recommendedRecipes, totalResults: totalRecommendedRecipes, loading: loadingRecommendedRecipes, refetch: refetchRecommendedRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
   );
-  const { results: favouriteRecipes, totalResults: totalFavouriteRecipes } = usePagedFetch(
+  const { results: favouriteRecipes, totalResults: totalFavouriteRecipes, loading: loadingFavouriteRecipes, refetch: refetchFavouriteRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&favourited=true`
   );
 
-  const { results: tags } = usePagedFetch(`${process.env.REACT_APP_API_URL}/tags`);
+  const { results: tags, loading: loadingTags, refetch: refetchTags } = usePagedFetch(`${process.env.REACT_APP_API_URL}/tags`);
+
+  /* Handlers */
+  const handleRefresh = async () => {
+    refetchRecentlyAddedRecipes();
+    refetchRecommendedRecipes();
+    refetchFavouriteRecipes();
+    refetchTags();
+  }
 
   const handleAvatarClick = () => {
     if (authenticated) {
@@ -146,10 +164,12 @@ export default () => {
     });
   };
 
+  /* Effects */
   useEffect(() => {
     setTags(tags);
   }, [tags]);
 
+  /* Rendering */
   const getWelcomeMessage = () => {
     if (user?.firstName) {
       return `Welcome, ${user.firstName}`;
@@ -192,64 +212,66 @@ export default () => {
             <Typography variant="subtitle2">{getWelcomeMessage()}</Typography>
             <Typography variant="h3">What would you like to cook today?</Typography>
           </Grid>
-          <Grid xs="auto">
+          <Grid item xs="auto">
             <Avatar sx={{ bgcolor: authenticated ? '#fb6b1c' : 'grey' }} onClick={handleAvatarClick} />
           </Grid>
         </Grid>
       </Box>
 
-      <Box sx={{ mb: 3 }}>
-        <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
-          <Grid item xs>
-            <TextField
-              fullWidth
-              id="input-with-icon-adornment"
-              placeholder="Search recipes"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon className={styles.searchIcon} />
-                  </InputAdornment>
-                ),
-              }}
-              value={search}
-              onChange={onSearchChange}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  handleApplySearch();
-                }
-              }}
-            />
+      <PullToRefresh onRefresh={handleRefresh}>
+        <Box sx={{ mb: 3 }}>
+          <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
+            <Grid item xs>
+              <TextField
+                fullWidth
+                id="input-with-icon-adornment"
+                placeholder="Search recipes"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon className={styles.searchIcon} />
+                    </InputAdornment>
+                  ),
+                }}
+                value={search}
+                onChange={onSearchChange}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    handleApplySearch();
+                  }
+                }}
+              />
+            </Grid>
+            <Grid item xs="auto">
+              <FilterButton onClick={handleAdvancedFiltersClick} />
+            </Grid>
           </Grid>
-          <Grid xs="auto">
-            <FilterButton onClick={handleAdvancedFiltersClick} />
-          </Grid>
-        </Grid>
-      </Box>
+        </Box>
 
-      <Section title="Categories" seeAll={categories.length < totalCategories}>
-        {categories.map((category) => (
-          <CategoryChip key={category.id} category={category} onClick={handleCategoryClick} />
-        ))}
-      </Section>
-
-      {recommendedRecipes.length > 0 && (
-        <Section title="Recommendations" seeAll={recommendedRecipes.length < totalRecommendedRecipes}>
-          {recommendedRecipes.map((recipe) => renderRecipeTile(recipe))}
+        <Section title="Categories" showSeeAllLink={categories.length < totalCategories} loading={loadingTags}>
+          {categories.map((category) => (
+            <CategoryChip key={category.id} category={category} onClick={handleCategoryClick} />
+          ))}
         </Section>
-      )}
 
-      {recentlyAddedRecipes.length > 0 && (
-        <Section title="Recently Added" seeAll={recentlyAddedRecipes.length < totalRecentlyAddedRecipes}>
-          {recentlyAddedRecipes.map((recipe) => renderRecipeTile(recipe))}
-        </Section>
-      )}
+        {recommendedRecipes.length > 0 && (
+          <Section title="Recommendations" showSeeAllLink={recommendedRecipes.length < totalRecommendedRecipes} loading={loadingRecommendedRecipes}>
+            {recommendedRecipes.map((recipe) => renderRecipeTile(recipe))}
+          </Section>
+        )}
 
-      {favouriteRecipes.length > 0 && (
-        <Section title="Favourite Recipes" seeAll={favouriteRecipes.length < totalFavouriteRecipes}>
-          {favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}
-        </Section>
-      )}
+        {recentlyAddedRecipes.length > 0 && (
+          <Section title="Recently Added" showSeeAllLink={recentlyAddedRecipes.length < totalRecentlyAddedRecipes} loading={loadingRecentlyAddedRecipes}>
+            {recentlyAddedRecipes.map((recipe) => renderRecipeTile(recipe))}
+          </Section>
+        )}
+
+        {favouriteRecipes.length > 0 && (
+          <Section title="Favourite Recipes" showSeeAllLink={favouriteRecipes.length < totalFavouriteRecipes} loading={loadingFavouriteRecipes}>
+            {favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}
+          </Section>
+        )}
+      </PullToRefresh>
     </Container>
   );
 };

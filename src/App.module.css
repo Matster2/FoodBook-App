@@ -17,11 +17,6 @@
     color: #828282 !important;
 }
 
-.bottomNavInner {
-    flex: 1;
-    max-width: 100% !important;
-}
-
 .navOption {
     width: 18px;
     height: auto;
