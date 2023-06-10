@@ -59,6 +59,10 @@ export default () => {
     navigate("/admin/ingredients/add")
   }
 
+  const handleIngredientClick = (id) => {
+    navigate(`/admin/ingredients/${id}`);
+  }
+
   /* Effects */
   useEffect(() => {
     fetchIngredients();
@@ -135,7 +139,7 @@ export default () => {
               </TableHead>
               <TableBody>
                 {ingredients.map((ingredient) => (
-                  <TableRow key={ingredient.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableRow key={ingredient.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleIngredientClick(ingredient.id)}>
                     <TableCell component="th" scope="row">
                       {getIngredientText(ingredient)}
                     </TableCell>

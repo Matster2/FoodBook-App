@@ -21,10 +21,9 @@ import Settings from './pages/Settings';
 import ContactUs from './pages/ContactUs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import AdminTags from './pages/Admin/Tags';
-import AdminAddTag from './pages/Admin/AddTag';
-import AdminEditTag from './pages/Admin/EditTag';
+import AdminTag from './pages/Admin/Tag';
 import AdminIngredients from './pages/Admin/Ingredients';
-import AdminAddIngredient from './pages/Admin/AddIngredient';
+import AdminIngredient from './pages/Admin/Ingredient';
 import AdminAuthors from './pages/Admin/Authors';
 import AdminAddAuthor from './pages/Admin/AddAuthor';
 import AdminAddRecipe from './pages/Admin/AddRecipe';
@@ -264,7 +263,7 @@ const App = () => {
           path: '/admin/tags/add',
           element: (
             <AdminRoute>
-              <AdminAddTag />
+              <AdminTag />
             </AdminRoute>
           ),
         },
@@ -272,7 +271,7 @@ const App = () => {
           path: '/admin/tags/:id',
           element: (
             <AdminRoute>
-              <AdminEditTag />
+              <AdminTag />
             </AdminRoute>
           ),
         },
@@ -288,7 +287,15 @@ const App = () => {
           path: '/admin/ingredients/add',
           element: (
             <AdminRoute>
-              <AdminAddIngredient />
+              <AdminIngredient />
+            </AdminRoute>
+          ),
+        },
+        {
+          path: '/admin/ingredients/:id',
+          element: (
+            <AdminRoute>
+              <AdminIngredient />
             </AdminRoute>
           ),
         },

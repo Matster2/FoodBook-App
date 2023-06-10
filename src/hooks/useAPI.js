@@ -82,6 +82,14 @@ const useAPI = () => {
     });
   };
 
+  const getIngredient = async (id) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/ingredients/${id}`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
   const getIngredients = async (parameters = {}) => {
     const url = new URL(`${process.env.REACT_APP_API_URL}/ingredients`);
     url.search = getSearchParams(parameters);
@@ -214,6 +222,20 @@ const useAPI = () => {
     );
   };
 
+  const updateIngredient = async (id, data) => {
+    return axios.put(
+      `${process.env.REACT_APP_API_URL}/ingredients/${id}`,
+      {
+        ...data,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
   const createRecipe = async (recipe) => {
     return axios.post(
       `${process.env.REACT_APP_API_URL}/recipes`,
@@ -336,7 +358,15 @@ const useAPI = () => {
       },
     });
   };
-  
+
+  const getSupportTicket  = async (id) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/support-tickets/${id}`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };  
+
   const getSupportTickets = async (parameters = {}) => {
     const url = new URL(`${process.env.REACT_APP_API_URL}/support-tickets`);
     url.search = getSearchParams(parameters);
@@ -367,6 +397,7 @@ const useAPI = () => {
     getMe,
     getRecipes,
     getRecipe,
+    getIngredient,
     getIngredients,
     getTag,
     getTags,
@@ -379,6 +410,7 @@ const useAPI = () => {
     getUserRecipeRating,
     getRecipeRating,
     createIngredient,
+    updateIngredient,
     createRecipe,
     uploadRecipeImage,
     createTag,
@@ -389,6 +421,7 @@ const useAPI = () => {
     getPlannerIngredientList,
     getAuthor,
     getAuthors,
+    getSupportTicket,
     getSupportTickets,
     resolveSupportTicket
   };

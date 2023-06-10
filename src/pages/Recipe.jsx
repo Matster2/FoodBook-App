@@ -87,7 +87,6 @@ export default () => {
   const fetchRecipe = async () => {
     setLoadingRecipe(true);
     try {
-      setLoadingRecipe(true);
       const { data } = await api.getRecipe(id);
       setRecipe(data);
     } catch {
