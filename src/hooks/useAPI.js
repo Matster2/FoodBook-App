@@ -93,6 +93,14 @@ const useAPI = () => {
     });
   };
 
+  const getTag = async (id) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/tags/${id}`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
   const getTags = async (parameters = {}) => {
     const url = new URL(`${process.env.REACT_APP_API_URL}/tags`);
     url.search = getSearchParams(parameters);
@@ -246,6 +254,20 @@ const useAPI = () => {
     );
   };
 
+  const updateTag = async (id, data) => {
+    return axios.put(
+      `${process.env.REACT_APP_API_URL}/tags/${id}`,
+      {
+        ...data,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
   const createAuthor = async (author) => {
     return axios.post(
       `${process.env.REACT_APP_API_URL}/authors`,
@@ -314,6 +336,28 @@ const useAPI = () => {
       },
     });
   };
+  
+  const getSupportTickets = async (parameters = {}) => {
+    const url = new URL(`${process.env.REACT_APP_API_URL}/support-tickets`);
+    url.search = getSearchParams(parameters);
+
+    return axios.get(url.href, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
+  const resolveSupportTicket = async (id) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/support-tickets/${id}/resolve`, {},
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
 
   return {
     queryEmail,
@@ -324,6 +368,7 @@ const useAPI = () => {
     getRecipes,
     getRecipe,
     getIngredients,
+    getTag,
     getTags,
     getUnitOfMeasurements,
     favouriteRecipe,
@@ -337,12 +382,15 @@ const useAPI = () => {
     createRecipe,
     uploadRecipeImage,
     createTag,
+    updateTag,
     createAuthor,
     getUserPlanner,
     planRecipe,
     getPlannerIngredientList,
     getAuthor,
     getAuthors,
+    getSupportTickets,
+    resolveSupportTicket
   };
 };
 

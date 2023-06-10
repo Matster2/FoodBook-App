@@ -248,11 +248,13 @@ export default () => {
           </Grid>
         </Box>
 
-        <Section title="Categories" showSeeAllLink={categories.length < totalCategories} loading={loadingTags}>
-          {categories.map((category) => (
-            <CategoryChip key={category.id} category={category} onClick={handleCategoryClick} />
-          ))}
-        </Section>
+        {categories.length > 0 && (
+          <Section title="Categories" showSeeAllLink={categories.length < totalCategories} loading={loadingTags}>
+            {categories.map((category) => (
+              <CategoryChip key={category.id} category={category} onClick={handleCategoryClick} />
+            ))}
+          </Section>
+        )}
 
         {recommendedRecipes.length > 0 && (
           <Section title="Recommendations" showSeeAllLink={recommendedRecipes.length < totalRecommendedRecipes} loading={loadingRecommendedRecipes}>

@@ -13,8 +13,7 @@ import {
   Box,
   CircularProgress,
   Typography,
-  Button,
-  Icon
+  Button
 } from '@mui/material';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useNavigate } from 'react-router-dom';
@@ -23,52 +22,42 @@ import useFilters from '../../hooks/useFilters';
 import useInput from '../../hooks/useInput';
 import Header from '../../components/Header';
 
-import categoryIcons from '../../config/categoryIcons';
-
 export default () => {
   const navigate = useNavigate();
   const api = useAPI();
 
   const { filters, setFilter } = useFilters({
     search: '',
-    sortBy: 'name',
+    sortBy: 'datecreated',
   });
 
   const { value: search, onChange: onSearchChange } = useInput('');
-  const [loadingTags, setLoadingTags] = useState(false);
-  const [tags, setTags] = useState([]);
+  const [loadingSupportTickets, setLoadingSupportTickets] = useState(false);
+  const [supportTickets, setSupportTickets] = useState([]);
 
-  const fetchTags = async () => {
-    setLoadingTags(true);
+  const fetchingSupportTickets = async () => {
+    setLoadingSupportTickets(true);
 
     try {
       const {
         data: { results },
-      } = await api.getTags(filters);
-      setTags(results);
+      } = await api.getSupportTickets(filters);
+      setSupportTickets(results);
     } catch (e) {
       console.log(e);
     }
 
-    setLoadingTags(false);
+    setLoadingSupportTickets(false);
   };
 
   /* Handlers */
   const handleRefresh = async () => {
-    fetchTags();
-  }
-
-  const handleAddClick = () => {
-    navigate("/admin/tags/add");
-  }
-
-  const handleTagClick = (id) => {
-    navigate(`/admin/tags/${id}`);
+    fetchingSupportTickets();
   }
 
   /* Effects */
   useEffect(() => {
-    fetchTags();
+    fetchingSupportTickets();
   }, [filters]);
 
   useEffect(() => {
@@ -79,24 +68,11 @@ export default () => {
     return () => clearTimeout(delayDebounce);
   }, [search]);
 
-  /* Rendering */
   return (
     <Container sx={{ pb: 7 }}>
       <CssBaseline />
-      <Header title="Tags" onBackClick={() => navigate(-1)} />
-
-      <Box
-        sx={{ display: "flex", justifyContent: "right" }}
-      >
-        <Button
-          type="button"
-          variant="contained"
-          onClick={handleAddClick}
-        >
-          Add
-        </Button>
-      </Box>
-
+      <Header title="Support Tickets" onBackClick={() => navigate(-1)} />
+      {/* 
       <TextField
         sx={{ mb: 2 }}
         fullWidth
@@ -107,43 +83,34 @@ export default () => {
         autoFocus
         value={search}
         onChange={onSearchChange}
-      />
+      /> */}
 
       <PullToRefresh onRefresh={handleRefresh}>
-        {tags.length === 0 && !loadingTags && (
+        {supportTickets.length === 0 && !loadingSupportTickets && (
           <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
-            <Typography>No Tags Found</Typography>
+            <Typography>No Support Tickets Found</Typography>
           </Box>
         )}
 
-        {loadingTags && (
+        {loadingSupportTickets && (
           <Box sx={{ mt: 2, mb: 4 }} display="flex" justifyContent="center">
             <CircularProgress />
           </Box>
         )}
 
-        {tags.length > 0 && (
+        {supportTickets.length > 0 && (
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
+                  <TableCell>Message</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tags.map((tag) => (
-                  <TableRow key={tag.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleTagClick(tag.id)}>
+                {supportTickets.map((supportTicket) => (
+                  <TableRow key={supportTicket.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell component="th" scope="row">
-                      <Typography
-                        sx={{
-                          display: 'flex',
-                        }}
-                      >
-                        <Icon sx={{ mr: 1 }}>
-                          <img style={{ height: '100%' }} alt={tag.name} src={categoryIcons[tag.icon.toLowerCase()]} />
-                        </Icon>
-                        {tag.name}
-                      </Typography>
+                      {supportTicket.message}
                     </TableCell>
                   </TableRow>
                 ))}

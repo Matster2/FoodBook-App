@@ -6,6 +6,8 @@ import { CssBaseline, Container, Box, TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useAPI from '../../hooks/useAPI';
 import Header from '../../components/Header';
+import { tagSchema } from '../../shemas';
+import TagForm from '../../forms/TagForm';
 
 const initialTagValue = {
   name: '',
@@ -19,11 +21,6 @@ export default () => {
   const formRef = useRef();
 
   const [tag, setTag] = useState(initialTagValue);
-
-  const tagSchema = yup.object({
-    name: yup.string().required(),
-    icon: yup.string(),
-  });
 
   const handleSubmit = async (values) => {
     const data = {
@@ -54,10 +51,6 @@ export default () => {
       <CssBaseline />
       <Header title="Add Tag" onBackClick={() => navigate(-1)} />
 
-      {/* <Box>
-        <FormControlLabel label="Add Multiple" control={<Checkbox defaultChecked />} />
-      </Box> */}
-
       <Formik
         innerRef={formRef}
         initialValues={tag}
@@ -69,44 +62,11 @@ export default () => {
         {(formik) => {
           const { errors, touched, values } = formik;
           return (
-            <Form>
-              <Field
-                as={TextField}
-                required
-                fullWidth
-                margin="normal"
-                id="name"
-                name="name"
-                label="Name"
-                autoFocus
-                error={errors.name && touched.name}
-                helperText={touched.name && errors.name}
-              />
-              <Field
-                as={TextField}
-                required
-                fullWidth
-                margin="normal"
-                id="icon"
-                name="icon"
-                label="Icon"
-                autoFocus
-                error={errors.icon && touched.icon}
-                helperText={touched.icon && errors.icon}
-              />
-
-              <Box
-                sx={{
-                  marginBottom: 4,
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                }}
-              >
-                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                  Create
-                </Button>
-              </Box>
-            </Form>
+            <TagForm
+              mode="create"
+              errors={errors}
+              touched={touched}
+            />
           );
         }}
       </Formik>

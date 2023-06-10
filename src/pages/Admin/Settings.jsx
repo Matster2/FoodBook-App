@@ -37,6 +37,12 @@ export default () => {
             <ListItemText primary="Create Recipe" />
           </ListItemButton>
         </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton component={Link} to="/admin/support-tickets">
+            <ListItemText primary="Support Tickets" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Container>
   );

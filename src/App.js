@@ -22,11 +22,13 @@ import ContactUs from './pages/ContactUs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import AdminTags from './pages/Admin/Tags';
 import AdminAddTag from './pages/Admin/AddTag';
+import AdminEditTag from './pages/Admin/EditTag';
 import AdminIngredients from './pages/Admin/Ingredients';
 import AdminAddIngredient from './pages/Admin/AddIngredient';
 import AdminAuthors from './pages/Admin/Authors';
 import AdminAddAuthor from './pages/Admin/AddAuthor';
 import AdminAddRecipe from './pages/Admin/AddRecipe';
+import AdminSupportTickets from './pages/Admin/SupportTickets';
 import AdminSettings from './pages/Admin/Settings';
 import Planner from './pages/Planner';
 import TermsOfService from './pages/TermsOfService';
@@ -267,6 +269,14 @@ const App = () => {
           ),
         },
         {
+          path: '/admin/tags/:id',
+          element: (
+            <AdminRoute>
+              <AdminEditTag />
+            </AdminRoute>
+          ),
+        },
+        {
           path: '/admin/ingredients',
           element: (
             <AdminRoute>
@@ -306,7 +316,15 @@ const App = () => {
             </AdminRoute>
           ),
         },
-      ],
+        {
+          path: '/admin/support-tickets',
+          element: (
+            <AdminRoute>
+              <AdminSupportTickets />
+            </AdminRoute>
+          ),
+        },
+      ]
     },
     {
       children: [
