@@ -33,12 +33,6 @@ export default () => {
         </ListItem>
 
         <ListItem disablePadding>
-          <ListItemButton component={Link} to="/admin/recipes/add">
-            <ListItemText primary="Create Recipe" />
-          </ListItemButton>
-        </ListItem>
-
-        <ListItem disablePadding>
           <ListItemButton component={Link} to="/admin/support-tickets">
             <ListItemText primary="Support Tickets" />
           </ListItemButton>

@@ -143,6 +143,7 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
               labelId="type-label"
               label="Type"
               onChange={handleChange}
+              value={`${recipeIngredient.unitOfMeasurementId}`}
             >
               {unitOfMeasurements.map((unitOfMeasurement) => (
                 <MenuItem key={unitOfMeasurement.id} value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
@@ -311,13 +312,15 @@ export default () => {
   const handleAddIngredient = (ingredient) => {
     const recipeIngredient = {
       ingredient,
-      unitOfMeasurementId: undefined,
+      unitOfMeasurementId: ingredient.defaultUnitOfMeasurement.id,
       amount: undefined,
       optional: false,
     };
 
     const newRecipeIngredients = recipe.ingredients.slice();
     newRecipeIngredients.push(recipeIngredient);
+
+    console.log(newRecipeIngredients)
 
     setRecipe((state) => ({
       ...state,

@@ -26,7 +26,8 @@ import AdminIngredients from './pages/Admin/Ingredients';
 import AdminIngredient from './pages/Admin/Ingredient';
 import AdminAuthors from './pages/Admin/Authors';
 import AdminAddAuthor from './pages/Admin/AddAuthor';
-import AdminAddRecipe from './pages/Admin/AddRecipe';
+import AdminRecipes from './pages/Admin/Recipes';
+import AdminRecipe from './pages/Admin/Recipe';
 import AdminSupportTickets from './pages/Admin/SupportTickets';
 import AdminSettings from './pages/Admin/Settings';
 import Planner from './pages/Planner';
@@ -316,10 +317,18 @@ const App = () => {
           ),
         },
         {
+          path: '/admin/recipes',
+          element: (
+            <AdminRoute>
+              <AdminRecipes />
+            </AdminRoute>
+          ),
+        },
+        {
           path: '/admin/recipes/add',
           element: (
             <AdminRoute>
-              <AdminAddRecipe />
+              <AdminRecipe />
             </AdminRoute>
           ),
         },

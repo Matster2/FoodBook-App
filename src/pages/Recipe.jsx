@@ -64,7 +64,7 @@ const RecipeStep = ({ step }) => {
   }
 
   return (
-    <Box>
+    <Box sx={{ mb: 3 }}>
       <Typography>{step.name}</Typography>
 
       <Stepper orientation="vertical" activeStep={activeInstruction}>
