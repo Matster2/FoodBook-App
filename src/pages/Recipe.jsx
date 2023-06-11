@@ -12,6 +12,7 @@ import {
   IconButton,
   Stack,
   Dialog,
+  CircularProgress,
   Slide,
 } from '@mui/material';
 import {
@@ -55,6 +56,28 @@ const CollapsibleSection = ({ title, collapse, children }) => (
   </Box>
 )
 
+const RecipeStep = ({ step }) => {
+  const [activeInstruction, setActiveInstruction] = useState(0);
+
+  const handleInstructionClick = (index) => {
+    setActiveInstruction(index + 1);
+  }
+
+  return (
+    <Box>
+      <Typography>{step.name}</Typography>
+
+      <Stepper orientation="vertical" activeStep={activeInstruction}>
+        {step.instructions.map((instruction, index) => (
+          <Step onClick={() => handleInstructionClick(index)}>
+            <StepLabel>{instruction.instruction}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+    </Box>
+  )
+}
+
 export default () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -67,9 +90,12 @@ export default () => {
 
   const api = useAPI();
 
-  const [recipe, setRecipe] = useState();
   const [loadingRecipe, setLoadingRecipe] = useState();
+  const [recipe, setRecipe] = useState();
   const [showFullDescription, setShowFullDescription] = useState(false);
+
+  const [loadingInstructions, setLoadingInstructions] = useState();
+  const [instructions, setInstructions] = useState();
 
   const [rating, setRating] = useState(undefined);
   const [servings, setServings] = useState(location?.state?.servings);
@@ -77,8 +103,6 @@ export default () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showPlannerModal, setShowPlannerModal] = useState(false);
-
-  const [activeInstructionStep, setActiveInstructionStep] = useState(0);
 
   const onServingsChange = (newServings) => {
     setServings(newServings);
@@ -93,6 +117,17 @@ export default () => {
       console.log('error fetching recipe');
     }
     setLoadingRecipe(false);
+  };
+
+  const fetchInstructions = async () => {
+    setLoadingInstructions(true);
+    try {
+      const { data } = await api.getRecipeInstructions(id);
+      setInstructions(data);
+    } catch {
+      console.log('error fetching recipe instructions');
+    }
+    setLoadingInstructions(false);
   };
 
   /* Handlers */
@@ -159,10 +194,6 @@ export default () => {
     setShowPlannerModal(true);
   };
 
-  const handleInstructionClick = (index) => {
-    setActiveInstructionStep(index + 1);
-  }
-
   const fetchRecipeRating = async () => {
     try {
       const { data } = await api.getUserRecipeRating(id, userId);
@@ -178,6 +209,7 @@ export default () => {
       fetchRecipeRating();
     }
     fetchRecipe();
+    fetchInstructions();
   }, [authenticated]);
 
   useEffect(() => {
@@ -487,13 +519,17 @@ export default () => {
           <CollapsibleSection
             title="Directions"
           >
-            <Stepper orientation="vertical" activeStep={activeInstructionStep}>
-              {recipe.instructions.map((instruction, index) => (
-                <Step onClick={() => handleInstructionClick(index)}>
-                  <StepLabel>{instruction}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
+            {loadingInstructions && (
+              <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
+                <CircularProgress />
+              </Box>
+            )}
+
+            {instructions && instructions.steps.map((step) => (
+              <RecipeStep
+                step={step}
+              />
+            ))}
           </CollapsibleSection>
 
           <CollapsibleSection

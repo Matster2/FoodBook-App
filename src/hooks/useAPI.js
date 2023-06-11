@@ -82,6 +82,14 @@ const useAPI = () => {
     });
   };
 
+  const getRecipeInstructions = async (id) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/recipes/${id}/instructions`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
   const getIngredient = async (id) => {
     return axios.get(`${process.env.REACT_APP_API_URL}/ingredients/${id}`, {
       headers: {
@@ -397,6 +405,7 @@ const useAPI = () => {
     getMe,
     getRecipes,
     getRecipe,
+    getRecipeInstructions,
     getIngredient,
     getIngredients,
     getTag,

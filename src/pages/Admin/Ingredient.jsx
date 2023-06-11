@@ -12,9 +12,9 @@ import FormModes from '../../utils/formModes';
 const ingredientSchema = yup.object({
   name: yup.string().required(),
   pluralName: yup.string().required(),
-  defaultUnitOfMeasurement: {
+  defaultUnitOfMeasurement: yup.object({
     id: yup.string().required()
-  }
+  })
 });
 
 const initialIngredientValue = {
@@ -83,7 +83,11 @@ export default () => {
         return;
       }
 
-      await api.createIngredient(data);
+      await api.createIngredient({
+        name: data.name,
+        pluralName: data.pluralName,
+        defaultUnitOfMeasurementId: data.defaultUnitOfMeasurement.id
+      });
       toast.success('Ingredient successfully created');
       formRef.current?.resetForm({ values: initialIngredientValue });
     } catch (e) {
@@ -130,7 +134,7 @@ export default () => {
       >
         {(formik) => {
           const { errors, touched, values } = formik;
-          console.log(values.defaultUnitOfMeasurement.id)
+
           return (
             <Form>
               <Field
@@ -160,7 +164,17 @@ export default () => {
 
               <FormControl fullWidth sx={{ mt: 2, mb: 1 }}>
                 <InputLabel id="defaultUnitOfMeasurementId-label">Default Unit Of Measurement</InputLabel>
-                <Field as={Select} margin="normal" id="defaultUnitOfMeasurement.id" name="defaultUnitOfMeasurement.id" value={`${values.defaultUnitOfMeasurement.id}`} labelId="defaultUnitOfMeasurementId-label" label="Default Unit Of Measurement">
+                <Field
+                  as={Select}
+                  margin="normal"
+                  id="defaultUnitOfMeasurement.id"
+                  name="defaultUnitOfMeasurement.id"
+                  value={`${values.defaultUnitOfMeasurement.id}`}
+                  labelId="defaultUnitOfMeasurementId-label"
+                  label="Default Unit Of Measurement"
+                  error={errors.defaultUnitOfMeasurement?.id && touched.defaultUnitOfMeasurement?.id}
+                  helperText={touched.defaultUnitOfMeasurement?.id && errors.defaultUnitOfMeasurement?.id}
+                >
                   {unitOfMeasurements.map((unitOfMeasurement) => (
                     <MenuItem value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
                   ))}

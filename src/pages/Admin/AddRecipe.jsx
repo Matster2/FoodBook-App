@@ -1,4 +1,5 @@
 import React, { useRef, useContext, useEffect, useState } from 'react';
+import uuid from 'react-uuid';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
@@ -20,7 +21,7 @@ import {
   IconButton,
   List,
 } from '@mui/material';
-import { Clear as ClearIcon } from '@mui/icons-material';
+import { Clear as ClearIcon, HorizontalRule } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import useAPI from '../../hooks/useAPI';
 import Header from '../../components/Header';
@@ -29,6 +30,64 @@ import RecipeImageControl from '../../components/RecipeImageControl';
 import { UnitOfMeasurementContext } from '../../contexts/UnitOfMeasurementContext';
 import { TagContext } from '../../contexts/TagContext';
 import { isUndefined } from '../../utils/utils';
+
+const recipeSchema = yup.object({
+  name: yup.string().required(),
+  description: yup.string().required(),
+  type: yup.string().required(),
+  prepTime: yup.number().integer().required(),
+  cookTime: yup.number().integer().required(),
+  totalTime: yup.number().integer().required(),
+  servings: yup.number().integer().required(),
+  nutrition: yup.object({
+    calories: yup.number().integer().required(),
+    sugar: yup.number().integer(),
+    fat: yup.number().integer(),
+    saturatedFat: yup.number().integer(),
+    sodium: yup.number().integer(),
+    protein: yup.number().integer(),
+    carbohydrates: yup.number().integer(),
+    fiber: yup.number().integer(),
+  }),
+  steps: yup.array(yup.object({
+    name: yup.string(),
+    instructions: yup.array(yup.object({
+      instruction: yup.string().required(),
+    }))
+  })),
+});
+
+const initialRecipeValue = {
+  name: '',
+  description: '',
+  type: undefined,
+  prepTime: undefined,
+  cookTime: undefined,
+  totalTime: undefined,
+  servings: undefined,
+  steps: [
+    {
+      id: uuid(),
+      name: "",
+      instructions: []
+    }
+  ],
+  ingredients: [],
+  referenceUrl: '',
+  nutrition: {
+    calories: undefined,
+    sugar: undefined,
+    fat: undefined,
+    saturatedFat: undefined,
+    sodium: undefined,
+    protein: undefined,
+    carbohydrates: undefined,
+    fiber: undefined,
+  },
+  tags: [],
+  images: [],
+};
+
 
 const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
   const { unitOfMeasurements } = useContext(UnitOfMeasurementContext);
@@ -113,29 +172,104 @@ RecipeIngredient.defaultProps = {
   onDelete: () => { },
 };
 
-const initialRecipeValue = {
-  name: '',
-  description: '',
-  type: undefined,
-  prepTime: undefined,
-  cookTime: undefined,
-  totalTime: undefined,
-  servings: undefined,
-  instructions: [],
-  ingredients: [],
-  referenceUrl: '',
-  nutrition: {
-    calories: undefined,
-    sugar: undefined,
-    fat: undefined,
-    saturatedFat: undefined,
-    sodium: undefined,
-    protein: undefined,
-    carbohydrates: undefined,
-    fiber: undefined,
-  },
-  tags: [],
-  images: [],
+
+const RecipeStep = ({ step, onChange, onDelete }) => {
+  const handleChange = (e) => {
+    onChange({
+      ...step,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleAddInstructionClick = () => {
+    const newInstructions = [...step.instructions];
+    newInstructions.push({
+      id: uuid(),
+      instruction: ""
+    })
+
+    onChange({
+      ...step,
+      instructions: newInstructions
+    });
+  };
+
+  const handleInstructionChange = (id, value) => {
+    const newInstructions = [...step.instructions];
+
+    const index = newInstructions.findIndex((x) => x.id === id);
+
+    newInstructions[index].instruction = value;
+
+    onChange({
+      ...step,
+      instructions: newInstructions
+    });
+  }
+
+  return (
+    <Box sx={{ border: 1, borderColor: 'grey.500', p: 2 }}>
+      <Grid container spacing={1} justifyContent="space-between">
+        <Grid item xs={9} sx={{ mb: 1 }}>
+          <TextField
+            fullWidth
+            id="name"
+            label="Name"
+            name="name"
+            autoFocus
+            value={step.name}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs="auto">
+          <IconButton onClick={() => onDelete(step)}>
+            <ClearIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
+
+      {step.instructions.map((instruction) => (
+        <Stack direction="row" gap={1}>
+          <Field
+            as={TextField}
+            margin="normal"
+            fullWidth
+            multiline
+            rows={2}
+            required
+            value={instruction.instruction}
+            onChange={(e) => handleInstructionChange(instruction.id, e.target.value)}
+            label="instruction"
+            id="instruction"
+          />
+
+          <IconButton>
+            <ClearIcon />
+          </IconButton>
+        </Stack>
+      ))}
+
+      <Button type="button" onClick={handleAddInstructionClick} variant="contained">
+        Add Instruction
+      </Button>
+    </Box>
+  );
+};
+
+RecipeStep.propTypes = {
+  step: PropTypes.shape({
+    name: PropTypes.string,
+    instructions: PropTypes.arrayOf(PropTypes.shape({
+      instruction: PropTypes.string
+    })),
+  }).isRequired,
+  onChange: PropTypes.func,
+  onDelete: PropTypes.func,
+};
+
+RecipeStep.defaultProps = {
+  onChange: () => { },
+  onDelete: () => { },
 };
 
 export default () => {
@@ -159,26 +293,6 @@ export default () => {
 
   const [recipe, setRecipe] = useState(initialRecipeValue);
 
-  const recipeSchema = yup.object({
-    name: yup.string().required(),
-    description: yup.string().required(),
-    type: yup.string().required(),
-    prepTime: yup.number().integer().required(),
-    cookTime: yup.number().integer().required(),
-    totalTime: yup.number().integer().required(),
-    servings: yup.number().integer().required(),
-    nutrition: yup.object({
-      calories: yup.number().integer().required(),
-      sugar: yup.number().integer(),
-      fat: yup.number().integer(),
-      saturatedFat: yup.number().integer(),
-      sodium: yup.number().integer(),
-      protein: yup.number().integer(),
-      carbohydrates: yup.number().integer(),
-      fiber: yup.number().integer(),
-    }),
-    instructions: yup.array(yup.string()),
-  });
 
   const handleSetAuthor = (author) => {
     setRecipe({
@@ -248,8 +362,14 @@ export default () => {
         amount: recipeIngredient.amount,
         optional: recipeIngredient.optional,
       })),
-      authorId: recipe?.author?.id
-    };
+      authorId: recipe?.author?.id,
+      steps: recipe.steps.map((step) => ({
+        name: step.name,
+        instructions: step.instructions.map(instruction => ({
+          instruction: instruction.instruction
+        }))
+      }))
+    }
 
     try {
       const {
@@ -265,7 +385,8 @@ export default () => {
     } catch (e) {
       toast.error('Unable to create recipe');
     }
-  };
+  }
+
 
   const handleRecipeIngredientChange = (newRecipeIngredient) => {
     const newRecipeIngredients = recipe.ingredients;
@@ -288,6 +409,45 @@ export default () => {
     setRecipe((state) => ({
       ...state,
       ingredients: newRecipeIngredients,
+    }));
+  };
+
+  const handleAddStepClick = () => {
+    const newSteps = recipe.steps;
+
+    newSteps.push({
+      id: uuid(),
+      name: "",
+      instructions: []
+    })
+
+    setRecipe((state) => ({
+      ...state,
+      steps: newSteps,
+    }));
+  }
+
+  const handleStepChange = (newStep) => {
+    const newSteps = recipe.steps;
+
+    const index = newSteps.findIndex((x) => x.id === newStep.id);
+
+    newSteps[index] = newStep;
+
+    setRecipe((state) => ({
+      ...state,
+      steps: newSteps,
+    }));
+  };
+
+  const handleDeleteStep = (newStep) => {
+    const newSteps = recipe.steps.filter(
+      (x) => x.id !== newStep.id
+    );
+
+    setRecipe((state) => ({
+      ...state,
+      steps: newSteps,
     }));
   };
 
@@ -554,35 +714,18 @@ export default () => {
                 <Box sx={{ mt: 3, mb: 3 }}>
                   <Typography variant="h6">Instructions</Typography>
 
-                  <FieldArray
-                    name="instructions"
-                    render={(arrayHelpers) => (
-                      <div>
-                        {values.instructions.map((_, index) => (
-                          <Stack direction="row" gap={1}>
-                            <Field
-                              as={TextField}
-                              margin="normal"
-                              fullWidth
-                              multiline
-                              rows={2}
-                              required
-                              name={`instructions.${index}`}
-                              label="instruction"
-                              id="instruction"
-                            />
 
-                            <IconButton onClick={() => arrayHelpers.remove(index)}>
-                              <ClearIcon />
-                            </IconButton>
-                          </Stack>
-                        ))}
-                        <Button type="button" onClick={() => arrayHelpers.push('')} variant="contained">
-                          Add Instruction
-                        </Button>
-                      </div>
-                    )}
-                  />
+                  {recipe.steps.map((step) => (
+                    <RecipeStep
+                      step={step}
+                      onChange={handleStepChange}
+                      onDelete={handleDeleteStep}
+                    />
+                  ))}
+
+                  <Button sx={{ mt: 2 }} type="button" onClick={handleAddStepClick} variant="contained">
+                    Add Step
+                  </Button>
                 </Box>
 
                 <Box sx={{ mt: 3 }}>
