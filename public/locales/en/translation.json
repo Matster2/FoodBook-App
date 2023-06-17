@@ -332,6 +332,11 @@
       }
     },
     "recipe": {
+      "times": {
+        "slow": "Slow",
+        "medium": "Medium",
+        "fast": "Fast"
+      },
       "types": {
         "breakfast": {
           "name": "Breakfast",

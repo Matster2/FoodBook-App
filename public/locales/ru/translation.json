@@ -1,0 +1,409 @@
+{
+  "pages": {
+    "register": {
+      "title": "регистр",
+      "alreadyHaveAccount": "У вас уже есть аккаунт?",
+      "links": {
+        "signIn": "Войти"
+      }
+    },
+    "signIn": {
+      "title": "Войти",
+      "noAccount": "У вас нет аккаунта?",
+      "links": {
+        "forgottenPassword": "Забытый пароль?",
+        "signUp": "Зарегистрироваться"
+      }
+    },
+    "forgotPassword": {
+      "title": "Забытый пароль",
+      "links": {
+        "signIn": "Войти"
+      }
+    },
+    "home": {
+      "title": "Дом",
+      "welcome": {
+        "greeting": "Добро пожаловать",
+        "message": "Что бы вы хотели приготовить сегодня?"
+      },
+      "seeAll": "Увидеть все",
+      "sections": {
+        "categories": "Категории",
+        "recommended": "Рекомендации",
+        "recentlyAdded": "Недавно добавленный",
+        "favourites": "Любимые рецепты"
+      },
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Поиск рецептов"
+          }
+        }
+      }
+    },
+    "contactUs": {
+      "title": "Связаться с нами",
+      "messageSent": "Спасибо за ваше сообщение",
+      "continueCooking": "Продолжайте готовить!"
+    },
+    "recipe": {
+      "title": "Рецепт",
+      "description": {
+        "showMore": "Показать больше",
+        "showLess": "Показывай меньше"
+      },
+      "rate": "Ставка",
+      "author": "Автор",
+      "prepTime": "Время подготовки",
+      "cookingTime": "Время готовить",
+      "sections": {
+        "ingredients": "Ингредиенты",
+        "directions": "Направления",
+        "nutrition": "Питание"
+      }
+    },
+    "recipes": {
+      "title": "Рецепты",
+      "noRecipes": "Нет рецептов, соответствующих критериям",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Поиск рецептов"
+          }
+        }
+      }
+    },
+    "favourites": {
+      "title": "Избранное",
+      "authenticationRequired": "Вы должны войти в систему, чтобы увидеть избранное",
+      "noRecipes": "Нет избранных рецептов",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Поиск рецептов"
+          }
+        },
+        "buttons": {
+          "signIn": {
+            "label": "Войти"
+          }
+        }
+      }
+    },
+    "planner": {
+      "title": "Планировщик",
+      "authenticationRequired": "Вы должны войти в систему, чтобы увидеть свой планировщик",
+      "noRecipes": "Рецептов в этот день не запланировано.",
+      "components": {
+        "buttons": {
+          "signIn": {
+            "label": "Войти"
+          }
+        }
+      }
+    },
+    "settings": {
+      "title": "Настройки",
+      "options": {
+        "signIn": "Войти",
+        "admin": "Администратор",
+        "contactUs": "Связаться с нами",
+        "privacyPolicy": "политика конфиденциальности",
+        "termsOfService": "Условия использования",
+        "logOut": "Выйти",
+        "deleteAccount": "Удалить аккаунт"
+      }
+    }
+  },
+  "forms": {
+    "auth": {
+      "register": {
+        "title": "Завести аккаунт",
+        "inputs": {
+          "email": {
+            "label": "Адрес электронной почты",
+            "validationMessages": {
+              "empty": "Электронная почта обязательна",
+              "invalid": "Неверный адрес электронной почты"
+            }
+          },
+          "password": {
+            "label": "Пароль",
+            "validationMessages": {
+              "empty": "Необходим пароль"
+            }
+          },
+          "confirmPassword": {
+            "label": "Подтвердите пароль",
+            "validationMessages": {
+              "empty": "Пожалуйста, подтвердите свой пароль",
+              "notSame": "Пароли не совпадают"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Зарегистрироваться"
+          }
+        }
+      },
+      "signIn": {
+        "inputs": {
+          "email": {
+            "label": "Адрес электронной почты",
+            "validationMessages": {
+              "empty": "Электронная почта обязательна",
+              "invalid": "Неверный адрес электронной почты"
+            }
+          },
+          "password": {
+            "label": "Пароль",
+            "validationMessages": {
+              "empty": "Необходим пароль"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Войти"
+          }
+        }
+      },
+      "forgotPassword": {
+        "inputs": {
+          "email": {
+            "label": "Адрес электронной почты",
+            "validationMessages": {
+              "empty": "Электронная почта обязательна"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Сброс пароля"
+          }
+        }
+      }
+    },
+    "accounts": {
+      "delete": {
+        "title": "Вы уверены, что хотите удалить свой аккаунт?",
+        "description": "Это действие необратимо. ",
+        "buttons": {
+          "submit": {
+            "label": "Подтверждать"
+          },
+          "cancel": {
+            "label": "Нет"
+          }
+        }
+      }
+    },
+    "contactUs": {
+      "inputs": {
+        "email": {
+          "label": "Адрес электронной почты",
+          "validationMessages": {
+            "empty": "Электронная почта обязательна",
+            "invalid": "Неверный адрес электронной почты"
+          }
+        },
+        "message": {
+          "label": "Сообщение",
+          "validationMessages": {
+            "empty": "Требуется сообщение"
+          }
+        }
+      },
+      "buttons": {
+        "submit": {
+          "label": "Отправлять"
+        }
+      }
+    }
+  },
+  "components": {
+    "bottomNavBar": {
+      "discover": "Обнаружить"
+    },
+    "plannerIngredientListDialog": {
+      "ingredients": "Ингредиенты"
+    },
+    "planRecipeDialog": {
+      "title": "Планировщик",
+      "selectDaysMessage": "Выберите дни, в которые вы хотите добавить этот рецепт.",
+      "addToPlanner": "Добавить в планировщик"
+    },
+    "recipeFilters": {
+      "title": "Филлеры",
+      "filters": {
+        "type": "Типы",
+        "time": "раз",
+        "tag": "Теги",
+        "ingredient": "Ингредиенты",
+        "rating": "Рейтинги"
+      },
+      "inputs": {
+        "addIngredient": {
+          "label": "Добавить ингредиент"
+        }
+      },
+      "buttons": {
+        "submit": {
+          "label": "Применить фильтры"
+        }
+      }
+    }
+  },
+  "requests": {
+    "auth": {
+      "register": {
+        "success": "Аккаунт создан.",
+        "emailAlreadyUsed": "Электронная почта уже используется",
+        "error": "Невозможно зарегистрировать аккаунт. "
+      },
+      "signIn": {
+        "success": "Выполнен вход успешно.",
+        "invalid": "Неверный логин. ",
+        "error": "Не удалось войти. Повторите попытку позже."
+      },
+      "forgottenPassword": {
+        "success": "Выполнен вход успешно.",
+        "error": "Не удалось отправить электронное письмо для восстановления. "
+      },
+      "logout": {
+        "success": "Вы вышли из системы",
+        "error": ""
+      }
+    },
+    "accounts": {
+      "delete": {
+        "success": "Ваш аккаунт удален.",
+        "error": ""
+      }
+    },
+    "support": {
+      "contactUs": {
+        "success": "Сообщение отправлено",
+        "error": "Не удалось отправить сообщение. "
+      },
+      "resolve": {
+        "success": "Тикет поддержки был решен",
+        "error": "Не удалось разрешить заявку в службу поддержки"
+      }
+    },
+    "favourites": {
+      "favourite": {
+        "success": "Рецепт понравился.",
+        "error": "Не удалось добавить рецепт в избранное. "
+      },
+      "unfavourite": {
+        "success": "Рецепт не понравился.",
+        "error": "Не удалось удалить рецепт из избранного. "
+      }
+    },
+    "rating": {
+      "rate": {
+        "success": "Рецепт оценен.",
+        "error": "Не удалось оценить рецепт. "
+      }
+    },
+    "planner": {
+      "planRecipe": {
+        "success": "Рецепт добавлен в планировщик.",
+        "error": "Невозможно добавить рецепт в планировщик. "
+      }
+    }
+  },
+  "types": {
+    "log": {
+      "fields": {
+        "message": "Сообщение"
+      }
+    },
+    "supportTicket": {
+      "fields": {
+        "from": "От",
+        "message": "Сообщение",
+        "actions": {
+          "resolve": "Решать"
+        }
+      }
+    },
+    "recipe": {
+      "types": {
+        "breakfast": {
+          "name": "Завтрак",
+          "displayName": "Завтрак"
+        },
+        "lunch": {
+          "name": "Обед",
+          "displayName": "Обед"
+        },
+        "dinner": {
+          "name": "Ужин",
+          "displayName": "Ужин"
+        },
+        "dessert": {
+          "name": "Десерт",
+          "displayName": "Десерты"
+        },
+        "snack": {
+          "name": "Закуска",
+          "displayName": "Закуски"
+        },
+        "drink": {
+          "name": "Напиток",
+          "displayName": "Напитки"
+        }
+      },
+      "fields": {
+        "type": "Тип",
+        "servings": "Порции",
+        "nutrition": {
+          "calories": "Калории",
+          "sugar": "Сахар",
+          "fat": "Толстый",
+          "saturatedFat": "Насыщенный жир",
+          "sodium": "натрий",
+          "protein": "белок",
+          "carbohydrates": "Углеводы",
+          "fiber": "Волокно"
+        }
+      }
+    }
+  },
+  "common": {
+    "version": "версия",
+    "time": {
+      "min": "мин",
+      "mins": "минут"
+    },
+    "date": {
+      "days": {
+        "monday": "Понедельник",
+        "tuesday": "Вторник",
+        "wednesday": "Среда",
+        "thursday": "Четверг",
+        "friday": "Пятница",
+        "saturday": "Суббота",
+        "sunday": "Воскресенье"
+      },
+      "months": {
+        "january": "январь",
+        "february": "февраль",
+        "march": "Маршировать",
+        "april": "апрель",
+        "may": "Может",
+        "june": "Июнь",
+        "july": "Июль",
+        "august": "Август",
+        "september": "Сентябрь",
+        "october": "Октябрь",
+        "november": "ноябрь",
+        "december": "Декабрь"
+      }
+    }
+  }
+}

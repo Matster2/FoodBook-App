@@ -1,0 +1,409 @@
+{
+  "pages": {
+    "register": {
+      "title": "зареєструватися",
+      "alreadyHaveAccount": "Вже є аккаунт?",
+      "links": {
+        "signIn": "Увійти"
+      }
+    },
+    "signIn": {
+      "title": "Увійти",
+      "noAccount": "Немає облікового запису?",
+      "links": {
+        "forgottenPassword": "Забули пароль?",
+        "signUp": "Зареєструватися"
+      }
+    },
+    "forgotPassword": {
+      "title": "Забутий пароль",
+      "links": {
+        "signIn": "Увійти"
+      }
+    },
+    "home": {
+      "title": "додому",
+      "welcome": {
+        "greeting": "Ласкаво просимо",
+        "message": "Що б ви хотіли приготувати сьогодні?"
+      },
+      "seeAll": "Бачити все",
+      "sections": {
+        "categories": "Категорії",
+        "recommended": "Рекомендації",
+        "recentlyAdded": "Нещодавно додані",
+        "favourites": "Улюблені рецепти"
+      },
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Пошук рецептів"
+          }
+        }
+      }
+    },
+    "contactUs": {
+      "title": "Зв'яжіться з нами",
+      "messageSent": "Дякую за повідомлення",
+      "continueCooking": "Продовжуйте готувати!"
+    },
+    "recipe": {
+      "title": "рецепт",
+      "description": {
+        "showMore": "Показати більше",
+        "showLess": "Показати менше"
+      },
+      "rate": "Оцінка",
+      "author": "Автор",
+      "prepTime": "Час підготовки",
+      "cookingTime": "Час приготування",
+      "sections": {
+        "ingredients": "Інгредієнти",
+        "directions": "Напрямки",
+        "nutrition": "Харчування"
+      }
+    },
+    "recipes": {
+      "title": "рецепти",
+      "noRecipes": "Немає рецептів, які відповідають критеріям",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Пошук рецептів"
+          }
+        }
+      }
+    },
+    "favourites": {
+      "title": "Вибране",
+      "authenticationRequired": "Ви повинні увійти в систему, щоб побачити свої улюблені",
+      "noRecipes": "Немає улюблених рецептів",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Пошук рецептів"
+          }
+        },
+        "buttons": {
+          "signIn": {
+            "label": "Увійти"
+          }
+        }
+      }
+    },
+    "planner": {
+      "title": "Планувальник",
+      "authenticationRequired": "Ви повинні увійти, щоб побачити свій планувальник",
+      "noRecipes": "На цей день не заплановано рецептів.",
+      "components": {
+        "buttons": {
+          "signIn": {
+            "label": "Увійти"
+          }
+        }
+      }
+    },
+    "settings": {
+      "title": "Налаштування",
+      "options": {
+        "signIn": "Увійти",
+        "admin": "адмін",
+        "contactUs": "Зв'яжіться з нами",
+        "privacyPolicy": "Політика конфіденційності",
+        "termsOfService": "Умови використання",
+        "logOut": "Вийти",
+        "deleteAccount": "Видалити аккаунт"
+      }
+    }
+  },
+  "forms": {
+    "auth": {
+      "register": {
+        "title": "Створити аккаунт",
+        "inputs": {
+          "email": {
+            "label": "Адреса електронної пошти",
+            "validationMessages": {
+              "empty": "Необхідно вказати адресу електронної пошти",
+              "invalid": "Недійсна електронна адреса"
+            }
+          },
+          "password": {
+            "label": "Пароль",
+            "validationMessages": {
+              "empty": "Необхідно ввести пароль"
+            }
+          },
+          "confirmPassword": {
+            "label": "Підтвердьте пароль",
+            "validationMessages": {
+              "empty": "Будь ласка, підтвердьте свій пароль",
+              "notSame": "Паролі не збігаються"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Зареєструватися"
+          }
+        }
+      },
+      "signIn": {
+        "inputs": {
+          "email": {
+            "label": "Адреса електронної пошти",
+            "validationMessages": {
+              "empty": "Необхідно вказати адресу електронної пошти",
+              "invalid": "Недійсна електронна адреса"
+            }
+          },
+          "password": {
+            "label": "Пароль",
+            "validationMessages": {
+              "empty": "Необхідно ввести пароль"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Увійти"
+          }
+        }
+      },
+      "forgotPassword": {
+        "inputs": {
+          "email": {
+            "label": "Адреса електронної пошти",
+            "validationMessages": {
+              "empty": "Необхідно вказати адресу електронної пошти"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Скинути пароль"
+          }
+        }
+      }
+    },
+    "accounts": {
+      "delete": {
+        "title": "Ви впевнені, що хочете видалити свій обліковий запис?",
+        "description": "Ця дія незворотна. ",
+        "buttons": {
+          "submit": {
+            "label": "Підтвердити"
+          },
+          "cancel": {
+            "label": "Немає"
+          }
+        }
+      }
+    },
+    "contactUs": {
+      "inputs": {
+        "email": {
+          "label": "Адреса електронної пошти",
+          "validationMessages": {
+            "empty": "Необхідно вказати адресу електронної пошти",
+            "invalid": "Недійсна електронна адреса"
+          }
+        },
+        "message": {
+          "label": "повідомлення",
+          "validationMessages": {
+            "empty": "Необхідне повідомлення"
+          }
+        }
+      },
+      "buttons": {
+        "submit": {
+          "label": "Надіслати"
+        }
+      }
+    }
+  },
+  "components": {
+    "bottomNavBar": {
+      "discover": "Відкрийте для себе"
+    },
+    "plannerIngredientListDialog": {
+      "ingredients": "Інгредієнти"
+    },
+    "planRecipeDialog": {
+      "title": "Планувальник",
+      "selectDaysMessage": "Виберіть дні, до яких ви хочете додати цей рецепт",
+      "addToPlanner": "Додати до планувальника"
+    },
+    "recipeFilters": {
+      "title": "Фітлери",
+      "filters": {
+        "type": "Типи",
+        "time": "Часи",
+        "tag": "Теги",
+        "ingredient": "Інгредієнти",
+        "rating": "Рейтинги"
+      },
+      "inputs": {
+        "addIngredient": {
+          "label": "Додати інгредієнт"
+        }
+      },
+      "buttons": {
+        "submit": {
+          "label": "Застосувати фільтри"
+        }
+      }
+    }
+  },
+  "requests": {
+    "auth": {
+      "register": {
+        "success": "Обліковий запис створено.",
+        "emailAlreadyUsed": "Електронна пошта вже використовується",
+        "error": "Не вдалося зареєструвати обліковий запис. "
+      },
+      "signIn": {
+        "success": "Успішно ввійшли.",
+        "invalid": "Невірний логін. ",
+        "error": "Не вдається ввійти. Повторіть спробу пізніше."
+      },
+      "forgottenPassword": {
+        "success": "Успішно ввійшли.",
+        "error": "Не вдалося надіслати електронну адресу для відновлення. "
+      },
+      "logout": {
+        "success": "Ви вийшли з системи",
+        "error": ""
+      }
+    },
+    "accounts": {
+      "delete": {
+        "success": "Ваш обліковий запис видалено.",
+        "error": ""
+      }
+    },
+    "support": {
+      "contactUs": {
+        "success": "Повідомлення надіслано",
+        "error": "Неможливо надіслати повідомлення. "
+      },
+      "resolve": {
+        "success": "Запит у службу підтримки вирішено",
+        "error": "Неможливо вирішити запит служби підтримки"
+      }
+    },
+    "favourites": {
+      "favourite": {
+        "success": "Рецепт улюблений.",
+        "error": "Неможливо вибрати улюблений рецепт. "
+      },
+      "unfavourite": {
+        "success": "Рецепт не улюблений.",
+        "error": "Неможливо видалити рецепт із обраного. "
+      }
+    },
+    "rating": {
+      "rate": {
+        "success": "Рецепт оцінений.",
+        "error": "Неможливо оцінити рецепт. "
+      }
+    },
+    "planner": {
+      "planRecipe": {
+        "success": "Рецепт додано до планувальника.",
+        "error": "Не вдалося додати рецепт до планувальника. "
+      }
+    }
+  },
+  "types": {
+    "log": {
+      "fields": {
+        "message": "повідомлення"
+      }
+    },
+    "supportTicket": {
+      "fields": {
+        "from": "Від",
+        "message": "повідомлення",
+        "actions": {
+          "resolve": "Розв'язати"
+        }
+      }
+    },
+    "recipe": {
+      "types": {
+        "breakfast": {
+          "name": "Сніданок",
+          "displayName": "Сніданок"
+        },
+        "lunch": {
+          "name": "обід",
+          "displayName": "обід"
+        },
+        "dinner": {
+          "name": "Вечеря",
+          "displayName": "Вечеря"
+        },
+        "dessert": {
+          "name": "десерт",
+          "displayName": "Десерти"
+        },
+        "snack": {
+          "name": "перекус",
+          "displayName": "закуски"
+        },
+        "drink": {
+          "name": "пити",
+          "displayName": "Напої"
+        }
+      },
+      "fields": {
+        "type": "Тип",
+        "servings": "Порції",
+        "nutrition": {
+          "calories": "Калорії",
+          "sugar": "цукор",
+          "fat": "Жир",
+          "saturatedFat": "Насичених жирів",
+          "sodium": "натрію",
+          "protein": "білок",
+          "carbohydrates": "вуглеводи",
+          "fiber": "клітковина"
+        }
+      }
+    }
+  },
+  "common": {
+    "version": "версія",
+    "time": {
+      "min": "хв",
+      "mins": "хв"
+    },
+    "date": {
+      "days": {
+        "monday": "понеділок",
+        "tuesday": "вівторок",
+        "wednesday": "Середа",
+        "thursday": "четвер",
+        "friday": "П'ятниця",
+        "saturday": "Субота",
+        "sunday": "неділя"
+      },
+      "months": {
+        "january": "січня",
+        "february": "Лютий",
+        "march": "березень",
+        "april": "квітень",
+        "may": "Може",
+        "june": "червень",
+        "july": "липень",
+        "august": "серпень",
+        "september": "Вересень",
+        "october": "жовтень",
+        "november": "Листопад",
+        "december": "Грудень"
+      }
+    }
+  }
+}

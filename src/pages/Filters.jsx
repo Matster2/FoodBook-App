@@ -69,17 +69,17 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
   ]
   const timeOptions = [
     {
-      label: 'Fast',
+      label: t('types.recipe.times.fast'),
       minTotalTime: undefined,
       maxTotalTime: 15,
     },
     {
-      label: 'Medium',
+      label: t('types.recipe.times.medium'),
       minTotalTime: 15,
       maxTotalTime: 45,
     },
     {
-      label: 'Slow',
+      label: t('types.recipe.times.slow'),
       minTotalTime: 45,
       maxTotalTime: undefined,
     },

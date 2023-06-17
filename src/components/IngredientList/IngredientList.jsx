@@ -8,7 +8,7 @@ const unitOfMeasurementsThatMustBeAWholeNumber = ['milligram', 'milliliter'];
 
 const IngredientList = ({ ingredients }) => {
   const getUnitName = (unitOfMeasurement, amount) => {
-    if (unitOfMeasurement.name.toLowerCase() === 'unit') {
+    if (unitOfMeasurement.code === 'unit') {
       return '';
     }
 
@@ -16,7 +16,7 @@ const IngredientList = ({ ingredients }) => {
   };
 
   function compare(ingredient1, ingredient2) {
-    if (ingredient1.unitOfMeasurement.name.toLowerCase() === 'unit') {
+    if (ingredient1.unitOfMeasurement.code === 'unit') {
       return -1;
     }
 

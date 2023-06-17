@@ -1,0 +1,409 @@
+{
+  "pages": {
+    "register": {
+      "title": "Kayıt olmak",
+      "alreadyHaveAccount": "Zaten hesabınız var mı?",
+      "links": {
+        "signIn": "Kayıt olmak"
+      }
+    },
+    "signIn": {
+      "title": "Kayıt olmak",
+      "noAccount": "Hesabınız yok mu?",
+      "links": {
+        "forgottenPassword": "Unutulan Şifre?",
+        "signUp": "Üye olmak"
+      }
+    },
+    "forgotPassword": {
+      "title": "Unutulan Şifre",
+      "links": {
+        "signIn": "Kayıt olmak"
+      }
+    },
+    "home": {
+      "title": "Ev",
+      "welcome": {
+        "greeting": "Hoş geldin",
+        "message": "Bugün ne pişirmek istersin?"
+      },
+      "seeAll": "Hepsini gör",
+      "sections": {
+        "categories": "Kategoriler",
+        "recommended": "öneriler",
+        "recentlyAdded": "Son Eklenenler",
+        "favourites": "Favori Tarifler"
+      },
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Tarif ara"
+          }
+        }
+      }
+    },
+    "contactUs": {
+      "title": "Bize Ulaşın",
+      "messageSent": "Mesajın için teşekkürler",
+      "continueCooking": "Pişirmeye Devam Edin!"
+    },
+    "recipe": {
+      "title": "Yemek tarifi",
+      "description": {
+        "showMore": "Daha fazla göster",
+        "showLess": "Daha az göster"
+      },
+      "rate": "Oran",
+      "author": "Yazar",
+      "prepTime": "Hazırlık zamanı",
+      "cookingTime": "Pişirme süresi",
+      "sections": {
+        "ingredients": "İçindekiler",
+        "directions": "Talimatlar",
+        "nutrition": "Beslenme"
+      }
+    },
+    "recipes": {
+      "title": "tarifler",
+      "noRecipes": "Kriterlerle eşleşen tarif yok",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Tarif ara"
+          }
+        }
+      }
+    },
+    "favourites": {
+      "title": "Favoriler",
+      "authenticationRequired": "Favorilerinizi görmek için giriş yapmalısınız",
+      "noRecipes": "Favori tarif yok",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Tarif ara"
+          }
+        },
+        "buttons": {
+          "signIn": {
+            "label": "Kayıt olmak"
+          }
+        }
+      }
+    },
+    "planner": {
+      "title": "planlayıcı",
+      "authenticationRequired": "Planlayıcınızı görmek için oturum açmış olmanız gerekir",
+      "noRecipes": "Bu gün için planlanmış bir tarif yok.",
+      "components": {
+        "buttons": {
+          "signIn": {
+            "label": "Kayıt olmak"
+          }
+        }
+      }
+    },
+    "settings": {
+      "title": "Ayarlar",
+      "options": {
+        "signIn": "Kayıt olmak",
+        "admin": "yönetici",
+        "contactUs": "Bize Ulaşın",
+        "privacyPolicy": "Gizlilik Politikası",
+        "termsOfService": "Kullanım Şartları",
+        "logOut": "Çıkış Yap",
+        "deleteAccount": "Hesabı sil"
+      }
+    }
+  },
+  "forms": {
+    "auth": {
+      "register": {
+        "title": "Bir hesap oluşturun",
+        "inputs": {
+          "email": {
+            "label": "E-posta Adresi",
+            "validationMessages": {
+              "empty": "Email gereklidir",
+              "invalid": "Geçersiz e-posta"
+            }
+          },
+          "password": {
+            "label": "Şifre",
+            "validationMessages": {
+              "empty": "Şifre gereklidir"
+            }
+          },
+          "confirmPassword": {
+            "label": "Şifreyi Onayla",
+            "validationMessages": {
+              "empty": "Lütfen şifrenizi doğrulayınız",
+              "notSame": "Parolalar uyuşmuyor"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Üye olmak"
+          }
+        }
+      },
+      "signIn": {
+        "inputs": {
+          "email": {
+            "label": "E-posta Adresi",
+            "validationMessages": {
+              "empty": "Email gereklidir",
+              "invalid": "Geçersiz e-posta"
+            }
+          },
+          "password": {
+            "label": "Şifre",
+            "validationMessages": {
+              "empty": "Şifre gereklidir"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Kayıt olmak"
+          }
+        }
+      },
+      "forgotPassword": {
+        "inputs": {
+          "email": {
+            "label": "E-posta Adresi",
+            "validationMessages": {
+              "empty": "Email gereklidir"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Şifreyi yenile"
+          }
+        }
+      }
+    },
+    "accounts": {
+      "delete": {
+        "title": "Hesabınızı silmek istediğinizden emin misiniz?",
+        "description": "Bu işlem geri alınamaz. ",
+        "buttons": {
+          "submit": {
+            "label": "Onaylamak"
+          },
+          "cancel": {
+            "label": "HAYIR"
+          }
+        }
+      }
+    },
+    "contactUs": {
+      "inputs": {
+        "email": {
+          "label": "E-posta Adresi",
+          "validationMessages": {
+            "empty": "Email gereklidir",
+            "invalid": "Geçersiz e-posta"
+          }
+        },
+        "message": {
+          "label": "İleti",
+          "validationMessages": {
+            "empty": "Mesaj gerekli"
+          }
+        }
+      },
+      "buttons": {
+        "submit": {
+          "label": "Göndermek"
+        }
+      }
+    }
+  },
+  "components": {
+    "bottomNavBar": {
+      "discover": "Keşfetmek"
+    },
+    "plannerIngredientListDialog": {
+      "ingredients": "İçindekiler"
+    },
+    "planRecipeDialog": {
+      "title": "planlayıcı",
+      "selectDaysMessage": "Bu tarifi eklemek istediğiniz günleri seçin",
+      "addToPlanner": "Planlayıcıya Ekle"
+    },
+    "recipeFilters": {
+      "title": "filtreler",
+      "filters": {
+        "type": "Türler",
+        "time": "Zamanlar",
+        "tag": "Etiketler",
+        "ingredient": "İçindekiler",
+        "rating": "Derecelendirmeler"
+      },
+      "inputs": {
+        "addIngredient": {
+          "label": "Malzeme Ekle"
+        }
+      },
+      "buttons": {
+        "submit": {
+          "label": "Filtreleri Uygula"
+        }
+      }
+    }
+  },
+  "requests": {
+    "auth": {
+      "register": {
+        "success": "Hesap oluşturuldu.",
+        "emailAlreadyUsed": "E-posta zaten kullanılmış",
+        "error": "Hesap kaydedilemiyor. "
+      },
+      "signIn": {
+        "success": "Başarıyla Oturum Açıldı.",
+        "invalid": "Geçersiz giriş. ",
+        "error": "Oturum açılamıyor. Lütfen daha sonra tekrar deneyin."
+      },
+      "forgottenPassword": {
+        "success": "Başarıyla Oturum Açıldı.",
+        "error": "Kurtarma e-postası gönderilemiyor. "
+      },
+      "logout": {
+        "success": "Çıkış yaptınız",
+        "error": ""
+      }
+    },
+    "accounts": {
+      "delete": {
+        "success": "Hesabınız silinmiştir.",
+        "error": ""
+      }
+    },
+    "support": {
+      "contactUs": {
+        "success": "Mesajı gönderildi",
+        "error": "Mesaj gönderilemiyor. "
+      },
+      "resolve": {
+        "success": "Destek kaydı çözüldü",
+        "error": "Destek bileti çözülemiyor"
+      }
+    },
+    "favourites": {
+      "favourite": {
+        "success": "Tarif favorilere eklendi.",
+        "error": "Favori tarif yapılamıyor. "
+      },
+      "unfavourite": {
+        "success": "Tarif favorilere eklenmemiş.",
+        "error": "Tarif favorilerden çıkarılamıyor. "
+      }
+    },
+    "rating": {
+      "rate": {
+        "success": "Tarif puanlandı.",
+        "error": "Tarif değerlendirilemiyor. "
+      }
+    },
+    "planner": {
+      "planRecipe": {
+        "success": "Tarif planlayıcıya eklendi.",
+        "error": "Planlayıcıya tarif eklenemiyor. "
+      }
+    }
+  },
+  "types": {
+    "log": {
+      "fields": {
+        "message": "İleti"
+      }
+    },
+    "supportTicket": {
+      "fields": {
+        "from": "İtibaren",
+        "message": "İleti",
+        "actions": {
+          "resolve": "çözmek"
+        }
+      }
+    },
+    "recipe": {
+      "types": {
+        "breakfast": {
+          "name": "Kahvaltı",
+          "displayName": "Kahvaltı"
+        },
+        "lunch": {
+          "name": "Öğle yemeği",
+          "displayName": "Öğle yemeği"
+        },
+        "dinner": {
+          "name": "Akşam yemeği",
+          "displayName": "Akşam yemeği"
+        },
+        "dessert": {
+          "name": "Tatlı",
+          "displayName": "tatlılar"
+        },
+        "snack": {
+          "name": "Atıştırmalık",
+          "displayName": "atıştırmalıklar"
+        },
+        "drink": {
+          "name": "İçmek",
+          "displayName": "İçecekler"
+        }
+      },
+      "fields": {
+        "type": "Tip",
+        "servings": "Porsiyon",
+        "nutrition": {
+          "calories": "kalori",
+          "sugar": "Şeker",
+          "fat": "Yağ",
+          "saturatedFat": "Doymuş yağ",
+          "sodium": "Sodyum",
+          "protein": "Protein",
+          "carbohydrates": "karbonhidratlar",
+          "fiber": "Lif"
+        }
+      }
+    }
+  },
+  "common": {
+    "version": "versiyon",
+    "time": {
+      "min": "dakika",
+      "mins": "dakika"
+    },
+    "date": {
+      "days": {
+        "monday": "Pazartesi",
+        "tuesday": "Salı",
+        "wednesday": "Çarşamba",
+        "thursday": "Perşembe",
+        "friday": "Cuma",
+        "saturday": "Cumartesi",
+        "sunday": "Pazar"
+      },
+      "months": {
+        "january": "Ocak",
+        "february": "Şubat",
+        "march": "Mart",
+        "april": "Nisan",
+        "may": "Mayıs",
+        "june": "Haziran",
+        "july": "Temmuz",
+        "august": "Ağustos",
+        "september": "Eylül",
+        "october": "Ekim",
+        "november": "Kasım",
+        "december": "Aralık"
+      }
+    }
+  }
+}

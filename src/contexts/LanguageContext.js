@@ -1,5 +1,6 @@
 import React, { createElement, createContext, useReducer, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 import { reducer, actions } from '../reducers/languageReducer';
 
@@ -13,6 +14,8 @@ const initialState = {
 };
 
 export const LanguageProvider = ({ children }) => {
+  const { i18n } = useTranslation();
+
   const [state, dispatch] = useReducer(reducer, initialState, () => {
     const newState = initialState;
 
@@ -34,6 +37,7 @@ export const LanguageProvider = ({ children }) => {
   }, [state.supportedLanguages]);
 
   const setCurrentLanguage = (language) => {
+    i18n.changeLanguage(language);
     dispatch({
       type: actions.SET_CURRENT_LANGUAGE,
       payload: {

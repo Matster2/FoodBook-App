@@ -28,6 +28,7 @@ import logo from '../assets/logo.svg';
 import Header from '../components/Header';
 import LanguageDropdown from '../components/LanguageDropdown';
 import { LanguageContext } from '../contexts/LanguageContext';
+import { capitalizeFirstLetter } from '../utils/stringUtils';
 
 export default () => {
   const { t } = useTranslation();
@@ -159,7 +160,7 @@ export default () => {
               >
                 <img className={styles.logo} src={logo} alt="foodbook" />
               </Box>
-              <Typography variant="body2">{t('common.version')} {process.env.REACT_APP_VERSION}</Typography>
+              <Typography variant="body2">{capitalizeFirstLetter(t('common.version'))} {process.env.REACT_APP_VERSION}</Typography>
             </Box>
 
             {authenticated && (

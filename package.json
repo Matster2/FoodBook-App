@@ -74,6 +74,7 @@
     ]
   },
   "devDependencies": {
+    "i18next-scanner": "^4.2.0",
     "typescript-plugin-css-modules": "^5.0.1"
   }
 }
