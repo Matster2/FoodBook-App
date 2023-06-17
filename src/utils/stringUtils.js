@@ -65,3 +65,5 @@ export const format = (string, args) => {
 };
 
 export const capitaliseEachWord = (value) => value.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+
+export const capitalizeFirstLetter = (word) => word.charAt(0).toUpperCase() + word.slice(1)

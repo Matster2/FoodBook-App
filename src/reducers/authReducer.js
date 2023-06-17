@@ -2,6 +2,16 @@ import jwtDecode from 'jwt-decode';
 
 import claimTypes from '../config/jwtClaimTypes';
 
+export const actions = {
+  LOGIN_REQUESTED: 'LOGIN_REQUESTED',
+  LOGIN_SUCCESSFUL: 'LOGIN_SUCCESSFUL',
+  LOGIN_FAILED: 'LOGIN_FAILED',
+  LOGOUT: 'LOGOUT',
+  REFRESHING_TOKENS_REQUESTED: 'REFRESHING_TOKENS_REQUESTED',
+  REFRESHING_TOKENS_SUCCESSFUL: 'REFRESHING_TOKENS_SUCCESSFUL',
+  REFRESHING_TOKENS_FAILED: 'REFRESHING_TOKENS_FAILED',
+};
+
 export const getClaims = (accessToken) => {
   const decoded = jwtDecode(accessToken);
 
@@ -19,12 +29,12 @@ export const reducer = (state, action) => {
 
   switch (action.type) {
     // login
-    case 'login_requested':
+    case actions.LOGIN_REQUESTED:
       return {
         ...state,
         authenticating: true,
       };
-    case 'login_successful':
+    case actions.LOGIN_SUCCESSFUL:
       return {
         ...state,
         authenticating: false,
@@ -35,7 +45,7 @@ export const reducer = (state, action) => {
           refreshToken: payload.tokens.refreshToken,
         },
       };
-    case 'login_failed':
+    case actions.LOGIN_FAILED:
       return {
         ...state,
         authenticating: false,
@@ -43,7 +53,7 @@ export const reducer = (state, action) => {
       };
 
     // Logout
-    case 'logout':
+    case actions.LOGOUT:
       return {
         ...state,
         authenticated: false,
@@ -57,12 +67,12 @@ export const reducer = (state, action) => {
 
     // Refreshing Tokens
     // login
-    case 'refreshing_tokens_requested':
+    case actions.REFRESHING_TOKENS_REQUESTED:
       return {
         ...state,
         refreshingRokens: true,
       };
-    case 'refreshing_tokens_successful':
+    case actions.REFRESHING_TOKENS_SUCCESSFUL:
       return {
         ...state,
         refreshingRokens: false,
@@ -73,7 +83,7 @@ export const reducer = (state, action) => {
           refreshToken: payload.tokens.refreshToken,
         },
       };
-    case 'refreshing_tokens_failed':
+    case actions.REFRESHING_TOKENS_FAILED:
       return {
         ...state,
         refreshingRokens: false,

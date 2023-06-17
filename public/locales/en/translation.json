@@ -1,0 +1,409 @@
+{
+  "pages": {
+    "register": {
+      "title": "Register",
+      "alreadyHaveAccount": "Already have an account?",
+      "links": {
+        "signIn": "Sign In"
+      }
+    },
+    "signIn": {
+      "title": "Sign In",
+      "noAccount": "Don't have an account?",
+      "links": {
+        "forgottenPassword": "Forgotten Password?",
+        "signUp": "Sign Up"
+      }
+    },
+    "forgotPassword": {
+      "title": "Forgotten Password",
+      "links": {
+        "signIn": "Sign In"
+      }
+    },
+    "home": {
+      "title": "Home",
+      "welcome": {
+        "greeting": "Welcome",
+        "message": "What would you like to cook today?"
+      },
+      "seeAll": "See all",
+      "sections": {
+        "categories": "Categories",
+        "recommended": "Recommendations",
+        "recentlyAdded": "Recently Added",
+        "favourites": "Favourite Recipes"
+      },
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Search recipes"
+          }
+        }
+      }
+    },
+    "contactUs": {
+      "title": "Contact Us",
+      "messageSent": "Thank you for your message",
+      "continueCooking": "Continue Cooking!"
+    },
+    "recipe": {
+      "title": "Recipe",
+      "description": {
+        "showMore": "Show More",
+        "showLess": "Show Less"
+      },
+      "rate": "Rate",
+      "author": "Author",
+      "prepTime": "Prep Time",
+      "cookingTime": "Cooking Time",
+      "sections": {
+        "ingredients": "Ingredients",
+        "directions": "Directions",
+        "nutrition": "Nutrition"
+      }
+    },
+    "recipes": {
+      "title": "Recipes",
+      "noRecipes": "No recipes matching criteria",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Search recipes"
+          }
+        }
+      }
+    },
+    "favourites": {
+      "title": "Favourites",
+      "authenticationRequired": "You must be signed in to see your favourites",
+      "noRecipes": "No favourited recipes",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Search recipes"
+          }
+        },
+        "buttons": {
+          "signIn": {
+            "label": "Sign In"
+          }
+        }
+      }
+    },
+    "planner": {
+      "title": "Planner",
+      "authenticationRequired": "You must be signed in to see your planner",
+      "noRecipes": "No recipes planned on this day.",
+      "components": {
+        "buttons": {
+          "signIn": {
+            "label": "Sign In"
+          }
+        }
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "options": {
+        "signIn": "Sign In",
+        "admin": "Admin",
+        "contactUs": "Contact Us",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfService": "Terms of Service",
+        "logOut": "Log Out",
+        "deleteAccount": "Delete Account"
+      }
+    }
+  },
+  "forms": {
+    "auth": {
+      "register": {
+        "title": "Create an account",
+        "inputs": {
+          "email": {
+            "label": "Email Address",
+            "validationMessages": {
+              "empty": "Email is required",
+              "invalid": "Invalid email"
+            }
+          },
+          "password": {
+            "label": "Password",
+            "validationMessages": {
+              "empty": "Password is required"
+            }
+          },
+          "confirmPassword": {
+            "label": "Confirm Password",
+            "validationMessages": {
+              "empty": "Please confirm your password",
+              "notSame": "Passwords do not match"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Sign Up"
+          }
+        }
+      },
+      "signIn": {
+        "inputs": {
+          "email": {
+            "label": "Email Address",
+            "validationMessages": {
+              "empty": "Email is required",
+              "invalid": "Invalid email"
+            }
+          },
+          "password": {
+            "label": "Password",
+            "validationMessages": {
+              "empty": "Password is required"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Sign In"
+          }
+        }
+      },
+      "forgotPassword": {
+        "inputs": {
+          "email": {
+            "label": "Email Address",
+            "validationMessages": {
+              "empty": "Email is required"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Reset Password"
+          }
+        }
+      }
+    },
+    "accounts": {
+      "delete": {
+        "title": "Are you sure you want to delete your account?",
+        "description": "This action is irreversable. Once your account is deleted, it cannot be recovered.",
+        "buttons": {
+          "submit": {
+            "label": "Confirm"
+          },
+          "cancel": {
+            "label": "No"
+          }
+        }
+      }
+    },
+    "contactUs": {
+      "inputs": {
+        "email": {
+          "label": "Email Address",
+          "validationMessages": {
+            "empty": "Email is required",
+            "invalid": "Invalid email"
+          }
+        },
+        "message": {
+          "label": "Message",
+          "validationMessages": {
+            "empty": "Message is required"
+          }
+        }
+      },
+      "buttons": {
+        "submit": {
+          "label": "Send"
+        }
+      }
+    }
+  },
+  "components": {
+    "bottomNavBar": {
+      "discover": "Discover"
+    },
+    "plannerIngredientListDialog": {
+      "ingredients": "Ingredients"
+    },
+    "planRecipeDialog": {
+      "title": "Planner",
+      "selectDaysMessage": "Select the days you would like to add this recipe to",
+      "addToPlanner": "Add To Planner"
+    },
+    "recipeFilters": {
+      "title": "Fitlers",
+      "filters": {
+        "type": "Types",
+        "time": "Times",
+        "tag": "Tags",
+        "ingredient": "Ingredients",
+        "rating": "Ratings"
+      },
+      "inputs": {
+        "addIngredient": {
+          "label": "Add Ingredient"
+        }
+      },
+      "buttons": {
+        "submit": {
+          "label": "Apply Filters"
+        }
+      }
+    }
+  },
+  "requests": {
+    "auth": {
+      "register": {
+        "success": "Account Created.",
+        "emailAlreadyUsed": "Email is already used",
+        "error": "Unable to register account. Please try again later."
+      },
+      "signIn": {
+        "success": "Signed In Successfully.",
+        "invalid": "Invalid login. Please check your credentials.",
+        "error": "Unable to sign in. Please try again later."
+      },
+      "forgottenPassword": {
+        "success": "Signed In Successfully.",
+        "error": "Unable to send recovery email. Please try again later."
+      },
+      "logout": {
+        "success": "You have been logged out",
+        "error": ""
+      }
+    },
+    "accounts": {
+      "delete": {
+        "success": "Your account has been deleted.",
+        "error": ""
+      }
+    },
+    "support": {
+      "contactUs": {
+        "success": "Message sent",
+        "error": "Unable to send message. Please try again later."
+      },
+      "resolve": {
+        "success": "Support ticket has been resolved",
+        "error": "Unable to resolve support ticket"
+      }
+    },
+    "favourites": {
+      "favourite": {
+        "success": "Recipe favourited.",
+        "error": "Unable to favourite recipe. Please try again later."
+      },
+      "unfavourite": {
+        "success": "Recipe unfavourited.",
+        "error": "Unable to unfavourite recipe. Please try again later."
+      }
+    },
+    "rating": {
+      "rate": {
+        "success": "Recipe rated.",
+        "error": "Unable to rate recipe. Please try again later."
+      }
+    },
+    "planner": {
+      "planRecipe": {
+        "success": "Recipe added to planner.",
+        "error": "Unable to add recipe to planner. Please try again later."
+      }
+    }
+  },
+  "types": {
+    "log": {
+      "fields": {
+        "message": "Message"
+      }
+    },
+    "supportTicket": {
+      "fields": {
+        "from": "From",
+        "message": "Message",
+        "actions": {
+          "resolve": "Resolve"
+        }
+      }
+    },
+    "recipe": {
+      "types": {
+        "breakfast": {
+          "name": "Breakfast",
+          "displayName": "Breakfast"
+        },
+        "lunch": {
+          "name": "Lunch",
+          "displayName": "Lunch"
+        },
+        "dinner": {
+          "name": "Dinner",
+          "displayName": "Dinner"
+        },
+        "dessert": {
+          "name": "Dessert",
+          "displayName": "Desserts"
+        },
+        "snack": {
+          "name": "Snack",
+          "displayName": "Snacks"
+        },
+        "drink": {
+          "name": "Drink",
+          "displayName": "Drinks"
+        }
+      },
+      "fields": {
+        "type": "Type",
+        "servings": "Servings",
+        "nutrition": {
+          "calories": "Calories",
+          "sugar": "Sugar",
+          "fat": "Fat",
+          "saturatedFat": "Saturated Fat",
+          "sodium": "Sodium",
+          "protein": "Protein",
+          "carbohydrates": "Carbohydrates",
+          "fiber": "Fiber"
+        }
+      }
+    }
+  },
+  "common": {
+    "version": "version",
+    "time": {
+      "min": "min",
+      "mins": "mins"
+    },
+    "date": {
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "months": {
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December"
+      }
+    }
+  }
+}

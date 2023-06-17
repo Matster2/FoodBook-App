@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NiceModal from '@ebay/nice-modal-react';
+import { useTranslation } from "react-i18next";
 import { Container, CircularProgress, Grid, CssBaseline, Stack, List, Box, Button, Typography, IconButton, Slide } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
@@ -18,7 +19,10 @@ const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="left" ref={ref} {...props} />;
 });
 
+const recipeTypes = ['breakfast', 'lunch', 'dinner', 'dessert', 'snack', 'drink'];
+
 export default () => {
+  const { t } = useTranslation();
   const api = useAPI();
   const navigate = useNavigate();
   const location = useLocation();
@@ -86,7 +90,6 @@ export default () => {
     });
   };
 
-  const recipeTypes = ["Breakfast", "Lunch", "Dinner", "Dessert", "Snack", "Drink"]
 
   const getDateString = () => {
     return `${getDayName(selectedDate)}, ${selectedDate.getDate()} ${getMonthName(selectedDate)}`
@@ -96,7 +99,7 @@ export default () => {
     return (
       <Container>
         <Box textAlign="center" sx={{ marginTop: '30%' }}>
-          <Typography>You must be signed in to see your planner</Typography>
+          <Typography>{t('pages.planner.authenticationRequired')}</Typography>
 
           <Button
             variant="contained"
@@ -105,7 +108,7 @@ export default () => {
               NiceModal.show('authentication-modal');
             }}
           >
-            Sign In
+            {t('pages.planner.components.buttons.signIn.label')}
           </Button>
         </Box>
       </Container>
@@ -129,7 +132,7 @@ export default () => {
         }}
       />
 
-      <Header title="Planner" onBackClick={() => navigate(-1)} />
+      <Header title={t("pages.planner.title")} onBackClick={() => navigate(-1)} />
 
       <List sx={{ mb: 2 }} style={{ overflow: 'auto' }}>
         <Stack direction="row" alignItems="center" gap={1}>
@@ -157,7 +160,7 @@ export default () => {
 
       {!isUndefined(planner) && planner.plannedRecipes.length === 0 && (
         <Box>
-          <Typography>No recipes planned on this day.</Typography>
+          <Typography>{t('pages.planner.noRecipes')}</Typography>
         </Box>
       )}
 
@@ -172,7 +175,7 @@ export default () => {
 
             return (
               <Box sx={{ mb: 2 }}>
-                <Typography variant='h6'>{recipeType}</Typography>
+                <Typography variant='h6'>{t(`types.recipe.types.${recipeType}.displayName`)}</Typography>
 
                 <Stack direction="column" gap={1}>
                   {plannedRecipes.map((plannedRecipe) => (

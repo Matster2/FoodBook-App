@@ -1,20 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from "react-i18next";
 import { Box, Typography } from '@mui/material';
 import { isNull } from '../../utils/utils';
 import styles from './NutritionList.module.css';
 
 const NutritionList = ({ nutrition: { calories, sugar, fat, saturatedFat, sodium, protein, carbohydrates, fiber } }) => {
+  const { t } = useTranslation();
+
   const getNutritionRows = () => {
     return [
-      { name: 'Calories', amount: calories, unit: 'kcal' },
-      { name: 'Sugar', amount: sugar, unit: 'g' },
-      { name: 'Fat', amount: fat, unit: 'g' },
-      { name: 'Saturated Fat', amount: saturatedFat, unit: 'g' },
-      { name: 'Sodium', amount: sodium, unit: 'mg' },
-      { name: 'Protein', amount: protein, unit: 'g' },
-      { name: 'Carbohydrates', amount: carbohydrates, unit: 'g' },
-      { name: 'Fiber', amount: fiber, unit: 'g' },
+      { name: t('types.recipe.fields.nutrition.calories'), amount: calories, unit: 'kcal' },
+      { name: t('types.recipe.fields.nutrition.sugar'), amount: sugar, unit: 'g' },
+      { name: t('types.recipe.fields.nutrition.fat'), amount: fat, unit: 'g' },
+      { name: t('types.recipe.fields.nutrition.saturatedFat'), amount: saturatedFat, unit: 'g' },
+      { name: t('types.recipe.fields.nutrition.sodium'), amount: sodium, unit: 'mg' },
+      { name: t('types.recipe.fields.nutrition.protein'), amount: protein, unit: 'g' },
+      { name: t('types.recipe.fields.nutrition.carbohydrates'), amount: carbohydrates, unit: 'g' },
+      { name: t('types.recipe.fields.nutrition.fiber'), amount: fiber, unit: 'g' },
     ];
   };
 

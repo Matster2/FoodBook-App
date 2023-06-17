@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
 import PropTypes from 'prop-types';
 import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
 import useInput from '../hooks/useInput';
-import useAPI from '../hooks/useAPI';
 import useAuth from '../hooks/useAuth';
 import { isUndefined, isEmptyOrWhiteSpace, isValidEmail } from '../utils/utils';
 import styles from './SignIn.module.css';
 import logo from '../assets/logo.svg';
 
 const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
-  const api = useAPI();
+  const { t } = useTranslation();
   const auth = useAuth();
 
   const { value: email, onChange: onEmailChange } = useInput('');
@@ -37,18 +37,18 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
     const newInputErrors = {
       email: (() => {
         if (isEmptyOrWhiteSpace(email)) {
-          return 'Email is required';
+          return t('forms.auth.signIn.inputs.email.validationMessages.empty');
         }
 
         if (!isValidEmail(email)) {
-          return 'Invalid email';
+          return t('forms.auth.signIn.inputs.email.validationMessages.invalid');
         }
 
         return undefined;
       })(),
       password: (() => {
         if (isEmptyOrWhiteSpace(password)) {
-          return 'Password is required';
+          return t('forms.auth.signIn.inputs.password.validationMessages.empty');
         }
 
         return undefined;
@@ -71,13 +71,13 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
     try {
       await auth.login(email, password);
       setSignedin(true);
-      toast.success('Signed In Successfully');
+      toast.success(t('requests.auth.signIn.success'));
       onComplete();
     } catch (e) {
       if (!isUndefined(e.response) && e.response.status === 400) {
-        toast.error('Invalid login');
+        toast.error(t('requests.auth.signIn.invalid'));
       } else {
-        toast.error('Unable to sign in. \n Please try again later');
+        toast.error(t('requests.auth.signIn.error'));
       }
     }
 
@@ -120,7 +120,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           justifyContent: 'flex-start',
         }}
       >
-        <Typography variant="h1">Sign In</Typography>
+        <Typography variant="h1">{t('pages.signIn.title')}</Typography>
       </Box>
 
       <Box sx={{ mt: 1 }}>
@@ -129,7 +129,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           required
           fullWidth
           id="email"
-          label="Email Address"
+          label={t('forms.auth.signIn.inputs.email.label')}
           name="email"
           autoComplete="email"
           autoFocus
@@ -144,7 +144,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           required
           fullWidth
           name="password"
-          label="Password"
+          label={t('forms.auth.signIn.inputs.password.label')}
           type="password"
           id="password"
           autoComplete="current-password"
@@ -162,11 +162,8 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
             justifyContent: 'flex-end',
           }}
         >
-          {/* <Link href="/forgotten-password" variant="body2">
-            Forgot password?
-          </Link> */}
           <Typography inline className="link" onClick={onForgottenPasswordClick}>
-            Forgot password?
+            {t('pages.signIn.links.forgottenPassword')}
           </Typography>
         </Box>
 
@@ -178,7 +175,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Sign In
+          {t('forms.auth.signIn.buttons.submit.label')}
         </Button>
 
         <Box
@@ -188,12 +185,9 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           }}
         >
           <Typography variant="body2">
-            Don&apos;t have an account?
-            {/* <Link sx={{ ml: 1 }} href="/register" variant="body2">
-              Sign Up
-            </Link> */}
+            {t('pages.signIn.noAccount')}
             <Typography sx={{ ml: 0.5 }} display="inline" className="link" onClick={onSignUpClick}>
-              Sign Up
+              {t('pages.signIn.links.signUp')}
             </Typography>
           </Typography>
         </Box>

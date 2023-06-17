@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
 import useInput from '../hooks/useInput';
 import useAPI from '../hooks/useAPI';
@@ -9,7 +10,7 @@ import styles from './ForgottenPassword.module.css';
 import logo from '../assets/logo.svg';
 
 const ForgottenPassword = ({ onSignInClick, onComplete }) => {
-  const navigate = useNavigate();
+  const { t } = useTranslation();
   const api = useAPI();
 
   const { value: email, onChange: onEmailChange } = useInput('');
@@ -30,7 +31,7 @@ const ForgottenPassword = ({ onSignInClick, onComplete }) => {
     const newInputErrors = {
       email: (() => {
         if (isEmptyOrWhiteSpace(email)) {
-          return 'Email is required';
+          return t('forms.auth.forgotPassword.inputs.email.validationMessages.empty');
         }
 
         return undefined;
@@ -51,18 +52,9 @@ const ForgottenPassword = ({ onSignInClick, onComplete }) => {
       await api.forgotPassword(email);
 
       onComplete();
-
-      // addToast(translate('admin.requests.brands.update.success'), {
-      //   appearance: 'success',
-      //   autoDismiss: true,
-      //   pauseOnHover: false,
-      // });
+      toast.success(t('requests.auth.forgottenPassword.success'));
     } catch {
-      // addToast(translate('admin.requests.brands.update.failed'), {
-      //   appearance: 'error',
-      //   autoDismiss: true,
-      //   pauseOnHover: false,
-      // });
+      toast.error(t('requests.auth.forgottenPassword.error'));
     }
   };
 
@@ -102,7 +94,7 @@ const ForgottenPassword = ({ onSignInClick, onComplete }) => {
           justifyContent: 'flex-start',
         }}
       >
-        <Typography variant="h1">Forgotten Password</Typography>
+        <Typography variant="h1">{t('pages.forgotPassword.title')}</Typography>
       </Box>
 
       <Box
@@ -115,7 +107,7 @@ const ForgottenPassword = ({ onSignInClick, onComplete }) => {
           required
           fullWidth
           id="email"
-          label="Email Address"
+          label={t('forms.auth.forgotPassword.inputs.email.label')}
           name="email"
           autoComplete="email"
           autoFocus
@@ -125,7 +117,7 @@ const ForgottenPassword = ({ onSignInClick, onComplete }) => {
           helperText={inputErrors.email}
         />
         <Button type="button" onClick={handleResetPasswordClick} fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-          Reset Password
+          {t('forms.auth.forgotPassword.buttons.submit.label')}
         </Button>
       </Box>
 
@@ -136,11 +128,8 @@ const ForgottenPassword = ({ onSignInClick, onComplete }) => {
         }}
       >
         <Typography variant="body2">
-          {/* <Link sx={{ ml: 1 }} href="/sign-in" variant="body2">
-            Return to Sign In
-          </Link> */}
           <Typography sx={{ ml: 0.5 }} display="inline" className="link" onClick={onSignInClick}>
-            Sign In
+            {t('pages.forgotPassword.links.signIn')}
           </Typography>
         </Typography>
       </Box>

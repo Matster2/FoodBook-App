@@ -1,7 +1,8 @@
+import { useContext } from 'react';
 import axios from 'axios';
-
 import useAuth from './useAuth';
 import { isNullOrEmpty, isUndefined } from '../utils/utils';
+import { LanguageContext } from '../contexts/LanguageContext';
 
 const getSearchParams = (parameters) => {
   const filters = parameters;
@@ -29,12 +30,18 @@ const getSearchParams = (parameters) => {
 };
 
 const useAPI = () => {
+  const { currentLanguage } = useContext(LanguageContext);
   const { tokens } = useAuth();
+
+  const getSupportedLanguages = async () => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/languages`);
+  };
 
   const queryEmail = async (email) => {
     return axios.get(`${process.env.REACT_APP_API_URL}/users/email/${email}`, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -59,6 +66,7 @@ const useAPI = () => {
     return axios.get(`${process.env.REACT_APP_API_URL}/users/me`, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -70,6 +78,7 @@ const useAPI = () => {
     return axios.get(url.href, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -78,6 +87,7 @@ const useAPI = () => {
     return axios.get(`${process.env.REACT_APP_API_URL}/recipes/${id}`, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -86,6 +96,7 @@ const useAPI = () => {
     return axios.get(`${process.env.REACT_APP_API_URL}/recipes/${id}/instructions`, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -94,6 +105,7 @@ const useAPI = () => {
     return axios.get(`${process.env.REACT_APP_API_URL}/ingredients/${id}`, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -105,6 +117,7 @@ const useAPI = () => {
     return axios.get(url.href, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -113,6 +126,7 @@ const useAPI = () => {
     return axios.get(`${process.env.REACT_APP_API_URL}/tags/${id}`, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -124,6 +138,7 @@ const useAPI = () => {
     return axios.get(url.href, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -135,6 +150,7 @@ const useAPI = () => {
     return axios.get(url.href, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -204,6 +220,7 @@ const useAPI = () => {
     return axios.get(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}/rating/users/${userId}`, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -212,6 +229,7 @@ const useAPI = () => {
     return axios.get(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}/rating`, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -319,6 +337,7 @@ const useAPI = () => {
     return axios.get(url.href, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -344,6 +363,7 @@ const useAPI = () => {
     return axios.get(url.href, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -352,6 +372,7 @@ const useAPI = () => {
     return axios.get(`${process.env.REACT_APP_API_URL}/authors/${id}`, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -363,6 +384,7 @@ const useAPI = () => {
     return axios.get(url.href, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -371,6 +393,7 @@ const useAPI = () => {
     return axios.get(`${process.env.REACT_APP_API_URL}/support-tickets/${id}`, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };  
@@ -382,6 +405,7 @@ const useAPI = () => {
     return axios.get(url.href, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
       },
     });
   };
@@ -397,7 +421,29 @@ const useAPI = () => {
     );
   };
 
+  const getLog  = async (id) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/logs/${id}`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
+      },
+    });
+  };  
+
+  const getLogs = async (parameters = {}) => {
+    const url = new URL(`${process.env.REACT_APP_API_URL}/logs`);
+    url.search = getSearchParams(parameters);
+
+    return axios.get(url.href, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
+      },
+    });
+  };
+
   return {
+    getSupportedLanguages,
     queryEmail,
     forgotPassword,
     resetPassword,
@@ -432,7 +478,9 @@ const useAPI = () => {
     getAuthors,
     getSupportTicket,
     getSupportTickets,
-    resolveSupportTicket
+    resolveSupportTicket,
+    getLog,
+    getLogs
   };
 };
 

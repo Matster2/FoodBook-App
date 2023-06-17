@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
 import useAPI from '../../hooks/useAPI';
 import useAuth from '../../hooks/useAuth';
 import { styled } from '@mui/material/styles';
@@ -61,6 +62,7 @@ interface Recipe {
 }
 
 const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRecipeDialogProps) => {
+  const { t } = useTranslation();
   const {
     claims: { userId },
   } = useAuth();
@@ -96,12 +98,12 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
     try {
       var dates = selectedDays.map((x) => (x.format('YYYY-MM-DD')))
       await api.planRecipe(userId, recipe.id, servings, dates);
-      toast.success('Recipe added to planner');
+      toast.success(t('requests.planner.planRecipe.success'));
 
       setSelectedDays([]);
       onClose();
     } catch {
-      toast.error('Unable to add recipe to planner. \n Please try again later');
+      toast.error(t('requests.planner.planRecipe.failed'));
     }
   }
 
@@ -118,7 +120,7 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
     >
       <Box sx={{ p: 4 }}>
         <Typography variant="h5" sx={{ mb: 1 }}>
-          Planner
+          {t('components.planRecipeDialog.title')}
         </Typography>
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -148,7 +150,7 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
           }}
         >
           <Stack direction="column">
-            <Typography textAlign="center" variant='h6'>Servings</Typography>
+            <Typography textAlign="center" variant='h6'>{t('types.recipe.fields.servings')}</Typography>
 
             <ButtonGroup size="small" aria-label="small button group">
               <Button variant="contained" disabled={servings <= 1} onClick={handleDecrementServings}>-</Button>
@@ -160,7 +162,7 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
 
         {selectedDays.length === 0 && (
           <Box sx={{ mb: 1 }}>
-            <Typography textAlign="center" className={styles.selectedText}>Select the days you would like to add this recipe to</Typography>
+            <Typography textAlign="center" className={styles.selectedText}>{t('components.planRecipeDialog.selectDaysMessage')}</Typography>
           </Box>
         )}
 
@@ -172,7 +174,7 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
           variant="contained"
           sx={{ mb: 2 }}
         >
-          Add To Planner
+          {t('components.planRecipeDialog.addToPlanner')}
         </Button>
       </Box>
     </Dialog>

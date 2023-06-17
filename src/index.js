@@ -7,6 +7,8 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import Providers from './contexts/Providers';
 
+import './i18n';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Providers>

@@ -84,6 +84,7 @@ export default () => {
       }
 
       await api.createIngredient({
+        languageCode: "en",
         name: data.name,
         pluralName: data.pluralName,
         defaultUnitOfMeasurementId: data.defaultUnitOfMeasurement.id

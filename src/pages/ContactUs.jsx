@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
 import { Container, TextField, Button, Box, Typography } from '@mui/material';
 import useInput from '../hooks/useInput';
@@ -12,6 +13,7 @@ import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
 export default () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const api = useAPI();
@@ -39,18 +41,18 @@ export default () => {
     const newInputErrors = {
       email: (() => {
         if (isEmptyOrWhiteSpace(email)) {
-          return 'Email is required';
+          return t('forms.contactUs.inputs.email.validationMessages.empty');
         }
 
         if (!isValidEmail(email)) {
-          return 'Invalid email';
+          return t('forms.contactUs.inputs.email.validationMessages.invalid');
         }
 
         return undefined;
       })(),
       message: (() => {
         if (isEmptyOrWhiteSpace(message)) {
-          return 'Message is required';
+          return t('forms.contactUs.inputs.message.validationMessages.empty');
         }
 
         return undefined;
@@ -70,18 +72,18 @@ export default () => {
 
       await api.contactUs(email, message);
       setMessageSent(true);
-      toast.success('Message sent');
+      toast.success(t('requests.support.contactUs.success'));
     } catch {
-      toast.error('Unable to send message. \n Please try again later');
+      toast.error(t('requests.support.contactUs.error'));
     }
   };
   return (
     <Container>
-      <Header title="Contact Us" onBackClick={() => navigate(-1)} />
+      <Header title={t("pages.contactUs.title")} onBackClick={() => navigate(-1)} />
 
       {messageSent && (
         <Box textAlign="center" sx={{ marginTop: '30%' }}>
-          <Typography>Thank you for your message</Typography>
+          <Typography>{t("pages.contactUs.messageSent")}</Typography>
 
           <Button
             variant="contained"
@@ -90,7 +92,7 @@ export default () => {
               navigate('/');
             }}
           >
-            Continue Cooking!
+            {t("pages.contactUs.continueCooking")}
           </Button>
         </Box>
       )}
@@ -102,7 +104,7 @@ export default () => {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label={t('forms.contactUs.inputs.email.label')}
             name="email"
             autoComplete="email"
             autoFocus
@@ -117,7 +119,7 @@ export default () => {
             required
             fullWidth
             id="message"
-            label="Message"
+            label={t('forms.contactUs.inputs.message.label')}
             multiline
             rows={5}
             maxRows={5}
@@ -134,7 +136,7 @@ export default () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Send
+            {t('forms.contactUs.buttons.submit.label')}
           </Button>
         </Box>
       )}

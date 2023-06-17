@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import NiceModal from '@ebay/nice-modal-react';
+import { useTranslation } from "react-i18next";
 import {
   Container,
   Grid,
@@ -32,10 +33,11 @@ const Transition = React.forwardRef((props, ref) => {
 });
 
 export default () => {
-  const api = useAPI();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
+  const api = useAPI();
   const { authenticated } = useAuth();
 
   const { setTags } = useContext(TagContext);
@@ -105,7 +107,7 @@ export default () => {
     return (
       <Container>
         <Box textAlign="center" sx={{ marginTop: '30%' }}>
-          <Typography>You must be signed in to see your favourites</Typography>
+          <Typography>{t('pages.favourites.authenticationRequired')}</Typography>
 
           <Button
             variant="contained"
@@ -114,7 +116,7 @@ export default () => {
               NiceModal.show('authentication-modal');
             }}
           >
-            Sign In
+            {t('pages.favourites.components.buttons.signIn.label')}
           </Button>
         </Box>
       </Container>
@@ -139,7 +141,7 @@ export default () => {
         <Filters filters={filters} onApply={handleFiltersApplied} onClose={() => setShowAdvancedFilters(false)} />
       </Dialog>
 
-      <Header title="Favourites" onBackClick={() => navigate(-1)} />
+      <Header title={t('pages.favourites.title')} onBackClick={() => navigate(-1)} />
 
       <Box sx={{ mb: 3 }}>
         <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
@@ -147,7 +149,7 @@ export default () => {
             <TextField
               fullWidth
               id="input-with-icon-adornment"
-              placeholder="Search recipes"
+              placeholder={t('pages.favourites.components.inputs.recipeSearch.placeholder')}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -166,7 +168,7 @@ export default () => {
       <PullToRefresh onRefresh={handleRefresh}>
         {!loadingRecipes && recipes.length === 0 && (
           <Box textAlign="center" sx={{ marginTop: '20%' }}>
-            <Typography>No favourited recipes</Typography>
+            <Typography>{t('pages.favourites.noRecipes')}</Typography>
           </Box>
         )}
 

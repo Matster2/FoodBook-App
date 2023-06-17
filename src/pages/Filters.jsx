@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useTranslation } from "react-i18next";
 import PropTypes from 'prop-types';
 import {
   CssBaseline,
@@ -21,6 +22,7 @@ import { isUndefined } from '../utils/utils';
 import Header from '../components/Header';
 
 const Filters = ({ filters: originalFilters, onApply, onClose }) => {
+  const { t } = useTranslation();
   const api = useAPI();
 
   const { tags } = useContext(TagContext);
@@ -39,7 +41,32 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
   const [ingredientSearch, setIngredientSearch] = useState('');
   const [selectedTime, setSelectedTime] = useState();
 
-  const types = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Drink'];
+  const typeOptions = [
+    {
+      value: 'breakfast',
+      label: t('types.recipe.types.breakfast.displayName')
+    },
+    {
+      value: 'lunch',
+      label: t('types.recipe.types.lunch.displayName')
+    },
+    {
+      value: 'dinner',
+      label: t('types.recipe.types.dinner.displayName')
+    },
+    {
+      value: 'dessert',
+      label: t('types.recipe.types.dessert.displayName')
+    },
+    {
+      value: 'snack',
+      label: t('types.recipe.types.snack.displayName')
+    },
+    {
+      value: 'drink',
+      label: t('types.recipe.types.drink.displayName')
+    }
+  ]
   const timeOptions = [
     {
       label: 'Fast',
@@ -132,16 +159,16 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
     <Container component="main" maxWidth="lg">
       <CssBaseline />
 
-      <Header title="Filters" onBackClick={onClose} />
+      <Header title={t('components.recipeFilters.title')} onBackClick={onClose} />
 
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">Type</Typography>
+        <Typography variant="h6">{t('components.recipeFilters.filters.type')}</Typography>
 
         <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
-          {types.map((type) => (
+          {typeOptions.map((type) => (
             <FilterOption
-              label={type}
-              value={type}
+              label={type.label}
+              value={type.value}
               onClick={handleTypeClick}
               active={filters.types.some((x) => x === type)}
             />
@@ -150,7 +177,7 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
       </Box>
 
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">Time</Typography>
+        <Typography variant="h6">{t('components.recipeFilters.filters.time')}</Typography>
 
         <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
           {timeOptions.map((timeOption) => (
@@ -165,7 +192,7 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
       </Box>
 
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">Tags</Typography>
+        <Typography variant="h6">{t('components.recipeFilters.filters.tag')}</Typography>
 
         <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
           {tags.map((tag) => (
@@ -180,7 +207,7 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
       </Box>
 
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">Ingredients</Typography>
+        <Typography variant="h6">{t('components.recipeFilters.filters.ingredient')}</Typography>
 
         <Autocomplete
           options={searchIngredients
@@ -189,7 +216,7 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
             )
             .map((ingredient) => ({ label: ingredient.name, ingredient }))}
           // eslint-disable-next-line react/jsx-props-no-spreading
-          renderInput={(params) => <TextField {...params} label="Add Ingredient" />}
+          renderInput={(params) => <TextField {...params} label={t('components.recipeFilters.inputs.addIngredient.label')} />}
           value={ingredientSearch}
           inputValue={ingredientSearch}
           onInputChange={(event, newValue) => {
@@ -211,7 +238,7 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
       </Box>
 
       <Box sx={{ mb: 3 }}>
-        <Typography variant="h6">Rating</Typography>
+        <Typography variant="h6">{t('components.recipeFilters.filters.rating')}</Typography>
 
         {/* <Stack direction="reverse-row" alignItems="center" gap={2}>
           {Array.from(Array(5).keys())
@@ -237,7 +264,7 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
       </Box>
 
       <Button fullWidth variant="contained" onClick={handleApplyClick}>
-        Apply Filters
+        {t('components.recipeFilters.buttons.submit.label')}
       </Button>
     </Container>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -34,6 +35,7 @@ import RecipeAttributeWidget from '../components/RecipeAttributeWidget';
 import PlanRecipeDialog from '../dialogs/PlanRecipeDialog';
 
 import { isUndefined, isNull } from '../utils/utils';
+import { capitalizeFirstLetter } from '../utils/stringUtils';
 import { ReactComponent as PlannerIcon } from '../assets/icons/planner.svg';
 import { ReactComponent as PrepIcon } from '../assets/icons/prep.svg';
 import { ReactComponent as CookIcon } from '../assets/icons/cook.svg';
@@ -79,6 +81,7 @@ const RecipeStep = ({ step }) => {
 }
 
 export default () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
@@ -132,33 +135,45 @@ export default () => {
 
   /* Handlers */
   const handleFavoriteClick = async () => {
-    try {
-      if (isNull(recipe.favourited)) {
-        return;
-      }
+    if (isNull(recipe.favourited)) {
+      return;
+    }
 
-      if (!recipe.favourited) {
-        await api.favouriteRecipe(recipe.id);
-        setRecipe({
-          ...recipe,
-          favourited: true,
-        });
+    if (!recipe.favourited) {
+      favouriteRecipe();
 
-        toast.success('Recipe favourited!');
-      } else {
-        await api.unfavouriteRecipe(recipe.id);
-        setRecipe({
-          ...recipe,
-          favourited: false,
-        });
-
-        toast.success('Recipe unfavourited!');
-      }
-    } catch (e) {
-      console.log(e);
-      toast.error('Something went wrong. \n Please try again later');
+    } else {
+      unfavouriteRecipe();
     }
   };
+
+  const favouriteRecipe = async () => {
+    try {
+      await api.favouriteRecipe(recipe.id);
+      setRecipe({
+        ...recipe,
+        favourited: true,
+      });
+      toast.success(t('requests.favourites.favourite.success'));
+    } catch (e) {
+      console.log(e);
+      toast.error(t('requests.favourites.favourite.error'));
+    }
+  }
+
+  const unfavouriteRecipe = async () => {
+    try {
+      await api.unfavouriteRecipe(recipe.id);
+      setRecipe({
+        ...recipe,
+        favourited: false,
+      });
+      toast.success(t('requests.favourites.unfavourite.success'));
+    } catch (e) {
+      console.log(e);
+      toast.error(t('requests.favourites.unfavourite.error'));
+    }
+  }
 
   const handleBackClick = () => {
     navigate(-1);
@@ -168,7 +183,7 @@ export default () => {
     try {
       await api.rateRecipe(recipe.id, newRating);
       setRating(newRating);
-      toast.success('Recipe rated!');
+      toast.success(t('requests.rating.rate.success'));
 
       try {
         const { data } = await api.getRecipeRating(id);
@@ -182,7 +197,7 @@ export default () => {
 
       setShowRatingModal(false);
     } catch {
-      toast.error('Unable to rate recipe. \n Please try again later');
+      toast.error(t('requests.rating.rate.error'));
     }
   };
 
@@ -257,7 +272,7 @@ export default () => {
               className={styles.showMoreLink}
               variant="body2"
             >
-              Show More
+              {t('pages.recipe.description.showMore')}
             </Typography>
           )}
         </Typography>
@@ -268,7 +283,7 @@ export default () => {
             className={styles.showLessLink}
             variant="body2"
           >
-            Show less
+            {t('pages.recipe.description.showLess')}
           </Typography>
         )}
       </>
@@ -286,7 +301,7 @@ export default () => {
     }
 
     if (mins > 0) {
-      parts.push(mins > 1 ? `${mins} mins` : `${mins} min`)
+      parts.push(mins > 1 ? `${mins} ${t('common.time.mins')}` : `${mins} ${t('common.time.min')}`)
     }
 
     return parts.join(" ");
@@ -333,7 +348,7 @@ export default () => {
         >
           <Box sx={{ p: 4 }}>
             <Typography variant="h5" sx={{ mb: 1 }}>
-              Rate
+              {t('pages.recipe.rate')}
             </Typography>
 
             <Grid container justifyContent="space-between" sx={{ mb: 1 }} spacing={1}>
@@ -426,7 +441,7 @@ export default () => {
             <Grid item>
               <Stack direction="row" alignItems="center" gap={0.4}>
                 <AccessTimeIcon className={styles.icon} />
-                <Typography sx={{ fontSize: 15 }}>{recipe.totalTime} mins</Typography>
+                <Typography sx={{ fontSize: 15 }}>{recipe.totalTime} {t('common.time.mins')}</Typography>
               </Stack>
             </Grid>
             <Grid
@@ -460,7 +475,7 @@ export default () => {
           {recipe.author && (
             <Box>
               <Typography className={styles.author}>
-                <span style={{ fontWeight: 'bold' }}>Author: </span>
+                <span style={{ fontWeight: 'bold' }}>{t('pages.recipe.author')}: </span>
                 {recipe.author.name}
               </Typography>
             </Box>
@@ -482,14 +497,14 @@ export default () => {
             {recipe.prepTime > 0 && (
               <Box display="flex" alignItems="center" justifyContent="center">
                 <PrepIcon className={styles.cookTimeIcon} />
-                <Typography display="inline" className={styles.cookTimeHeading}>Prep Time</Typography>
+                <Typography display="inline" className={styles.cookTimeHeading}>{t('pages.recipe.prepTime')}</Typography>
                 <Typography display="inline" className={styles.cookTimeValue}>{renderTime(recipe.prepTime)}</Typography>
               </Box>
             )}
             {recipe.cookTime > 0 && (
               <Box display="flex" alignItems="center" justifyContent="center">
                 <CookIcon className={styles.cookTimeIcon} />
-                <Typography display="inline" className={styles.cookTimeHeading}>Cooking Time</Typography>
+                <Typography display="inline" className={styles.cookTimeHeading}>{t('pages.recipe.cookingTime')}</Typography>
                 <Typography display="inline" className={styles.cookTimeValue}>{renderTime(recipe.cookTime)}</Typography>
               </Box>
             )}
@@ -500,14 +515,14 @@ export default () => {
               recipeServings={recipe.servings}
               defaultValue={servings}
               onChange={onServingsChange}
-              suffixText="Servings"
+              suffixText={capitalizeFirstLetter(t('types.recipe.fields.servings'))}
               min={1}
               max={100}
             />
           </Box>
 
           <CollapsibleSection
-            title="Ingredients"
+            title={t('pages.recipe.sections.ingredients')}
           >
             {!isUndefined(servings) && (
               <IngredientList
@@ -517,7 +532,7 @@ export default () => {
           </CollapsibleSection>
 
           <CollapsibleSection
-            title="Directions"
+            title={t('pages.recipe.sections.directions')}
           >
             {loadingInstructions && (
               <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
@@ -533,7 +548,7 @@ export default () => {
           </CollapsibleSection>
 
           <CollapsibleSection
-            title="Nutrition"
+            title={t('pages.recipe.sections.nutrition')}
           >
             <NutritionList
               nutrition={recipe.nutrition}

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { reducer, getClaims } from '../reducers/authReducer';
 
 import { isUndefined } from '../utils/utils';
+import localStorageKeys from '../config/localStorageKeys';
 
 export const AuthContext = createContext();
 
@@ -24,10 +25,10 @@ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState, () => {
     const newState = initialState;
 
-    const rememberMe = localStorage.getItem('FoodBook:RememberMe');
+    const rememberMe = localStorage.getItem(localStorageKeys.auth.rememberMe);
     newState.rememberMe = rememberMe ? JSON.parse(rememberMe) : initialState.rememberMe;
 
-    const tokens = localStorage.getItem('FoodBook:Tokens');
+    const tokens = localStorage.getItem(localStorageKeys.auth.tokens);
     newState.tokens = tokens ? JSON.parse(tokens) : initialState.tokens;
 
     if (!isUndefined(newState.tokens.accessToken)) {
@@ -39,12 +40,12 @@ export const AuthProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    localStorage.setItem('FoodBook:RememberMe', JSON.stringify(state.rememberMe));
+    localStorage.setItem(localStorageKeys.auth.rememberMe, JSON.stringify(state.rememberMe));
   }, [state.rememberMe]);
 
   useEffect(() => {
     localStorage.setItem(
-      'FoodBook:Tokens',
+      localStorageKeys.auth.tokens,
       JSON.stringify({
         accessToken: state.tokens.accessToken,
         refreshToken: state.tokens.refreshToken,

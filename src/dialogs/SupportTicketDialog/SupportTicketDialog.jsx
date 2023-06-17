@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
 import { Typography, Box, Dialog, Button, CircularProgress, Stack, Chip } from '@mui/material';
 
-import styles from './SupportTicketDialog.module.css';
 import useAPI from '../../hooks/useAPI';
 import { useEffect } from 'react';
 
 const SupportTicketDialog = ({ open, onClose, id, transitionComponent }) => {
+  const { t } = useTranslation();
   const api = useAPI();
 
   const [loadingSupportTicket, setLoadingSupportTicket] = useState();
@@ -33,10 +34,10 @@ const SupportTicketDialog = ({ open, onClose, id, transitionComponent }) => {
         ...supportTicket,
         status: "Resolved"
       });
-      toast.success('Support ticket has been resolved');
+      toast.success(t('requests.support.resolve.success'));
       onClose();
     } catch {
-      toast.error('Unable to resolve support ticket');
+      toast.error(t('requests.support.resolve.error'));
     }
   }
 
@@ -97,10 +98,10 @@ const SupportTicketDialog = ({ open, onClose, id, transitionComponent }) => {
               <Chip label={supportTicket.status} />
             </Stack>
 
-            <Typography sx={{ mt: 2 }}><b>From:</b> {supportTicket.email}</Typography>
+            <Typography sx={{ mt: 2 }}><b>{t('types.supportTicket.from')}:</b> {supportTicket.email}</Typography>
 
             <Box sx={{ mt: 2 }}>
-              <Typography variant='h6'>Message</Typography>
+              <Typography variant='h6'>{t('types.supportTicket.message')}</Typography>
               <Typography>{supportTicket.message}</Typography>
             </Box>
 
@@ -113,7 +114,7 @@ const SupportTicketDialog = ({ open, onClose, id, transitionComponent }) => {
                   variant="contained"
                   onClick={handleResolveClick}
                 >
-                  Resolve
+                  {t('types.supportTicket.actions.resolve')}
                 </Button>
               </Box>
             )}

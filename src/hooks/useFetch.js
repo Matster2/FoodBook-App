@@ -1,10 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useContext, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 import useAuth from './useAuth';
 
 import { isNullOrUndefined } from '../utils/utils';
 import { isEmptyOrWhiteSpace } from '../utils/stringUtils';
+import { LanguageContext } from '../contexts/LanguageContext';
 
 const useFetch = (url) => {
   const [data, setData] = useState(undefined);
@@ -14,6 +15,8 @@ const useFetch = (url) => {
   const {
     tokens: { accessToken },
   } = useAuth();
+  
+  const { currentLanguage } = useContext(LanguageContext);
 
   const fetch = useCallback(async () => {
     setError(undefined);
@@ -23,6 +26,7 @@ const useFetch = (url) => {
       const { data: responseData } = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          Language: currentLanguage
         },
       });
 

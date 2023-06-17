@@ -37,6 +37,12 @@ export default () => {
             <ListItemText primary="Support Tickets" />
           </ListItemButton>
         </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton component={Link} to="/admin/logs">
+            <ListItemText primary="Logs" />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Container>
   );

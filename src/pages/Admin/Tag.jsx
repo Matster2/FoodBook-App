@@ -64,7 +64,10 @@ export default () => {
         return;
       }
 
-      await api.createTag(data);
+      await api.createTag({
+        ...data,
+        languageCode: "en"
+      });
       toast.success('Tag successfully created');
       formRef.current?.resetForm({ values: initialTagValue });
     } catch (e) {

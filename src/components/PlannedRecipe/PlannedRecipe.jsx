@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from "react-i18next";
 import { Grid, Card, Typography, Stack, Box } from '@mui/material';
 import { AccessTime as AccessTimeIcon, Star as StarIcon } from '@mui/icons-material';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -7,8 +8,11 @@ import styles from './PlannedRecipe.module.css';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import FavouriteHeart from '../FavouriteHeart';
+import { capitalizeFirstLetter } from '../../utils/stringUtils';
 
 const PlannedRecipe = ({ plannedRecipe, onClick }) => {
+  const { t } = useTranslation();
+
   const handleClick = () => {
     onClick(plannedRecipe.id);
   };
@@ -38,13 +42,13 @@ const PlannedRecipe = ({ plannedRecipe, onClick }) => {
             <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
               <Grid item xs={6}>
                 <Stack direction="row" alignItems="center" gap={0.4}>
-                  <Typography>{plannedRecipe.servings} servings</Typography>
+                  <Typography>{plannedRecipe.servings} {capitalizeFirstLetter(t('types.recipe.fields.servings'))}</Typography>
                 </Stack>
               </Grid>
               <Grid item xs={6}>
                 <Stack direction="row" alignItems="center" gap={0.4}>
                   <AccessTimeIcon className={styles.icon} />
-                  <Typography>{plannedRecipe.recipe.totalTime} mins</Typography>
+                  <Typography>{plannedRecipe.recipe.totalTime} {t('common.time.mins')}</Typography>
                 </Stack>
               </Grid>
             </Grid>

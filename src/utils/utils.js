@@ -1,3 +1,5 @@
+import i18n from '../i18n'; 
+
 export const isEmpty = (value) => value === '';
 
 export const isWhiteSpace = (value) => value.match(/^ *$/) !== null;
@@ -29,26 +31,40 @@ export const containsString = (value, search, caseSensitive = false) => {
   return value.indexOf(search) > -1;
 };
 
-export const getDayName = (date) => {
-  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+export const getDayName = (date) => {  
+  const t = i18n.t;
+  
+  const days = [
+    t('common.date.days.sunday'),
+    t('common.date.days.monday'),
+    t('common.date.days.tuesday'),
+    t('common.date.days.wednesday'),
+    t('common.date.days.thursday'),
+    t('common.date.days.friday'),
+    t('common.date.days.saturday')
+  ];
+
   return days[date.getDay()];
 };
 
 export const getMonthName = (date) => {
+  const t = i18n.t;
+
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    t('common.date.months.january'),
+    t('common.date.months.february'),
+    t('common.date.months.march'),
+    t('common.date.months.april'),
+    t('common.date.months.may'),
+    t('common.date.months.june'),
+    t('common.date.months.july'),
+    t('common.date.months.august'),
+    t('common.date.months.september'),
+    t('common.date.months.october'),
+    t('common.date.months.november'),
+    t('common.date.months.december'),
   ];
+
   return months[date.getMonth()];
 };
 

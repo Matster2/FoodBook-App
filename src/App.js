@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import axios from 'axios';
+import { useTranslation } from "react-i18next";
 import classnames from 'classnames';
 import { Toaster } from 'react-hot-toast';
 import { createBrowserRouter, RouterProvider, Link, Outlet, useLocation, matchPath } from 'react-router-dom';
@@ -7,6 +8,7 @@ import { ThemeProvider, BottomNavigation, BottomNavigationAction, Box } from '@m
 import { createTheme } from '@mui/material/styles';
 
 import { AppContext } from './contexts/AppContext';
+import { LanguageContext } from './contexts/LanguageContext';
 import { UserContext } from './contexts/UserContext';
 import useAuth from './hooks/useAuth';
 import useAPI from './hooks/useAPI';
@@ -29,6 +31,7 @@ import AdminAddAuthor from './pages/Admin/AddAuthor';
 import AdminRecipes from './pages/Admin/Recipes';
 import AdminRecipe from './pages/Admin/Recipe';
 import AdminSupportTickets from './pages/Admin/SupportTickets';
+import AdminLogs from './pages/Admin/Logs';
 import AdminSettings from './pages/Admin/Settings';
 import Planner from './pages/Planner';
 import TermsOfService from './pages/TermsOfService';
@@ -48,6 +51,7 @@ const App = () => {
   const { authenticated, refreshTokens } = useAuth();
   const api = useAPI();
 
+  const { setSupportedLanguages } = useContext(LanguageContext);
   const { initialized, setInitialized } = useContext(AppContext);
   const { setUser } = useContext(UserContext);
 
@@ -115,7 +119,17 @@ const App = () => {
     }
   };
 
+  const fetchSupportedLanguages = async () => {
+    try {
+      const { data } = await api.getSupportedLanguages();
+      setSupportedLanguages(data.results.map(x => x.code));
+    } catch {
+      console.log('error fetching supported languages');
+    }
+  }
+
   useEffect(() => {
+    fetchSupportedLanguages();
     setInitialized(true);
   }, []);
 
@@ -340,6 +354,14 @@ const App = () => {
             </AdminRoute>
           ),
         },
+        {
+          path: '/admin/logs',
+          element: (
+            <AdminRoute>
+              <AdminLogs />
+            </AdminRoute>
+          ),
+        },
       ]
     },
     {
@@ -393,6 +415,7 @@ const App = () => {
 };
 
 const Layout = () => {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
 
   const isHomeActive = () => {
@@ -457,14 +480,14 @@ const Layout = () => {
             className={isHomeActive() ? styles.navOptionSelected : ''}
             component={Link}
             to="/"
-            label="Home"
+            label={t("pages.home.title")}
             icon={<HomeIcon className={classnames(styles.navOption, isHomeActive() ? styles.navOptionSelected : '')} />}
           />
           <BottomNavigationAction
             className={isDiscoverActive() ? styles.navOptionSelected : ''}
             component={Link}
             to="/recipes"
-            label="Discover"
+            label={t("components.bottomNavBar.discover")}
             icon={
               <DiscoverIcon className={classnames(styles.navOption, isDiscoverActive() ? styles.navOptionSelected : '')} />
             }
@@ -473,7 +496,7 @@ const Layout = () => {
             className={isPlannerActive() ? styles.navOptionSelected : ''}
             component={Link}
             to="/planner"
-            label="Planner"
+            label={t("pages.planner.title")}
             icon={
               <PlannerIcon className={classnames(styles.navOption, styles.planner, isPlannerActive() ? styles.navOptionSelected : '')} />
             }
@@ -482,7 +505,7 @@ const Layout = () => {
             className={isFavouritesActive() ? styles.navOptionSelected : ''}
             component={Link}
             to="/favourites"
-            label="Favourites"
+            label={t("pages.favourites.title")}
             icon={
               <HeartIcon className={classnames(styles.navOption, isFavouritesActive() ? styles.navOptionSelected : '')} />
             }
@@ -491,7 +514,7 @@ const Layout = () => {
             className={isSettingsActive() ? styles.navOptionSelected : ''}
             component={Link}
             to="/settings"
-            label="Settings"
+            label={t("pages.settings.title")}
             icon={
               <SettingsIcon className={classnames(styles.navOption, isSettingsActive() ? styles.navOptionSelected : '')} />
             }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import PropTypes from 'prop-types';
+import { useTranslation } from "react-i18next";
 import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import styles from './Register.module.css';
@@ -10,6 +11,7 @@ import { isUndefined, isEmptyOrWhiteSpace, isValidEmail } from '../utils/utils';
 import logo from '../assets/logo.svg';
 
 const Register = ({ onSignInClick, onComplete }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const api = useAPI();
 
@@ -40,18 +42,18 @@ const Register = ({ onSignInClick, onComplete }) => {
     const newInputErrors = {
       email: (() => {
         if (isEmptyOrWhiteSpace(email)) {
-          return 'Email is required';
+          return t('forms.auth.register.inputs.email.validationMessages.empty');
         }
 
         if (!isValidEmail(email)) {
-          return 'Please enter a valid email';
+          return t('forms.auth.register.inputs.email.validationMessages.invalid');
         }
 
         return undefined;
       })(),
       password: (() => {
         if (isEmptyOrWhiteSpace(password)) {
-          return 'Password is required';
+          return t('forms.auth.register.inputs.password.validationMessages.empty');
         }
 
         return undefined;
@@ -59,15 +61,11 @@ const Register = ({ onSignInClick, onComplete }) => {
 
       confirmPassword: (() => {
         if (isEmptyOrWhiteSpace(confirmPassword)) {
-          return 'Password is required';
-        }
-
-        if (isEmptyOrWhiteSpace(password)) {
-          return 'Please confirm your password';
+          return t('forms.auth.register.inputs.confirmPassword.validationMessages.empty');
         }
 
         if (password !== confirmPassword) {
-          return 'Passwords do not match';
+          return t('forms.auth.register.inputs.confirmPassword.validationMessages.notSame');
         }
 
         return undefined;
@@ -98,7 +96,7 @@ const Register = ({ onSignInClick, onComplete }) => {
 
         if (isUsed) {
           const newInputErrors = inputErrors;
-          newInputErrors.email = 'Email is already used';
+          newInputErrors.email = t('requests.auth.register.emailAlreadyUsed');
           setInputErrors(newInputErrors);
           return;
         }
@@ -109,10 +107,10 @@ const Register = ({ onSignInClick, onComplete }) => {
       await api.register(email, password);
 
       setRegistrationComplete(true);
-      toast.success('Account created');
+      toast.success(t('requests.auth.register.success'));
       onComplete();
     } catch {
-      toast.error('Unable to register account. \n Please try again later');
+      toast.error(t('requests.auth.register.error'));
     }
 
     setRegistering(false);
@@ -155,7 +153,7 @@ const Register = ({ onSignInClick, onComplete }) => {
         }}
       >
         <Typography sx={{ fontWeight: 'bold' }} variant="h1">
-          Create an account
+          {t('forms.auth.register.title')}
         </Typography>
       </Box>
 
@@ -169,7 +167,7 @@ const Register = ({ onSignInClick, onComplete }) => {
           required
           fullWidth
           id="email"
-          label="Email Address"
+          label={t('forms.auth.register.inputs.email.label')}
           name="email"
           autoComplete="email"
           autoFocus
@@ -184,7 +182,7 @@ const Register = ({ onSignInClick, onComplete }) => {
           required
           fullWidth
           name="password"
-          label="Password"
+          label={t('forms.auth.register.inputs.password.label')}
           type="password"
           id="password"
           autoComplete="current-password"
@@ -199,7 +197,7 @@ const Register = ({ onSignInClick, onComplete }) => {
           required
           fullWidth
           name="confirm-password"
-          label="Confirm Password"
+          label={t('forms.auth.register.inputs.confirmPassword.label')}
           type="password"
           id="confirm-password"
           autoComplete="current-password"
@@ -217,7 +215,7 @@ const Register = ({ onSignInClick, onComplete }) => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Sign Up
+          {t('forms.auth.register.buttons.submit.label')}
         </Button>
       </Box>
 
@@ -228,12 +226,9 @@ const Register = ({ onSignInClick, onComplete }) => {
         }}
       >
         <Typography variant="body2">
-          Already have an account?
-          {/* <Link sx={{ ml: 1 }} href="/sign-in" variant="body2">
-            Sign In
-          </Link> */}
+          {t('pages.register.alreadyHaveAccount')}
           <Typography sx={{ ml: 0.5 }} display="inline" className="link" onClick={onSignInClick}>
-            Sign In
+            {t('pages.register.links.signIn')}
           </Typography>
         </Typography>
       </Box>

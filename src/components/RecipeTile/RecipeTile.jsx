@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from "react-i18next";
 import { Grid, Card, Typography, Stack, Box } from '@mui/material';
 import { AccessTime as AccessTimeIcon, Star as StarIcon } from '@mui/icons-material';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -9,6 +10,7 @@ import 'swiper/swiper.min.css';
 import FavouriteHeart from '../FavouriteHeart';
 
 const RecipeTile = ({ recipe, onClick }) => {
+  const { t } = useTranslation();
   const handleClick = () => {
     onClick(recipe.id);
   };
@@ -39,7 +41,7 @@ const RecipeTile = ({ recipe, onClick }) => {
           <Grid item>
             <Stack direction="row" alignItems="center" gap={0.4}>
               <AccessTimeIcon className={styles.icon} />
-              <Typography>{recipe.totalTime} mins</Typography>
+              <Typography>{recipe.totalTime} {t('common.time.mins')}</Typography>
             </Stack>
           </Grid>
           {/* <Grid item>

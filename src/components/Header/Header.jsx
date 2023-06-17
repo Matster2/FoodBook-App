@@ -38,18 +38,6 @@ const Header = ({ title, onBackClick }) => {
           justifyContent: 'flex-end',
         }}
       >
-        {/* <IconButton>
-          <Icon style={{ fill: 'green' }} sx={{ color: 'black' }}>
-            <img
-              style={{ fill: 'green' }}
-              className={styles.icon}
-              alt="favourite"
-              src={HeartIcon}
-              height={22}
-              width={22}
-            />
-          </Icon>
-        </IconButton> */}
       </Grid>
     </Grid>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, CircularProgress, Box, Typography, IconButton, Grid } from '@mui/material';
+import { useTranslation } from "react-i18next";
 import useAPI from '../../hooks/useAPI';
 import IngredientList from '../../components/IngredientList';
 import styles from './PlannerIngredientListDialog.module.css';
@@ -12,6 +13,7 @@ const views = {
 }
 
 const PlannerIngredientListDialog = ({ open, onClose, userId, filters, transitionComponent }) => {
+  const { t } = useTranslation();
   const api = useAPI();
 
   const [currentView, setCurrentView] = useState(views.ingredients);
@@ -86,7 +88,7 @@ const PlannerIngredientListDialog = ({ open, onClose, userId, filters, transitio
         <Grid container justifyContent="space-between">
           <Grid item>
             <Typography className={styles.title} variant="h5">
-              Ingredients
+              {t('components.plannerIngredientListDialog.ingredients')}
             </Typography>
           </Grid>
           <Grid item>

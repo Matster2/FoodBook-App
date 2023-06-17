@@ -17,6 +17,7 @@ import {
   Slide,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import Filters from './Filters';
 import useInput from '../hooks/useInput';
@@ -38,32 +39,37 @@ const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="left" ref={ref} {...props} />;
 });
 
-const Section = ({ title, loading, showSeeAllLink, children }) => (
-  <Box sx={{ mb: 2 }}>
-    <Grid item xs={12} container justifyContent="space-between" alignItems="center">
-      <Grid item xs>
-        <Typography variant="h5">{title}</Typography>
-      </Grid>
-      {showSeeAllLink && (
-        <Grid item xs="auto">
-          <Link to="/recipes">See all</Link>
+const Section = ({ title, loading, showSeeAllLink, children }) => {
+
+  const { t } = useTranslation();
+
+  return (
+    <Box sx={{ mb: 2 }}>
+      <Grid item xs={12} container justifyContent="space-between" alignItems="center">
+        <Grid item xs>
+          <Typography variant="h5">{title}</Typography>
         </Grid>
-      )}
-    </Grid>
-
-    <List style={{ overflow: 'auto' }}>
-      <Stack direction="row" alignItems="center" gap={2}>
-        {loading && (
-          <Box>
-            <CircularProgress />
-          </Box>
+        {showSeeAllLink && (
+          <Grid item xs="auto">
+            <Link to="/recipes">{t('pages.home.seeAll')}</Link>
+          </Grid>
         )}
+      </Grid>
 
-        {children}
-      </Stack>
-    </List>
-  </Box>
-);
+      <List style={{ overflow: 'auto' }}>
+        <Stack direction="row" alignItems="center" gap={2}>
+          {loading && (
+            <Box>
+              <CircularProgress />
+            </Box>
+          )}
+
+          {children}
+        </Stack>
+      </List>
+    </Box>
+  )
+}
 
 Section.propTypes = {
   title: PropTypes.string.isRequired,
@@ -78,6 +84,7 @@ Section.defaultProps = {
 };
 
 export default () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { authenticated } = useAuth();
 
@@ -172,10 +179,10 @@ export default () => {
   /* Rendering */
   const getWelcomeMessage = () => {
     if (user?.firstName) {
-      return `Welcome, ${user.firstName}`;
+      return `${t('pages.home.welcome.greeting')}, ${user.firstName}`;
     }
 
-    return 'Welcome';
+    return t('pages.home.welcome.greeting');
   };
 
   const renderRecipeTile = (recipe) => (
@@ -206,26 +213,26 @@ export default () => {
         <Filters onApply={handleFiltersApplied} onClose={() => setShowAdvancedFilters(false)} />
       </Dialog>
 
-      <Box sx={{ mb: 3, mt: 5 }}>
-        <Grid item xs={12} container justifyContent="space-between" alignItems="center">
-          <Grid item xs>
-            <Typography variant="subtitle2">{getWelcomeMessage()}</Typography>
-            <Typography variant="h3">What would you like to cook today?</Typography>
-          </Grid>
-          <Grid item xs="auto">
-            <Avatar sx={{ bgcolor: authenticated ? '#fb6b1c' : 'grey' }} onClick={handleAvatarClick} />
-          </Grid>
-        </Grid>
-      </Box>
-
       <PullToRefresh onRefresh={handleRefresh}>
+        <Box sx={{ mb: 3, mt: 5 }}>
+          <Grid item xs={12} container justifyContent="space-between" alignItems="center">
+            <Grid item xs>
+              <Typography variant="subtitle2">{getWelcomeMessage()}</Typography>
+              <Typography variant="h3">{t('pages.home.welcome.message')}</Typography>
+            </Grid>
+            <Grid item xs="auto">
+              <Avatar sx={{ bgcolor: authenticated ? '#fb6b1c' : 'grey' }} onClick={handleAvatarClick} />
+            </Grid>
+          </Grid>
+        </Box>
+
         <Box sx={{ mb: 3 }}>
           <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
             <Grid item xs>
               <TextField
                 fullWidth
                 id="input-with-icon-adornment"
-                placeholder="Search recipes"
+                placeholder={t('pages.home.components.inputs.recipeSearch.placeholder')}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -249,7 +256,11 @@ export default () => {
         </Box>
 
         {categories.length > 0 && (
-          <Section title="Categories" showSeeAllLink={categories.length < totalCategories} loading={loadingTags}>
+          <Section
+            title={t('pages.home.sections.categories')}
+            showSeeAllLink={categories.length < totalCategories}
+            loading={loadingTags}
+          >
             {categories.map((category) => (
               <CategoryChip key={category.id} category={category} onClick={handleCategoryClick} />
             ))}
@@ -257,19 +268,31 @@ export default () => {
         )}
 
         {recommendedRecipes.length > 0 && (
-          <Section title="Recommendations" showSeeAllLink={recommendedRecipes.length < totalRecommendedRecipes} loading={loadingRecommendedRecipes}>
+          <Section
+            title={t('pages.home.sections.recommended')}
+            showSeeAllLink={recommendedRecipes.length < totalRecommendedRecipes}
+            loading={loadingRecommendedRecipes}
+          >
             {recommendedRecipes.map((recipe) => renderRecipeTile(recipe))}
           </Section>
         )}
 
         {recentlyAddedRecipes.length > 0 && (
-          <Section title="Recently Added" showSeeAllLink={recentlyAddedRecipes.length < totalRecentlyAddedRecipes} loading={loadingRecentlyAddedRecipes}>
+          <Section
+            title={t('pages.home.sections.recentlyAdded')}
+            showSeeAllLink={recentlyAddedRecipes.length < totalRecentlyAddedRecipes}
+            loading={loadingRecentlyAddedRecipes}
+          >
             {recentlyAddedRecipes.map((recipe) => renderRecipeTile(recipe))}
           </Section>
         )}
 
         {favouriteRecipes.length > 0 && (
-          <Section title="Favourite Recipes" showSeeAllLink={favouriteRecipes.length < totalFavouriteRecipes} loading={loadingFavouriteRecipes}>
+          <Section
+            title={t('pages.home.sections.favourites')}
+            showSeeAllLink={favouriteRecipes.length < totalFavouriteRecipes}
+            loading={loadingFavouriteRecipes}
+          >
             {favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}
           </Section>
         )}

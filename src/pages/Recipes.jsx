@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Container, CircularProgress, Grid, TextField, Box, InputAdornment, CssBaseline, Dialog, Slide } from '@mui/material';
+import { useTranslation } from "react-i18next";
+import { Container, CircularProgress, Grid, Typography, TextField, Box, InputAdornment, CssBaseline, Dialog, Slide } from '@mui/material';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useLocation, useNavigate } from 'react-router-dom';
 import RecipeTile from '../components/RecipeTile';
@@ -18,6 +19,7 @@ const Transition = React.forwardRef((props, ref) => {
 });
 
 export default () => {
+  const { t } = useTranslation();
   const api = useAPI();
   const navigate = useNavigate();
   const location = useLocation();
@@ -113,7 +115,7 @@ export default () => {
         <Filters filters={filters} onApply={handleFiltersApplied} onClose={() => setShowAdvancedFilters(false)} />
       </Dialog>
 
-      <Header title="Recipes" onBackClick={() => navigate(-1)} />
+      <Header title={t('pages.recipes.title')} onBackClick={() => navigate(-1)} />
 
       <Box sx={{ mb: 3 }}>
         <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
@@ -121,7 +123,7 @@ export default () => {
             <TextField
               fullWidth
               id="input-with-icon-adornment"
-              placeholder="Search recipes"
+              placeholder={t('pages.recipes.components.inputs.recipeSearch.placeholder')}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -146,6 +148,12 @@ export default () => {
       </Box>
 
       <PullToRefresh onRefresh={handleRefresh}>
+        {!loadingRecipes && recipes.length === 0 && (
+          <Box textAlign="center" sx={{ marginTop: '20%' }}>
+            <Typography>{t('pages.recipes.noRecipes')}</Typography>
+          </Box>
+        )}
+
         {loadingRecipes && (
           <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
             <CircularProgress />

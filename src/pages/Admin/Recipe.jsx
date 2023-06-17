@@ -349,6 +349,7 @@ export default () => {
 
     setRecipe((state) => ({
       ...state,
+      languageCode: "en",
       images: [...recipe.images, url],
     }));
     setFilesToUpload((state) => [...state, file]);
