@@ -22,6 +22,7 @@ import Favourites from './pages/Favourites';
 import Settings from './pages/Settings';
 import ContactUs from './pages/ContactUs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import Author from './pages/Author';
 import AdminTags from './pages/Admin/Tags';
 import AdminTag from './pages/Admin/Tag';
 import AdminIngredients from './pages/Admin/Ingredients';
@@ -257,6 +258,10 @@ const App = () => {
         {
           path: '/planner',
           element: <Planner />,
+        },
+        {
+          path: '/authors/:id',
+          element: <Author />,
         },
         {
           path: '/admin/settings',

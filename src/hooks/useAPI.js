@@ -329,6 +329,18 @@ const useAPI = () => {
       }
     );
   };
+  
+  const uploadAuthorProfilePicture = async (authorId, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return axios.put(`${process.env.REACT_APP_API_URL}/authors/${authorId}/profile-picture`, formData, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+  };
 
   const getUserPlanner = async (userId, parameters) => {
     const url = new URL(`${process.env.REACT_APP_API_URL}/users/${userId}/planner`);
@@ -471,6 +483,7 @@ const useAPI = () => {
     createTag,
     updateTag,
     createAuthor,
+    uploadAuthorProfilePicture,
     getUserPlanner,
     planRecipe,
     getPlannerIngredientList,

@@ -349,7 +349,6 @@ export default () => {
 
     setRecipe((state) => ({
       ...state,
-      languageCode: "en",
       images: [...recipe.images, url],
     }));
     setFilesToUpload((state) => [...state, file]);
@@ -359,6 +358,7 @@ export default () => {
     const data = {
       ...recipe,
       ...values,
+      languageCode: "en",
       tags: recipe.tags,
       ingredients: recipe.ingredients.map((recipeIngredient) => ({
         ingredientId: recipeIngredient.ingredient.id,

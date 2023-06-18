@@ -27,7 +27,6 @@
         "greeting": "Welcome",
         "message": "What would you like to cook today?"
       },
-      "seeAll": "See all",
       "sections": {
         "categories": "Categories",
         "recommended": "Recommendations",
@@ -101,6 +100,16 @@
             "label": "Sign In"
           }
         }
+      }
+    },
+    "author": {
+      "title": "",
+      "biography": {
+        "showMore": "Show More",
+        "showLess": "Show Less"
+      },
+      "sections": {
+        "authorRecipes": "My Recipes"
       }
     },
     "settings": {
@@ -226,6 +235,9 @@
   "components": {
     "bottomNavBar": {
       "discover": "Discover"
+    },
+    "section": {
+      "seeAll": "See all"
     },
     "plannerIngredientListDialog": {
       "ingredients": "Ingredients"

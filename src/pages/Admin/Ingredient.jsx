@@ -54,7 +54,6 @@ export default () => {
       const { data } = await api.getIngredient(id);
       setIngredient(data);
     } catch (e) {
-      console.log(e)
       console.log('error fetching ingredient');
     }
     setLoadingIngredient(false);

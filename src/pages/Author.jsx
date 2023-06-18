@@ -1,4 +1,6 @@
 import React, { useMemo, useEffect, useContext, useState } from 'react';
+import { useTranslation } from "react-i18next";
+import { useParams, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   CssBaseline,
@@ -10,11 +12,16 @@ import {
   Grid,
   Avatar,
   Stack,
-  List,
-  Dialog,
-  Slide,
+  CircularProgress
 } from '@mui/material';
+import useAPI from '../hooks/useAPI';
+import Section from '../components/Section';
+import RecipeTile from '../components/RecipeTile';
+import AuthorLink from '../components/AuthorLink';
+import Header from '../components/Header';
+import { truncateText } from '../utils/stringUtils';
 
+import styles from './Author.module.css';
 /*
   TODO:
     - Profile picture & Basic information (name)
@@ -25,11 +32,160 @@ import {
 */
 
 export default () => {
+  const { t } = useTranslation();
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const api = useAPI();
+
+  const [loadingAuthor, setLoadingAuthor] = useState(false);
+  const [author, setAuthor] = useState();
+
+  const [loadingRecipes, setLoadingRecipes] = useState(false);
+  const [recipes, setRecipes] = useState([]);
+
+  const [showFullBiography, setShowFullBiography] = useState(false);
+
+  const fetchAuthor = async () => {
+    setLoadingAuthor(true);
+    try {
+      const { data } = await api.getAuthor(id);
+      setAuthor(data);
+    } catch (e) {
+      console.log('error fetching author');
+    }
+    setLoadingAuthor(false);
+  };
+
+  const fetchRecipes = async () => {
+    setLoadingRecipes(true);
+    try {
+      const { data } = await api.getRecipes({
+        authorId: id,
+        pageSize: 100,
+        sortBy: 'datepublished',
+        sortDesc: 'true'
+      });
+      setRecipes(data.results);
+    } catch {
+      console.log('error fetching recipes');
+    }
+    setLoadingRecipes(false);
+  };
+
+  /* Handlers */
+  const handleRecipeClick = (id) => {
+    navigate(`/recipes/${id}`);
+  };
+
+  /* Effects */
+  useEffect(() => {
+    fetchAuthor();
+    fetchRecipes();
+  }, []);
+
+  /* Rendering */
+  const renderBiographyText = (biography) => {
+    const maxLength = 90;
+
+    const text = showFullBiography ? biography : truncateText(biography, maxLength);
+
+    return (
+      <>
+        <Typography variant="body2">
+          {text}
+          {showFullBiography ? ' ' : '...  '}
+          {!showFullBiography && (
+            <Typography
+              display="inline"
+              onClick={() => setShowFullBiography(true)}
+              className={styles.showMoreLink}
+              variant="body2"
+            >
+              {t('pages.author.biography.showMore')}
+            </Typography>
+          )}
+        </Typography>
+        {showFullBiography && (
+          <Typography
+            sx={{ mt: 1 }}
+            onClick={() => setShowFullBiography(false)}
+            className={styles.showLessLink}
+            variant="body2"
+          >
+            {t('pages.author.biography.showLess')}
+          </Typography>
+        )}
+      </>
+    );
+  };
+
+  const renderRecipeTile = (recipe) => (
+    <Box
+      sx={{
+        maxWidth: 150,
+      }}
+    >
+      <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+    </Box>
+  );
+
+  console.log(author)
 
   return (
     <Container sx={{ pb: 7 }}>
       <CssBaseline />
 
-    </Container>
+      <Header title={t('pages.author.title')} onBackClick={() => navigate(-1)} />
+
+      {loadingAuthor && (
+        <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
+      )}
+
+      {author && (
+        <>
+          <Stack direction="column" display="flex" alignItems="center" justifyContent="center">
+            <Avatar sx={{ mb: 1, height: 80, width: 80 }} src={author.profilePictureUrl} />
+            <Typography className={styles.name}>{author.name}</Typography>
+          </Stack>
+
+          {author.links.length > 0 && (
+            <Stack sx={{ mt: 2 }} direction="row" display="flex" alignItems="center" justifyContent="center" gap={2}>
+              {author.links.map((link) => (
+                <AuthorLink link={link} />
+              ))}
+            </Stack>
+          )}
+
+          <Box sx={{ mt: 2 }}>
+            {renderBiographyText(author.biography)}
+          </Box>
+        </>
+      )
+      }
+
+      {
+        loadingRecipes && (
+          <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        )
+      }
+
+      {
+        recipes.length > 0 && (
+          <Section
+            title={t('pages.author.sections.authorRecipes')}
+            showSeeAllLink={true}
+            loading={loadingRecipes}
+          >
+            {recipes.map((recipe) => renderRecipeTile(recipe))}
+          </Section>
+        )
+      }
+
+    </Container >
   );
 };

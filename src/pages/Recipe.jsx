@@ -15,6 +15,7 @@ import {
   Dialog,
   CircularProgress,
   Slide,
+  Avatar,
 } from '@mui/material';
 import {
   ExpandMore as ExpandMoreIcon,
@@ -35,7 +36,7 @@ import RecipeAttributeWidget from '../components/RecipeAttributeWidget';
 import PlanRecipeDialog from '../dialogs/PlanRecipeDialog';
 
 import { isUndefined, isNull } from '../utils/utils';
-import { capitalizeFirstLetter } from '../utils/stringUtils';
+import { capitalizeFirstLetter, truncateText } from '../utils/stringUtils';
 import { ReactComponent as PlannerIcon } from '../assets/icons/planner.svg';
 import { ReactComponent as PrepIcon } from '../assets/icons/prep.svg';
 import { ReactComponent as CookIcon } from '../assets/icons/cook.svg';
@@ -100,6 +101,9 @@ export default () => {
   const [loadingInstructions, setLoadingInstructions] = useState();
   const [instructions, setInstructions] = useState();
 
+  const [loadingAuthor, setLoadingAuthor] = useState(false);
+  const [author, setAuthor] = useState();
+
   const [rating, setRating] = useState(undefined);
   const [servings, setServings] = useState(location?.state?.servings);
 
@@ -161,6 +165,17 @@ export default () => {
     }
   }
 
+  const fetchAuthor = async () => {
+    setLoadingAuthor(true);
+    try {
+      const { data } = await api.getAuthor(recipe.author.id);
+      setAuthor(data);
+    } catch (e) {
+      console.log('error fetching author');
+    }
+    setLoadingAuthor(false);
+  };
+
   const unfavouriteRecipe = async () => {
     try {
       await api.unfavouriteRecipe(recipe.id);
@@ -218,6 +233,10 @@ export default () => {
     }
   };
 
+  const handleAuthorClick = () => {
+    navigate(`/authors/${recipe.author.id}`);
+  };
+
   /* Effects */
   useEffect(() => {
     if (authenticated) {
@@ -230,6 +249,9 @@ export default () => {
   useEffect(() => {
     if (!isUndefined(recipe) && !location?.state?.servings) {
       setServings(recipe.servings)
+    }
+    if (recipe?.author) {
+      fetchAuthor();
     }
   }, [recipe]);
 
@@ -249,11 +271,6 @@ export default () => {
       })
     })
   }
-
-  const truncateText = (value, maxLength) => {
-    const trimmedString = value.substr(0, maxLength);
-    return trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(' ')));
-  };
 
   const renderDescriptionText = (description) => {
     const maxLength = 90;
@@ -472,13 +489,14 @@ export default () => {
             {renderDescriptionText(recipe.description)}
           </Box>
 
-          {recipe.author && (
-            <Box>
+          {author && (
+            <Stack direction="row" display="flex" alignItems="center" onClick={handleAuthorClick}>
+              <Typography className={styles.author} sx={{ mr: 1 }} style={{ fontWeight: 'bold' }}>{t('pages.recipe.author')}:</Typography>
+              <Avatar sx={{ height: 20, width: 20, mr: 1 }} src={author.profilePictureUrl} />
               <Typography className={styles.author}>
-                <span style={{ fontWeight: 'bold' }}>{t('pages.recipe.author')}: </span>
                 {recipe.author.name}
               </Typography>
-            </Box>
+            </Stack>
           )}
 
           <Stack

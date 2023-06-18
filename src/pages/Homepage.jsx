@@ -3,7 +3,6 @@ import NiceModal from '@ebay/nice-modal-react';
 import PropTypes from 'prop-types';
 import {
   CssBaseline,
-  CircularProgress,
   Container,
   Typography,
   Box,
@@ -11,8 +10,6 @@ import {
   InputAdornment,
   Grid,
   Avatar,
-  Stack,
-  List,
   Dialog,
   Slide,
 } from '@mui/material';
@@ -23,6 +20,7 @@ import Filters from './Filters';
 import useInput from '../hooks/useInput';
 import RecipeTile from '../components/RecipeTile';
 import FilterButton from '../components/FilterButton';
+import Section from '../components/Section';
 import CategoryChip from '../components/CategoryChip';
 import usePagedFetch from '../hooks/usePagedFetch';
 import { TagContext } from '../contexts/TagContext';
@@ -38,50 +36,6 @@ const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading
   return <Slide direction="left" ref={ref} {...props} />;
 });
-
-const Section = ({ title, loading, showSeeAllLink, children }) => {
-
-  const { t } = useTranslation();
-
-  return (
-    <Box sx={{ mb: 2 }}>
-      <Grid item xs={12} container justifyContent="space-between" alignItems="center">
-        <Grid item xs>
-          <Typography variant="h5">{title}</Typography>
-        </Grid>
-        {showSeeAllLink && (
-          <Grid item xs="auto">
-            <Link to="/recipes">{t('pages.home.seeAll')}</Link>
-          </Grid>
-        )}
-      </Grid>
-
-      <List style={{ overflow: 'auto' }}>
-        <Stack direction="row" alignItems="center" gap={2}>
-          {loading && (
-            <Box>
-              <CircularProgress />
-            </Box>
-          )}
-
-          {children}
-        </Stack>
-      </List>
-    </Box>
-  )
-}
-
-Section.propTypes = {
-  title: PropTypes.string.isRequired,
-  loading: PropTypes.bool,
-  showSeeAllLink: PropTypes.bool,
-  children: PropTypes.node.isRequired,
-};
-
-Section.defaultProps = {
-  loading: false,
-  showSeeAllLink: true,
-};
 
 export default () => {
   const { t } = useTranslation();
