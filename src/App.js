@@ -14,6 +14,7 @@ import useAuth from './hooks/useAuth';
 import useAPI from './hooks/useAPI';
 
 import AdminRoute from './routings/AdminRoute';
+import AuthRoute from './routings/AuthRoute';
 
 import NotFound from './pages/NotFound';
 import Homepage from './pages/Homepage';
@@ -21,6 +22,8 @@ import Recipe from './pages/Recipe';
 import Recipes from './pages/Recipes';
 import Favourites from './pages/Favourites';
 import Settings from './pages/Settings';
+import AccountSettings from './pages/Account/AccountSettings';
+import ChangePassword from './pages/Account/ChangePassword';
 import ContactUs from './pages/ContactUs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Author from './pages/Author';
@@ -251,6 +254,22 @@ const App = () => {
         {
           path: '/settings',
           element: <Settings />,
+        },
+        {
+          path: '/account',
+          element: (
+            <AuthRoute>
+              <AccountSettings />
+            </AuthRoute>
+          ),
+        },
+        {
+          path: '/change-password',
+          element: (
+            <AuthRoute>
+              <ChangePassword />
+            </AuthRoute>
+          ),
         },
         {
           path: '/contact-us',

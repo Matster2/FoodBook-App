@@ -117,12 +117,22 @@
       "options": {
         "signIn": "Sign In",
         "admin": "Admin",
+        "account": "Account",
         "contactUs": "Contact Us",
         "privacyPolicy": "Privacy Policy",
         "termsOfService": "Terms of Service",
-        "logOut": "Log Out",
+        "logOut": "Log Out"
+      }
+    },
+    "accountSettings": {
+      "title": "Account Settings",
+      "options": {
+        "changePassword": "Change Password",
         "deleteAccount": "Delete Account"
       }
+    },
+    "changePassword": {
+      "title": "Change Password"
     }
   },
   "forms": {
@@ -191,6 +201,36 @@
         "buttons": {
           "submit": {
             "label": "Reset Password"
+          }
+        }
+      },
+      "changePassword": {
+        "title": "Change Password",
+        "inputs": {
+          "currentPassword": {
+            "label": "Current Password",
+            "validationMessages": {
+              "empty": "Current Password is required"
+            }
+          },
+          "newPassword": {
+            "label": "New Password",
+            "validationMessages": {
+              "empty": "New Password is required",
+              "sameAsCurrent": "New Password must be different from current password."
+            }
+          },
+          "confirmPassword": {
+            "label": "Confirm Password",
+            "validationMessages": {
+              "empty": "Please confirm your password",
+              "notSame": "Passwords do not match"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Change Password"
           }
         }
       }
@@ -286,8 +326,13 @@
         "error": "Unable to sign in. Please try again later."
       },
       "forgottenPassword": {
-        "success": "Signed In Successfully.",
+        "success": "A reset link has been sent to your email address.",
         "error": "Unable to send recovery email. Please try again later."
+      },
+      "changePassword": {
+        "success": "Your password has been changed.",
+        "invalid": "Please check your credentials.",
+        "error": "Unable to change password. Please try again later."
       },
       "logout": {
         "success": "You have been logged out",

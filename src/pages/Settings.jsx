@@ -39,8 +39,6 @@ export default () => {
   const { currentLanguage, supportedLanguages, setCurrentLanguage } = useContext(LanguageContext);
   const { logout, authenticated, claims } = useAuth();
 
-  const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] = useState(false);
-
   const handleSignInClick = () => {
     NiceModal.show('authentication-modal');
   };
@@ -51,39 +49,12 @@ export default () => {
     toast(t('requests.auth.logout.success'));
   };
 
-  const handleDeleteAccountClick = async () => {
-    setDeleteAccountDialogOpen(false);
-    await api.deleteMyUser();
-    logout();
-    toast(t('requests.accounts.delete.success'));
-    navigate('/');
-  };
-
   const handleLanguageChange = (code) => {
     setCurrentLanguage(code);
   }
 
   return (
     <>
-      <Dialog
-        open={deleteAccountDialogOpen}
-        onClose={() => setDeleteAccountDialogOpen(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{t('forms.accounts.delete.title')}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {t('forms.accounts.delete.description')}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteAccountDialogOpen(false)}>{t('forms.accounts.delete.buttons.cancel.label')}</Button>
-          <Button onClick={handleDeleteAccountClick} autoFocus>
-            {t('forms.accounts.delete.buttons.submit.label')}
-          </Button>
-        </DialogActions>
-      </Dialog>
       <Container>
         <Header title={t('pages.settings.title')} onBackClick={() => navigate(-1)} />
 
@@ -109,6 +80,14 @@ export default () => {
             <ListItem disablePadding>
               <ListItemButton component={Link} to="/admin/settings">
                 <ListItemText primary={t('pages.settings.options.admin')} />
+              </ListItemButton>
+            </ListItem>
+          )}
+
+          {authenticated && (
+            <ListItem disablePadding>
+              <ListItemButton to="/account">
+                <ListItemText primary={t('pages.settings.options.account')} />
               </ListItemButton>
             </ListItem>
           )}
@@ -163,13 +142,13 @@ export default () => {
               <Typography variant="body2">{capitalizeFirstLetter(t('common.version'))} {process.env.REACT_APP_VERSION}</Typography>
             </Box>
 
-            {authenticated && (
+            {/* {authenticated && (
               <ListItem disablePadding>
                 <ListItemButton sx={{ textAlign: 'center' }} onClick={() => setDeleteAccountDialogOpen(true)}>
                   <ListItemText primary={t('pages.settings.options.deleteAccount')} />
                 </ListItemButton>
               </ListItem>
-            )}
+            )} */}
           </Box>
         </List>
       </Container>

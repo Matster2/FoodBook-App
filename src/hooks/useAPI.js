@@ -54,6 +54,14 @@ const useAPI = () => {
     return axios.post(`${process.env.REACT_APP_API_URL}/forgot-password`, { email });
   };
 
+  const changePassword = async (userId, currentPassword, newPassword) => {
+    return axios.post(`${process.env.REACT_APP_API_URL}/users/${userId}/change-password`, { 
+      userId: userId,
+      currentPassword,
+      newPassword  
+    });
+  };
+
   const resetPassword = async (email, resetToken, newPassword) => {
     return axios.post(`${process.env.REACT_APP_API_URL}/forgot-password`, {
       email,
@@ -458,6 +466,7 @@ const useAPI = () => {
     getSupportedLanguages,
     queryEmail,
     forgotPassword,
+    changePassword,
     resetPassword,
     register,
     getMe,
