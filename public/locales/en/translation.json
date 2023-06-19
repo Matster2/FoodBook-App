@@ -266,6 +266,11 @@
           "label": "Apply Filters"
         }
       }
+    },
+    "recipeAttributeWidget": {
+      "alcohol": {
+        "text": "Contains Alcohol"
+      }
     }
   },
   "requests": {

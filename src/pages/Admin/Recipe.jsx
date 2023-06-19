@@ -3,7 +3,7 @@ import uuid from 'react-uuid';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
-import { Formik, Form, Field, FieldArray } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import {
   CssBaseline,
   Container,
@@ -20,6 +20,8 @@ import {
   Autocomplete,
   IconButton,
   List,
+  FormControlLabel,
+  Checkbox
 } from '@mui/material';
 import { Clear as ClearIcon, HorizontalRule } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -39,6 +41,7 @@ const recipeSchema = yup.object({
   cookTime: yup.number().integer().required(),
   totalTime: yup.number().integer().required(),
   servings: yup.number().integer().required(),
+  containsAlcohol: yup.bool().required(),
   nutrition: yup.object({
     calories: yup.number().integer().required(),
     sugar: yup.number().integer(),
@@ -65,6 +68,7 @@ const initialRecipeValue = {
   cookTime: undefined,
   totalTime: undefined,
   servings: undefined,
+  containsAlcohol: false,
   steps: [
     {
       id: uuid(),
@@ -641,6 +645,16 @@ export default () => {
                     />
                   </Grid>
                 </Grid>
+
+                <Box sx={{ mt: 2 }}>
+                  <Field
+                    type="checkbox"
+                    name="containsAlcohol"
+                    as={FormControlLabel}
+                    control={<Checkbox />}
+                    label="Contains Alcohol"
+                  />
+                </Box>
 
                 <Box sx={{ mt: 3, mb: 3 }}>
                   <Typography variant="h6">Author</Typography>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 22 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlSpace="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,-6509.26,-3808.32)">
+        <g>
+            <path d="M6523.27,3818.37L6529.26,3818.37C6529.26,3818.37 6530.32,3823.91 6530.01,3825.54C6528.99,3830.87 6523.6,3831.13 6522.34,3825.54C6521.98,3823.94 6523.27,3818.37 6523.27,3818.37" style="fill:none;stroke-width:0.91px;"/>
+            <path d="M6522.34,3825.54L6530.01,3825.54" style="fill:none;stroke-width:0.91px;"/>
+            <g transform="matrix(0.973384,0,0,0.973384,173.703,102.102)">
+                <path d="M6526.26,3829.56L6526.26,3836.13" style="fill:none;stroke-width:0.93px;"/>
+            </g>
+            <g transform="matrix(0.983003,0,0,1.00605,110.945,-23.1261)">
+                <path d="M6518.44,3821.59C6518.23,3820.08 6515.62,3817.99 6515.62,3817.99L6515.62,3808.85L6512.45,3808.85L6512.45,3817.99C6512.45,3817.99 6509.84,3820.08 6509.62,3821.59C6509.15,3824.95 6509.62,3838.11 6509.62,3838.11L6518.44,3838.11C6518.44,3838.11 6518.91,3824.95 6518.44,3821.59Z" style="fill:rgb(237,255,0);fill-opacity:0;stroke-width:0.91px;"/>
+            </g>
+            <path d="M6512.7,3811.46L6515.82,3811.46" style="fill:none;stroke-width:0.91px;"/>
+            <g transform="matrix(1.06024,0,0,1,-392.949,0)">
+                <path d="M6529.17,3838.03C6529.17,3838.03 6527,3836.14 6526.1,3836.14C6525.2,3836.14 6522.95,3838.03 6522.95,3838.03C6522.95,3838.27 6523.13,3838.46 6523.36,3838.46L6528.77,3838.46C6528.99,3838.46 6529.17,3838.27 6529.17,3838.03Z" style="fill:rgb(237,255,0);fill-opacity:0;stroke-width:0.88px;"/>
+            </g>
+            <g transform="matrix(0.529745,0,0,0.552194,3063.48,1714.28)">
+                <rect x="6509.62" y="3821.59" width="8.82" height="16.516" style="fill:rgb(237,255,0);fill-opacity:0;stroke-width:1.68px;"/>
+            </g>
+        </g>
+    </g>
+</svg>

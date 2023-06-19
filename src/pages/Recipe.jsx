@@ -514,13 +514,23 @@ export default () => {
           <Stack
             sx={{ my: 2 }}
             direction="row"
-            alignItems="center"
             justifyContent="center"
+            gap={3}
           >
-            <RecipeAttributeWidget
-              type="calories"
-              value={recipe.nutrition.calories}
-            />
+            <Box maxWidth={100} textAlign="center">
+              <RecipeAttributeWidget
+                type="calories"
+                value={recipe.nutrition.calories}
+              />
+            </Box>
+
+            {recipe.containsAlcohol && (
+              <Box maxWidth={100} textAlign="center">
+                <RecipeAttributeWidget
+                  type="alcohol"
+                />
+              </Box>
+            )}
           </Stack>
 
           <Stack direction="row" display="flex" justifyContent="center" sx={{ mt: 2, mb: 2 }} gap={2}>

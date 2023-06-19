@@ -1,17 +1,16 @@
 .box {
   border-radius: 8px;
-  width: 25px;
-  height: 25px;
-  background-color: #FFC4B8;
-  padding: 8px;
+  background-color: #ffebb8;
 }
 
 .icon {
-  width: 100%;
-  stroke: #F54343;
+  width: 24px;
+  height: 24px;
+  margin: 8px;
+  stroke: #f59f43;
 }
 
 .text {
-  font-weight: bold !important;
-  font-size: 14px !important;
+  font-weight: normal !important;
+  font-size: 13px !important;
 }
