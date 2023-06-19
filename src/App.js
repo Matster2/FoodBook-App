@@ -15,6 +15,7 @@ import useAPI from './hooks/useAPI';
 
 import AdminRoute from './routings/AdminRoute';
 
+import NotFound from './pages/NotFound';
 import Homepage from './pages/Homepage';
 import Recipe from './pages/Recipe';
 import Recipes from './pages/Recipes';
@@ -232,11 +233,11 @@ const App = () => {
       element: <Layout />,
       children: [
         {
-          path: '/*',
+          path: '/',
           element: <Homepage />,
         },
         {
-          path: '/',
+          path: '/home',
           element: <Homepage />,
         },
         {
@@ -409,6 +410,14 @@ const App = () => {
         },
       ],
     },
+    {
+      children: [
+        {
+          path: '*',
+          element: <NotFound />,
+        },
+      ]
+    }
   ]);
 
   return (

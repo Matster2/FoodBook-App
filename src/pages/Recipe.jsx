@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
+import uuid from 'react-uuid';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -72,7 +73,7 @@ const RecipeStep = ({ step }) => {
 
       <Stepper orientation="vertical" activeStep={activeInstruction}>
         {step.instructions.map((instruction, index) => (
-          <Step onClick={() => handleInstructionClick(index)}>
+          <Step key={instruction.id} onClick={() => handleInstructionClick(index)}>
             <StepLabel>{instruction.instruction}</StepLabel>
           </Step>
         ))}
@@ -111,6 +112,8 @@ export default () => {
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showPlannerModal, setShowPlannerModal] = useState(false);
 
+  const [isError, setIsError] = useState(false);
+
   const onServingsChange = (newServings) => {
     setServings(newServings);
   }
@@ -120,7 +123,7 @@ export default () => {
     try {
       const { data } = await api.getRecipe(id);
       setRecipe(data);
-    } catch {
+    } catch (e) {
       console.log('error fetching recipe');
     }
     setLoadingRecipe(false);
@@ -128,14 +131,23 @@ export default () => {
 
   const fetchInstructions = async () => {
     setLoadingInstructions(true);
-    try {
-      const { data } = await api.getRecipeInstructions(id);
-      setInstructions(data);
-    } catch {
-      console.log('error fetching recipe instructions');
-    }
+
+    api.getRecipeInstructions(id)
+      .then((reponse) => {
+        setInstructions(reponse.data);
+      })
+      .catch((error) => {
+        setIsError(true)
+      });
+
     setLoadingInstructions(false);
   };
+
+  useEffect(() => {
+    if (isError) {
+      navigate('/');
+    }
+  }, [isError])
 
   /* Handlers */
   const handleFavoriteClick = async () => {
@@ -343,7 +355,7 @@ export default () => {
       >
         <Swiper className={styles.swiper}>
           {recipe.images.map((image) => (
-            <SwiperSlide className={styles.swiperSlide} onDoubleClick={() => setShowImageModal(false)}>
+            <SwiperSlide key={uuid()} className={styles.swiperSlide} onDoubleClick={() => setShowImageModal(false)}>
               <img className={styles.slideImage} src={image} alt="recipe" />
             </SwiperSlide>
           ))}
@@ -560,6 +572,7 @@ export default () => {
 
             {instructions && instructions.steps.map((step) => (
               <RecipeStep
+                key={step.id}
                 step={step}
               />
             ))}

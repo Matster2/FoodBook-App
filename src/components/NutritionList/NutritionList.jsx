@@ -23,7 +23,7 @@ const NutritionList = ({ nutrition: { calories, sugar, fat, saturatedFat, sodium
 
   const renderNutritionRow = (row) => {
     return (
-      <Box className={styles.listLine} display="flex" flexDirection="row" justifyContent="space-between">
+      <Box key={row.name} className={styles.listLine} display="flex" flexDirection="row" justifyContent="space-between">
         <Typography>{row.name}</Typography>
         <Typography> {`${row.amount} ${row.unit}`}</Typography>
       </Box>

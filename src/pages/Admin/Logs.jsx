@@ -48,7 +48,7 @@ export default () => {
   const [showLogModal, setShowLogModal] = useState(false);
 
   const [loadingLogs, setLoadingLogs] = useState(false);
-  const [logs, setLogs] = useState();
+  const [logResponse, setLogResponse] = useState();
 
   const [selectedLog, setSelectedLog] = useState();
 
@@ -56,10 +56,8 @@ export default () => {
     setLoadingLogs(true);
 
     try {
-      const {
-        data,
-      } = await api.getLogs(filters);
-      setLogs(data);
+      const { data } = await api.getLogs(filters);
+      setLogResponse(data);
     } catch (e) {
       console.log(e);
     }
@@ -161,15 +159,19 @@ export default () => {
           </Box>
         )}
 
-        {logs && (
+        {logResponse && (
           <PullToRefresh onRefresh={handleRefresh}>
-            {logs.results.length === 0 && !loadingLogs && (
+            <Box sx={{ mb: 1 }} display="flex" justifyContent="end">
+              <Typography sx={{ fontSize: 12 }}>Total logs: {logResponse.totalResults}</Typography>
+            </Box>
+
+            {logResponse.results.length === 0 && !loadingLogs && (
               <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
                 <Typography>No Logs Found</Typography>
               </Box>
             )}
 
-            {logs.results.length > 0 && (
+            {logResponse.results.length > 0 && (
               <TableContainer component={Paper}>
                 <Table sx={{ width: "100%" }} style={{ tableLayout: "auto" }}>
                   <TableHead>
@@ -179,7 +181,7 @@ export default () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {logs.results.map((log) => (
+                    {logResponse.results.map((log) => (
                       <TableRow key={log.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleLogClick(log)}>
                         <TableCell component="th" scope="row">
                           {getDateString(new Date(log.dateCreated))}
@@ -194,9 +196,9 @@ export default () => {
               </TableContainer>
             )}
 
-            {logs.totalPages > 1 && (
+            {logResponse.totalPages > 1 && (
               <Box sx={{ mt: 3 }} display="flex" justifyContent="center">
-                <Pagination count={logs.totalPages} page={logs.currentPage} onChange={handlePageChange} shape="rounded" />
+                <Pagination count={logResponse.totalPages} page={logResponse.currentPage} onChange={handlePageChange} shape="rounded" />
               </Box>
             )}
           </PullToRefresh>

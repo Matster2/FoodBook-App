@@ -14,7 +14,8 @@ import {
   CircularProgress,
   Typography,
   Button,
-  Icon
+  Icon,
+  Pagination
 } from '@mui/material';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useNavigate } from 'react-router-dom';
@@ -32,20 +33,21 @@ export default () => {
   const { filters, setFilter } = useFilters({
     search: '',
     sortBy: 'name',
+    sortDesc: false,
+    page: 1,
+    pageSize: 50
   });
 
   const { value: search, onChange: onSearchChange } = useInput('');
   const [loadingTags, setLoadingTags] = useState(false);
-  const [tags, setTags] = useState([]);
+  const [tagResponse, setTagResponse] = useState();
 
   const fetchTags = async () => {
     setLoadingTags(true);
 
     try {
-      const {
-        data: { results },
-      } = await api.getTags(filters);
-      setTags(results);
+      const { data } = await api.getTags(filters);
+      setTagResponse(data);
     } catch (e) {
       console.log(e);
     }
@@ -65,6 +67,10 @@ export default () => {
   const handleTagClick = (id) => {
     navigate(`/admin/tags/${id}`);
   }
+
+  const handlePageChange = (event, value) => {
+    setFilter("page", value);
+  };
 
   /* Effects */
   useEffect(() => {
@@ -109,49 +115,61 @@ export default () => {
         onChange={onSearchChange}
       />
 
-      <PullToRefresh onRefresh={handleRefresh}>
-        {tags.length === 0 && !loadingTags && (
-          <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
-            <Typography>No Tags Found</Typography>
-          </Box>
-        )}
+      {loadingTags && (
+        <Box sx={{ mt: 2, mb: 4 }} display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
+      )}
 
-        {loadingTags && (
-          <Box sx={{ mt: 2, mb: 4 }} display="flex" justifyContent="center">
-            <CircularProgress />
+      {tagResponse && (
+        <PullToRefresh onRefresh={handleRefresh}>
+          <Box sx={{ mb: 1 }} display="flex" justifyContent="end">
+            <Typography sx={{ fontSize: 12 }}>Total tags: {tagResponse.totalResults}</Typography>
           </Box>
-        )}
 
-        {tags.length > 0 && (
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {tags.map((tag) => (
-                  <TableRow key={tag.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleTagClick(tag.id)}>
-                    <TableCell component="th" scope="row">
-                      <Typography
-                        sx={{
-                          display: 'flex',
-                        }}
-                      >
-                        <Icon sx={{ mr: 1 }}>
-                          <img style={{ height: '100%' }} alt={tag.name} src={categoryIcons[tag.icon.toLowerCase()]} />
-                        </Icon>
-                        {tag.name}
-                      </Typography>
-                    </TableCell>
+          {tagResponse.results.length === 0 && !loadingTags && (
+            <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
+              <Typography>No Tags Found</Typography>
+            </Box>
+          )}
+
+          {tagResponse.results.length > 0 && (
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </PullToRefresh>
+                </TableHead>
+                <TableBody>
+                  {tagResponse.results.map((tag) => (
+                    <TableRow key={tag.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleTagClick(tag.id)}>
+                      <TableCell component="th" scope="row">
+                        <Typography
+                          sx={{
+                            display: 'flex',
+                          }}
+                        >
+                          <Icon sx={{ mr: 1 }}>
+                            <img style={{ height: '100%' }} alt={tag.name} src={categoryIcons[tag.icon.toLowerCase()]} />
+                          </Icon>
+                          {tag.name}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+
+          {tagResponse.totalPages > 1 && (
+            <Box sx={{ mt: 3 }} display="flex" justifyContent="center">
+              <Pagination count={tagResponse.totalPages} page={tagResponse.currentPage} onChange={handlePageChange} shape="rounded" />
+            </Box>
+          )}
+        </PullToRefresh>
+      )}
     </Container>
   );
 };

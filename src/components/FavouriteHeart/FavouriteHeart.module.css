@@ -3,7 +3,7 @@
   border-radius: 10px !important;
   stroke: black;
   fill: none;
-  padding: 20% !important;
+  padding: 0px !important;
 }
 
 .favourited {
@@ -13,5 +13,6 @@
 }
 
 .icon {
-  width: 100% !important;
+  max-width: 100% !important;
+  margin: 20% !important;
 }

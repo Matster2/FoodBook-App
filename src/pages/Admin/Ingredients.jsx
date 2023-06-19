@@ -13,7 +13,8 @@ import {
   Box,
   CircularProgress,
   Typography,
-  Button
+  Button,
+  Pagination
 } from '@mui/material';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useNavigate } from 'react-router-dom';
@@ -29,20 +30,21 @@ export default () => {
   const { filters, setFilter } = useFilters({
     search: '',
     sortBy: 'name',
+    sortDesc: false,
+    page: 1,
+    pageSize: 50
   });
 
   const { value: search, onChange: onSearchChange } = useInput('');
   const [loadingIngredients, setLoadingIngredients] = useState(false);
-  const [ingredients, setIngredients] = useState([]);
+  const [ingredientResponse, setIngredientResponse] = useState();
 
   const fetchIngredients = async () => {
     setLoadingIngredients(true);
 
     try {
-      const {
-        data: { results },
-      } = await api.getIngredients(filters);
-      setIngredients(results);
+      const { data } = await api.getIngredients(filters);
+      setIngredientResponse(data);
     } catch (e) {
       console.log(e);
     }
@@ -54,6 +56,10 @@ export default () => {
   const handleRefresh = async () => {
     fetchIngredients();
   }
+
+  const handlePageChange = (event, value) => {
+    setFilter("page", value);
+  };
 
   const handleAddClick = () => {
     navigate("/admin/ingredients/add")
@@ -116,40 +122,52 @@ export default () => {
         onChange={onSearchChange}
       />
 
-      <PullToRefresh onRefresh={handleRefresh}>
-        {ingredients.length === 0 && !loadingIngredients && (
-          <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
-            <Typography>No Ingredients Found</Typography>
-          </Box>
-        )}
+      {loadingIngredients && (
+        <Box sx={{ mt: 2, mb: 4 }} display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
+      )}
 
-        {loadingIngredients && (
-          <Box sx={{ mt: 2, mb: 4 }} display="flex" justifyContent="center">
-            <CircularProgress />
+      {ingredientResponse && (
+        <PullToRefresh onRefresh={handleRefresh}>
+          <Box sx={{ mb: 1 }} display="flex" justifyContent="end">
+            <Typography sx={{ fontSize: 12 }}>Total ingredients: {ingredientResponse.totalResults}</Typography>
           </Box>
-        )}
 
-        {ingredients.length > 0 && (
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {ingredients.map((ingredient) => (
-                  <TableRow key={ingredient.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleIngredientClick(ingredient.id)}>
-                    <TableCell component="th" scope="row">
-                      {getIngredientText(ingredient)}
-                    </TableCell>
+          {ingredientResponse.results.length === 0 && !loadingIngredients && (
+            <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
+              <Typography>No Ingredients Found</Typography>
+            </Box>
+          )}
+
+          {ingredientResponse.results.length > 0 && (
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </PullToRefresh>
+                </TableHead>
+                <TableBody>
+                  {ingredientResponse.results.map((ingredient) => (
+                    <TableRow key={ingredient.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleIngredientClick(ingredient.id)}>
+                      <TableCell component="th" scope="row">
+                        {getIngredientText(ingredient)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+
+          {ingredientResponse.totalPages > 1 && (
+            <Box sx={{ mt: 3 }} display="flex" justifyContent="center">
+              <Pagination count={ingredientResponse.totalPages} page={ingredientResponse.currentPage} onChange={handlePageChange} shape="rounded" />
+            </Box>
+          )}
+        </PullToRefresh>
+      )}
     </Container>
   );
 };

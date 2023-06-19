@@ -5,9 +5,11 @@ import { Formik, Form, Field, setIn } from 'formik';
 import { CssBaseline, Container, Box, TextField, Button, FormControl, Select, InputLabel, MenuItem } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
 import useAPI from '../../hooks/useAPI';
+import usePrevious from '../../hooks/usePrevious';
 import Header from '../../components/Header';
 import { UnitOfMeasurementContext } from '../../contexts/UnitOfMeasurementContext';
 import FormModes from '../../utils/formModes';
+import { isUndefined } from '../../utils/utils';
 
 const ingredientSchema = yup.object({
   name: yup.string().required(),
@@ -117,6 +119,7 @@ export default () => {
     }
   }, []);
 
+
   /* Rendering */
   return (
     <Container sx={{ pb: 7 }}>
@@ -133,7 +136,18 @@ export default () => {
         }}
       >
         {(formik) => {
-          const { errors, touched, values } = formik;
+          const { errors, touched, values, setFieldValue } = formik;
+
+          var previousName = usePrevious(values.name);
+
+          useEffect(() => {
+            if (!isUndefined(previousName)) {
+              if (previousName === values.pluralName) {
+                setFieldValue("pluralName", values.name)
+              }
+
+            }
+          }, [values])
 
           return (
             <Form>

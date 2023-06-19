@@ -64,7 +64,7 @@ const IngredientList = ({ ingredients }) => {
     const ingredientName = amount === 1 ? ingredient.name : ingredient.pluralName;
 
     return (
-      <Box className={styles.listLine} display="flex" flexDirection="row" justifyContent="space-between">
+      <Box key={ingredient.id} className={styles.listLine} display="flex" flexDirection="row" justifyContent="space-between">
         <Typography>{ingredientName}</Typography>
         <Typography> {`${amount} ${unit}`.trim()}</Typography>
       </Box>

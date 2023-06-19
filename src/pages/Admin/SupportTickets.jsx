@@ -46,7 +46,7 @@ export default () => {
   const [showSupportTicketModal, setShowSupportTicketModal] = useState(false);
 
   const [loadingSupportTickets, setLoadingSupportTickets] = useState(false);
-  const [supportTickets, setSupportTickets] = useState();
+  const [supportTicketResponse, setSupportTicketResponse] = useState();
 
   const [selectedSupportTicketId, setSelectedSupportTicketId] = useState();
 
@@ -54,10 +54,8 @@ export default () => {
     setLoadingSupportTickets(true);
 
     try {
-      const {
-        data,
-      } = await api.getSupportTickets(filters);
-      setSupportTickets(data);
+      const { data } = await api.getSupportTickets(filters);
+      setSupportTicketResponse(data);
     } catch (e) {
       console.log(e);
     }
@@ -153,15 +151,19 @@ export default () => {
           </Box>
         )}
 
-        {supportTickets && (
+        {supportTicketResponse && (
           <PullToRefresh onRefresh={handleRefresh}>
-            {supportTickets.results.length === 0 && !loadingSupportTickets && (
+            <Box sx={{ mb: 1 }} display="flex" justifyContent="end">
+              <Typography sx={{ fontSize: 12 }}>Total support tickets: {supportTicketResponse.totalResults}</Typography>
+            </Box>
+
+            {supportTicketResponse.results.length === 0 && !loadingSupportTickets && (
               <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
                 <Typography>No Support Tickets Found</Typography>
               </Box>
             )}
 
-            {supportTickets.results.length > 0 && (
+            {supportTicketResponse.results.length > 0 && (
               <TableContainer component={Paper}>
                 <Table sx={{ width: "100%" }} style={{ tableLayout: "auto" }}>
                   <TableHead>
@@ -171,7 +173,7 @@ export default () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {supportTickets.results.map((supportTicket) => (
+                    {supportTicketResponse.results.map((supportTicket) => (
                       <TableRow key={supportTicket.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleSupportTicketClick(supportTicket.id)}>
                         <TableCell component="th" scope="row">
                           {getDateString(new Date(supportTicket.dateCreated))}
@@ -186,9 +188,9 @@ export default () => {
               </TableContainer>
             )}
 
-            {supportTickets.totalPages > 1 && (
+            {supportTicketResponse.totalPages > 1 && (
               <Box sx={{ mt: 3 }} display="flex" justifyContent="center">
-                <Pagination count={supportTickets.totalPages} page={supportTickets.currentPage} onChange={handlePageChange} shape="rounded" />
+                <Pagination count={supportTicketResponse.totalPages} page={supportTicketResponse.currentPage} onChange={handlePageChange} shape="rounded" />
               </Box>
             )}
           </PullToRefresh>

@@ -39,16 +39,14 @@ export default () => {
   const [showSupportTicketModal, setShowSupportTicketModal] = useState(false);
 
   const [loadingRecipes, setLoadingRecipes] = useState(false);
-  const [recipes, setRecipes] = useState();
+  const [recipeResponse, setRecipeResponse] = useState();
 
   const fetchRecipes = async () => {
     setLoadingRecipes(true);
 
     try {
-      const {
-        data,
-      } = await api.getRecipes(filters);
-      setRecipes(data);
+      const { data } = await api.getRecipes(filters);
+      setRecipeResponse(data);
     } catch (e) {
       console.log(e);
     }
@@ -61,13 +59,13 @@ export default () => {
     fetchRecipes();
   }
 
-  const handleAddClick = () => {
-    navigate("/admin/recipes/add");
-  }
-
   const handlePageChange = (event, value) => {
     setFilter("page", value);
   };
+
+  const handleAddClick = () => {
+    navigate("/admin/recipes/add");
+  }
 
   const handleRecipeClick = (id) => {
     navigate(`/recipes/${id}`)
@@ -142,15 +140,19 @@ export default () => {
         </Box>
       )}
 
-      {recipes && (
+      {recipeResponse && (
         <PullToRefresh onRefresh={handleRefresh}>
-          {recipes.results.length === 0 && !loadingRecipes && (
+          <Box sx={{ mb: 1 }} display="flex" justifyContent="end">
+            <Typography sx={{ fontSize: 12 }}>Total recipes: {recipeResponse.totalResults}</Typography>
+          </Box>
+
+          {recipeResponse.results.length === 0 && !loadingRecipes && (
             <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
               <Typography>No Recipe Found</Typography>
             </Box>
           )}
 
-          {recipes.results.length > 0 && (
+          {recipeResponse.results.length > 0 && (
             <TableContainer component={Paper}>
               <Table sx={{ width: "100%" }} style={{ tableLayout: "auto" }}>
                 <TableHead>
@@ -160,7 +162,7 @@ export default () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {recipes.results.map((recipe) => (
+                  {recipeResponse.results.map((recipe) => (
                     <TableRow key={recipe.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleRecipeClick(recipe.id)}>
                       <TableCell component="th" scope="row">
                         {getDateString(new Date(recipe.dateCreated))}
@@ -175,9 +177,9 @@ export default () => {
             </TableContainer>
           )}
 
-          {recipes.totalPages > 1 && (
+          {recipeResponse.totalPages > 1 && (
             <Box sx={{ mt: 3 }} display="flex" justifyContent="center">
-              <Pagination count={recipes.totalPages} page={recipes.currentPage} onChange={handlePageChange} shape="rounded" />
+              <Pagination count={recipeResponse.totalPages} page={recipeResponse.currentPage} onChange={handlePageChange} shape="rounded" />
             </Box>
           )}
         </PullToRefresh>
