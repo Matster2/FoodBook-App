@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useTranslation } from "react-i18next";
 import { Offline, Online } from "react-detect-offline";
@@ -452,16 +452,36 @@ const App = () => {
     }
   ]);
 
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    // Update network status
+    const handleStatusChange = () => {
+      setIsOnline(navigator.onLine);
+    };
+
+    // Listen to the online status
+    window.addEventListener('online', handleStatusChange);
+
+    // Listen to the offline status
+    window.addEventListener('offline', handleStatusChange);
+
+    // Specify how to clean up after this effect for performance improvment
+    return () => {
+      window.removeEventListener('online', handleStatusChange);
+      window.removeEventListener('offline', handleStatusChange);
+    };
+  }, [isOnline]);
+
   return (
     <ThemeProvider theme={theme}>
-      <Offline>
+      {!isOnline && (
         <OfflinePage />
-      </Offline>
+      )}
+        
+      {(isOnline && initialized) && (<RouterProvider router={router} />)}
 
-      <Online>
-        {initialized && <RouterProvider router={router} />}
-        <Toaster />
-      </Online>
+      <Toaster />
     </ThemeProvider>
   );
 };
