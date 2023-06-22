@@ -63,7 +63,7 @@ const useAPI = () => {
   };
 
   const resetPassword = async (email, resetToken, newPassword) => {
-    return axios.post(`${process.env.REACT_APP_API_URL}/forgot-password`, {
+    return axios.post(`${process.env.REACT_APP_API_URL}/reset-password`, {
       email,
       resetToken,
       newPassword,

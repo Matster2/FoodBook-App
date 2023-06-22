@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import styles from './Register.module.css';
+import NiceModal from '@ebay/nice-modal-react';
 import useInput from '../hooks/useInput';
 import useAPI from '../hooks/useAPI';
 import { isUndefined, isEmptyOrWhiteSpace, isValidEmail } from '../utils/utils';
@@ -116,6 +117,11 @@ const Register = ({ onSignInClick, onComplete }) => {
     setRegistering(false);
   };
 
+  const handleLogoClick = () => {
+    navigate('/');
+    NiceModal.hide('authentication-modal');
+  }
+
   useEffect(() => {
     clearErrors();
   }, [email, password, confirmPassword]);
@@ -141,7 +147,7 @@ const Register = ({ onSignInClick, onComplete }) => {
             alignItems: 'center',
           }}
         >
-          <img className={styles.logo} src={logo} alt="foodbook" />
+          <img onClick={handleLogoClick} className={styles.logo} src={logo} alt="foodbook" />
         </Box>
       </Box>
 

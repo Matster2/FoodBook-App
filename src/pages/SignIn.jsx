@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import NiceModal from '@ebay/nice-modal-react';
 import { useTranslation } from "react-i18next";
 import PropTypes from 'prop-types';
 import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
@@ -8,9 +9,11 @@ import useAuth from '../hooks/useAuth';
 import { isUndefined, isEmptyOrWhiteSpace, isValidEmail } from '../utils/utils';
 import styles from './SignIn.module.css';
 import logo from '../assets/logo.svg';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
   const { t } = useTranslation();
+  var navigate = useNavigate();
   const auth = useAuth();
 
   const { value: email, onChange: onEmailChange } = useInput('');
@@ -84,6 +87,11 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
     setSigningIn(false);
   };
 
+  const handleLogoClick = () => {
+    navigate('/');
+    NiceModal.hide('authentication-modal');
+  }
+
   useEffect(() => {
     clearErrors();
   }, [email, password]);
@@ -109,7 +117,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
             alignItems: 'center',
           }}
         >
-          <img className={styles.logo} src={logo} alt="foodbook" />
+          <img onClick={handleLogoClick} className={styles.logo} src={logo} alt="foodbook" />
         </Box>
       </Box>
 

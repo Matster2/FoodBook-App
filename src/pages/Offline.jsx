@@ -5,22 +5,13 @@ import {
   Typography,
   Box,
   Button,
-  InputAdornment,
-  Grid,
-  Avatar,
-  Dialog,
-  Slide,
   Stack,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
+import sleepLogo from '../assets/logo-sleep.svg';
 
-import 'swiper/swiper-bundle.min.css';
-import 'swiper/swiper.min.css';
 export default () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-
 
   return (
     <Container>
@@ -29,20 +20,32 @@ export default () => {
         direction="column"
         gap={2}
         sx={{
+          pb: 20,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: '100vh',
         }}
       >
+        <Box
+          sx={{
+            mb: 4,
+            width: 100,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <img style={{ maxWidth: 100, }} src={sleepLogo} alt="foodbook" />
+        </Box>
         <Typography variant="h3" style={{ color: 'var(--primary-colour)' }}>
-          {t('pages.notFound.title')}
+          {t('pages.offline.title')}
         </Typography>
-        <Typography variant="h1" style={{ color: 'var(--primary-colour)' }}>
-          {t('pages.notFound.404')}
+        <Typography textAlign="center">
+          {t('pages.offline.message')}
         </Typography>
-        <Button sx={{ mt: 2 }} variant='contained' onClick={() => navigate('/')}>
-          {t('pages.notFound.links.home')}
+        <Button sx={{ mt: 2 }} variant='contained'>
+          {t('pages.offline.components.buttons.refresh.label')}
         </Button>
       </Stack>
     </Container>

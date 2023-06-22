@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import axios from 'axios';
 import { useTranslation } from "react-i18next";
+import { Offline, Online } from "react-detect-offline";
 import classnames from 'classnames';
 import { Toaster } from 'react-hot-toast';
 import { createBrowserRouter, RouterProvider, Link, Outlet, useLocation, matchPath } from 'react-router-dom';
@@ -14,8 +15,13 @@ import useAuth from './hooks/useAuth';
 import useAPI from './hooks/useAPI';
 
 import AdminRoute from './routings/AdminRoute';
+import UnAuthRoute from './routings/UnAuthRoute';
 import AuthRoute from './routings/AuthRoute';
 
+import SignIn from './pages/SignIn';
+import Register from './pages/Register';
+import ForgottenPassword from './pages/ForgottenPassword';
+import ResetPassword from './pages/ResetPassword';
 import NotFound from './pages/NotFound';
 import Homepage from './pages/Homepage';
 import Recipe from './pages/Recipe';
@@ -40,6 +46,7 @@ import AdminLogs from './pages/Admin/Logs';
 import AdminSettings from './pages/Admin/Settings';
 import Planner from './pages/Planner';
 import TermsOfService from './pages/TermsOfService';
+import OfflinePage from './pages/Offline';
 
 import AuthenticationModal from './modals/AuthenticationModal';
 
@@ -59,6 +66,8 @@ const App = () => {
   const { setSupportedLanguages } = useContext(LanguageContext);
   const { initialized, setInitialized } = useContext(AppContext);
   const { setUser } = useContext(UserContext);
+
+  
 
   let isRefreshing = false;
   let failedQueue = [];
@@ -391,30 +400,34 @@ const App = () => {
     },
     {
       children: [
-        // {
-        //   path: '/sign-in',
-        //   element: (
-        //     <UnAuthRoute>
-        //       <SignIn />
-        //     </UnAuthRoute>
-        //   ),
-        // },
-        // {
-        //   path: '/forgotten-password',
-        //   element: (
-        //     <UnAuthRoute>
-        //       <ForgottenPassword />
-        //     </UnAuthRoute>
-        //   ),
-        // },
-        // {
-        //   path: '/register',
-        //   element: (
-        //     <UnAuthRoute>
-        //       <Register />
-        //     </UnAuthRoute>
-        //   ),
-        // },
+        {
+          path: '/sign-in',
+          element: (
+            <UnAuthRoute>
+              <SignIn />
+            </UnAuthRoute>
+          ),
+        },
+        {
+          path: '/forgotten-password',
+          element: (
+            <UnAuthRoute>
+              <ForgottenPassword />
+            </UnAuthRoute>
+          ),
+        },
+        {
+          path: '/register',
+          element: (
+            <UnAuthRoute>
+              <Register />
+            </UnAuthRoute>
+          ),
+        },
+        {
+          path: '/reset-password',
+          element: <ResetPassword />
+        },
         {
           path: '/recipes/:id',
           element: <Recipe />,
@@ -441,8 +454,15 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      {initialized && <RouterProvider router={router} />}
-      <Toaster />
+      <Offline>
+        <OfflinePage />
+      </Offline>
+
+      <Online>
+        {/* {initialized && <RouterProvider router={router} />}
+        <Toaster /> */}
+        <OfflinePage />
+      </Online>
     </ThemeProvider>
   );
 };

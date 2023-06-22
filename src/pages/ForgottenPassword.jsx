@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import NiceModal from '@ebay/nice-modal-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
+import { useNavigate } from 'react-router-dom';
 import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
 import useInput from '../hooks/useInput';
 import useAPI from '../hooks/useAPI';
@@ -11,6 +13,7 @@ import logo from '../assets/logo.svg';
 
 const ForgottenPassword = ({ onSignInClick, onComplete }) => {
   const { t } = useTranslation();
+  var navigate = useNavigate();
   const api = useAPI();
 
   const { value: email, onChange: onEmailChange } = useInput('');
@@ -58,6 +61,11 @@ const ForgottenPassword = ({ onSignInClick, onComplete }) => {
     }
   };
 
+  const handleLogoClick = () => {
+    navigate('/');
+    NiceModal.hide('authentication-modal');
+  }
+
   useEffect(() => {
     clearErrors();
   }, [email]);
@@ -83,7 +91,7 @@ const ForgottenPassword = ({ onSignInClick, onComplete }) => {
             alignItems: 'center',
           }}
         >
-          <img className={styles.logo} src={logo} alt="foodbook" />
+          <img onClick={handleLogoClick} className={styles.logo} src={logo} alt="foodbook" />
         </Box>
       </Box>
 
