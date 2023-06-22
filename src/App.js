@@ -459,9 +459,8 @@ const App = () => {
       </Offline>
 
       <Online>
-        {/* {initialized && <RouterProvider router={router} />}
-        <Toaster /> */}
-        <OfflinePage />
+        {initialized && <RouterProvider router={router} />}
+        <Toaster />
       </Online>
     </ThemeProvider>
   );
