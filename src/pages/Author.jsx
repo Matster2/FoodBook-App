@@ -78,6 +78,16 @@ export default () => {
     navigate(`/recipes/${id}`);
   };
 
+  const handleSeeAllClick = () => {
+    navigate(`/recipes`, {
+      state: {
+        filters: {
+          authorId: id,
+        },
+      },
+    });
+  }
+
   /* Effects */
   useEffect(() => {
     fetchAuthor();
@@ -86,13 +96,18 @@ export default () => {
 
   /* Rendering */
   const renderBiographyText = (biography) => {
-    const maxLength = 90;
+    const maxLength = 300;
+
+    if (biography.length <= maxLength) {
+      return <Typography style={{ whiteSpace: "pre-wrap" }} variant="body2">{biography}</Typography>;
+    }
 
     const text = showFullBiography ? biography : truncateText(biography, maxLength);
 
     return (
       <>
-        <Typography variant="body2">
+        <Typography
+          style={{ whiteSpace: "pre-wrap" }} variant="body2">
           {text}
           {showFullBiography ? ' ' : '...  '}
           {!showFullBiography && (
@@ -129,8 +144,6 @@ export default () => {
       <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
     </Box>
   );
-
-  console.log(author)
 
   return (
     <Container sx={{ pb: 7 }}>
@@ -177,9 +190,11 @@ export default () => {
       {
         recipes.length > 0 && (
           <Section
+            sx={{ mt: 2 }}
             title={t('pages.author.sections.authorRecipes')}
             showSeeAllLink={true}
             loading={loadingRecipes}
+            onSeeAllClick={handleSeeAllClick}
           >
             {recipes.map((recipe) => renderRecipeTile(recipe))}
           </Section>

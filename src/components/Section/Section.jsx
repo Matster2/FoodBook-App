@@ -12,19 +12,19 @@ import {
 import { Link } from 'react-router-dom';
 import styles from './Section.module.css';
 
-const Section = ({ title, loading, showSeeAllLink, children }) => {
+const Section = ({ title, loading, showSeeAllLink, onSeeAllClick, children, ...props }) => {
 
   const { t } = useTranslation();
 
   return (
-    <Box sx={{ mb: 2 }}>
+    <Box sx={{ mb: 2 }} {...props}>
       <Grid item xs={12} container justifyContent="space-between" alignItems="center">
         <Grid item xs>
           <Typography variant="h5">{title}</Typography>
         </Grid>
         {showSeeAllLink && (
           <Grid item xs="auto">
-            <Link to="/recipes">{t('components.section.seeAll')}</Link>
+            <Typography className={styles.seeAll} onClick={onSeeAllClick}>{t('components.section.seeAll')}</Typography>
           </Grid>
         )}
       </Grid>
@@ -53,7 +53,8 @@ Section.propTypes = {
 
 Section.defaultProps = {
   loading: false,
-  showSeeAllLink: true,
+  showSeeAllLink: false,
+  onSeeAllClick: () => { }
 };
 
 export default Section;

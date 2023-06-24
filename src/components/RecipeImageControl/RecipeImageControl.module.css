@@ -1,8 +1,9 @@
 .container {
-    height: 100px;
-    width: fit-content;
+    height: 100px !important;
+    min-width: fit-content;
     display: flex;
     justify-content: center;
+    position: relative;
 }
 
 .image {

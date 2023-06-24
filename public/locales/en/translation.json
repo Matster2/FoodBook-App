@@ -77,7 +77,8 @@
       "sections": {
         "ingredients": "Ingredients",
         "directions": "Directions",
-        "nutrition": "Nutrition"
+        "nutrition": "Nutrition",
+        "reference": "Reference"
       }
     },
     "recipes": {

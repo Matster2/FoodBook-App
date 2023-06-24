@@ -17,7 +17,7 @@ RecipeImageControl.propTypes = {
 };
 
 RecipeImageControl.defaultProps = {
-  onDeleteClick: () => {},
+  onDeleteClick: () => { },
 };
 
 export default RecipeImageControl;

@@ -522,15 +522,19 @@ export default () => {
         <FormControlLabel label="Add Multiple" control={<Checkbox defaultChecked />} />
       </Box> */}
 
-      <List style={{ overflow: 'auto' }}>
-        <Stack direction="row" gap={2} sx={{ mb: 2 }}>
-          {recipe.images.map((image) => (
-            <RecipeImageControl src={image} onDeleteClick={handleDeleteImageClick} />
-          ))}
-        </Stack>
-      </List>
+      <Box sx={{ mb: 1 }}>
+        <Typography variant="body2">{recipe.images.length} {recipe.images.length === 1 ? "Image" : "Images"}</Typography>
 
-      <input type="file" onChange={handleUploadFile} />
+        <List sx={{ overflow: "auto" }}>
+          <Stack direction="row" gap={2} alignItems="center" >
+            {recipe.images.map((image) => (
+              <RecipeImageControl src={image} onDeleteClick={handleDeleteImageClick} />
+            ))}
+          </Stack>
+        </List>
+
+        <input type="file" onChange={handleUploadFile} />
+      </Box>
 
       <Formik
         innerRef={formRef}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import uuid from 'react-uuid';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import {
   Container,
   Typography,
@@ -291,7 +291,7 @@ export default () => {
 
     return (
       <>
-        <Typography variant="body2">
+        <Typography style={{ whiteSpace: "pre-wrap" }} variant="body2">
           {text}
           {showFullDescription ? ' ' : '...  '}
           {!showFullDescription && (
@@ -595,6 +595,14 @@ export default () => {
               nutrition={recipe.nutrition}
             />
           </CollapsibleSection>
+
+          {recipe.referenceUrl && (
+            <Box>
+              <Typography variant='h6'>{t('pages.recipe.sections.reference')}</Typography>
+              <Link to={recipe.referenceUrl}><Typography variant="body2">{recipe.referenceUrl}</Typography></Link>
+            </Box>
+          )}
+
         </Container>
       </BottomSheet>
     </>

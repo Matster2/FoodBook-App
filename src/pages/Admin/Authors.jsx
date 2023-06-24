@@ -65,6 +65,10 @@ export default () => {
     navigate("/admin/authors/add")
   }
 
+  const handleAuthorlick = (id) => {
+    navigate(`/authors/${id}`);
+  }
+
   /* Effects */
   useEffect(() => {
     fetchAuthors();
@@ -135,8 +139,8 @@ export default () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {authorResponse.map((author) => (
-                    <TableRow key={author.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  {authorResponse.results.map((author) => (
+                    <TableRow key={author.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleAuthorlick(author.id)}>
                       <TableCell component="th" scope="row">
                         {`${author.name}`}
                       </TableCell>

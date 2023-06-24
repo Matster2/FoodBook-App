@@ -212,7 +212,7 @@ export default () => {
         {categories.length > 0 && (
           <Section
             title={t('pages.home.sections.categories')}
-            showSeeAllLink={categories.length < totalCategories}
+            //showSeeAllLink={categories.length < totalCategories}
             loading={loadingTags}
           >
             {categories.map((category) => (
@@ -224,7 +224,7 @@ export default () => {
         {recommendedRecipes.length > 0 && (
           <Section
             title={t('pages.home.sections.recommended')}
-            showSeeAllLink={recommendedRecipes.length < totalRecommendedRecipes}
+            //showSeeAllLink={recommendedRecipes.length < totalRecommendedRecipes}
             loading={loadingRecommendedRecipes}
           >
             {recommendedRecipes.map((recipe) => renderRecipeTile(recipe))}
@@ -235,6 +235,17 @@ export default () => {
           <Section
             title={t('pages.home.sections.recentlyAdded')}
             showSeeAllLink={recentlyAddedRecipes.length < totalRecentlyAddedRecipes}
+            onClick={() => {
+              navigate('/recipes', {
+                state: {
+                  filters: {
+                    publishedAfter: `${sevenDaysAgo.toISOString()}`,
+                    sortBy: 'datepublished',
+                    sortDesc: true
+                  }
+                }
+              })
+            }}
             loading={loadingRecentlyAddedRecipes}
           >
             {recentlyAddedRecipes.map((recipe) => renderRecipeTile(recipe))}
@@ -246,6 +257,7 @@ export default () => {
             title={t('pages.home.sections.favourites')}
             showSeeAllLink={favouriteRecipes.length < totalFavouriteRecipes}
             loading={loadingFavouriteRecipes}
+            onSeeAllClick={() => navigate('/favourites')}
           >
             {favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}
           </Section>

@@ -23,6 +23,7 @@ import useAPI from '../../hooks/useAPI';
 import useFilters from '../../hooks/useFilters';
 import useInput from '../../hooks/useInput';
 import Header from '../../components/Header';
+import { isNull, isNullOrUndefined, isUndefined } from '../../utils/utils';
 
 import categoryIcons from '../../config/categoryIcons';
 
@@ -151,7 +152,7 @@ export default () => {
                           }}
                         >
                           <Icon sx={{ mr: 1 }}>
-                            <img style={{ height: '100%' }} alt={tag.name} src={categoryIcons[tag.icon.toLowerCase()]} />
+                            <img style={{ height: '100%' }} alt={tag.name} src={!isUndefined(categoryIcons[tag.icon.toLowerCase()]) ? categoryIcons[tag.icon.toLowerCase()] : categoryIcons.default} />
                           </Icon>
                           {tag.name}
                         </Typography>

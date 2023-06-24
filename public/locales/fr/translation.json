@@ -60,7 +60,8 @@
       "sections": {
         "ingredients": "Ingrédients",
         "directions": "Directions",
-        "nutrition": "Nutrition"
+        "nutrition": "Nutrition",
+        "reference": "Reference"
       }
     },
     "recipes": {
