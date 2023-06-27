@@ -17,7 +17,7 @@ const Section = ({ title, loading, showSeeAllLink, onSeeAllClick, children, ...p
   const { t } = useTranslation();
 
   return (
-    <Box sx={{ mb: 2 }} {...props}>
+    <Box sx={{ mb: 2 }} {...props} >
       <Grid item xs={12} container justifyContent="space-between" alignItems="center">
         <Grid item xs>
           <Typography variant="h5">{title}</Typography>
