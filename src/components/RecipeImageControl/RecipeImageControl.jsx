@@ -1,11 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Paper } from '@mui/material';
+import useLongPress from '../../hooks/useLongPress';
 import styles from './RecipeImageControl.module.css';
 
 const RecipeImageControl = ({ src, onDeleteClick }) => {
+  const defaultOptions = {
+    shouldPreventDefault: true,
+    delay: 500,
+  };
+
+  const onLongPress = () => {
+    onDeleteClick();
+  };
+
+  const onClick = () => { }
+
+  const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
+
   return (
-    <Paper onClick={() => onDeleteClick(src)} sx={{ p: 0.5 }} className={styles.container}>
+    <Paper {...longPressEvent} sx={{ p: 0.5 }} className={styles.container}>
       <img alt="recipe" className={styles.image} src={src} />
     </Paper>
   );

@@ -79,7 +79,8 @@
         "directions": "Directions",
         "nutrition": "Nutrition",
         "reference": "Reference"
-      }
+      },
+      "seeFullRecipe": "See Full Recipe Here"
     },
     "recipes": {
       "title": "Recipes",
@@ -336,6 +337,7 @@
       "title": "Fitlers",
       "filters": {
         "type": "Types",
+        "difficulty": "Difficulty",
         "time": "Times",
         "tag": "Tags",
         "ingredient": "Ingredients",
@@ -473,6 +475,13 @@
           "name": "Drink",
           "displayName": "Drinks"
         }
+      },
+      "difficulty": {
+        "veryEasy": "Very Easy",
+        "easy": "Easy",
+        "average": "Average",
+        "hard": "Hard",
+        "veryHard": "Very Hard"
       },
       "fields": {
         "type": "Type",

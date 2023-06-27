@@ -196,7 +196,26 @@ export default () => {
             loading={loadingRecipes}
             onSeeAllClick={handleSeeAllClick}
           >
-            {recipes.map((recipe) => renderRecipeTile(recipe))}
+            <Grid container spacing={1}>
+              <Grid item xs={6}>
+                {recipes
+                  .filter((_, index) => !(index % 2))
+                  .map((recipe) => (
+                    <Box sx={{ mb: 1 }}>
+                      <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+                    </Box>
+                  ))}
+              </Grid>
+              <Grid item xs={6}>
+                {recipes
+                  .filter((_, index) => index % 2)
+                  .map((recipe) => (
+                    <Box sx={{ mb: 1 }}>
+                      <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+                    </Box>
+                  ))}
+              </Grid>
+            </Grid>
           </Section>
         )
       }

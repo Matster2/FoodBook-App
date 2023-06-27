@@ -30,7 +30,6 @@ const initialIngredientValue = {
 export default () => {
   const navigate = useNavigate();
   const { id } = useParams();
-
   const api = useAPI();
   const formRef = useRef();
 

@@ -381,6 +381,14 @@ const App = () => {
           ),
         },
         {
+          path: '/admin/recipes/:id',
+          element: (
+            <AdminRoute>
+              <AdminRecipe />
+            </AdminRoute>
+          ),
+        },
+        {
           path: '/admin/support-tickets',
           element: (
             <AdminRoute>

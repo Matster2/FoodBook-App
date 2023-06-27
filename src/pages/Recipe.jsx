@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
+import _ from "lodash";
 import uuid from 'react-uuid';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import {
@@ -273,10 +274,14 @@ export default () => {
     return this.toString().split(".")[1].length || 0;
   }
 
+  function fixRounding(value, precision) {
+    var power = Math.pow(10, precision || 0);
+    return Math.round(value * power) / power;
+  }
+
   const getIngredients = () => {
     return recipe.ingredients.map(ingredient => {
-      var amount = ((ingredient.amount / recipe.servings) * servings);
-
+      var amount = fixRounding(_.divide(ingredient.amount, recipe.servings) * servings, 6);
       return ({
         ...ingredient,
         amount,
@@ -417,14 +422,12 @@ export default () => {
         className={styles.header}
         container
         justifyContent="space-between"
-        alignItems="center"
         sx={{ mt: 4, mb: 2 }}
       >
         <Grid
           item
-          xs={1}
+          xs="auto"
           sx={{
-            display: 'flex',
             justifyContent: 'flex-end',
           }}
         >
@@ -432,16 +435,27 @@ export default () => {
             <ChevronLeftIcon className={styles.backIcon} />
           </IconButton>
         </Grid>
-        <Grid item xs="auto">
-          <Typography variant="h6" className={styles.title}>
+        <Grid
+          item
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          style={{ flex: 1 }}>
+          <Typography
+            variant="h6"
+            display="flex"
+            textAlign="center"
+            justifyContent="center"
+            alignItems="center"
+            style={{ wordWrap: "break-word" }}
+          >
             {recipe.name}
           </Typography>
         </Grid>
         <Grid
           item
-          xs={1}
+          xs="auto"
           sx={{
-            display: 'flex',
             justifyContent: 'flex-end',
           }}
         >
@@ -470,7 +484,7 @@ export default () => {
             <Grid item>
               <Stack direction="row" alignItems="center" gap={0.4}>
                 <AccessTimeIcon className={styles.icon} />
-                <Typography sx={{ fontSize: 15 }}>{recipe.totalTime} {t('common.time.mins')}</Typography>
+                <Typography sx={{ fontSize: 15 }}>{renderTime(recipe.totalTime)}</Typography>
               </Stack>
             </Grid>
             <Grid
@@ -550,7 +564,7 @@ export default () => {
             )}
           </Stack>
 
-          <Box sx={{ mb: 1 }} display="flex" alignItems="center" justifyContent="center">
+          <Box sx={{ mt: 2, mb: 1 }} display="flex" alignItems="center" justifyContent="center">
             <ServingsIncrementor
               recipeServings={recipe.servings}
               defaultValue={servings}
@@ -588,6 +602,12 @@ export default () => {
             ))}
           </CollapsibleSection>
 
+          {recipe.referenceUrl && (
+            <Box display="flex" justifyContent="center" sx={{ mb: 3 }}>
+              <Link to={recipe.referenceUrl}><Typography variant="body2">{t('pages.recipe.seeFullRecipe')}</Typography></Link>
+            </Box>
+          )}
+
           <CollapsibleSection
             title={t('pages.recipe.sections.nutrition')}
           >
@@ -595,14 +615,6 @@ export default () => {
               nutrition={recipe.nutrition}
             />
           </CollapsibleSection>
-
-          {recipe.referenceUrl && (
-            <Box>
-              <Typography variant='h6'>{t('pages.recipe.sections.reference')}</Typography>
-              <Link to={recipe.referenceUrl}><Typography variant="body2">{recipe.referenceUrl}</Typography></Link>
-            </Box>
-          )}
-
         </Container>
       </BottomSheet>
     </>

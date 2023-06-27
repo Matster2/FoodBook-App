@@ -3,6 +3,7 @@ import uuid from 'react-uuid';
 import toast from 'react-hot-toast';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
+import { useTranslation } from "react-i18next";
 import { Formik, Form, Field } from 'formik';
 import {
   CssBaseline,
@@ -24,19 +25,44 @@ import {
   Checkbox
 } from '@mui/material';
 import { Clear as ClearIcon, HorizontalRule } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useAPI from '../../hooks/useAPI';
 import Header from '../../components/Header';
 import FilterOption from '../../components/FilterOption';
 import RecipeImageControl from '../../components/RecipeImageControl';
+import RecipeIngredient from '../../Admin/components/RecipeIngredient';
+import RecipeStep from '../../Admin/components/RecipeStep';
 import { UnitOfMeasurementContext } from '../../contexts/UnitOfMeasurementContext';
 import { TagContext } from '../../contexts/TagContext';
+import FormModes from '../../utils/formModes';
 import { isUndefined } from '../../utils/utils';
+
+
+const NutritionField = ({ id, label, value, errors, touched }) => {
+  return (
+    <Field
+      as={TextField}
+      required
+      fullWidth
+      type="number"
+      id={id}
+      name={id}
+      label={label}
+      value={value}
+      autoFocus
+      error={errors.nutrition?.[id] && touched.nutrition?.[id]}
+      helperText={touched.nutrition?.[id] && errors.nutrition?.[id]}
+      InputLabelProps={{ shrink: true }}
+    />
+  )
+}
+
 
 const recipeSchema = yup.object({
   name: yup.string().required(),
   description: yup.string().required(),
   type: yup.string().required(),
+  difficulty: yup.string().required(),
   prepTime: yup.number().integer().required(),
   cookTime: yup.number().integer().required(),
   totalTime: yup.number().integer().required(),
@@ -44,13 +70,13 @@ const recipeSchema = yup.object({
   containsAlcohol: yup.bool().required(),
   nutrition: yup.object({
     calories: yup.number().integer().required(),
-    sugar: yup.number().integer(),
-    fat: yup.number().integer(),
-    saturatedFat: yup.number().integer(),
-    sodium: yup.number().integer(),
-    protein: yup.number().integer(),
-    carbohydrates: yup.number().integer(),
-    fiber: yup.number().integer(),
+    sugar: yup.number(),
+    fat: yup.number(),
+    saturatedFat: yup.number(),
+    sodium: yup.number(),
+    protein: yup.number(),
+    carbohydrates: yup.number(),
+    fiber: yup.number(),
   }),
   steps: yup.array(yup.object({
     name: yup.string(),
@@ -64,6 +90,7 @@ const initialRecipeValue = {
   name: '',
   description: '',
   type: undefined,
+  difficulty: undefined,
   prepTime: undefined,
   cookTime: undefined,
   totalTime: undefined,
@@ -92,198 +119,17 @@ const initialRecipeValue = {
   images: [],
 };
 
-
-const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
-  const { unitOfMeasurements } = useContext(UnitOfMeasurementContext);
-
-  const handleChange = (e) => {
-    onChange({
-      ...recipeIngredient,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  return (
-    <Box sx={{ border: 1, borderColor: 'grey.500', p: 2 }}>
-      <Grid container spacing={1} justifyContent="space-between">
-        <Grid item xs={9} sx={{ mb: 1 }}>
-          <TextField
-            fullWidth
-            required
-            id="name"
-            label="Name"
-            name="name"
-            autoFocus
-            value={recipeIngredient.ingredient.name}
-            disabled
-          />
-        </Grid>
-        <Grid item xs="auto">
-          <IconButton onClick={() => onDelete(recipeIngredient)}>
-            <ClearIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={1}>
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
-            required
-            id="amount"
-            label="Amount"
-            name="amount"
-            autoFocus
-            value={recipeIngredient.amount}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <FormControl fullWidth>
-            <InputLabel id="type-label">Type</InputLabel>
-            <Select
-              id="id"
-              name="unitOfMeasurementId"
-              labelId="type-label"
-              label="Type"
-              onChange={handleChange}
-              value={`${recipeIngredient.unitOfMeasurementId}`}
-            >
-              {unitOfMeasurements.map((unitOfMeasurement) => (
-                <MenuItem key={unitOfMeasurement.id} value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
-    </Box>
-  );
-};
-
-RecipeIngredient.propTypes = {
-  recipeIngredient: PropTypes.shape({
-    ingredient: PropTypes.shape({
-      name: PropTypes.string,
-    }),
-    unitOfMeasurementId: PropTypes.string,
-    amount: PropTypes.number,
-  }).isRequired,
-  onChange: PropTypes.func,
-  onDelete: PropTypes.func,
-};
-
-RecipeIngredient.defaultProps = {
-  onChange: () => { },
-  onDelete: () => { },
-};
-
-
-const RecipeStep = ({ step, onChange, onDelete }) => {
-  const handleChange = (e) => {
-    onChange({
-      ...step,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleAddInstructionClick = () => {
-    const newInstructions = [...step.instructions];
-    newInstructions.push({
-      id: uuid(),
-      instruction: ""
-    })
-
-    onChange({
-      ...step,
-      instructions: newInstructions
-    });
-  };
-
-  const handleInstructionChange = (id, value) => {
-    const newInstructions = [...step.instructions];
-
-    const index = newInstructions.findIndex((x) => x.id === id);
-
-    newInstructions[index].instruction = value;
-
-    onChange({
-      ...step,
-      instructions: newInstructions
-    });
-  }
-
-  return (
-    <Box sx={{ border: 1, borderColor: 'grey.500', p: 2 }}>
-      <Grid container spacing={1} justifyContent="space-between">
-        <Grid item xs={9} sx={{ mb: 1 }}>
-          <TextField
-            fullWidth
-            id="name"
-            label="Name"
-            name="name"
-            autoFocus
-            value={step.name}
-            onChange={handleChange}
-          />
-        </Grid>
-        <Grid item xs="auto">
-          <IconButton onClick={() => onDelete(step)}>
-            <ClearIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-
-      {step.instructions.map((instruction) => (
-        <Stack direction="row" gap={1}>
-          <Field
-            as={TextField}
-            margin="normal"
-            fullWidth
-            multiline
-            rows={2}
-            required
-            value={instruction.instruction}
-            onChange={(e) => handleInstructionChange(instruction.id, e.target.value)}
-            label="instruction"
-            id="instruction"
-          />
-
-          <IconButton>
-            <ClearIcon />
-          </IconButton>
-        </Stack>
-      ))}
-
-      <Button type="button" onClick={handleAddInstructionClick} variant="contained">
-        Add Instruction
-      </Button>
-    </Box>
-  );
-};
-
-RecipeStep.propTypes = {
-  step: PropTypes.shape({
-    name: PropTypes.string,
-    instructions: PropTypes.arrayOf(PropTypes.shape({
-      instruction: PropTypes.string
-    })),
-  }).isRequired,
-  onChange: PropTypes.func,
-  onDelete: PropTypes.func,
-};
-
-RecipeStep.defaultProps = {
-  onChange: () => { },
-  onDelete: () => { },
-};
-
 export default () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const api = useAPI();
   const formRef = useRef();
 
-  const navigate = useNavigate();
-  const api = useAPI();
+  const mode = !id ? FormModes.Create : FormModes.Update;
 
-  const types = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Drink'];
+  const types = ['Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snack', 'Drink'];
+  const difficulties = ['veryEasy', 'easy', 'average', 'hard', 'veryHard'];
 
   const { setUnitOfMeasurements } = useContext(UnitOfMeasurementContext);
   const { tags, setTags } = useContext(TagContext);
@@ -296,35 +142,65 @@ export default () => {
 
   const [filesToUpload, setFilesToUpload] = useState([]);
 
+  const [loadingRecipe, setLoadingRecipe] = useState(false);
   const [recipe, setRecipe] = useState(initialRecipeValue);
 
+  const fetchUnitOfMeasurements = async () => {
+    try {
+      const { data } = await api.getUnitOfMeasurements({ sortBy: 'name' });
+      setUnitOfMeasurements(data.results);
+    } catch {
+      console.log('error fetching unit of measurements');
+    }
+  };
 
+  const fetchTags = async () => {
+    try {
+      const { data } = await api.getTags();
+      setTags(data.results);
+    } catch {
+      console.log('error fetching tags');
+    }
+  };
+
+  const fetchRecipe = async () => {
+    setLoadingRecipe(true);
+    try {
+      const { data } = await api.getRecipe(id);
+      setRecipe(data);
+    } catch (e) {
+      console.log('error fetching recipe');
+    }
+    setLoadingRecipe(false);
+  };
+
+  /* Handlers */
   const handleSetAuthor = (author) => {
-    setRecipe({
-      ...recipe,
+    setRecipe((state) => ({
+      ...state,
       author: author
-    })
+    }));
   }
 
   const handleRemoveAuthorClick = () => {
-    setRecipe({
-      ...recipe,
+    setRecipe((state) => ({
+      ...state,
       author: undefined
-    })
+    }));
   }
 
   const handleAddIngredient = (ingredient) => {
     const recipeIngredient = {
-      ingredient,
-      unitOfMeasurementId: ingredient.defaultUnitOfMeasurement.id,
+      ...ingredient,
       amount: undefined,
       optional: false,
+      unitOfMeasurement: {
+        id: ingredient.defaultUnitOfMeasurement.id,
+      },
     };
 
     const newRecipeIngredients = recipe.ingredients.slice();
     newRecipeIngredients.push(recipeIngredient);
-
-    console.log(newRecipeIngredients)
 
     setRecipe((state) => ({
       ...state,
@@ -365,8 +241,8 @@ export default () => {
       languageCode: "en",
       tags: recipe.tags,
       ingredients: recipe.ingredients.map((recipeIngredient) => ({
-        ingredientId: recipeIngredient.ingredient.id,
-        unitOfMeasurementId: recipeIngredient.unitOfMeasurementId,
+        ingredientId: recipeIngredient.id,
+        unitOfMeasurementId: recipeIngredient.unitOfMeasurement.id,
         amount: recipeIngredient.amount,
         optional: recipeIngredient.optional,
       })),
@@ -395,11 +271,10 @@ export default () => {
     }
   }
 
-
   const handleRecipeIngredientChange = (newRecipeIngredient) => {
     const newRecipeIngredients = recipe.ingredients;
 
-    const index = newRecipeIngredients.findIndex((x) => x.ingredient.id === newRecipeIngredient.ingredient.id);
+    const index = newRecipeIngredients.findIndex((x) => x.id === newRecipeIngredient.id);
 
     newRecipeIngredients[index] = newRecipeIngredient;
 
@@ -411,7 +286,7 @@ export default () => {
 
   const handleDeleteRecipeIngredient = (newRecipeIngredient) => {
     const newRecipeIngredients = recipe.ingredients.filter(
-      (x) => x.ingredient.id !== newRecipeIngredient.ingredient.id
+      (x) => x.id !== newRecipeIngredient.id
     );
 
     setRecipe((state) => ({
@@ -468,27 +343,14 @@ export default () => {
     }));
   };
 
-  const fetchUnitOfMeasurements = async () => {
-    try {
-      const { data } = await api.getUnitOfMeasurements({ sortBy: 'name' });
-      setUnitOfMeasurements(data.results);
-    } catch {
-      console.log('error fetching unit of measurements');
-    }
-  };
-
-  const fetchTags = async () => {
-    try {
-      const { data } = await api.getTags();
-      setTags(data.results);
-    } catch {
-      console.log('error fetching tags');
-    }
-  };
-
+  /* Effects */
   useEffect(() => {
     fetchUnitOfMeasurements();
     fetchTags();
+
+    if (mode !== FormModes.Create) {
+      fetchRecipe();
+    }
   }, []);
 
   useEffect(() => {
@@ -579,9 +441,36 @@ export default () => {
 
                 <FormControl fullWidth sx={{ mt: 2, mb: 1 }}>
                   <InputLabel id="type-label">Type</InputLabel>
-                  <Field as={Select} id="id" name="type" labelId="type-label" label="Type" defaultValue=''>
+                  <Field
+                    as={Select}
+                    id="id"
+                    name="type"
+                    labelId="type-label"
+                    label="Type"
+                    value={`${values.type}`}
+                    error={errors.type && touched.type}
+                    helperText={touched.type && errors.type}
+                  >
                     {types.map((t) => (
                       <MenuItem key={t} value={t}>{t}</MenuItem>
+                    ))}
+                  </Field>
+                </FormControl>
+
+                <FormControl fullWidth sx={{ mt: 2, mb: 1 }}>
+                  <InputLabel id="difficulty-label">Difficulty</InputLabel>
+                  <Field
+                    as={Select}
+                    id="id"
+                    name="difficulty"
+                    labelId="difficulty-label"
+                    label="Difficulty"
+                    value={`${values.difficulty}`}
+                    error={errors.difficulty && touched.difficulty}
+                    helperText={touched.difficulty && errors.difficulty}
+                  >
+                    {difficulties.map((difficulty) => (
+                      <MenuItem key={difficulty} value={difficulty}>{t(`types.recipe.difficulty.${difficulty}`)}</MenuItem>
                     ))}
                   </Field>
                 </FormControl>
@@ -590,15 +479,16 @@ export default () => {
                   <Grid item xs={6} md={3} lg={2}>
                     <Field
                       as={TextField}
+                      required
                       fullWidth
+                      type="number"
                       id="prepTime"
                       name="prepTime"
-                      required
                       label="Prep Time"
-                      type="number"
                       autoFocus
                       error={errors.prepTime && touched.prepTime}
                       helperText={touched.prepTime && errors.prepTime}
+                      InputLabelProps={{ shrink: true }}
                     />
                   </Grid>
 
@@ -606,14 +496,15 @@ export default () => {
                     <Field
                       as={TextField}
                       fullWidth
+                      type="number"
                       id="cookTime"
                       name="cookTime"
                       required
                       label="Cooking Time"
-                      type="number"
                       autoFocus
-                    // error={!isUndefined(errors.cookTime)}
-                    // helperText={errors.cookTime?.message}
+                      error={!isUndefined(errors.cookTime)}
+                      helperText={errors.cookTime?.message}
+                      InputLabelProps={{ shrink: true }}
                     />
                   </Grid>
 
@@ -627,8 +518,9 @@ export default () => {
                       label="Total Time"
                       type="number"
                       autoFocus
-                    // error={!isUndefined(errors.totalTime)}
-                    // helperText={errors.totalTime?.message}
+                      error={!isUndefined(errors.totalTime)}
+                      helperText={errors.totalTime?.message}
+                      InputLabelProps={{ shrink: true }}
                     />
                   </Grid>
                 </Grid>
@@ -644,8 +536,9 @@ export default () => {
                       label="Servings"
                       type="number"
                       autoFocus
-                    // error={!isUndefined(errors.servings)}
-                    // helperText={errors.servings?.message}
+                      error={!isUndefined(errors.servings)}
+                      helperText={errors.servings?.message}
+                      InputLabelProps={{ shrink: true }}
                     />
                   </Grid>
                 </Grid>
@@ -698,12 +591,24 @@ export default () => {
                 <Box sx={{ mt: 3, mb: 3 }}>
                   <Typography variant="h6">Ingredients</Typography>
 
+                  <Box>
+                    {recipe.ingredients.map((recipeIngredient) => (
+                      <RecipeIngredient
+                        key={recipeIngredient.id}
+                        recipeIngredient={recipeIngredient}
+                        onChange={handleRecipeIngredientChange}
+                        onDelete={handleDeleteRecipeIngredient}
+                      />
+                    ))}
+                  </Box>
+
                   <Autocomplete
+                    sx={{ mt: 3 }}
                     options={searchIngredients
                       .filter(
                         (ingredient) =>
                           !recipe.ingredients.some(
-                            (recipeIngredient) => recipeIngredient.ingredient.id === ingredient.id
+                            (recipeIngredient) => recipeIngredient.id === ingredient.id
                           )
                       )
                       .map((ingredient) => ({ label: ingredient.name, ingredient }))}
@@ -721,16 +626,6 @@ export default () => {
                       }
                     }}
                   />
-
-                  <Box sx={{ mt: 3 }}>
-                    {recipe.ingredients.map((recipeIngredient) => (
-                      <RecipeIngredient
-                        recipeIngredient={recipeIngredient}
-                        onChange={handleRecipeIngredientChange}
-                        onDelete={handleDeleteRecipeIngredient}
-                      />
-                    ))}
-                  </Box>
                 </Box>
 
                 <Box sx={{ mt: 3, mb: 3 }}>
@@ -739,6 +634,7 @@ export default () => {
 
                   {recipe.steps.map((step) => (
                     <RecipeStep
+                      key={step.id}
                       step={step}
                       onChange={handleStepChange}
                       onDelete={handleDeleteStep}
@@ -763,76 +659,115 @@ export default () => {
                         value={recipe.nutrition.calories}
                         required
                         label="Calories"
+                        error={errors.nutrition?.calories && touched.nutrition?.calories}
+                        helperText={touched.nutrition?.calories && errors.nutrition?.calories}
+                        InputLabelProps={{ shrink: true }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
+                      {/* <NutritionField
+                        id="sugar"
+                        label="Sugar"
+                        value={recipe.nutrition.sugar}
+                        errors={errors}
+                        touched={touched}
+                      /> */}
+
                       <Field
                         as={TextField}
                         fullWidth
-                        id="sugar"
+                        type="number"
+                        id="nutrition.sugar"
                         name="nutrition.sugar"
                         value={recipe.nutrition.sugar}
                         label="Sugar"
+                        error={errors.nutrition?.sugar && touched.nutrition?.sugar}
+                        helperText={touched.nutrition?.sugar && errors.nutrition?.sugar}
+                        InputLabelProps={{ shrink: true }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
                         fullWidth
+                        type="number"
                         id="fat"
                         name="nutrition.fat"
                         value={recipe.nutrition.fat}
                         label="Fat"
+                        error={errors.nutrition?.fat && touched.nutrition?.fat}
+                        helperText={touched.nutrition?.fat && errors.nutrition?.fat}
+                        InputLabelProps={{ shrink: true }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
                         fullWidth
+                        type="number"
                         id="saturatedFat"
                         name="nutrition.saturatedFat"
                         value={recipe.nutrition.saturatedFat}
                         label="Saturated Fat"
+                        error={errors.nutrition?.saturatedFat && touched.nutrition?.saturatedFat}
+                        helperText={touched.nutrition?.saturatedFat && errors.nutrition?.saturatedFat}
+                        InputLabelProps={{ shrink: true }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
                         fullWidth
+                        type="number"
                         id="sodium"
                         name="nutrition.sodium"
                         value={recipe.nutrition.sodium}
                         label="Sodium"
+                        error={errors.nutrition?.sodium && touched.nutrition?.sodium}
+                        helperText={touched.nutrition?.sodium && errors.nutrition?.sodium}
+                        InputLabelProps={{ shrink: true }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
                         fullWidth
+                        type="number"
                         id="protein"
                         name="nutrition.protein"
                         value={recipe.nutrition.protein}
                         label="Protein"
+                        error={errors.nutrition?.protein && touched.nutrition?.protein}
+                        helperText={touched.nutrition?.protein && errors.nutrition?.protein}
+                        InputLabelProps={{ shrink: true }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3}>
                       <Field
                         as={TextField}
                         fullWidth
+                        InputLabelProps={{ shrink: true }}
+                        type="number"
                         id="carbohydrates"
                         name="nutrition.carbohydrates"
                         value={recipe.nutrition.carbohydrates}
                         label="Carbohydrates"
+                        error={errors.nutrition?.carbohydrates && touched.nutrition?.carbohydrates}
+                        helperText={touched.nutrition?.carbohydrates && errors.nutrition?.carbohydrates}
+                        InputLabelProps={{ shrink: true }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
                       <Field
                         as={TextField}
                         fullWidth
+                        type="number"
                         id="fiber"
                         name="nutrition.fiber"
-                        value={recipe.nutrition.fiber}
                         label="Fiber"
+                        error={errors.nutrition?.fiber && touched.nutrition?.fiber}
+                        helperText={touched.nutrition?.fiber && errors.nutrition?.fiber}
+                        InputLabelProps={{ shrink: true }}
                       />
                     </Grid>
                   </Grid>
@@ -876,7 +811,7 @@ export default () => {
                   }}
                 >
                   <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                    Create
+                    {mode === FormModes.Create ? "Create" : "Update"}
                   </Button>
                 </Box>
               </Box>

@@ -68,7 +68,7 @@ export default () => {
   }
 
   const handleRecipeClick = (id) => {
-    navigate(`/recipes/${id}`)
+    navigate(`/admin/recipes/${id}`)
   };
 
   /* Effects */

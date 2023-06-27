@@ -32,6 +32,7 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
     rating: undefined,
     time: undefined,
     types: [],
+    difficulties: [],
     tagIds: [],
     ...originalFilters,
   });
@@ -40,6 +41,8 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
 
   const [ingredientSearch, setIngredientSearch] = useState('');
   const [selectedTime, setSelectedTime] = useState();
+
+  console.log(filters)
 
   const typeOptions = [
     {
@@ -66,7 +69,29 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
       value: 'drink',
       label: t('types.recipe.types.drink.displayName')
     }
-  ]
+  ];
+  const difficultyOptions = [
+    {
+      value: 'veryEasy',
+      label: t('types.recipe.difficulty.veryEasy')
+    },
+    {
+      value: 'easy',
+      label: t('types.recipe.difficulty.easy')
+    },
+    {
+      value: 'average',
+      label: t('types.recipe.difficulty.average')
+    },
+    {
+      value: 'hard',
+      label: t('types.recipe.difficulty.hard')
+    },
+    {
+      value: 'veryHard',
+      label: t('types.recipe.difficulty.veryHard')
+    }
+  ];
   const timeOptions = [
     {
       label: t('types.recipe.times.fast'),
@@ -101,6 +126,16 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
     }
 
     setFilter('types', newTypes);
+  };
+
+  const handleDifficultyClick = (difficulty) => {
+    const newDifficulties = filters.difficulties.filter((x) => x !== difficulty);
+
+    if (!filters.difficulties.some((x) => x === difficulty)) {
+      newDifficulties.push(difficulty);
+    }
+
+    setFilter('difficulties', newDifficulties);
   };
 
   const handleTimeClick = (time) => {
@@ -170,7 +205,22 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
               label={type.label}
               value={type.value}
               onClick={handleTypeClick}
-              active={filters.types.some((x) => x === type)}
+              active={filters.types.some((x) => x === type.value)}
+            />
+          ))}
+        </Stack>
+      </Box>
+
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h6">{t('components.recipeFilters.filters.difficulty')}</Typography>
+
+        <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
+          {difficultyOptions.map((difficulty) => (
+            <FilterOption
+              label={difficulty.label}
+              value={difficulty.value}
+              onClick={handleDifficultyClick}
+              active={filters.difficulties.some((x) => x === difficulty.value)}
             />
           ))}
         </Stack>
