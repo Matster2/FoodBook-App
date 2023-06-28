@@ -1,5 +1,23 @@
 {
   "pages": {
+    "notFound": {
+      "404": "404",
+      "title": "Pas trouvé",
+      "links": {
+        "home": "Maison"
+      }
+    },
+    "offline": {
+      "title": "Tu es hors ligne",
+      "message": "Il semble qu'il y ait un problème avec votre connexion. ",
+      "components": {
+        "buttons": {
+          "refresh": {
+            "label": "Rafraîchir"
+          }
+        }
+      }
+    },
     "register": {
       "title": "Enregistrer",
       "alreadyHaveAccount": "Vous avez déjà un compte?",
@@ -27,7 +45,6 @@
         "greeting": "Accueillir",
         "message": "Qu'aimeriez-vous cuisiner aujourd'hui ?"
       },
-      "seeAll": "Voir tout",
       "sections": {
         "categories": "Catégories",
         "recommended": "Recommandations",
@@ -61,8 +78,9 @@
         "ingredients": "Ingrédients",
         "directions": "Directions",
         "nutrition": "Nutrition",
-        "reference": "Reference"
-      }
+        "reference": "Référence"
+      },
+      "seeFullRecipe": "Voir la recette complète ici"
     },
     "recipes": {
       "title": "Recettes",
@@ -104,17 +122,40 @@
         }
       }
     },
+    "author": {
+      "title": "",
+      "biography": {
+        "showMore": "Montre plus",
+        "showLess": "Montrer moins"
+      },
+      "sections": {
+        "authorRecipes": "Mes recettes"
+      }
+    },
     "settings": {
       "title": "Paramètres",
       "options": {
         "signIn": "S'identifier",
         "admin": "Administrateur",
+        "account": "Compte",
         "contactUs": "Contactez-nous",
         "privacyPolicy": "politique de confidentialité",
         "termsOfService": "Conditions d'utilisation",
-        "logOut": "Se déconnecter",
+        "logOut": "Se déconnecter"
+      }
+    },
+    "accountSettings": {
+      "title": "Paramètres du compte",
+      "options": {
+        "changePassword": "Changer le mot de passe",
         "deleteAccount": "Supprimer le compte"
       }
+    },
+    "changePassword": {
+      "title": "Changer le mot de passe"
+    },
+    "resetPassword": {
+      "title": "Réinitialisez votre mot de passe"
     }
   },
   "forms": {
@@ -185,6 +226,59 @@
             "label": "réinitialiser le mot de passe"
           }
         }
+      },
+      "changePassword": {
+        "title": "Changer le mot de passe",
+        "inputs": {
+          "currentPassword": {
+            "label": "Mot de passe actuel",
+            "validationMessages": {
+              "empty": "Le mot de passe actuel est requis"
+            }
+          },
+          "newPassword": {
+            "label": "nouveau mot de passe",
+            "validationMessages": {
+              "empty": "Un nouveau mot de passe est requis",
+              "sameAsCurrent": "Le nouveau mot de passe doit être différent du mot de passe actuel."
+            }
+          },
+          "confirmPassword": {
+            "label": "Confirmez le mot de passe",
+            "validationMessages": {
+              "empty": "Veuillez confirmer votre mot de passe",
+              "notSame": "Les mots de passe ne correspondent pas"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Changer le mot de passe"
+          }
+        }
+      },
+      "resetPassword": {
+        "title": "Créer un nouveau mot de passe",
+        "inputs": {
+          "newPassword": {
+            "label": "nouveau mot de passe",
+            "validationMessages": {
+              "empty": "Un nouveau mot de passe est requis"
+            }
+          },
+          "confirmPassword": {
+            "label": "Confirmez le mot de passe",
+            "validationMessages": {
+              "empty": "Veuillez confirmer votre mot de passe",
+              "notSame": "Les mots de passe ne correspondent pas"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "réinitialiser le mot de passe"
+          }
+        }
       }
     },
     "accounts": {
@@ -228,6 +322,9 @@
     "bottomNavBar": {
       "discover": "Découvrir"
     },
+    "section": {
+      "seeAll": "Voir tout"
+    },
     "plannerIngredientListDialog": {
       "ingredients": "Ingrédients"
     },
@@ -240,6 +337,7 @@
       "title": "Ajusteurs",
       "filters": {
         "type": "Les types",
+        "difficulty": "Difficulté",
         "time": "Fois",
         "tag": "Mots clés",
         "ingredient": "Ingrédients",
@@ -254,6 +352,11 @@
         "submit": {
           "label": "Appliquer des filtres"
         }
+      }
+    },
+    "recipeAttributeWidget": {
+      "alcohol": {
+        "text": "Contient de l'alcool"
       }
     }
   },
@@ -270,8 +373,17 @@
         "error": "Impossible de se connecter. Veuillez réessayer plus tard."
       },
       "forgottenPassword": {
-        "success": "Connexion réussie.",
+        "success": "Un lien de réinitialisation a été envoyé à votre adresse e-mail.",
         "error": "Impossible d'envoyer l'e-mail de récupération. "
+      },
+      "changePassword": {
+        "success": "Votre mot de passe a été changé.",
+        "invalid": "Veuillez vérifier vos informations d'identification.",
+        "error": "Impossible de changer le mot de passe. "
+      },
+      "resetPassword": {
+        "success": "Votre mot de passe a été changé.",
+        "error": "Impossible de changer le mot de passe. "
       },
       "logout": {
         "success": "vous avez été déconnecté",
@@ -333,6 +445,11 @@
       }
     },
     "recipe": {
+      "times": {
+        "slow": "Lent",
+        "medium": "Moyen",
+        "fast": "Rapide"
+      },
       "types": {
         "breakfast": {
           "name": "Petit-déjeuner",
@@ -358,6 +475,13 @@
           "name": "Boire",
           "displayName": "Boissons"
         }
+      },
+      "difficulty": {
+        "veryEasy": "Très facile",
+        "easy": "Facile",
+        "average": "Moyenne",
+        "hard": "Dur",
+        "veryHard": "Très dur"
       },
       "fields": {
         "type": "Taper",

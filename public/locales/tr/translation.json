@@ -1,5 +1,23 @@
 {
   "pages": {
+    "notFound": {
+      "404": "404",
+      "title": "Bulunamadı",
+      "links": {
+        "home": "Ev"
+      }
+    },
+    "offline": {
+      "title": "Çevrimdışısınız",
+      "message": "Bağlantınızla ilgili bir sorun var gibi görünüyor. ",
+      "components": {
+        "buttons": {
+          "refresh": {
+            "label": "Yenile"
+          }
+        }
+      }
+    },
     "register": {
       "title": "Kayıt olmak",
       "alreadyHaveAccount": "Zaten hesabınız var mı?",
@@ -27,7 +45,6 @@
         "greeting": "Hoş geldin",
         "message": "Bugün ne pişirmek istersin?"
       },
-      "seeAll": "Hepsini gör",
       "sections": {
         "categories": "Kategoriler",
         "recommended": "öneriler",
@@ -60,8 +77,10 @@
       "sections": {
         "ingredients": "İçindekiler",
         "directions": "Talimatlar",
-        "nutrition": "Beslenme"
-      }
+        "nutrition": "Beslenme",
+        "reference": "Referans"
+      },
+      "seeFullRecipe": "Tam Tarife Buradan Bakın"
     },
     "recipes": {
       "title": "tarifler",
@@ -103,17 +122,40 @@
         }
       }
     },
+    "author": {
+      "title": "",
+      "biography": {
+        "showMore": "Daha fazla göster",
+        "showLess": "Daha az göster"
+      },
+      "sections": {
+        "authorRecipes": "Tariflerim"
+      }
+    },
     "settings": {
       "title": "Ayarlar",
       "options": {
         "signIn": "Kayıt olmak",
         "admin": "yönetici",
+        "account": "Hesap",
         "contactUs": "Bize Ulaşın",
         "privacyPolicy": "Gizlilik Politikası",
         "termsOfService": "Kullanım Şartları",
-        "logOut": "Çıkış Yap",
+        "logOut": "Çıkış Yap"
+      }
+    },
+    "accountSettings": {
+      "title": "Hesap ayarları",
+      "options": {
+        "changePassword": "Şifre değiştir",
         "deleteAccount": "Hesabı sil"
       }
+    },
+    "changePassword": {
+      "title": "Şifre değiştir"
+    },
+    "resetPassword": {
+      "title": "Parolanızı Sıfırlayın"
     }
   },
   "forms": {
@@ -184,6 +226,59 @@
             "label": "Şifreyi yenile"
           }
         }
+      },
+      "changePassword": {
+        "title": "Şifre değiştir",
+        "inputs": {
+          "currentPassword": {
+            "label": "Mevcut Şifre",
+            "validationMessages": {
+              "empty": "Mevcut Şifre gerekli"
+            }
+          },
+          "newPassword": {
+            "label": "Yeni Şifre",
+            "validationMessages": {
+              "empty": "Yeni Şifre gerekli",
+              "sameAsCurrent": "Yeni Parola mevcut paroladan farklı olmalıdır."
+            }
+          },
+          "confirmPassword": {
+            "label": "Şifreyi Onayla",
+            "validationMessages": {
+              "empty": "Lütfen şifrenizi doğrulayınız",
+              "notSame": "Parolalar uyuşmuyor"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Şifre değiştir"
+          }
+        }
+      },
+      "resetPassword": {
+        "title": "Yeni Şifre Oluştur",
+        "inputs": {
+          "newPassword": {
+            "label": "Yeni Şifre",
+            "validationMessages": {
+              "empty": "Yeni Şifre gerekli"
+            }
+          },
+          "confirmPassword": {
+            "label": "Şifreyi Onayla",
+            "validationMessages": {
+              "empty": "Lütfen şifrenizi doğrulayınız",
+              "notSame": "Parolalar uyuşmuyor"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Şifreyi yenile"
+          }
+        }
       }
     },
     "accounts": {
@@ -227,6 +322,9 @@
     "bottomNavBar": {
       "discover": "Keşfetmek"
     },
+    "section": {
+      "seeAll": "Hepsini gör"
+    },
     "plannerIngredientListDialog": {
       "ingredients": "İçindekiler"
     },
@@ -239,6 +337,7 @@
       "title": "filtreler",
       "filters": {
         "type": "Türler",
+        "difficulty": "Zorluk",
         "time": "Zamanlar",
         "tag": "Etiketler",
         "ingredient": "İçindekiler",
@@ -253,6 +352,11 @@
         "submit": {
           "label": "Filtreleri Uygula"
         }
+      }
+    },
+    "recipeAttributeWidget": {
+      "alcohol": {
+        "text": "Alkol İçeriyor"
       }
     }
   },
@@ -269,8 +373,17 @@
         "error": "Oturum açılamıyor. Lütfen daha sonra tekrar deneyin."
       },
       "forgottenPassword": {
-        "success": "Başarıyla Oturum Açıldı.",
+        "success": "E-posta adresinize bir sıfırlama bağlantısı gönderildi.",
         "error": "Kurtarma e-postası gönderilemiyor. "
+      },
+      "changePassword": {
+        "success": "Şifreniz değiştirildi.",
+        "invalid": "Lütfen kimlik bilgilerinizi kontrol edin.",
+        "error": "Şifre değiştirilemiyor. "
+      },
+      "resetPassword": {
+        "success": "Şifreniz değiştirildi.",
+        "error": "Şifre değiştirilemiyor. "
       },
       "logout": {
         "success": "Çıkış yaptınız",
@@ -332,6 +445,11 @@
       }
     },
     "recipe": {
+      "times": {
+        "slow": "Yavaş",
+        "medium": "Orta",
+        "fast": "Hızlı"
+      },
       "types": {
         "breakfast": {
           "name": "Kahvaltı",
@@ -358,6 +476,13 @@
           "displayName": "İçecekler"
         }
       },
+      "difficulty": {
+        "veryEasy": "Çok kolay",
+        "easy": "Kolay",
+        "average": "Ortalama",
+        "hard": "Zor",
+        "veryHard": "Çok zor"
+      },
       "fields": {
         "type": "Tip",
         "servings": "Porsiyon",
@@ -375,7 +500,7 @@
     }
   },
   "common": {
-    "version": "versiyon",
+    "version": "sürüm",
     "time": {
       "min": "dakika",
       "mins": "dakika"

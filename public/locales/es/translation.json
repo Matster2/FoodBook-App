@@ -1,5 +1,23 @@
 {
   "pages": {
+    "notFound": {
+      "404": "404",
+      "title": "Extraviado",
+      "links": {
+        "home": "Hogar"
+      }
+    },
+    "offline": {
+      "title": "Estas desconectado",
+      "message": "Parece que hay un problema con tu conexión. ",
+      "components": {
+        "buttons": {
+          "refresh": {
+            "label": "Actualizar"
+          }
+        }
+      }
+    },
     "register": {
       "title": "Registro",
       "alreadyHaveAccount": "¿Ya tienes una cuenta?",
@@ -27,7 +45,6 @@
         "greeting": "Bienvenido",
         "message": "¿Qué te gustaría cocinar hoy?"
       },
-      "seeAll": "Ver todo",
       "sections": {
         "categories": "Categorías",
         "recommended": "Recomendaciones",
@@ -60,8 +77,10 @@
       "sections": {
         "ingredients": "Ingredientes",
         "directions": "Direcciones",
-        "nutrition": "Nutrición"
-      }
+        "nutrition": "Nutrición",
+        "reference": "Referencia"
+      },
+      "seeFullRecipe": "Ver receta completa aquí"
     },
     "recipes": {
       "title": "Recetas",
@@ -103,17 +122,40 @@
         }
       }
     },
+    "author": {
+      "title": "",
+      "biography": {
+        "showMore": "Mostrar más",
+        "showLess": "Muestra menos"
+      },
+      "sections": {
+        "authorRecipes": "mis recetas"
+      }
+    },
     "settings": {
       "title": "Ajustes",
       "options": {
         "signIn": "Iniciar sesión",
         "admin": "Administración",
+        "account": "Cuenta",
         "contactUs": "Contáctenos",
         "privacyPolicy": "política de privacidad",
         "termsOfService": "Términos de servicio",
-        "logOut": "Cerrar sesión",
+        "logOut": "Cerrar sesión"
+      }
+    },
+    "accountSettings": {
+      "title": "Configuraciones de la cuenta",
+      "options": {
+        "changePassword": "Cambiar la contraseña",
         "deleteAccount": "Borrar cuenta"
       }
+    },
+    "changePassword": {
+      "title": "Cambiar la contraseña"
+    },
+    "resetPassword": {
+      "title": "Restablecer su contraseña"
     }
   },
   "forms": {
@@ -184,6 +226,59 @@
             "label": "Restablecer la contraseña"
           }
         }
+      },
+      "changePassword": {
+        "title": "Cambiar la contraseña",
+        "inputs": {
+          "currentPassword": {
+            "label": "Contraseña actual",
+            "validationMessages": {
+              "empty": "Se requiere contraseña actual"
+            }
+          },
+          "newPassword": {
+            "label": "Nueva contraseña",
+            "validationMessages": {
+              "empty": "Se requiere una nueva contraseña",
+              "sameAsCurrent": "La nueva contraseña debe ser diferente de la contraseña actual."
+            }
+          },
+          "confirmPassword": {
+            "label": "confirmar Contraseña",
+            "validationMessages": {
+              "empty": "Por favor, confirme su contraseña",
+              "notSame": "Las contraseñas no coinciden"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Cambiar la contraseña"
+          }
+        }
+      },
+      "resetPassword": {
+        "title": "Crear nueva contraseña",
+        "inputs": {
+          "newPassword": {
+            "label": "Nueva contraseña",
+            "validationMessages": {
+              "empty": "Se requiere una nueva contraseña"
+            }
+          },
+          "confirmPassword": {
+            "label": "confirmar Contraseña",
+            "validationMessages": {
+              "empty": "Por favor, confirme su contraseña",
+              "notSame": "Las contraseñas no coinciden"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Restablecer la contraseña"
+          }
+        }
       }
     },
     "accounts": {
@@ -227,6 +322,9 @@
     "bottomNavBar": {
       "discover": "Descubrir"
     },
+    "section": {
+      "seeAll": "Ver todo"
+    },
     "plannerIngredientListDialog": {
       "ingredients": "Ingredientes"
     },
@@ -239,6 +337,7 @@
       "title": "Instaladores",
       "filters": {
         "type": "Tipos",
+        "difficulty": "Dificultad",
         "time": "Veces",
         "tag": "Etiquetas",
         "ingredient": "Ingredientes",
@@ -253,6 +352,11 @@
         "submit": {
           "label": "Aplicar filtros"
         }
+      }
+    },
+    "recipeAttributeWidget": {
+      "alcohol": {
+        "text": "Contiene alcohol"
       }
     }
   },
@@ -269,8 +373,17 @@
         "error": "No se puede iniciar sesión. Vuelva a intentarlo más tarde."
       },
       "forgottenPassword": {
-        "success": "Iniciado sesión con éxito.",
+        "success": "Se ha enviado un enlace de reinicio a su dirección de correo electrónico.",
         "error": "No se puede enviar el correo electrónico de recuperación. "
+      },
+      "changePassword": {
+        "success": "Tu contraseña ha sido cambiada.",
+        "invalid": "Por favor verifique sus credenciales.",
+        "error": "No se puede cambiar la contraseña. "
+      },
+      "resetPassword": {
+        "success": "Tu contraseña ha sido cambiada.",
+        "error": "No se puede cambiar la contraseña. "
       },
       "logout": {
         "success": "Has sido desconectado",
@@ -332,6 +445,11 @@
       }
     },
     "recipe": {
+      "times": {
+        "slow": "Lento",
+        "medium": "Medio",
+        "fast": "Rápido"
+      },
       "types": {
         "breakfast": {
           "name": "Desayuno",
@@ -357,6 +475,13 @@
           "name": "Beber",
           "displayName": "Bebidas"
         }
+      },
+      "difficulty": {
+        "veryEasy": "Muy fácil",
+        "easy": "Fácil",
+        "average": "Promedio",
+        "hard": "Duro",
+        "veryHard": "Muy duro"
       },
       "fields": {
         "type": "Tipo",

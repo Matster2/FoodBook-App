@@ -1,5 +1,23 @@
 {
   "pages": {
+    "notFound": {
+      "404": "404",
+      "title": "Не знайдено",
+      "links": {
+        "home": "додому"
+      }
+    },
+    "offline": {
+      "title": "Ви офлайн",
+      "message": "Здається, у вас проблема з підключенням. ",
+      "components": {
+        "buttons": {
+          "refresh": {
+            "label": "Оновити"
+          }
+        }
+      }
+    },
     "register": {
       "title": "зареєструватися",
       "alreadyHaveAccount": "Вже є аккаунт?",
@@ -27,7 +45,6 @@
         "greeting": "Ласкаво просимо",
         "message": "Що б ви хотіли приготувати сьогодні?"
       },
-      "seeAll": "Бачити все",
       "sections": {
         "categories": "Категорії",
         "recommended": "Рекомендації",
@@ -60,8 +77,10 @@
       "sections": {
         "ingredients": "Інгредієнти",
         "directions": "Напрямки",
-        "nutrition": "Харчування"
-      }
+        "nutrition": "Харчування",
+        "reference": "довідка"
+      },
+      "seeFullRecipe": "Дивіться повний рецепт тут"
     },
     "recipes": {
       "title": "рецепти",
@@ -103,17 +122,40 @@
         }
       }
     },
+    "author": {
+      "title": "",
+      "biography": {
+        "showMore": "Показати більше",
+        "showLess": "Показати менше"
+      },
+      "sections": {
+        "authorRecipes": "Мої рецепти"
+      }
+    },
     "settings": {
       "title": "Налаштування",
       "options": {
         "signIn": "Увійти",
         "admin": "адмін",
+        "account": "Обліковий запис",
         "contactUs": "Зв'яжіться з нами",
         "privacyPolicy": "Політика конфіденційності",
         "termsOfService": "Умови використання",
-        "logOut": "Вийти",
+        "logOut": "Вийти"
+      }
+    },
+    "accountSettings": {
+      "title": "Налаштування аккаунта",
+      "options": {
+        "changePassword": "Змінити пароль",
         "deleteAccount": "Видалити аккаунт"
       }
+    },
+    "changePassword": {
+      "title": "Змінити пароль"
+    },
+    "resetPassword": {
+      "title": "Скинути пароль"
     }
   },
   "forms": {
@@ -184,6 +226,59 @@
             "label": "Скинути пароль"
           }
         }
+      },
+      "changePassword": {
+        "title": "Змінити пароль",
+        "inputs": {
+          "currentPassword": {
+            "label": "Поточний пароль",
+            "validationMessages": {
+              "empty": "Потрібний поточний пароль"
+            }
+          },
+          "newPassword": {
+            "label": "Новий пароль",
+            "validationMessages": {
+              "empty": "Потрібен новий пароль",
+              "sameAsCurrent": "Новий пароль має відрізнятися від поточного."
+            }
+          },
+          "confirmPassword": {
+            "label": "Підтвердьте пароль",
+            "validationMessages": {
+              "empty": "Будь ласка, підтвердьте свій пароль",
+              "notSame": "Паролі не збігаються"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Змінити пароль"
+          }
+        }
+      },
+      "resetPassword": {
+        "title": "Створити новий пароль",
+        "inputs": {
+          "newPassword": {
+            "label": "Новий пароль",
+            "validationMessages": {
+              "empty": "Потрібен новий пароль"
+            }
+          },
+          "confirmPassword": {
+            "label": "Підтвердьте пароль",
+            "validationMessages": {
+              "empty": "Будь ласка, підтвердьте свій пароль",
+              "notSame": "Паролі не збігаються"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Скинути пароль"
+          }
+        }
       }
     },
     "accounts": {
@@ -227,6 +322,9 @@
     "bottomNavBar": {
       "discover": "Відкрийте для себе"
     },
+    "section": {
+      "seeAll": "Бачити все"
+    },
     "plannerIngredientListDialog": {
       "ingredients": "Інгредієнти"
     },
@@ -239,6 +337,7 @@
       "title": "Фітлери",
       "filters": {
         "type": "Типи",
+        "difficulty": "Складність",
         "time": "Часи",
         "tag": "Теги",
         "ingredient": "Інгредієнти",
@@ -253,6 +352,11 @@
         "submit": {
           "label": "Застосувати фільтри"
         }
+      }
+    },
+    "recipeAttributeWidget": {
+      "alcohol": {
+        "text": "Містить алкоголь"
       }
     }
   },
@@ -269,8 +373,17 @@
         "error": "Не вдається ввійти. Повторіть спробу пізніше."
       },
       "forgottenPassword": {
-        "success": "Успішно ввійшли.",
+        "success": "Посилання для скидання надіслано на вашу електронну адресу.",
         "error": "Не вдалося надіслати електронну адресу для відновлення. "
+      },
+      "changePassword": {
+        "success": "Ваш пароль був змінений.",
+        "invalid": "Перевірте свої облікові дані.",
+        "error": "Неможливо змінити пароль. "
+      },
+      "resetPassword": {
+        "success": "Ваш пароль був змінений.",
+        "error": "Неможливо змінити пароль. "
       },
       "logout": {
         "success": "Ви вийшли з системи",
@@ -332,6 +445,11 @@
       }
     },
     "recipe": {
+      "times": {
+        "slow": "Повільно",
+        "medium": "Середній",
+        "fast": "швидко"
+      },
       "types": {
         "breakfast": {
           "name": "Сніданок",
@@ -357,6 +475,13 @@
           "name": "пити",
           "displayName": "Напої"
         }
+      },
+      "difficulty": {
+        "veryEasy": "Дуже легко",
+        "easy": "легко",
+        "average": "Середній",
+        "hard": "важко",
+        "veryHard": "Дуже важкий"
       },
       "fields": {
         "type": "Тип",

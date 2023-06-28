@@ -1,5 +1,23 @@
 {
   "pages": {
+    "notFound": {
+      "404": "404",
+      "title": "Не найдено",
+      "links": {
+        "home": "Дом"
+      }
+    },
+    "offline": {
+      "title": "Ты не в сети",
+      "message": "Кажется, у вас проблемы с подключением. ",
+      "components": {
+        "buttons": {
+          "refresh": {
+            "label": "Обновить"
+          }
+        }
+      }
+    },
     "register": {
       "title": "регистр",
       "alreadyHaveAccount": "У вас уже есть аккаунт?",
@@ -27,7 +45,6 @@
         "greeting": "Добро пожаловать",
         "message": "Что бы вы хотели приготовить сегодня?"
       },
-      "seeAll": "Увидеть все",
       "sections": {
         "categories": "Категории",
         "recommended": "Рекомендации",
@@ -60,8 +77,10 @@
       "sections": {
         "ingredients": "Ингредиенты",
         "directions": "Направления",
-        "nutrition": "Питание"
-      }
+        "nutrition": "Питание",
+        "reference": "Ссылка"
+      },
+      "seeFullRecipe": "Полный рецепт смотрите здесь"
     },
     "recipes": {
       "title": "Рецепты",
@@ -103,17 +122,40 @@
         }
       }
     },
+    "author": {
+      "title": "",
+      "biography": {
+        "showMore": "Показать больше",
+        "showLess": "Показывай меньше"
+      },
+      "sections": {
+        "authorRecipes": "Мои рецепты"
+      }
+    },
     "settings": {
       "title": "Настройки",
       "options": {
         "signIn": "Войти",
         "admin": "Администратор",
+        "account": "Счет",
         "contactUs": "Связаться с нами",
         "privacyPolicy": "политика конфиденциальности",
         "termsOfService": "Условия использования",
-        "logOut": "Выйти",
+        "logOut": "Выйти"
+      }
+    },
+    "accountSettings": {
+      "title": "Настройки учетной записи",
+      "options": {
+        "changePassword": "Изменить пароль",
         "deleteAccount": "Удалить аккаунт"
       }
+    },
+    "changePassword": {
+      "title": "Изменить пароль"
+    },
+    "resetPassword": {
+      "title": "Сбросить пароль"
     }
   },
   "forms": {
@@ -184,6 +226,59 @@
             "label": "Сброс пароля"
           }
         }
+      },
+      "changePassword": {
+        "title": "Изменить пароль",
+        "inputs": {
+          "currentPassword": {
+            "label": "Текущий пароль",
+            "validationMessages": {
+              "empty": "Требуется текущий пароль"
+            }
+          },
+          "newPassword": {
+            "label": "Новый пароль",
+            "validationMessages": {
+              "empty": "Требуется новый пароль",
+              "sameAsCurrent": "Новый пароль должен отличаться от текущего пароля."
+            }
+          },
+          "confirmPassword": {
+            "label": "Подтвердите пароль",
+            "validationMessages": {
+              "empty": "Пожалуйста, подтвердите свой пароль",
+              "notSame": "Пароли не совпадают"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Изменить пароль"
+          }
+        }
+      },
+      "resetPassword": {
+        "title": "Создать новый пароль",
+        "inputs": {
+          "newPassword": {
+            "label": "Новый пароль",
+            "validationMessages": {
+              "empty": "Требуется новый пароль"
+            }
+          },
+          "confirmPassword": {
+            "label": "Подтвердите пароль",
+            "validationMessages": {
+              "empty": "Пожалуйста, подтвердите свой пароль",
+              "notSame": "Пароли не совпадают"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Сброс пароля"
+          }
+        }
       }
     },
     "accounts": {
@@ -227,6 +322,9 @@
     "bottomNavBar": {
       "discover": "Обнаружить"
     },
+    "section": {
+      "seeAll": "Увидеть все"
+    },
     "plannerIngredientListDialog": {
       "ingredients": "Ингредиенты"
     },
@@ -239,6 +337,7 @@
       "title": "Филлеры",
       "filters": {
         "type": "Типы",
+        "difficulty": "Сложность",
         "time": "раз",
         "tag": "Теги",
         "ingredient": "Ингредиенты",
@@ -253,6 +352,11 @@
         "submit": {
           "label": "Применить фильтры"
         }
+      }
+    },
+    "recipeAttributeWidget": {
+      "alcohol": {
+        "text": "Содержит алкоголь"
       }
     }
   },
@@ -269,8 +373,17 @@
         "error": "Не удалось войти. Повторите попытку позже."
       },
       "forgottenPassword": {
-        "success": "Выполнен вход успешно.",
+        "success": "Ссылка для сброса отправлена ​​на ваш адрес электронной почты.",
         "error": "Не удалось отправить электронное письмо для восстановления. "
+      },
+      "changePassword": {
+        "success": "Ваш пароль был изменен.",
+        "invalid": "Пожалуйста, проверьте свои учетные данные.",
+        "error": "Невозможно изменить пароль. "
+      },
+      "resetPassword": {
+        "success": "Ваш пароль был изменен.",
+        "error": "Невозможно изменить пароль. "
       },
       "logout": {
         "success": "Вы вышли из системы",
@@ -332,6 +445,11 @@
       }
     },
     "recipe": {
+      "times": {
+        "slow": "Медленный",
+        "medium": "Середина",
+        "fast": "Быстрый"
+      },
       "types": {
         "breakfast": {
           "name": "Завтрак",
@@ -357,6 +475,13 @@
           "name": "Напиток",
           "displayName": "Напитки"
         }
+      },
+      "difficulty": {
+        "veryEasy": "Очень просто",
+        "easy": "Легкий",
+        "average": "Средний",
+        "hard": "Жесткий",
+        "veryHard": "Очень сложно"
       },
       "fields": {
         "type": "Тип",
