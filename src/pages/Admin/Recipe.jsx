@@ -260,8 +260,8 @@ export default () => {
         data: { id },
       } = await api.createRecipe(data);
 
-      filesToUpload.forEach(async (file) => {
-        await api.uploadRecipeImage(id, file);
+      filesToUpload.forEach(async (file, index) => {
+        await api.uploadRecipeImage(id, file, index);
       });
 
       toast.success('Recipe successfully created');

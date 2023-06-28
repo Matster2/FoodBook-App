@@ -284,9 +284,13 @@ const useAPI = () => {
     );
   };
 
-  const uploadRecipeImage = async (recipeId, file) => {
+  const uploadRecipeImage = async (recipeId, file, sequence) => {
     const formData = new FormData();
     formData.append('file', file);
+
+    if (sequence) {
+      formData.append('sequence', sequence);
+    }
 
     return axios.post(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}/images`, formData, {
       headers: {
