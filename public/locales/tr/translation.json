@@ -333,6 +333,11 @@
       "selectDaysMessage": "Bu tarifi eklemek istediğiniz günleri seçin",
       "addToPlanner": "Planlayıcıya Ekle"
     },
+    "plannedRecipeDialog": {
+      "update": "Güncelleme",
+      "removeTitle": "Tarifi planlanandan kaldır",
+      "removeWarning": "Bu tarifi planlayıcınızdan çıkarmak istediğinizden emin misiniz?"
+    },
     "recipeFilters": {
       "title": "filtreler",
       "filters": {
@@ -426,6 +431,14 @@
       "planRecipe": {
         "success": "Tarif planlayıcıya eklendi.",
         "error": "Planlayıcıya tarif eklenemiyor. "
+      },
+      "updatePlannedRecipe": {
+        "success": "Planlayıcı güncellendi.",
+        "error": "Güncelleme planlanamıyor. "
+      },
+      "removePlannedRecipe": {
+        "success": "Tarif planlayıcıdan kaldırıldı.",
+        "error": "Tarif planlayıcıdan kaldırılamıyor. "
       }
     }
   },
@@ -500,7 +513,11 @@
     }
   },
   "common": {
-    "version": "sürüm",
+    "words": {
+      "no": "HAYIR",
+      "yes": "Evet"
+    },
+    "version": "Sürüm",
     "time": {
       "min": "dakika",
       "mins": "dakika"

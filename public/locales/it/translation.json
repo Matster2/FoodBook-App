@@ -333,6 +333,11 @@
       "selectDaysMessage": "Seleziona i giorni in cui desideri aggiungere questa ricetta",
       "addToPlanner": "Aggiungi al pianificatore"
     },
+    "plannedRecipeDialog": {
+      "update": "Aggiornamento",
+      "removeTitle": "Rimuovi la ricetta dal programmato",
+      "removeWarning": "Sei sicuro di voler rimuovere questa ricetta dal tuo pianificatore?"
+    },
     "recipeFilters": {
       "title": "Fitler",
       "filters": {
@@ -426,6 +431,14 @@
       "planRecipe": {
         "success": "Ricetta aggiunta al pianificatore.",
         "error": "Impossibile aggiungere la ricetta al pianificatore. "
+      },
+      "updatePlannedRecipe": {
+        "success": "Agenda aggiornata.",
+        "error": "Impossibile aggiornamento pianificato. "
+      },
+      "removePlannedRecipe": {
+        "success": "Ricetta rimossa dal pianificatore.",
+        "error": "Impossibile rimuovere la ricetta dal pianificatore. "
       }
     }
   },
@@ -500,7 +513,11 @@
     }
   },
   "common": {
-    "version": "versione",
+    "words": {
+      "no": "NO",
+      "yes": "SÌ"
+    },
+    "version": "Versione",
     "time": {
       "min": "min",
       "mins": "min"

@@ -333,6 +333,11 @@
       "selectDaysMessage": "Sélectionnez les jours où vous souhaitez ajouter cette recette",
       "addToPlanner": "Ajouter au planificateur"
     },
+    "plannedRecipeDialog": {
+      "update": "Mise à jour",
+      "removeTitle": "Supprimer la recette du plan",
+      "removeWarning": "Voulez-vous vraiment supprimer cette recette de votre agenda ?"
+    },
     "recipeFilters": {
       "title": "Ajusteurs",
       "filters": {
@@ -426,6 +431,14 @@
       "planRecipe": {
         "success": "Recette ajoutée au planificateur.",
         "error": "Impossible d'ajouter la recette au planificateur. "
+      },
+      "updatePlannedRecipe": {
+        "success": "Planificateur mis à jour.",
+        "error": "Impossible de mettre à jour prévu. "
+      },
+      "removePlannedRecipe": {
+        "success": "Recette supprimée du planificateur.",
+        "error": "Impossible de supprimer la recette du planificateur. "
       }
     }
   },
@@ -500,7 +513,11 @@
     }
   },
   "common": {
-    "version": "version",
+    "words": {
+      "no": "Non",
+      "yes": "Oui"
+    },
+    "version": "Version",
     "time": {
       "min": "min",
       "mins": "minutes"

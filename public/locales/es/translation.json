@@ -333,6 +333,11 @@
       "selectDaysMessage": "Seleccione los días a los que le gustaría agregar esta receta",
       "addToPlanner": "Agregar al planificador"
     },
+    "plannedRecipeDialog": {
+      "update": "Actualizar",
+      "removeTitle": "Eliminar receta de planificada",
+      "removeWarning": "¿Seguro que quieres eliminar esta receta de tu planificador?"
+    },
     "recipeFilters": {
       "title": "Instaladores",
       "filters": {
@@ -426,6 +431,14 @@
       "planRecipe": {
         "success": "Receta añadida al planificador.",
         "error": "No se puede agregar la receta al planificador. "
+      },
+      "updatePlannedRecipe": {
+        "success": "Planificador actualizado.",
+        "error": "No se puede actualizar planificada. "
+      },
+      "removePlannedRecipe": {
+        "success": "Receta eliminada del planificador.",
+        "error": "No se puede eliminar la receta del planificador. "
       }
     }
   },
@@ -500,7 +513,11 @@
     }
   },
   "common": {
-    "version": "versión",
+    "words": {
+      "no": "No",
+      "yes": "Sí"
+    },
+    "version": "Versión",
     "time": {
       "min": "min",
       "mins": "minutos"

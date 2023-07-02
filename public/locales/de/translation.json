@@ -333,6 +333,11 @@
       "selectDaysMessage": "Wählen Sie die Tage aus, an denen Sie dieses Rezept hinzufügen möchten",
       "addToPlanner": "Zum Planer hinzufügen"
     },
+    "plannedRecipeDialog": {
+      "update": "Aktualisieren",
+      "removeTitle": "Rezept aus geplant entfernen",
+      "removeWarning": "Möchten Sie dieses Rezept wirklich aus Ihrem Planer entfernen?"
+    },
     "recipeFilters": {
       "title": "Monteure",
       "filters": {
@@ -426,6 +431,14 @@
       "planRecipe": {
         "success": "Rezept zum Planer hinzugefügt.",
         "error": "Rezept kann nicht zum Planer hinzugefügt werden. "
+      },
+      "updatePlannedRecipe": {
+        "success": "Planer aktualisiert.",
+        "error": "Update nicht möglich. "
+      },
+      "removePlannedRecipe": {
+        "success": "Rezept aus Planer entfernt.",
+        "error": "Das Rezept konnte nicht aus dem Planer entfernt werden. "
       }
     }
   },
@@ -500,6 +513,10 @@
     }
   },
   "common": {
+    "words": {
+      "no": "NEIN",
+      "yes": "Ja"
+    },
     "version": "Ausführung",
     "time": {
       "min": "Mindest",
