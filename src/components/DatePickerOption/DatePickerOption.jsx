@@ -18,7 +18,7 @@ const DatePickerOption = ({ date, active, onClick }) => {
 
   return (
     <Box
-      sx={{ m: 0, p: 1, px: 1.8 }}
+      sx={{ m: 0, p: 1 }}
       onClick={handleClick}
       className={classnames(styles.option, past && styles.past, active && styles.active)}
     >
@@ -46,7 +46,7 @@ DatePickerOption.propTypes = {
 
 DatePickerOption.defaultProps = {
   active: false,
-  onClick: () => {},
+  onClick: () => { },
 };
 
 export default DatePickerOption;

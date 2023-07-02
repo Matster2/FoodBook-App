@@ -380,6 +380,31 @@ const useAPI = () => {
     );
   };
 
+  const updatePlannedRecipe = async (id, servings) => {
+    return axios.put(
+      `${process.env.REACT_APP_API_URL}/planned-recipes/${id}`,
+      {
+        servings
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
+  const removePlannedRecipe = async (id) => {
+    return axios.delete(
+      `${process.env.REACT_APP_API_URL}/planned-recipes/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
   const getPlannerIngredientList = async (userId, parameters) => {
     const url = new URL(`${process.env.REACT_APP_API_URL}/users/${userId}/planner/ingredients`);
     url.search = getSearchParams(parameters);
@@ -499,6 +524,8 @@ const useAPI = () => {
     uploadAuthorProfilePicture,
     getUserPlanner,
     planRecipe,
+    updatePlannedRecipe,
+    removePlannedRecipe,
     getPlannerIngredientList,
     getAuthor,
     getAuthors,

@@ -16,16 +16,28 @@ const IngredientList = ({ ingredients }) => {
   };
 
   function compare(ingredient1, ingredient2) {
-    if (ingredient1.unitOfMeasurement.code === 'unit') {
+    if (ingredient1.unitOfMeasurement.code !== ingredient2.unitOfMeasurement.code) {
+      if (ingredient1.unitOfMeasurement.code === "unit") {
+        return -1;
+      }
+
+      if (ingredient2.unitOfMeasurement.code === "unit") {
+        return 1;
+      }
+
+      if (ingredient1.unitOfMeasurement.code < ingredient2.unitOfMeasurement.code) {
+        return -1;
+      }
+
+      if (ingredient1.unitOfMeasurement.code > ingredient2.unitOfMeasurement.code) {
+        return 1;
+      }
+    }
+
+    if (ingredient1.amount > ingredient2.amount) {
       return -1;
     }
 
-    if (ingredient1.unitOfMeasurement.name < ingredient2.unitOfMeasurement.name) {
-      return -1;
-    }
-    if (ingredient1.unitOfMeasurement.name > ingredient2.unitOfMeasurement.name) {
-      return 1;
-    }
     return 0;
   }
 

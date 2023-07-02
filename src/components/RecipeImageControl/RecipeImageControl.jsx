@@ -10,13 +10,13 @@ const RecipeImageControl = ({ src, onDeleteClick }) => {
     delay: 500,
   };
 
-  const onLongPress = () => {
+  const onLongClick = () => {
     onDeleteClick();
   };
 
   const onClick = () => { }
 
-  const longPressEvent = useLongPress(onLongPress, onClick, defaultOptions);
+  const longPressEvent = useLongPress(onLongClick, onClick, defaultOptions);
 
   return (
     <Paper {...longPressEvent} sx={{ p: 0.5 }} className={styles.container}>

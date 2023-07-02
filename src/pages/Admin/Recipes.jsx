@@ -12,6 +12,7 @@ import {
   Select,
   Button,
   Box,
+  Stack,
   CircularProgress,
   Typography,
   FormControl,
@@ -30,6 +31,7 @@ export default () => {
   const api = useAPI();
 
   const { filters, setFilter } = useFilters({
+    states: ['published'],
     sortBy: 'datepublished',
     sortDesc: true,
     page: 1,
@@ -61,6 +63,10 @@ export default () => {
 
   const handlePageChange = (event, value) => {
     setFilter("page", value);
+  };
+
+  const handleStateFilterChange = (event) => {
+    setFilter("states", [event.target.value]);
   };
 
   const handleAddClick = () => {
@@ -106,6 +112,23 @@ export default () => {
       <CssBaseline />
       <Header title="Recipes" onBackClick={() => navigate(-1)} />
 
+      <Stack sx={{ mb: 2 }} direction="row" gap={2}>
+        <FormControl fullWidth>
+          <InputLabel id="state-filter-label">State</InputLabel>
+          <Select
+            labelId="state-filter-label"
+            id="state-filter"
+            value={filters.states.length > 0 ? filters.states[0] : undefined}
+            label="State"
+            onChange={handleStateFilterChange}
+          >
+            <MenuItem value="draft">Draft</MenuItem>
+            <MenuItem value="published">Published</MenuItem>
+            <MenuItem value="archived">Archived</MenuItem>
+          </Select>
+        </FormControl>
+      </Stack>
+
       <Box
         sx={{ display: "flex", justifyContent: "right", mb: 2 }}
       >
@@ -117,22 +140,6 @@ export default () => {
           Add
         </Button>
       </Box>
-
-      {/* <Box sx={{ mb: 2 }}>
-        <FormControl fullWidth>
-          <InputLabel id="status-filter-label">Status</InputLabel>
-          <Select
-            labelId="status-filter-label"
-            id="status-filter"
-            value={filters.status}
-            label="Status"
-            onChange={handleStatusFilterChange}
-          >
-            <MenuItem value="open">Open</MenuItem>
-            <MenuItem value="resolved">Resolved</MenuItem>
-          </Select>
-        </FormControl>
-      </Box> */}
 
       {loadingRecipes && (
         <Box sx={{ mt: 2, mb: 4 }} display="flex" justifyContent="center">

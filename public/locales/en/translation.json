@@ -333,6 +333,11 @@
       "selectDaysMessage": "Select the days you would like to add this recipe to",
       "addToPlanner": "Add To Planner"
     },
+    "plannedRecipeDialog": {
+      "update": "Update",
+      "removeTitle": "Remove recipe from planned",
+      "removeWarning": "Are you sure you want to remove this recipe from your planner?"
+    },
     "recipeFilters": {
       "title": "Fitlers",
       "filters": {
@@ -426,6 +431,14 @@
       "planRecipe": {
         "success": "Recipe added to planner.",
         "error": "Unable to add recipe to planner. Please try again later."
+      },
+      "updatePlannedRecipe": {
+        "success": "Planner updated.",
+        "error": "Unable update planned. Please try again later."
+      },
+      "removePlannedRecipe": {
+        "success": "Recipe removed from planner.",
+        "error": "Unable remove recipe from planner. Please try again later."
       }
     }
   },
@@ -500,7 +513,11 @@
     }
   },
   "common": {
-    "version": "version",
+    "words": {
+      "no": "No",
+      "yes": "Yes"
+    },
+    "version": "Version",
     "time": {
       "min": "min",
       "mins": "mins"

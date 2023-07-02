@@ -654,6 +654,7 @@ export default () => {
                       <Field
                         as={TextField}
                         fullWidth
+                        type="number"
                         id="calories"
                         name="nutrition.calories"
                         value={recipe.nutrition.calories}

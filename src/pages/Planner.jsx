@@ -10,6 +10,7 @@ import useAuth from '../hooks/useAuth';
 import DatePickerOption from '../components/DatePickerOption/DatePickerOption';
 import { areDatesTheSameDay, getDayName, getMonthName, isUndefined } from '../utils/utils';
 import PlannerIngredientListDialog from '../dialogs/PlannerIngredientListDialog';
+import PlannedRecipeDialog from '../dialogs/PlannedRecipeDialog';
 
 import { ReactComponent as IngredientsIcon } from '../assets/icons/ingredients.svg';
 import styles from './Planner.module.css';
@@ -39,6 +40,9 @@ export default () => {
   const [loadingPlanner, setLoadingPlanner] = useState(false);
 
   const [showIngredientListModal, setShowIngredientListModal] = useState(false);
+  const [showEditPlannedRecipeModal, setShowEditPlannedRecipeModal] = useState(false);
+
+  const [selectedPlannedRecipe, setSelectedPlannedRecipe] = useState();
 
   useEffect(() => {
     const dateToday = new Date();
@@ -90,6 +94,14 @@ export default () => {
     });
   };
 
+  const handlePlannedRecipeEditClick = (plannedRecipe) => {
+    setSelectedPlannedRecipe(plannedRecipe)
+    setShowEditPlannedRecipeModal(true);
+  }
+
+  const onPlannedRecipeUpdated = () => {
+    fetchPlanner();
+  }
 
   const getDateString = () => {
     return `${getDayName(selectedDate)}, ${selectedDate.getDate()} ${getMonthName(selectedDate)}`
@@ -131,6 +143,19 @@ export default () => {
           dateTo: selectedDate.toISOString().split('T')[0],
         }}
       />
+
+      {selectedPlannedRecipe && (
+        <PlannedRecipeDialog
+          open={showEditPlannedRecipeModal}
+          onClose={() => {
+            setShowEditPlannedRecipeModal(false);
+          }}
+          TransitionComponent={Transition}
+          plannedRecipe={selectedPlannedRecipe}
+          onComplete={onPlannedRecipeUpdated}
+        />
+      )}
+
 
       <Header title={t("pages.planner.title")} onBackClick={() => navigate(-1)} />
 
@@ -182,6 +207,7 @@ export default () => {
                     <PlannedRecipe
                       plannedRecipe={plannedRecipe}
                       onClick={() => handlePlannedRecipeClick(plannedRecipe)}
+                      onEditClick={() => handlePlannedRecipeEditClick(plannedRecipe)}
                     />
                   ))}
                 </Stack>

@@ -269,11 +269,6 @@ export default () => {
   }, [recipe]);
 
   /* Rendering */
-  Number.prototype.countDecimals = function () {
-    if (Math.floor(this.valueOf()) === this.valueOf()) return 0;
-    return this.toString().split(".")[1].length || 0;
-  }
-
   function fixRounding(value, precision) {
     var power = Math.pow(10, precision || 0);
     return Math.round(value * power) / power;

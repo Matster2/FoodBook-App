@@ -1,5 +1,6 @@
 .option {
     border-radius: 4px;
+    min-width: 45px;
 }
 
 .past {

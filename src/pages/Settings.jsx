@@ -139,7 +139,7 @@ export default () => {
               >
                 <img className={styles.logo} src={logo} alt="foodbook" />
               </Box>
-              <Typography variant="body2">{capitalizeFirstLetter(t('common.version'))} {process.env.REACT_APP_VERSION}</Typography>
+              <Typography variant="body2">{t('common.version')} {process.env.REACT_APP_VERSION}</Typography>
             </Box>
 
             {/* {authenticated && (
