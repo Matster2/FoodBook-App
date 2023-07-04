@@ -26,7 +26,7 @@
 }
 
 .navOptionIcon {
-    width: 22px;
+    width: 18px !important;
     height: auto;
     margin-bottom: 5px;
     padding: 0px;
