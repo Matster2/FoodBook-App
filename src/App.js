@@ -554,53 +554,51 @@ const Layout = () => {
 
       <Outlet />
 
-      <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 999 }} elevation={3}>
-        <BottomNavigation showLabels className={styles.bottomNav}>
-          <BottomNavigationAction
-            className={isHomeActive() ? styles.navOptionSelected : ''}
-            component={Link}
-            to="/"
-            label={t("pages.home.title")}
-            icon={<HomeIcon className={classnames(styles.navOption, isHomeActive() ? styles.navOptionSelected : '')} />}
-          />
-          <BottomNavigationAction
-            className={isDiscoverActive() ? styles.navOptionSelected : ''}
-            component={Link}
-            to="/recipes"
-            label={t("components.bottomNavBar.discover")}
-            icon={
-              <DiscoverIcon className={classnames(styles.navOption, isDiscoverActive() ? styles.navOptionSelected : '')} />
-            }
-          />
-          <BottomNavigationAction
-            className={isPlannerActive() ? styles.navOptionSelected : ''}
-            component={Link}
-            to="/planner"
-            label={t("pages.planner.title")}
-            icon={
-              <PlannerIcon className={classnames(styles.navOption, styles.planner, isPlannerActive() ? styles.navOptionSelected : '')} />
-            }
-          />
-          <BottomNavigationAction
-            className={isFavouritesActive() ? styles.navOptionSelected : ''}
-            component={Link}
-            to="/favourites"
-            label={t("pages.favourites.title")}
-            icon={
-              <HeartIcon className={classnames(styles.navOption, isFavouritesActive() ? styles.navOptionSelected : '')} />
-            }
-          />
-          <BottomNavigationAction
-            className={isSettingsActive() ? styles.navOptionSelected : ''}
-            component={Link}
-            to="/settings"
-            label={t("pages.settings.title")}
-            icon={
-              <SettingsIcon className={classnames(styles.navOption, isSettingsActive() ? styles.navOptionSelected : '')} />
-            }
-          />
-        </BottomNavigation>
-      </Box>
+      <BottomNavigation showLabels className={styles.bottomNav} sx={{ position: 'fixed', bottom: 0, zIndex: 999 }} elevation={3}>
+        <BottomNavigationAction
+          className={classnames(styles.navOption, isHomeActive() ? styles.navOptionSelected : '')}
+          component={Link}
+          to="/"
+          label={t("pages.home.title")}
+          icon={<HomeIcon className={classnames(styles.navOptionIcon, isHomeActive() ? styles.navOptionSelected : '')} />}
+        />
+        <BottomNavigationAction
+          className={classnames(styles.navOption, isDiscoverActive() ? styles.navOptionSelected : '')}
+          component={Link}
+          to="/recipes"
+          label={t("components.bottomNavBar.discover")}
+          icon={
+            <DiscoverIcon className={classnames(styles.navOptionIcon, isDiscoverActive() ? styles.navOptionSelected : '')} />
+          }
+        />
+        <BottomNavigationAction
+          className={classnames(styles.navOption, isPlannerActive() ? styles.navOptionSelected : '')}
+          component={Link}
+          to="/planner"
+          label={t("pages.planner.title")}
+          icon={
+            <PlannerIcon className={classnames(styles.navOptionIcon, styles.planner, isPlannerActive() ? styles.navOptionSelected : '')} />
+          }
+        />
+        <BottomNavigationAction
+          className={classnames(styles.navOption, isFavouritesActive() ? styles.navOptionSelected : '')}
+          component={Link}
+          to="/favourites"
+          label={t("pages.favourites.title")}
+          icon={
+            <HeartIcon className={classnames(styles.navOptionIcon, isFavouritesActive() ? styles.navOptionSelected : '')} />
+          }
+        />
+        <BottomNavigationAction
+          className={classnames(styles.navOption, isSettingsActive() ? styles.navOptionSelected : '')}
+          component={Link}
+          to="/settings"
+          label={t("pages.settings.title")}
+          icon={
+            <SettingsIcon className={classnames(styles.navOptionIcon, isSettingsActive() ? styles.navOptionSelected : '')} />
+          }
+        />
+      </BottomNavigation>
     </Box>
   );
 };

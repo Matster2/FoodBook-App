@@ -6,7 +6,9 @@
     box-shadow: 0px -3px 4px rgba(50, 50, 50, 0.1);
     height: calc(70px + env(safe-area-inset-bottom)) !important;
     padding-bottom: calc(5px + env(safe-area-inset-bottom));
-    max-width: 100% !important;
+    padding-top: 8px !important;
+    left: 0px !important;
+    right: 0px !important;
 }
 
 .bottomNav a {
@@ -18,9 +20,15 @@
 }
 
 .navOption {
-    width: 18px;
+    min-width: 20% !important;
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+.navOptionIcon {
+    width: 22px;
     height: auto;
-    margin: 3px 0px;
+    margin-bottom: 5px;
     padding: 0px;
     fill: rgba(50, 50, 50, 0);
     stroke: #747474;
@@ -28,10 +36,6 @@
 }
 
 .navOptionSelected {
-    width: 18px;
-    height: auto;
-    margin: 3px 0px;
-    padding: 0px;
     fill: #fb6b1c !important;
     stroke: rgba(50, 50, 50, 0);
     color: #fb6b1c !important;
