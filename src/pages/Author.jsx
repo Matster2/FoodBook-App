@@ -1,25 +1,22 @@
-import React, { useMemo, useEffect, useContext, useState } from 'react';
-import { useTranslation } from "react-i18next";
-import { useParams, useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import {
-  CssBaseline,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  InputAdornment,
-  Grid,
-  Avatar,
-  Stack,
-  CircularProgress
+    Avatar,
+    Box,
+    CircularProgress,
+    Container,
+    CssBaseline,
+    Grid,
+    Stack,
+    Typography
 } from '@mui/material';
-import useAPI from '../hooks/useAPI';
-import Section from '../components/Section';
-import RecipeTile from '../components/RecipeTile';
-import AuthorLink from '../components/AuthorLink';
-import Header from '../components/Header';
-import { truncateText } from '../utils/stringUtils';
+import AuthorLink from 'components/AuthorLink';
+import Header from 'components/Header';
+import RecipeTile from 'components/RecipeTile';
+import Section from 'components/Section';
+import useAPI from 'hooks/useAPI';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from 'react-router-dom';
+import { truncateText } from 'utils/stringUtils';
 
 import styles from './Author.module.css';
 /*

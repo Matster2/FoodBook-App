@@ -1,14 +1,13 @@
+import { Box, Button, Container, TextField } from '@mui/material';
+import Header from 'components/Header';
+import useAPI from 'hooks/useAPI';
+import useAuth from 'hooks/useAuth';
+import useInput from 'hooks/useInput';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
-import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
-import Header from '../../components/Header';
-import useAuth from '../../hooks/useAuth';
-import useInput from '../../hooks/useInput';
-import useAPI from '../../hooks/useAPI';
-import { isUndefined, isEmptyOrWhiteSpace, isValidEmail } from '../../utils/utils';
+import { isEmptyOrWhiteSpace, isUndefined } from 'utils/utils';
 
 export default () => {
   const { t } = useTranslation();

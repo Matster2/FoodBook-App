@@ -1,13 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useTranslation } from "react-i18next";
-import { Grid, Card, Typography, Stack, Box } from '@mui/material';
 import { AccessTime as AccessTimeIcon, Star as StarIcon } from '@mui/icons-material';
+import { Box, Card, Grid, Stack, Typography } from '@mui/material';
+import FavouriteHeart from 'components/FavouriteHeart';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import styles from './RecipeTile.module.css';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-import FavouriteHeart from '../FavouriteHeart';
+import styles from './RecipeTile.module.css';
 
 const RecipeTile = ({ recipe, onClick }) => {
   const { t } = useTranslation();

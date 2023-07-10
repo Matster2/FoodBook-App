@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from 'react';
 import {
-  CssBaseline,
-  Container,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Paper,
-  Select,
-  Slide,
-  Box,
-  CircularProgress,
-  Typography,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Pagination
+    Box,
+    CircularProgress,
+    Container,
+    CssBaseline,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Pagination,
+    Paper,
+    Select,
+    Slide,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography
 } from '@mui/material';
-import PullToRefresh from 'react-simple-pull-to-refresh';
+import Header from 'components/Header';
+import SupportTicketDialog from 'dialogs/SupportTicketDialog';
+import useAPI from 'hooks/useAPI';
+import useFilters from 'hooks/useFilters';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAPI from '../../hooks/useAPI';
-import useFilters from '../../hooks/useFilters';
-import Header from '../../components/Header';
-import SupportTicketDialog from '../../dialogs/SupportTicketDialog';
+import PullToRefresh from 'react-simple-pull-to-refresh';
 
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
 import NiceModal from '@ebay/nice-modal-react';
+import { Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
+import logo from 'assets/logo.svg';
+import useAPI from 'hooks/useAPI';
+import useInput from 'hooks/useInput';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
-import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
-import useInput from '../hooks/useInput';
-import useAPI from '../hooks/useAPI';
-import { isUndefined, isEmptyOrWhiteSpace } from '../utils/utils';
+import { isEmptyOrWhiteSpace, isUndefined } from 'utils/utils';
 import styles from './ForgottenPassword.module.css';
-import logo from '../assets/logo.svg';
 
 const ForgottenPassword = ({ onSignInClick, onComplete }) => {
   const { t } = useTranslation();

@@ -1,31 +1,31 @@
-import React, { useContext, useState, useEffect } from 'react';
 import NiceModal from '@ebay/nice-modal-react';
-import { useTranslation } from "react-i18next";
 import {
-  Container,
-  Grid,
-  TextField,
-  CircularProgress,
-  Box,
-  InputAdornment,
-  CssBaseline,
-  Dialog,
-  Slide,
-  Typography,
-  Button,
+    Box,
+    Button,
+    CircularProgress,
+    Container,
+    CssBaseline,
+    Dialog,
+    Grid,
+    InputAdornment,
+    Slide,
+    TextField,
+    Typography,
 } from '@mui/material';
-import PullToRefresh from 'react-simple-pull-to-refresh';
+import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
+import FilterButton from 'components/FilterButton';
+import Header from 'components/Header';
+import RecipeTile from 'components/RecipeTile';
+import { TagContext } from 'contexts/TagContext';
+import useAPI from 'hooks/useAPI';
+import useAuth from 'hooks/useAuth';
+import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
-import RecipeTile from '../components/RecipeTile';
-import Header from '../components/Header';
-import Filters from './Filters';
-import FilterButton from '../components/FilterButton';
-import useAPI from '../hooks/useAPI';
-import useAuth from '../hooks/useAuth';
-import { isUndefined } from '../utils/utils';
-import { TagContext } from '../contexts/TagContext';
-import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
+import PullToRefresh from 'react-simple-pull-to-refresh';
+import { isUndefined } from 'utils/utils';
 import styles from './Favourites.module.css';
+import Filters from './Filters';
 
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading

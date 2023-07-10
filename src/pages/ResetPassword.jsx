@@ -1,17 +1,14 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import NiceModal from '@ebay/nice-modal-react';
-import PropTypes from 'prop-types';
+import { Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
+import logo from 'assets/logo.svg';
+import useAPI from 'hooks/useAPI';
+import useInput from 'hooks/useInput';
+import React, { useEffect, useMemo, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
-import Header from '../components/Header';
-import useAuth from '../hooks/useAuth';
-import useInput from '../hooks/useInput';
-import useAPI from '../hooks/useAPI';
+import { isEmptyOrWhiteSpace, isNull, isUndefined } from 'utils/utils';
 import styles from './ResetPassword.module.css';
-import logo from '../assets/logo.svg';
-import { isUndefined, isEmptyOrWhiteSpace, isValidEmail, isNull } from '../utils/utils';
 
 export default () => {
   const { t } = useTranslation();

@@ -1,16 +1,14 @@
-import React from 'react';
+import { AccessTime as AccessTimeIcon, Edit as EditIcon } from '@mui/icons-material';
+import { Box, Card, Grid, Stack, Typography } from '@mui/material';
+import useLongPress from 'hooks/useLongPress';
 import PropTypes from 'prop-types';
+import React from 'react';
 import { useTranslation } from "react-i18next";
-import { Grid, Card, Typography, Stack, Box, IconButton } from '@mui/material';
-import { AccessTime as AccessTimeIcon, Star as StarIcon } from '@mui/icons-material';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import useLongPress from '../../hooks/useLongPress';
-import styles from './PlannedRecipe.module.css';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-import FavouriteHeart from '../FavouriteHeart';
-import { Edit as EditIcon } from '@mui/icons-material';
-import { capitalizeFirstLetter } from '../../utils/stringUtils';
+import { capitalizeFirstLetter } from 'utils/stringUtils';
+import styles from './PlannedRecipe.module.css';
 
 const defaultOptions = {
   shouldPreventDefault: false,
@@ -58,7 +56,7 @@ const PlannedRecipe = ({ plannedRecipe, onClick, onEditClick }) => {
           <Box display="flex" flexDirection="column" width="100%">
             <Typography className={styles.name} sx={{ mb: 0.5 }} onClick={handleClick}>{plannedRecipe.recipe.name}</Typography>
 
-            <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
+            <Grid container justifyContent="space-between" sx={{ mb: 1 }} display="flex" alignItems="center" justifyContent="center">
               <Grid item xs={6}>
                 <Stack direction="row" alignItems="center" gap={0.4}>
                   <Typography>{plannedRecipe.servings} {capitalizeFirstLetter(t('types.recipe.fields.servings'))}</Typography>
@@ -73,7 +71,7 @@ const PlannedRecipe = ({ plannedRecipe, onClick, onEditClick }) => {
             </Grid>
           </Box>
         </Grid>
-        <Grid item>
+        <Grid item xs={1} display="flex" alignItems="center" justifyContent="center">
           <EditIcon className={styles.editIcon} onClick={handleEditClick} />
         </Grid>
       </Grid>

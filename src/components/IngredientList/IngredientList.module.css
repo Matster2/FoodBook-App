@@ -6,3 +6,7 @@
 .listLine P {
     font-size: 12px;
 }
+
+.checkbox {
+    padding: 0px !important;
+}

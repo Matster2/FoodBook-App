@@ -1,34 +1,24 @@
-import React, { useContext, useState } from 'react';
-import toast from 'react-hot-toast';
-import { useTranslation } from "react-i18next";
-import { useNavigate, Link } from 'react-router-dom';
 import NiceModal from '@ebay/nice-modal-react';
 import {
-  Container,
-  List,
-  ListItem,
-  Select,
-  MenuItem,
-  ListItemIcon,
-  ListItemButton,
-  ListItemText,
-  Box,
-  Typography,
-  Dialog,
-  Button,
-  DialogContent,
-  DialogTitle,
-  DialogActions,
-  DialogContentText,
+    Box,
+    Container,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
+    Typography
 } from '@mui/material';
-import useAuth from '../hooks/useAuth';
-import useAPI from '../hooks/useAPI';
+import logo from 'assets/logo.svg';
+import Header from 'components/Header';
+import LanguageDropdown from 'components/LanguageDropdown';
+import { LanguageContext } from 'contexts/LanguageContext';
+import useAPI from 'hooks/useAPI';
+import useAuth from 'hooks/useAuth';
+import React, { useContext } from 'react';
+import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './Settings.module.css';
-import logo from '../assets/logo.svg';
-import Header from '../components/Header';
-import LanguageDropdown from '../components/LanguageDropdown';
-import { LanguageContext } from '../contexts/LanguageContext';
-import { capitalizeFirstLetter } from '../utils/stringUtils';
 
 export default () => {
   const { t } = useTranslation();

@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { Box, Button, Container, CssBaseline, TextField } from '@mui/material';
+import Header from 'components/Header';
+import { Field, Form, Formik } from 'formik';
+import useAPI from 'hooks/useAPI';
+import React, { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
-import * as yup from 'yup';
-import { Formik, Form, Field } from 'formik';
-import { CssBaseline, Container, Box, TextField, Button } from '@mui/material';
 import { useNavigate, useParams } from 'react-router-dom';
-import useAPI from '../../hooks/useAPI';
-import Header from '../../components/Header';
-import FormModes from '../../utils/formModes';
+import FormModes from 'utils/formModes';
+import * as yup from 'yup';
 
 const tagSchema = yup.object({
   name: yup.string().required(),

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
-import PropTypes from 'prop-types';
-import { useTranslation } from "react-i18next";
-import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import styles from './Register.module.css';
 import NiceModal from '@ebay/nice-modal-react';
-import useInput from '../hooks/useInput';
-import useAPI from '../hooks/useAPI';
-import { isUndefined, isEmptyOrWhiteSpace, isValidEmail } from '../utils/utils';
-import logo from '../assets/logo.svg';
+import { Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
+import logo from 'assets/logo.svg';
+import useAPI from 'hooks/useAPI';
+import useInput from 'hooks/useInput';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
+import { useNavigate } from 'react-router-dom';
+import { isEmptyOrWhiteSpace, isUndefined, isValidEmail } from 'utils/utils';
+import styles from './Register.module.css';
 
 const Register = ({ onSignInClick, onComplete }) => {
   const { t } = useTranslation();

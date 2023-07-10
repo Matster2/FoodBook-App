@@ -1,12 +1,12 @@
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import Header from 'components/Header';
+import useAPI from 'hooks/useAPI';
+import useInput from 'hooks/useInput';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
-import { Container, TextField, Button, Box, Typography } from '@mui/material';
-import useInput from '../hooks/useInput';
-import { isUndefined, isEmptyOrWhiteSpace, isValidEmail } from '../utils/utils';
-import useAPI from '../hooks/useAPI';
-import Header from '../components/Header';
+import { isEmptyOrWhiteSpace, isUndefined, isValidEmail } from 'utils/utils';
 
 import 'react-spring-bottom-sheet/dist/style.css';
 import 'swiper/swiper-bundle.min.css';

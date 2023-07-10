@@ -1,14 +1,14 @@
-import React, { useMemo, useEffect, useContext, useState } from 'react';
 import {
-  CssBaseline,
-  Container,
-  Typography,
-  Box,
-  Button,
-  Stack,
+    Box,
+    Button,
+    Container,
+    CssBaseline,
+    Stack,
+    Typography,
 } from '@mui/material';
+import sleepLogo from 'assets/logo-sleep.svg';
+import React from 'react';
 import { useTranslation } from "react-i18next";
-import sleepLogo from '../assets/logo-sleep.svg';
 
 export default () => {
   const { t } = useTranslation();

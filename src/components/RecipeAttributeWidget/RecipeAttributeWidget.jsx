@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import { Box, Icon, Stack, Typography } from '@mui/material';
 import classnames from 'classnames';
-import { useTranslation } from "react-i18next";
 import PropTypes from 'prop-types';
-import { Box, Stack, Icon, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { useTranslation } from "react-i18next";
 import styles from './RecipeAttributeWidget.module.css';
 
-import { ReactComponent as CaloriesIcon } from '../../assets/icons/calories.svg';
-import { ReactComponent as AlcoholIcon } from '../../assets/icons/alcohol.svg';
-import { isUndefined } from '../../utils/utils';
+import { ReactComponent as AlcoholIcon } from 'assets/icons/alcohol.svg';
+import { ReactComponent as CaloriesIcon } from 'assets/icons/calories.svg';
+import { isUndefined } from 'utils/utils';
 
 const RecipeAttributeWidget = ({ type, value }) => {
   const { t } = useTranslation();

@@ -1,7 +1,7 @@
-import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
 import { Container, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import Header from '../../components/Header';
+import Header from 'components/Header';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default () => {
   const navigate = useNavigate();

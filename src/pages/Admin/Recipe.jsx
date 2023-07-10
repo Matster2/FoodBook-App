@@ -1,41 +1,41 @@
-import React, { useRef, useContext, useEffect, useState } from 'react';
-import uuid from 'react-uuid';
-import toast from 'react-hot-toast';
-import * as yup from 'yup';
-import PropTypes from 'prop-types';
-import { useTranslation } from "react-i18next";
-import { Formik, Form, Field } from 'formik';
+import { Clear as ClearIcon } from '@mui/icons-material';
 import {
-  CssBaseline,
-  Container,
-  Box,
-  TextField,
-  Button,
-  FormControl,
-  Select,
-  InputLabel,
-  Grid,
-  MenuItem,
-  Typography,
-  Stack,
   Autocomplete,
-  IconButton,
-  List,
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  CssBaseline,
+  FormControl,
   FormControlLabel,
-  Checkbox
+  Grid,
+  IconButton,
+  InputLabel,
+  List,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography
 } from '@mui/material';
-import { Clear as ClearIcon, HorizontalRule } from '@mui/icons-material';
+import RecipeIngredient from 'Admin/components/RecipeIngredient';
+import RecipeStep from 'Admin/components/RecipeStep';
+import FilterOption from 'components/FilterOption';
+import Header from 'components/Header';
+import RecipeImageControl from 'components/RecipeImageControl';
+import { TagContext } from 'contexts/TagContext';
+import { UnitOfMeasurementContext } from 'contexts/UnitOfMeasurementContext';
+import { Field, Form, Formik } from 'formik';
+import useAPI from 'hooks/useAPI';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from 'react-router-dom';
-import useAPI from '../../hooks/useAPI';
-import Header from '../../components/Header';
-import FilterOption from '../../components/FilterOption';
-import RecipeImageControl from '../../components/RecipeImageControl';
-import RecipeIngredient from '../../Admin/components/RecipeIngredient';
-import RecipeStep from '../../Admin/components/RecipeStep';
-import { UnitOfMeasurementContext } from '../../contexts/UnitOfMeasurementContext';
-import { TagContext } from '../../contexts/TagContext';
-import FormModes from '../../utils/formModes';
-import { isUndefined } from '../../utils/utils';
+import uuid from 'react-uuid';
+import { RecipeTypes } from 'types';
+import FormModes from 'utils/formModes';
+import { isUndefined } from 'utils/utils';
+import * as yup from 'yup';
 
 
 const NutritionField = ({ id, label, value, errors, touched }) => {
@@ -128,7 +128,7 @@ export default () => {
 
   const mode = !id ? FormModes.Create : FormModes.Update;
 
-  const types = ['Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snack', 'Drink'];
+  const types = Object.entries(RecipeTypes).map(( [k, v] ) => (v));
   const difficulties = ['veryEasy', 'easy', 'average', 'hard', 'veryHard'];
 
   const { setUnitOfMeasurements } = useContext(UnitOfMeasurementContext);

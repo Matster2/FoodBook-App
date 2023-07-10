@@ -1,36 +1,35 @@
-import React, { useMemo, useEffect, useContext, useState } from 'react';
 import NiceModal from '@ebay/nice-modal-react';
-import PropTypes from 'prop-types';
 import {
-  CssBaseline,
-  Container,
-  Typography,
-  Box,
-  TextField,
-  InputAdornment,
-  Grid,
-  Avatar,
-  Dialog,
-  Slide,
+    Avatar,
+    Box,
+    Container,
+    CssBaseline,
+    Dialog,
+    Grid,
+    InputAdornment,
+    Slide,
+    TextField,
+    Typography,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import CategoryChip from 'components/CategoryChip';
+import FilterButton from 'components/FilterButton';
+import RecipeTile from 'components/RecipeTile';
+import Section from 'components/Section';
+import { TagContext } from 'contexts/TagContext';
+import { UserContext } from 'contexts/UserContext';
+import useInput from 'hooks/useInput';
+import usePagedFetch from 'hooks/usePagedFetch';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from "react-i18next";
+import { useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import Filters from './Filters';
-import useInput from '../hooks/useInput';
-import RecipeTile from '../components/RecipeTile';
-import FilterButton from '../components/FilterButton';
-import Section from '../components/Section';
-import CategoryChip from '../components/CategoryChip';
-import usePagedFetch from '../hooks/usePagedFetch';
-import { TagContext } from '../contexts/TagContext';
-import { UserContext } from '../contexts/UserContext';
 
+import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
+import useAuth from 'hooks/useAuth';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
 import styles from './Homepage.module.css';
-import useAuth from '../hooks/useAuth';
 
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading

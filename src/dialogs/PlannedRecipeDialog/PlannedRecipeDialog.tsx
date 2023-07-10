@@ -1,26 +1,25 @@
+import {
+    Box,
+    Button,
+    ButtonGroup,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Grid,
+    Stack,
+    Typography
+} from '@mui/material';
+import { TransitionProps } from "@mui/material/transitions";
+import useAPI from 'hooks/useAPI';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
-import useAPI from '../../hooks/useAPI';
-import {
-  Typography,
-  Box,
-  Dialog,
-  Button,
-  ButtonGroup,
-  Grid,
-  Stack,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText
-} from '@mui/material';
-import { AccessTime as AccessTimeIcon } from '@mui/icons-material';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { TransitionProps } from "@mui/material/transitions";
-import { getDayName, getMonthName } from '../../utils/utils';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
+import { getDayName, getMonthName } from 'utils/utils';
 
 import styles from './PlannedRecipeDialog.module.css';
 

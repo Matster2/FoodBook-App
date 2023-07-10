@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
 import NiceModal from '@ebay/nice-modal-react';
+import { Box, Button, CircularProgress, Container, CssBaseline, Grid, IconButton, List, Slide, Stack, Typography } from '@mui/material';
+import DatePickerOption from 'components/DatePickerOption/DatePickerOption';
+import Header from 'components/Header';
+import PlannedRecipe from 'components/PlannedRecipe';
+import PlannedRecipeDialog from 'dialogs/PlannedRecipeDialog';
+import useAPI from 'hooks/useAPI';
+import useAuth from 'hooks/useAuth';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { Container, CircularProgress, Grid, CssBaseline, Stack, List, Box, Button, Typography, IconButton, Slide } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
-import PlannedRecipe from '../components/PlannedRecipe';
-import useAPI from '../hooks/useAPI';
-import useAuth from '../hooks/useAuth';
-import DatePickerOption from '../components/DatePickerOption/DatePickerOption';
-import { areDatesTheSameDay, getDayName, getMonthName, isUndefined } from '../utils/utils';
-import PlannerIngredientListDialog from '../dialogs/PlannerIngredientListDialog';
-import PlannedRecipeDialog from '../dialogs/PlannedRecipeDialog';
+import { areDatesTheSameDay, getDayName, getMonthName, isUndefined, toISOLocal } from 'utils/utils';
 
-import { ReactComponent as IngredientsIcon } from '../assets/icons/ingredients.svg';
+import { ReactComponent as IngredientsIcon } from 'assets/icons/ingredients.svg';
 import styles from './Planner.module.css';
 
 const Transition = React.forwardRef((props, ref) => {
@@ -39,7 +38,6 @@ export default () => {
   const [planner, setPlanner] = useState();
   const [loadingPlanner, setLoadingPlanner] = useState(false);
 
-  const [showIngredientListModal, setShowIngredientListModal] = useState(false);
   const [showEditPlannedRecipeModal, setShowEditPlannedRecipeModal] = useState(false);
 
   const [selectedPlannedRecipe, setSelectedPlannedRecipe] = useState();
@@ -47,7 +45,6 @@ export default () => {
   useEffect(() => {
     const dateToday = new Date();
     const startDate = new Date();
-    // startDate.setDate(dateToday.getDate() - 7);
 
     const dates = [];
 
@@ -63,10 +60,12 @@ export default () => {
   const fetchPlanner = async () => {
     setLoadingPlanner(true);
 
+    const date = toISOLocal(selectedDate);
+
     try {
       const { data } = await api.getUserPlanner(userId, {
-        dateFrom: selectedDate.toISOString().split('T')[0],
-        dateTo: selectedDate.toISOString().split('T')[0],
+        dateFrom: date.split('T')[0],
+        dateTo: date.split('T')[0],
       });
       setPlanner(data);
     } catch (e) {
@@ -99,12 +98,25 @@ export default () => {
     setShowEditPlannedRecipeModal(true);
   }
 
+  const handleViewIngredientListClick = (date) => {
+    const formattedDate = toISOLocal(date);
+
+    navigate(`/ingredient-list`, {
+      state: {
+        filters: {
+          dateFrom: formattedDate.split('T')[0],
+          dateTo: formattedDate.split('T')[0],
+        }
+      }
+    });
+  }
+
   const onPlannedRecipeUpdated = () => {
     fetchPlanner();
   }
 
-  const getDateString = () => {
-    return `${getDayName(selectedDate)}, ${selectedDate.getDate()} ${getMonthName(selectedDate)}`
+  const getDateString = (date) => {
+    return `${getDayName(date)}, ${date.getDate()} ${getMonthName(date)}`
   }
 
   if (!authenticated) {
@@ -130,19 +142,6 @@ export default () => {
   return (
     <Container sx={{ pb: 10 }}>
       <CssBaseline />
-
-      <PlannerIngredientListDialog
-        open={showIngredientListModal}
-        onClose={() => {
-          setShowIngredientListModal(false);
-        }}
-        TransitionComponent={Transition}
-        userId={userId}
-        filters={{
-          dateFrom: selectedDate.toISOString().split('T')[0],
-          dateTo: selectedDate.toISOString().split('T')[0],
-        }}
-      />
 
       {selectedPlannedRecipe && (
         <PlannedRecipeDialog
@@ -170,12 +169,12 @@ export default () => {
       <Box>
         <Grid container justifyContent="space-between" alignItems="center">
           <Grid item alignItems="flex-start">
-            <Typography variant="h5" sx={{ mb: 2 }} className={styles.date}>{getDateString()}</Typography>
+            <Typography variant="h5" sx={{ mb: 2 }} className={styles.date}>{getDateString(selectedDate)}</Typography>
           </Grid>
 
           {!isUndefined(planner) && planner.plannedRecipes.length > 0 && (
             <Grid item alignItems="center" justifyContent="center">
-              <IconButton className={styles.ingredientsButton} onClick={() => { setShowIngredientListModal(true) }}>
+              <IconButton className={styles.ingredientsButton} onClick={() => handleViewIngredientListClick(selectedDate)}>
                 <IngredientsIcon className={styles.ingredientsIcon} />
               </IconButton>
             </Grid>

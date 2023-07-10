@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
+import { isUndefined, nestedCopy } from 'utils/utils';
 import useFetch from './useFetch';
-import { isUndefined, nestedCopy } from '../utils/utils';
 
 const usePagedFetch = (url) => {
   const [results, setResults] = useState([]);

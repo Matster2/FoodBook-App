@@ -1,15 +1,15 @@
+import NiceModal from '@ebay/nice-modal-react';
+import { Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
+import logo from 'assets/logo.svg';
+import useAuth from 'hooks/useAuth';
+import useInput from 'hooks/useInput';
+import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import NiceModal from '@ebay/nice-modal-react';
 import { useTranslation } from "react-i18next";
-import PropTypes from 'prop-types';
-import { CssBaseline, Container, Typography, TextField, Button, Box } from '@mui/material';
-import useInput from '../hooks/useInput';
-import useAuth from '../hooks/useAuth';
-import { isUndefined, isEmptyOrWhiteSpace, isValidEmail } from '../utils/utils';
+import { useNavigate } from 'react-router-dom';
+import { isEmptyOrWhiteSpace, isUndefined, isValidEmail } from 'utils/utils';
 import styles from './SignIn.module.css';
-import logo from '../assets/logo.svg';
-import { Link, useNavigate } from 'react-router-dom';
 
 const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
   const { t } = useTranslation();

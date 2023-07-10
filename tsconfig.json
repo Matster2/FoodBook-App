@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "src",
     "target": "es5",
     "lib": [
       "es6",
@@ -30,10 +30,10 @@
     ],
   },
   "include": [
+    "src",
     "src/**/*.ts",
     "src/**/*.tsx",
-    "globals.d.ts",
-    "src/dialogs/PlannerIngredientListDialog/PlannerIngredientListDialog.jsx",
+    "globals.d.ts"
   ],
   "exclude": [
     "node_modules"

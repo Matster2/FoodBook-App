@@ -1,52 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
-import { useTranslation } from "react-i18next";
-import _ from "lodash";
-import uuid from 'react-uuid';
-import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import {
-  Container,
-  Typography,
-  Stepper,
-  Step,
-  StepLabel,
+  AccessTime as AccessTimeIcon,
+  ChevronLeft as ChevronLeftIcon,
+  Star as StarIcon
+} from '@mui/icons-material';
+import {
+  Avatar,
   Box,
+  CircularProgress,
+  Container,
+  Dialog,
   Grid,
   IconButton,
-  Stack,
-  Dialog,
-  CircularProgress,
   Slide,
-  Avatar,
+  Stack,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
 } from '@mui/material';
-import {
-  ExpandMore as ExpandMoreIcon,
-  ChevronLeft as ChevronLeftIcon,
-  AccessTime as AccessTimeIcon,
-  Star as StarIcon,
-} from '@mui/icons-material';
+import FavouriteHeart from 'components/FavouriteHeart';
+import IngredientList from 'components/IngredientList';
+import NutritionList from 'components/NutritionList';
+import RatingFilter from 'components/RatingFilter';
+import RecipeAttributeWidget from 'components/RecipeAttributeWidget';
+import ServingsIncrementor from 'components/ServingsIncrementor';
+import PlanRecipeDialog from 'dialogs/PlanRecipeDialog';
+import useAPI from 'hooks/useAPI';
+import useAuth from 'hooks/useAuth';
+import _ from "lodash";
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { BottomSheet } from 'react-spring-bottom-sheet';
+import uuid from 'react-uuid';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import useAPI from '../hooks/useAPI';
-import useAuth from '../hooks/useAuth';
-import RatingFilter from '../components/RatingFilter';
-import FavouriteHeart from '../components/FavouriteHeart';
-import IngredientList from '../components/IngredientList';
-import ServingsIncrementor from '../components/ServingsIncrementor';
-import NutritionList from '../components/NutritionList';
-import RecipeAttributeWidget from '../components/RecipeAttributeWidget';
-import PlanRecipeDialog from '../dialogs/PlanRecipeDialog';
 
-import { isUndefined, isNull } from '../utils/utils';
-import { capitalizeFirstLetter, truncateText } from '../utils/stringUtils';
-import { ReactComponent as PlannerIcon } from '../assets/icons/planner.svg';
-import { ReactComponent as PrepIcon } from '../assets/icons/prep.svg';
-import { ReactComponent as CookIcon } from '../assets/icons/cook.svg';
+import { ReactComponent as CookIcon } from 'assets/icons/cook.svg';
+import { ReactComponent as PlannerIcon } from 'assets/icons/planner.svg';
+import { ReactComponent as PrepIcon } from 'assets/icons/prep.svg';
+import { capitalizeFirstLetter, truncateText } from 'utils/stringUtils';
+import { isNull, isUndefined } from 'utils/utils';
 
-import styles from './Recipe.module.css';
 import 'react-spring-bottom-sheet/dist/style.css';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
+import styles from './Recipe.module.css';
 
 const Transition = React.forwardRef((props, ref) => {
   // eslint-disable-next-line react/jsx-props-no-spreading

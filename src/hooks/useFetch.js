@@ -1,11 +1,11 @@
-import { useState, useContext, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { useCallback, useContext, useEffect, useState } from 'react';
 
 import useAuth from './useAuth';
 
-import { isNullOrUndefined } from '../utils/utils';
-import { isEmptyOrWhiteSpace } from '../utils/stringUtils';
-import { LanguageContext } from '../contexts/LanguageContext';
+import { LanguageContext } from 'contexts/LanguageContext';
+import { isEmptyOrWhiteSpace } from 'utils/stringUtils';
+import { isNullOrUndefined } from 'utils/utils';
 
 const useFetch = (url) => {
   const [data, setData] = useState(undefined);
@@ -37,7 +37,6 @@ const useFetch = (url) => {
     } catch (e) {
       setError(e);
       setLoading(false);
-      throw e;
     }
   }, [url, accessToken]);
 

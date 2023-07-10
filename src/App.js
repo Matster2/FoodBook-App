@@ -1,63 +1,63 @@
-import React, { useContext, useState, useEffect } from 'react';
-import axios from 'axios';
-import { useTranslation } from "react-i18next";
-import { Offline, Online } from "react-detect-offline";
-import classnames from 'classnames';
-import { Toaster } from 'react-hot-toast';
-import { createBrowserRouter, RouterProvider, Link, Outlet, useLocation, matchPath } from 'react-router-dom';
-import { ThemeProvider, BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Box, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
+import axios from 'axios';
+import classnames from 'classnames';
+import React, { useContext, useEffect, useState } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
+import { Link, Outlet, RouterProvider, createBrowserRouter, matchPath, useLocation } from 'react-router-dom';
 
 import { AppContext } from './contexts/AppContext';
 import { LanguageContext } from './contexts/LanguageContext';
 import { UserContext } from './contexts/UserContext';
-import useAuth from './hooks/useAuth';
 import useAPI from './hooks/useAPI';
+import useAuth from './hooks/useAuth';
 
 import AdminRoute from './routings/AdminRoute';
-import UnAuthRoute from './routings/UnAuthRoute';
 import AuthRoute from './routings/AuthRoute';
+import UnAuthRoute from './routings/UnAuthRoute';
 
-import SignIn from './pages/SignIn';
-import Register from './pages/Register';
-import ForgottenPassword from './pages/ForgottenPassword';
-import ResetPassword from './pages/ResetPassword';
-import NotFound from './pages/NotFound';
-import Homepage from './pages/Homepage';
-import Recipe from './pages/Recipe';
-import Recipes from './pages/Recipes';
-import Favourites from './pages/Favourites';
-import Settings from './pages/Settings';
 import AccountSettings from './pages/Account/AccountSettings';
 import ChangePassword from './pages/Account/ChangePassword';
-import ContactUs from './pages/ContactUs';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import Author from './pages/Author';
-import AdminTags from './pages/Admin/Tags';
-import AdminTag from './pages/Admin/Tag';
-import AdminIngredients from './pages/Admin/Ingredients';
-import AdminIngredient from './pages/Admin/Ingredient';
-import AdminAuthors from './pages/Admin/Authors';
 import AdminAddAuthor from './pages/Admin/AddAuthor';
-import AdminRecipes from './pages/Admin/Recipes';
-import AdminRecipe from './pages/Admin/Recipe';
-import AdminSupportTickets from './pages/Admin/SupportTickets';
+import AdminAuthors from './pages/Admin/Authors';
+import AdminIngredient from './pages/Admin/Ingredient';
+import AdminIngredients from './pages/Admin/Ingredients';
 import AdminLogs from './pages/Admin/Logs';
+import AdminRecipe from './pages/Admin/Recipe';
+import AdminRecipes from './pages/Admin/Recipes';
 import AdminSettings from './pages/Admin/Settings';
-import Planner from './pages/Planner';
-import TermsOfService from './pages/TermsOfService';
+import AdminSupportTickets from './pages/Admin/SupportTickets';
+import AdminTag from './pages/Admin/Tag';
+import AdminTags from './pages/Admin/Tags';
+import Author from './pages/Author';
+import ContactUs from './pages/ContactUs';
+import Favourites from './pages/Favourites';
+import ForgottenPassword from './pages/ForgottenPassword';
+import Homepage from './pages/Homepage';
+import IngredientList from './pages/IngredientList';
+import NotFound from './pages/NotFound';
 import OfflinePage from './pages/Offline';
+import Planner from './pages/Planner';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Recipe from './pages/Recipe';
+import Recipes from './pages/Recipes';
+import Register from './pages/Register';
+import ResetPassword from './pages/ResetPassword';
+import Settings from './pages/Settings';
+import SignIn from './pages/SignIn';
+import TermsOfService from './pages/TermsOfService';
 
 import AuthenticationModal from './modals/AuthenticationModal';
 
-import { ReactComponent as HomeIcon } from './assets/icons/home.svg';
-import { ReactComponent as DiscoverIcon } from './assets/icons/discover.svg';
-import { ReactComponent as PlannerIcon } from './assets/icons/planner.svg';
-import { ReactComponent as HeartIcon } from './assets/icons/heart.svg';
 import { ReactComponent as SettingsIcon } from './assets/icons/cog.svg';
+import { ReactComponent as DiscoverIcon } from './assets/icons/discover.svg';
+import { ReactComponent as HeartIcon } from './assets/icons/heart.svg';
+import { ReactComponent as HomeIcon } from './assets/icons/home.svg';
+import { ReactComponent as PlannerIcon } from './assets/icons/planner.svg';
 
-import styles from './App.module.css';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
+import styles from './App.module.css';
 
 const App = () => {
   const { authenticated, refreshTokens } = useAuth();
@@ -287,6 +287,14 @@ const App = () => {
         {
           path: '/planner',
           element: <Planner />,
+        },
+        {
+          path: '/ingredient-list',
+          element: (
+            <AdminRoute>
+              <IngredientList />
+            </AdminRoute>
+          ),
         },
         {
           path: '/authors/:id',

@@ -1,10 +1,10 @@
-import React, { createElement, createContext, useReducer, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import React, { createContext, createElement, useEffect, useMemo, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { reducer, actions } from '../reducers/languageReducer';
+import { actions, reducer } from 'reducers/languageReducer';
 
-import localStorageKeys from '../config/localStorageKeys';
+import localStorageKeys from 'config/localStorageKeys';
 
 export const LanguageContext = createContext();
 

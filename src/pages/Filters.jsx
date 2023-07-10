@@ -1,25 +1,26 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { useTranslation } from "react-i18next";
-import PropTypes from 'prop-types';
 import {
-  CssBaseline,
-  Container,
-  Typography,
-  Button,
-  TextField,
   Autocomplete,
-  Chip,
   Box,
+  Button,
+  Chip,
+  Container,
+  CssBaseline,
   Grid,
   Stack,
+  TextField,
+  Typography,
 } from '@mui/material';
-import useFilters from '../hooks/useFilters';
-import RatingFilter from '../components/RatingFilter';
-import FilterOption from '../components/FilterOption';
-import { TagContext } from '../contexts/TagContext';
-import useAPI from '../hooks/useAPI';
-import { isUndefined } from '../utils/utils';
-import Header from '../components/Header';
+import FilterOption from 'components/FilterOption';
+import Header from 'components/Header';
+import RatingFilter from 'components/RatingFilter';
+import { TagContext } from 'contexts/TagContext';
+import useAPI from 'hooks/useAPI';
+import useFilters from 'hooks/useFilters';
+import PropTypes from 'prop-types';
+import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from "react-i18next";
+import { RecipeTypes } from 'types';
+import { isUndefined } from 'utils/utils';
 
 const Filters = ({ filters: originalFilters, onApply, onClose }) => {
   const { t } = useTranslation();
@@ -46,27 +47,27 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
 
   const typeOptions = [
     {
-      value: 'breakfast',
+      value: RecipeTypes.Breakfast,
       label: t('types.recipe.types.breakfast.displayName')
     },
     {
-      value: 'lunch',
+      value: RecipeTypes.Lunch,
       label: t('types.recipe.types.lunch.displayName')
     },
     {
-      value: 'dinner',
+      value: RecipeTypes.Dinner,
       label: t('types.recipe.types.dinner.displayName')
     },
     {
-      value: 'dessert',
+      value: RecipeTypes.Dessert,
       label: t('types.recipe.types.dessert.displayName')
     },
     {
-      value: 'snack',
+      value: RecipeTypes.Snack,
       label: t('types.recipe.types.snack.displayName')
     },
     {
-      value: 'drink',
+      value: RecipeTypes.Drink,
       label: t('types.recipe.types.drink.displayName')
     }
   ];

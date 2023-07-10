@@ -1,24 +1,22 @@
-import React, { useState } from 'react';
-import ISO6391 from 'iso-639-1';
 import {
-  Select,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-  Typography
+    MenuItem,
+    Select,
+    Stack,
+    Typography
 } from '@mui/material';
+import ISO6391 from 'iso-639-1';
+import React from 'react';
 import styles from './LanguageDropdown.module.css';
 
-import { ReactComponent as EnglishFlag } from '../../assets/icons/flags/circular/england.svg';
-import { ReactComponent as FrenchFlag } from '../../assets/icons/flags/circular/france.svg';
-import { ReactComponent as GermanFlag } from '../../assets/icons/flags/circular/germany.svg';
-import { ReactComponent as ItalianFlag } from '../../assets/icons/flags/circular/italy.svg';
-import { ReactComponent as RussianFlag } from '../../assets/icons/flags/circular/russian-federation.svg';
-import { ReactComponent as SpanishFlag } from '../../assets/icons/flags/circular/spain.svg';
-import { ReactComponent as TurkishFlag } from '../../assets/icons/flags/circular/turkey.svg';
-import { ReactComponent as UkrainianFlag } from '../../assets/icons/flags/circular/ukraine.svg';
-import { ReactComponent as DefaultFlag } from '../../assets/icons/flags/circular/default.svg';
+import { ReactComponent as DefaultFlag } from 'assets/icons/flags/circular/default.svg';
+import { ReactComponent as EnglishFlag } from 'assets/icons/flags/circular/england.svg';
+import { ReactComponent as FrenchFlag } from 'assets/icons/flags/circular/france.svg';
+import { ReactComponent as GermanFlag } from 'assets/icons/flags/circular/germany.svg';
+import { ReactComponent as ItalianFlag } from 'assets/icons/flags/circular/italy.svg';
+import { ReactComponent as RussianFlag } from 'assets/icons/flags/circular/russian-federation.svg';
+import { ReactComponent as SpanishFlag } from 'assets/icons/flags/circular/spain.svg';
+import { ReactComponent as TurkishFlag } from 'assets/icons/flags/circular/turkey.svg';
+import { ReactComponent as UkrainianFlag } from 'assets/icons/flags/circular/ukraine.svg';
 
 const flagMappings = {
   "en": EnglishFlag,

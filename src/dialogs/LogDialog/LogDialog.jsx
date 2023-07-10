@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { Box, Dialog, Stack, Typography } from '@mui/material';
+import React from 'react';
 import { useTranslation } from "react-i18next";
-import { Typography, Box, Dialog, Button, CircularProgress, Stack, Chip } from '@mui/material';
 
-import useAPI from '../../hooks/useAPI';
+import useAPI from 'hooks/useAPI';
 
 const LogDialog = ({ open, onClose, log, transitionComponent }) => {
   const { t } = useTranslation();

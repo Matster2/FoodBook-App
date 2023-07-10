@@ -1,16 +1,16 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { Box, CircularProgress, Container, CssBaseline, Dialog, Grid, InputAdornment, Slide, TextField, Typography } from '@mui/material';
+import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
+import FilterButton from 'components/FilterButton';
+import Header from 'components/Header';
+import RecipeTile from 'components/RecipeTile';
+import { TagContext } from 'contexts/TagContext';
+import useAPI from 'hooks/useAPI';
+import useInput from 'hooks/useInput';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { Container, CircularProgress, Grid, Typography, TextField, Box, InputAdornment, CssBaseline, Dialog, Slide } from '@mui/material';
-import PullToRefresh from 'react-simple-pull-to-refresh';
 import { useLocation, useNavigate } from 'react-router-dom';
-import RecipeTile from '../components/RecipeTile';
-import Header from '../components/Header';
+import PullToRefresh from 'react-simple-pull-to-refresh';
 import Filters from './Filters';
-import FilterButton from '../components/FilterButton';
-import useAPI from '../hooks/useAPI';
-import useInput from '../hooks/useInput';
-import { TagContext } from '../contexts/TagContext';
-import { ReactComponent as SearchIcon } from '../assets/icons/search.svg';
 import styles from './Recipes.module.css';
 
 const Transition = React.forwardRef((props, ref) => {

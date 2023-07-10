@@ -1,12 +1,12 @@
-import React from 'react';
+import { Box, Checkbox, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import Fraction from '../../utils/fraction';
-import { Box, Typography } from '@mui/material';
+import React from 'react';
+import Fraction from 'utils/fraction';
 import styles from './IngredientList.module.css';
 
 const unitOfMeasurementsThatMustBeAWholeNumber = ['milligram', 'milliliter'];
 
-const IngredientList = ({ ingredients }) => {
+const IngredientList = ({ ingredients, enableCheckboxes }) => {
   const getUnitName = (unitOfMeasurement, amount) => {
     if (unitOfMeasurement.code === 'unit') {
       return '';
@@ -51,9 +51,9 @@ const IngredientList = ({ ingredients }) => {
     if (isWholeNumber) {
       return amount;
     }
-
+    
     const integer = Math.trunc(amount);
-    const decimal = Number(amount - integer);
+    const decimal = Number(amount - integer).toFixed(5);
 
     const fraction = Fraction(decimal);
 
@@ -76,8 +76,16 @@ const IngredientList = ({ ingredients }) => {
     const ingredientName = amount === 1 ? ingredient.name : ingredient.pluralName;
 
     return (
-      <Box key={ingredient.id} className={styles.listLine} display="flex" flexDirection="row" justifyContent="space-between">
-        <Typography>{ingredientName}</Typography>
+      <Box key={ingredient.id} className={styles.listLine} display="flex" flexDirection="row" justifyContent="space-between" alignItems="center">
+        <Stack direction="row" display="flex" alignItems="center">
+          {enableCheckboxes && (
+            <Checkbox
+              className={styles.checkbox}
+              sx={{ mr: 1 }}
+            />
+          )}
+          <Typography>{ingredientName}</Typography>
+        </Stack>
         <Typography> {`${amount} ${unit}`.trim()}</Typography>
       </Box>
     )
@@ -108,6 +116,7 @@ IngredientList.propTypes = {
 };
 
 IngredientList.defaultProps = {
+  enableCheckboxes: false,
 };
 
 export default IngredientList;

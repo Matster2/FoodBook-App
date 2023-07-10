@@ -1,17 +1,17 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import {
-  Box,
-  TextField,
-  FormControl,
-  Select,
-  InputLabel,
-  Grid,
-  MenuItem,
-  IconButton
-} from '@mui/material';
 import { Clear as ClearIcon } from '@mui/icons-material';
-import { UnitOfMeasurementContext } from '../../../contexts/UnitOfMeasurementContext';
+import {
+    Box,
+    FormControl,
+    Grid,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField
+} from '@mui/material';
+import { UnitOfMeasurementContext } from 'contexts/UnitOfMeasurementContext';
+import PropTypes from 'prop-types';
+import React, { useContext } from 'react';
 
 const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
   const { unitOfMeasurements } = useContext(UnitOfMeasurementContext);

@@ -1,7 +1,7 @@
-import React, { createElement, createContext, useReducer, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import React, { createContext, createElement, useMemo, useReducer } from 'react';
 
-import { reducer, initialState, actions } from '../reducers/unitOfMeasurementsReducer';
+import { actions, initialState, reducer } from 'reducers/unitOfMeasurementsReducer';
 
 export const UnitOfMeasurementContext = createContext();
 

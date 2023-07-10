@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { Dialog, DialogTitle, IconButton } from '@mui/material';
+import React, { useState } from 'react';
 
-import SignIn from '../../pages/SignIn';
-import Register from '../../pages/Register';
-import ForgottenPassword from '../../pages/ForgottenPassword';
+import ForgottenPassword from 'pages/ForgottenPassword';
+import Register from 'pages/Register';
+import SignIn from 'pages/SignIn';
 
 import styles from './AuthenticationModal.module.css';
 

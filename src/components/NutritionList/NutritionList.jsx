@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useTranslation } from "react-i18next";
 import { Box, Typography } from '@mui/material';
-import { isNull } from '../../utils/utils';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { useTranslation } from "react-i18next";
+import { isNull } from 'utils/utils';
 import styles from './NutritionList.module.css';
 
 const NutritionList = ({ nutrition: { calories, sugar, fat, saturatedFat, sodium, protein, carbohydrates, fiber } }) => {

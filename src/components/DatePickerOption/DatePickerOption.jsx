@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { Box, Stack, Typography } from '@mui/material';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { Box, Stack, Typography } from '@mui/material';
-import { getDayName, areDatesTheSameDay } from '../../utils/utils';
+import React, { useState } from 'react';
+import { areDatesTheSameDay, getDayName } from 'utils/utils';
 
 import styles from './DatePickerOption.module.css';
 
@@ -32,7 +32,7 @@ const DatePickerOption = ({ date, active, onClick }) => {
         gap={0.5}
       >
         <Typography className={styles.day}>{getDayName(date).slice(0, 1).toUpperCase()}</Typography>
-        <Typography className={styles.date}>{date.getUTCDate()}</Typography>
+        <Typography className={styles.date}>{date.getDate()}</Typography>
       </Stack>
     </Box>
   );

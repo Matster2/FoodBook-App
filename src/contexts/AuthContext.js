@@ -1,10 +1,10 @@
-import React, { createElement, createContext, useReducer, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import React, { createContext, createElement, useEffect, useMemo, useReducer } from 'react';
 
-import { reducer, getClaims } from '../reducers/authReducer';
+import { getClaims, reducer } from 'reducers/authReducer';
 
-import { isUndefined } from '../utils/utils';
-import localStorageKeys from '../config/localStorageKeys';
+import localStorageKeys from 'config/localStorageKeys';
+import { isUndefined } from 'utils/utils';
 
 export const AuthContext = createContext();
 

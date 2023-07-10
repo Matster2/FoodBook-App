@@ -1,9 +1,9 @@
+import { Box, Button, Chip, CircularProgress, Dialog, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
-import { Typography, Box, Dialog, Button, CircularProgress, Stack, Chip } from '@mui/material';
 
-import useAPI from '../../hooks/useAPI';
+import useAPI from 'hooks/useAPI';
 import { useEffect } from 'react';
 
 const SupportTicketDialog = ({ open, onClose, id, transitionComponent }) => {

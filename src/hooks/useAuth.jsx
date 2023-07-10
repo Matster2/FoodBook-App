@@ -1,8 +1,8 @@
-import { useContext, useCallback } from 'react';
 import axios from 'axios';
+import { useCallback, useContext } from 'react';
 
-import { AuthContext } from '../contexts/AuthContext';
-import { actions } from '../reducers/authReducer';
+import { AuthContext } from 'contexts/AuthContext';
+import { actions } from 'reducers/authReducer';
 
 const useAuth = () => {
   const { state, dispatch } = useContext(AuthContext);

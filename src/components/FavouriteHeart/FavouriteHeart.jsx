@@ -1,9 +1,9 @@
-import React from 'react';
+import { IconButton } from '@mui/material';
+import { ReactComponent as HeartIcon } from 'assets/icons/heart.svg';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { IconButton } from '@mui/material';
+import React from 'react';
 import styles from './FavouriteHeart.module.css';
-import { ReactComponent as HeartIcon } from '../../assets/icons/heart.svg';
 
 const FavouriteHeart = ({ disabled, favourited, onClick, width }) => {
   const handleClick = () => {
