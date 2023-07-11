@@ -72,11 +72,13 @@ function Day(props: PickersDayProps<Dayjs> & { fromDay?: Dayjs, toDay?: Dayjs })
   
   const isSelected = isFirstDay || dayIsBetween || isLastDay;
 
+  const onlyOneDay = toDay?.isSame(fromDay);
+
   return (
     <CustomPickersDay
       {...other}
       day={day}
-      sx={isSelected ? { px: 2.5, mx: 0 } : {}}
+      sx={isSelected && !onlyOneDay ? { px: 2.5, mx: 0 } : {}}
       dayIsBetween={dayIsBetween}
       isFirstDay={isFirstDay}
       isLastDay={isLastDay}

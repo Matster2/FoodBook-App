@@ -525,7 +525,8 @@
       "day": "Day",
       "days": "Days",
       "recipe": "Recipe",
-      "recipes": "Recipes"
+      "recipes": "Recipes",
+      "excluded": "Excluded"
     },
     "version": "Version",
     "time": {

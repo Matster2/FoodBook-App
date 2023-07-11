@@ -5,7 +5,7 @@ import { isNullOrEmpty, isUndefined } from 'utils/utils';
 import useAuth from './useAuth';
 
 const getSearchParams = (parameters) => {
-  const filters = parameters;
+  const filters = {...parameters};
   Object.keys(filters).forEach((key) => {
     const value = filters[key];
     if (isNullOrEmpty(value) || isUndefined(value) || (Array.isArray(value) && value.length === 0)) {

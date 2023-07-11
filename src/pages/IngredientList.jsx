@@ -1,8 +1,9 @@
 
-import { Box, CircularProgress, Container, CssBaseline, IconButton, Slide, Stack, Typography } from '@mui/material';
+import { Box, CircularProgress, Container, CssBaseline, IconButton, Stack, Typography } from '@mui/material';
 import classnames from 'classnames';
 import Header from 'components/Header';
 import IngredientList from 'components/IngredientList';
+import TogglablePlannedRecipe from 'components/TogglablePlannedRecipe';
 import dayjs from 'dayjs';
 import useAPI from 'hooks/useAPI';
 import useAuth from 'hooks/useAuth';
@@ -12,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { areDatesTheSameDay, getDayName, getMonthName } from 'utils/utils';
 
-import { CalendarMonth as CalendarIcon, Done as TickIcon } from '@mui/icons-material';
+import { CalendarMonth as CalendarIcon, RestaurantMenu as RecipesIcon, Done as TickIcon } from '@mui/icons-material';
 import { ReactComponent as IngredientBreakdownIcon } from 'assets/icons/ingredient-breakdown.svg';
 import { ReactComponent as IngredientOverviewIcon } from 'assets/icons/ingredient-overview.svg';
 import IngredientListDateDialog from 'dialogs/IngredientListDateDialog';
@@ -20,10 +21,9 @@ import { RecipeTypes } from 'types';
 import { isUndefined, toISOLocal } from 'utils/utils';
 import styles from './IngredientList.module.css';
 
-const Transition = React.forwardRef((props, ref) => {
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <Slide direction="left" ref={ref} {...props} />;
-});
+const formatDate = (date) => {
+  return `${getDayName(date)}, ${date.getDate()} ${getMonthName(date)}`
+}
 
 const recipeTypes = Object.entries(RecipeTypes).map(( [k, v] ) => (v));
 
@@ -55,6 +55,82 @@ const views = {
   breakdown: "breakdown"
 }
 
+const PlannedRecipesView = ({ plannedRecipes, excludedPlannedRecipeIds, handlePlannedRecipeToggle, showDates }) => {
+  const { t } = useTranslation();
+  
+  const days = 
+  [...new Set(plannedRecipes.map(x => x.date))]
+  .map(x => new Date(x))
+  .sort((a,b) => {
+    return b - a;
+  });
+
+  return (
+    <>
+      {days.map((day) => (
+        <>
+          {showDates && (
+            <Typography sx={{ mb: 1 }} className={styles.date}>{formatDate(day)}</Typography>
+          )}
+
+          {recipeTypes.map((recipeType) => {
+            const recipes = plannedRecipes.filter(plannedRecipe => plannedRecipe.recipe.type.toLowerCase() === recipeType.toLowerCase());
+
+            if (recipes.length === 0) {
+              return;
+            }
+
+            return (
+              <Box sx={{ mb: 2 }}>
+                <Typography variant='h6'>{t(`types.recipe.types.${recipeType}.displayName`)}</Typography>
+
+                <Stack direction="column" gap={1}>
+                  {recipes.map((plannedRecipe) => (
+                    <TogglablePlannedRecipe
+                      plannedRecipe={plannedRecipe}
+                      enabled={!excludedPlannedRecipeIds.includes(plannedRecipe.id)}
+                      onChange={(value) => handlePlannedRecipeToggle(plannedRecipe.id, value)}
+                    />
+                  ))}
+                </Stack>
+              </Box>
+            )
+          })}
+        </>
+      ))}
+    </>
+  )
+}
+
+const IngredientView = ({ ingredients, checkboxesEnabled }) => {
+  return (
+    <IngredientList
+      ingredients={ingredients}
+      enableCheckboxes={checkboxesEnabled}
+    />
+  );
+}
+
+const BreakdownView = ({ breakdown, showDates }) => {
+  return (
+    <>
+      {breakdown.plannedRecipes.sort(compare).map((plannedRecipe) => (
+        <Box sx={{ mb: 4 }}>
+          <Box sx={{ mb: 1 }}>              
+            {showDates && (                
+              <Typography className={styles.recipeDate}>{formatDate(new Date(plannedRecipe.date))}</Typography>
+            )}
+            <Typography className={styles.recipeName}>{plannedRecipe.recipe.name}</Typography>
+            <Typography className={styles.recipeServings}>{plannedRecipe.servings} Servings</Typography>
+          </Box>
+          <IngredientList
+            ingredients={plannedRecipe.ingredients}
+          />
+        </Box>
+      ))}
+    </>
+  )
+} 
 export default () => {
   const { t } = useTranslation();
   const api = useAPI();
@@ -68,20 +144,36 @@ export default () => {
   const { filters, setFilter } = useFilters({
     dateFrom: toISOLocal(new Date()).split('T')[0],
     dateTo: toISOLocal(new Date()).split('T')[0],
+    excludedPlannedRecipeIds: [],
     ...location?.state?.filters,
   });
 
+  const [excludedPlannedRecipeIds, setExcludedPlannedRecipeIds] = useState([]);
+
   const [currentView, setCurrentView] = useState(views.ingredients);
+  const [showPlannedRecipesView, setShowPlannedRecipesView] = useState(false);
   const [checkboxesEnabled, setCheckboxesEnabled] = useState(false);
 
   const [loadingPlannerIngredientList, setLoadingPlannerIngredientList] = useState(false);
+  const [originalPlannerIngredientList, setOriginalPlannerIngredientList] = useState();
   const [plannerIngredientList, setPlannerIngredientList] = useState();
 
   const [showDateDialog, setShowDateDialog] = useState(false);
 
+  var dateFrom = new Date(filters.dateFrom);
+  var dateTo = new Date(filters.dateTo);
+
+  const showDates = !areDatesTheSameDay(dateFrom, dateTo);
+
   const fetchPlannerIngredientList = async () => {
     setLoadingPlannerIngredientList(true);
     try {
+      const { data: originalData } = await api.getPlannerIngredientList(userId, {
+        ...filters,
+        excludedPlannedRecipeIds: []
+      });
+      setOriginalPlannerIngredientList(originalData);
+
       const { data } = await api.getPlannerIngredientList(userId, filters);
       setPlannerIngredientList(data);
     } catch {
@@ -96,6 +188,16 @@ export default () => {
   }, [filters]);
 
   /* Handlers */
+  const handleShowRecipes = () => {
+    setShowPlannedRecipesView((currentValue) => {
+      if (currentValue) {
+        setFilter("excludedPlannedRecipeIds", excludedPlannedRecipeIds)
+      }
+
+      return !currentValue;
+    });
+  }
+
   const handleToggleViewClick = () => {
     setCurrentView((currentView) => currentView === views.ingredients ? views.breakdown : views.ingredients);
   }
@@ -110,50 +212,17 @@ export default () => {
     setShowDateDialog(false);
   }
 
+  const handlePlannedRecipeToggle = (plannedRecipeId) => {
+    const newExcludedPlannedRecipeIds = excludedPlannedRecipeIds.filter(x => x !== plannedRecipeId);
+
+    if (!excludedPlannedRecipeIds.some(x => x === plannedRecipeId)) {
+      newExcludedPlannedRecipeIds.push(plannedRecipeId);
+    }
+
+    setExcludedPlannedRecipeIds(newExcludedPlannedRecipeIds);
+  }
+
   /* Rendering */
-  const getIngredients = () => {
-    return plannerIngredientList.ingredients;
-  }
-
-  const renderIngredientView = () => (
-    <Box sx={{ mb: 4 }}>
-      <IngredientList
-        ingredients={getIngredients()}
-        enableCheckboxes={checkboxesEnabled}
-      />
-    </Box>
-  )
-
-  const renderBreakdownView = () => {
-    var dateFrom = new Date(filters.dateFrom);
-    var dateTo = new Date(filters.dateTo);
-
-    const showDates = !areDatesTheSameDay(dateFrom, dateTo);
-
-    return (
-      <>
-        {plannerIngredientList.breakdown.plannedRecipes.sort(compare).map((plannedRecipe) => (
-          <Box sx={{ mb: 4 }}>
-            <Box sx={{ mb: 1 }}>              
-              {showDates && (                
-                <Typography className={styles.recipeDate}>{formatDate(new Date(plannedRecipe.date))}</Typography>
-              )}
-              <Typography className={styles.recipeName}>{plannedRecipe.recipe.name}</Typography>
-              <Typography className={styles.recipeServings}>{plannedRecipe.servings} Servings</Typography>
-            </Box>
-            <IngredientList
-              ingredients={plannedRecipe.ingredients}
-            />
-          </Box>
-        ))}
-      </>
-    )
-  } 
-
-  const formatDate = (date) => {
-    return `${getDayName(date)}, ${date.getDate()} ${getMonthName(date)}`
-  }
-
   const getDateString = () => {
     var dateFrom = new Date(filters.dateFrom);
     var dateTo = new Date(filters.dateTo);
@@ -166,9 +235,18 @@ export default () => {
   }
 
   const getScopeString = () => {
-    const recipesString = !isUndefined(plannerIngredientList) 
-      ? `(${plannerIngredientList.breakdown.plannedRecipes.length} ${plannerIngredientList.breakdown.plannedRecipes.length === 1 ? t('common.words.recipe') : t('common.words.recipes')})` 
-      : undefined;
+    var recipesString = undefined;
+    var excludedRecipesString = undefined;
+
+    if (!isUndefined(originalPlannerIngredientList) && !isUndefined(plannerIngredientList)) {
+      if (originalPlannerIngredientList.breakdown.plannedRecipes.length !== plannerIngredientList.breakdown.plannedRecipes.length) {
+        const noOfExcludedPlannedRecipes = originalPlannerIngredientList.breakdown.plannedRecipes.length - plannerIngredientList.breakdown.plannedRecipes.length;
+        
+        excludedRecipesString = ` - ${noOfExcludedPlannedRecipes}  ${t('common.words.excluded')}`
+      }
+      
+      recipesString = `(${plannerIngredientList.breakdown.plannedRecipes.length} ${plannerIngredientList.breakdown.plannedRecipes.length === 1 ? t('common.words.recipe') : t('common.words.recipes')}${excludedRecipesString ?? ''})`;
+    }
     
     var dateFrom = dayjs(filters.dateFrom);
     var dateTo = dayjs(filters.dateTo); 
@@ -178,7 +256,7 @@ export default () => {
 
     return [datesString, recipesString].join(' ');
   }
-
+  
   return (
     <>
       <IngredientListDateDialog
@@ -229,21 +307,52 @@ export default () => {
 
           {(plannerIngredientList && plannerIngredientList.breakdown.plannedRecipes.length > 0) && (
             <>
-              <Stack sx={{ mb: 2 }} direction="row" display="flex" justifyContent="right" gap={1}>
-                {currentView === views.ingredients && (
-                  <IconButton className={classnames(styles.optionButton, !checkboxesEnabled && styles.optionButtonDisabled)} onClick={handleToggleCheckboxesClick}>
-                    <TickIcon className={styles.optionIcon} />
-                  </IconButton>
-                )}
-
-                <IconButton className={styles.optionButton} onClick={handleToggleViewClick}>
-                  {currentView === views.ingredients && <IngredientOverviewIcon className={styles.optionIcon} />}
-                  {currentView === views.breakdown && <IngredientBreakdownIcon className={styles.optionIcon} />}
+              <Stack sx={{ mb: 2 }} direction="row" display="flex" justifyContent="space-between">             
+                <IconButton className={classnames(styles.optionButton, !showPlannedRecipesView && styles.optionButtonDisabled)} onClick={handleShowRecipes}>
+                  <RecipesIcon className={styles.optionIcon} />
                 </IconButton>
+
+                {!showPlannedRecipesView && (
+                  <Stack direction="row" gap={1}>
+                    {currentView === views.ingredients && (
+                      <IconButton className={classnames(styles.optionButton, !checkboxesEnabled && styles.optionButtonDisabled)} onClick={handleToggleCheckboxesClick}>
+                        <TickIcon className={styles.optionIcon} />
+                      </IconButton>
+                    )}
+
+                    <IconButton className={styles.optionButton} onClick={handleToggleViewClick}>
+                      {currentView === views.ingredients && <IngredientOverviewIcon className={styles.optionIcon} />}
+                      {currentView === views.breakdown && <IngredientBreakdownIcon className={styles.optionIcon} />}
+                    </IconButton>
+                  </Stack>
+                )}
               </Stack>
 
-              {currentView === views.ingredients && renderIngredientView()}
-              {currentView === views.breakdown && renderBreakdownView()}
+              {showPlannedRecipesView && (
+                <PlannedRecipesView
+                  plannedRecipes={originalPlannerIngredientList.breakdown.plannedRecipes}
+                  excludedPlannedRecipeIds={excludedPlannedRecipeIds}
+                  handlePlannedRecipeToggle={handlePlannedRecipeToggle}
+                  showDates={showDates}
+                />
+              )}
+
+              {!showPlannedRecipesView && (
+                <>
+                  {currentView === views.ingredients && (
+                    <IngredientView
+                      ingredients={plannerIngredientList.ingredients}
+                      checkboxesEnabled={checkboxesEnabled}
+                    />
+                  )}
+                  {currentView === views.breakdown && (
+                    <BreakdownView
+                      breakdown={plannerIngredientList.breakdown}
+                      showDates={showDates}
+                    />
+                  )}
+                </>
+              )}
             </>
           )}
         </Box>

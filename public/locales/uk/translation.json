@@ -122,6 +122,11 @@
         }
       }
     },
+    "ingredientList": {
+      "title": "Список інгредієнтів",
+      "noPlannedRecipesDay": "У вас немає рецептів, запланованих на цей день",
+      "noPlannedRecipesDays": "У вас немає рецептів, запланованих на ці дні"
+    },
     "author": {
       "title": "",
       "biography": {
@@ -325,13 +330,14 @@
     "section": {
       "seeAll": "Бачити все"
     },
-    "plannerIngredientListDialog": {
-      "ingredients": "Інгредієнти"
-    },
     "planRecipeDialog": {
       "title": "Планувальник",
       "selectDaysMessage": "Виберіть дні, до яких ви хочете додати цей рецепт",
       "addToPlanner": "Додати до планувальника"
+    },
+    "ingredientListDateDialog": {
+      "title": "Виберіть Дні",
+      "update": "оновлення"
     },
     "plannedRecipeDialog": {
       "update": "оновлення",
@@ -515,7 +521,12 @@
   "common": {
     "words": {
       "no": "Немає",
-      "yes": "Так"
+      "yes": "Так",
+      "day": "День",
+      "days": "днів",
+      "recipe": "рецепт",
+      "recipes": "рецепти",
+      "excluded": "Виключено"
     },
     "version": "Версія",
     "time": {

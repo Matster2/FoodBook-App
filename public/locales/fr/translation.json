@@ -122,6 +122,11 @@
         }
       }
     },
+    "ingredientList": {
+      "title": "Liste d'ingrédients",
+      "noPlannedRecipesDay": "Vous n'avez pas de recette prévue ce jour",
+      "noPlannedRecipesDays": "Vous n'avez pas de recettes prévues ces jours-ci"
+    },
     "author": {
       "title": "",
       "biography": {
@@ -325,13 +330,14 @@
     "section": {
       "seeAll": "Voir tout"
     },
-    "plannerIngredientListDialog": {
-      "ingredients": "Ingrédients"
-    },
     "planRecipeDialog": {
       "title": "Planificateur",
       "selectDaysMessage": "Sélectionnez les jours où vous souhaitez ajouter cette recette",
       "addToPlanner": "Ajouter au planificateur"
+    },
+    "ingredientListDateDialog": {
+      "title": "Sélectionnez les jours",
+      "update": "Mise à jour"
     },
     "plannedRecipeDialog": {
       "update": "Mise à jour",
@@ -515,7 +521,12 @@
   "common": {
     "words": {
       "no": "Non",
-      "yes": "Oui"
+      "yes": "Oui",
+      "day": "Jour",
+      "days": "Jours",
+      "recipe": "Recette",
+      "recipes": "Recettes",
+      "excluded": "Exclu"
     },
     "version": "Version",
     "time": {

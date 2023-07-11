@@ -49,3 +49,9 @@
   stroke: white !important;
   fill: white !important;
 }
+
+.date {
+  color: black !important;
+  font-weight: bold !important;
+  font-size: 18px !important;
+}

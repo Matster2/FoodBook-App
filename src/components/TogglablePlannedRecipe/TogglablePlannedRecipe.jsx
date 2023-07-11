@@ -1,6 +1,5 @@
-import { AccessTime as AccessTimeIcon, Edit as EditIcon } from '@mui/icons-material';
-import { Box, Card, Grid, Stack, Typography } from '@mui/material';
-import useLongPress from 'hooks/useLongPress';
+import { AccessTime as AccessTimeIcon } from '@mui/icons-material';
+import { Box, Card, Checkbox, Grid, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useTranslation } from "react-i18next";
@@ -8,34 +7,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import { capitalizeFirstLetter } from 'utils/stringUtils';
-import styles from './PlannedRecipe.module.css';
+import styles from './TogglablePlannedRecipe.module.css';
 
-const defaultOptions = {
-  shouldPreventDefault: false,
-  delay: 500,
-};
-
-const PlannedRecipe = ({ plannedRecipe, onClick, onEditClick }) => {
+const TogglablePlannedRecipe = ({ plannedRecipe, onChange, enabled }) => {
   const { t } = useTranslation();
 
-  const handleClick = () => {
-    onClick(plannedRecipe.id);
+  const handleChange = (event) => {
+    onChange(event.target.checked);
   };
-
-  const handleLongClick = () => {
-    onEditClick(plannedRecipe.id);
-  };
-
-  const handleEditClick = () => {
-    onEditClick(plannedRecipe.id);
-  };
-
-  const dummyPress = () => { }
-
-  const longPressEvent = useLongPress(handleLongClick, dummyPress, defaultOptions);
 
   return (
-    <Card sx={{ p: 1 }} className={styles.card} {...longPressEvent}>
+    <Card sx={{ p: 1, pr: 2 }} className={styles.card}>
       {/* {recipe?.favourited && (
         <div className={styles.favourite}>
           <FavouriteHeart width={25} favourited={recipe.favourited} />
@@ -44,7 +26,7 @@ const PlannedRecipe = ({ plannedRecipe, onClick, onEditClick }) => {
 
       <Grid container gap={2}>
         <Grid item xs={3} justifyContent="center">
-          <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper} onClick={handleClick}>
+          <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper}>
             {plannedRecipe.recipe.images.map((image) => (
               <SwiperSlide className={styles.imageContainer}>
                 <img className={styles.image} src={image} alt="recipe" />
@@ -54,7 +36,7 @@ const PlannedRecipe = ({ plannedRecipe, onClick, onEditClick }) => {
         </Grid>
         <Grid item xs display="flex" alignItems="center">
           <Box display="flex" flexDirection="column" width="100%">
-            <Typography className={styles.name} sx={{ mb: 0.5 }} onClick={handleClick}>{plannedRecipe.recipe.name}</Typography>
+            <Typography className={styles.name} sx={{ mb: 0.5 }}>{plannedRecipe.recipe.name}</Typography>
 
             <Grid container justifyContent="space-between" sx={{ mb: 1 }} display="flex" alignItems="center">
               <Grid item xs={6}>
@@ -72,14 +54,17 @@ const PlannedRecipe = ({ plannedRecipe, onClick, onEditClick }) => {
           </Box>
         </Grid>
         <Grid item xs={1} display="flex" alignItems="center" justifyContent="center">
-          <EditIcon className={styles.editIcon} onClick={handleEditClick} />
+          <Checkbox
+            checked={enabled}
+            onChange={handleChange}
+          />
         </Grid>
       </Grid>
     </Card >
   );
 };
 
-PlannedRecipe.propTypes = {
+TogglablePlannedRecipe.propTypes = {
   recipe: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
@@ -90,12 +75,10 @@ PlannedRecipe.propTypes = {
     favourited: PropTypes.bool,
   }).isRequired,
   onClick: PropTypes.func,
-  onLongClick: PropTypes.func,
 };
 
-PlannedRecipe.defaultProps = {
-  onClick: () => { },
-  onLongClick: () => { }
+TogglablePlannedRecipe.defaultProps = {
+  onChange: () => { },
 };
 
-export default PlannedRecipe;
+export default TogglablePlannedRecipe;
