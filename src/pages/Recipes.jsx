@@ -68,7 +68,7 @@ export default () => {
   }
 
   const handleApplySearch = () => {
-    setFilters((value) => ({
+    setFilters((_value) => ({
       ...filters,
       search
     }))

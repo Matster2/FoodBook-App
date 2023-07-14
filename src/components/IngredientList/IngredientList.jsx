@@ -73,7 +73,7 @@ const IngredientList = ({ ingredients, enableCheckboxes }) => {
     const amount = getAmountString(ingredient.amount, ingredient.unitOfMeasurement);
     const unit = getUnitName(ingredient.unitOfMeasurement, ingredient.amount);
 
-    const ingredientName = amount === 1 ? ingredient.name : ingredient.pluralName;
+    const name = amount === 1 ? ingredient.name : ingredient.pluralName;
 
     return (
       <Box key={ingredient.id} className={styles.listLine} display="flex" flexDirection="row" justifyContent="space-between" alignItems="center">
@@ -84,7 +84,7 @@ const IngredientList = ({ ingredients, enableCheckboxes }) => {
               sx={{ mr: 1 }}
             />
           )}
-          <Typography>{ingredientName}</Typography>
+          <Typography>{name}</Typography>
         </Stack>
         <Typography> {`${amount} ${unit}`.trim()}</Typography>
       </Box>

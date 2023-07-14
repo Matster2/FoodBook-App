@@ -75,6 +75,7 @@
       "prepTime": "Prep Time",
       "cookingTime": "Cooking Time",
       "sections": {
+        "equipment": "Equipment",
         "ingredients": "Ingredients",
         "directions": "Directions",
         "nutrition": "Nutrition",

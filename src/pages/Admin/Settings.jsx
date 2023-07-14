@@ -22,6 +22,11 @@ export default () => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
+          <ListItemButton component={Link} to="/admin/equipment">
+            <ListItemText primary="Equipment" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
           <ListItemButton component={Link} to="/admin/authors">
             <ListItemText primary="Authors" />
           </ListItemButton>

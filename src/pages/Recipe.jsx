@@ -18,6 +18,7 @@ import {
   Stepper,
   Typography,
 } from '@mui/material';
+import EquipmentList from 'components/EquipmentList';
 import FavouriteHeart from 'components/FavouriteHeart';
 import IngredientList from 'components/IngredientList';
 import NutritionList from 'components/NutritionList';
@@ -568,6 +569,14 @@ export default () => {
               max={100}
             />
           </Box>
+
+          <CollapsibleSection
+            title={t('pages.recipe.sections.equipment')}
+          >
+            <EquipmentList
+              equipment={recipe.equipment}
+            />
+          </CollapsibleSection>
 
           <CollapsibleSection
             title={t('pages.recipe.sections.ingredients')}

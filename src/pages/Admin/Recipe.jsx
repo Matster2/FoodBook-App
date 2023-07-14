@@ -19,6 +19,7 @@ import {
   Typography
 } from '@mui/material';
 import RecipeIngredient from 'Admin/components/RecipeIngredient';
+import RecipePieceOfEquipment from 'Admin/components/RecipePieceOfEquipment';
 import RecipeStep from 'Admin/components/RecipeStep';
 import FilterOption from 'components/FilterOption';
 import Header from 'components/Header';
@@ -56,7 +57,6 @@ const NutritionField = ({ id, label, value, errors, touched }) => {
     />
   )
 }
-
 
 const recipeSchema = yup.object({
   name: yup.string().required(),
@@ -104,6 +104,7 @@ const initialRecipeValue = {
     }
   ],
   ingredients: [],
+  equipment: [],
   referenceUrl: '',
   nutrition: {
     calories: undefined,
@@ -135,7 +136,10 @@ export default () => {
   const { tags, setTags } = useContext(TagContext);
 
   const [ingredientSearch, setIngredientSearch] = useState('');
-  const [searchIngredients, setSearchIngredients] = useState([]);
+  const [ingredientSearchResults, setIngredientSearchResults] = useState([]);
+
+  const [equipmentSearch, setEquipmentSearch] = useState('');
+  const [equipmentSearchResults, setEquipmentSearchResults] = useState([]);
 
   const [authorSearch, setAuthorSearch] = useState('');
   const [searchAuthors, setSearchAuthors] = useState([]);
@@ -207,6 +211,22 @@ export default () => {
       ingredients: newRecipeIngredients,
     }));
   };
+  
+  const handleAddPieceOfEquipment = (pieceOfEquipment) => {
+    const recipePieceOfEquipment = {
+      ...pieceOfEquipment,
+      amount: 1,
+      dependsOnServings: false,
+    };
+
+    const newRecipeEquipment = recipe.equipment.slice();
+    newRecipeEquipment.push(recipePieceOfEquipment);
+
+    setRecipe((state) => ({
+      ...state,
+      equipment: newRecipeEquipment,
+    }));
+  };
 
   const handleTagClick = (tagId) => {
     const newTags = recipe.tags.filter((x) => x.id !== tagId);
@@ -245,6 +265,11 @@ export default () => {
         unitOfMeasurementId: recipeIngredient.unitOfMeasurement.id,
         amount: recipeIngredient.amount,
         optional: recipeIngredient.optional,
+      })),
+      equipment: recipe.equipment.map((recipePieceOfEquipment) => ({
+        equipmentId: recipePieceOfEquipment.id,
+        amount: recipePieceOfEquipment.amount,
+        dependsOnServings: recipePieceOfEquipment.dependsOnServings,
       })),
       authorId: recipe?.author?.id,
       steps: recipe.steps.map((step) => ({
@@ -292,6 +317,30 @@ export default () => {
     setRecipe((state) => ({
       ...state,
       ingredients: newRecipeIngredients,
+    }));
+  };
+
+  const handleRecipePieceOfEquipmentChange = (newRecipePieceOfEquipment) => {
+    const newRecipeEquipment = recipe.equipment;
+
+    const index = newRecipeEquipment.findIndex((x) => x.id === newRecipePieceOfEquipment.id);
+
+    newRecipeEquipment[index] = newRecipePieceOfEquipment;
+
+    setRecipe((state) => ({
+      ...state,
+      equipment: newRecipeEquipment,
+    }));
+  };
+
+  const handleDeleteRecipePieceOfEquipment = (newRecipePieceOfEquipment) => {
+    const newRecipeEquipment = recipe.equipment.filter(
+      (x) => x.id !== newRecipePieceOfEquipment.id
+    );
+
+    setRecipe((state) => ({
+      ...state,
+      equipment: newRecipeEquipment,
     }));
   };
 
@@ -369,11 +418,22 @@ export default () => {
       const {
         data: { results },
       } = await api.getIngredients({ search: ingredientSearch, pageSize: 50, sortBy: 'name' });
-      setSearchIngredients(results);
+      setIngredientSearchResults(results);
     }, 3000);
 
     return () => clearTimeout(delayDebounce);
   }, [ingredientSearch]);
+  
+  useEffect(() => {
+    const delayDebounce = setTimeout(async () => {
+      const {
+        data: { results },
+      } = await api.getEquipment({ search: equipmentSearch, pageSize: 50, sortBy: 'name' });
+      setEquipmentSearchResults(results);
+    }, 3000);
+
+    return () => clearTimeout(delayDebounce);
+  }, [equipmentSearch]);
 
   return (
     <Container sx={{ pb: 7 }}>
@@ -489,6 +549,7 @@ export default () => {
                       error={errors.prepTime && touched.prepTime}
                       helperText={touched.prepTime && errors.prepTime}
                       InputLabelProps={{ shrink: true }}
+                      InputProps={{ inputProps: { min: 0 } }}
                     />
                   </Grid>
 
@@ -505,6 +566,7 @@ export default () => {
                       error={!isUndefined(errors.cookTime)}
                       helperText={errors.cookTime?.message}
                       InputLabelProps={{ shrink: true }}
+                      InputProps={{ inputProps: { min: 0 } }}
                     />
                   </Grid>
 
@@ -521,6 +583,7 @@ export default () => {
                       error={!isUndefined(errors.totalTime)}
                       helperText={errors.totalTime?.message}
                       InputLabelProps={{ shrink: true }}
+                      InputProps={{ inputProps: { min: 0 } }}
                     />
                   </Grid>
                 </Grid>
@@ -539,6 +602,7 @@ export default () => {
                       error={!isUndefined(errors.servings)}
                       helperText={errors.servings?.message}
                       InputLabelProps={{ shrink: true }}
+                      InputProps={{ inputProps: { min: 1 } }}
                     />
                   </Grid>
                 </Grid>
@@ -604,7 +668,7 @@ export default () => {
 
                   <Autocomplete
                     sx={{ mt: 3 }}
-                    options={searchIngredients
+                    options={ingredientSearchResults
                       .filter(
                         (ingredient) =>
                           !recipe.ingredients.some(
@@ -623,6 +687,47 @@ export default () => {
                       setIngredientSearch('');
                       if (value) {
                         handleAddIngredient(value.ingredient);
+                      }
+                    }}
+                  />
+                </Box>
+
+                
+                <Box sx={{ mt: 3, mb: 3 }}>
+                  <Typography variant="h6">Equipment</Typography>
+
+                  <Box>
+                    {recipe.equipment.map((recipePieceOfEquipment) => (
+                      <RecipePieceOfEquipment
+                        key={recipePieceOfEquipment.id}
+                        recipePieceOfEquipment={recipePieceOfEquipment}
+                        onChange={handleRecipePieceOfEquipmentChange}
+                        onDelete={handleDeleteRecipePieceOfEquipment}
+                      />
+                    ))}
+                  </Box>
+
+                  <Autocomplete
+                    sx={{ mt: 3 }}
+                    options={equipmentSearchResults
+                      .filter(
+                        (pieceOfEquipment) =>
+                          !recipe.equipment.some(
+                            (recipePieceOfEquipment) => recipePieceOfEquipment.id === pieceOfEquipment.id
+                          )
+                      )
+                      .map((pieceOfEquipment) => ({ label: pieceOfEquipment.name, pieceOfEquipment }))}
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    renderInput={(params) => <TextField {...params} label="Add Piece Of Equipment" />}
+                    value={equipmentSearch}
+                    inputValue={equipmentSearch}
+                    onInputChange={(event, newValue) => {
+                      setEquipmentSearch(newValue);
+                    }}
+                    onChange={(event, value) => {
+                      setIngredientSearch('');
+                      if (value) {
+                        handleAddPieceOfEquipment(value.pieceOfEquipment);
                       }
                     }}
                   />
@@ -663,6 +768,7 @@ export default () => {
                         error={errors.nutrition?.calories && touched.nutrition?.calories}
                         helperText={touched.nutrition?.calories && errors.nutrition?.calories}
                         InputLabelProps={{ shrink: true }}
+                        InputProps={{ inputProps: { min: 0 } }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
@@ -685,6 +791,7 @@ export default () => {
                         error={errors.nutrition?.sugar && touched.nutrition?.sugar}
                         helperText={touched.nutrition?.sugar && errors.nutrition?.sugar}
                         InputLabelProps={{ shrink: true }}
+                        InputProps={{ inputProps: { min: 0 } }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
@@ -699,6 +806,7 @@ export default () => {
                         error={errors.nutrition?.fat && touched.nutrition?.fat}
                         helperText={touched.nutrition?.fat && errors.nutrition?.fat}
                         InputLabelProps={{ shrink: true }}
+                        InputProps={{ inputProps: { min: 0 } }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
@@ -713,6 +821,7 @@ export default () => {
                         error={errors.nutrition?.saturatedFat && touched.nutrition?.saturatedFat}
                         helperText={touched.nutrition?.saturatedFat && errors.nutrition?.saturatedFat}
                         InputLabelProps={{ shrink: true }}
+                        InputProps={{ inputProps: { min: 0 } }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
@@ -727,6 +836,7 @@ export default () => {
                         error={errors.nutrition?.sodium && touched.nutrition?.sodium}
                         helperText={touched.nutrition?.sodium && errors.nutrition?.sodium}
                         InputLabelProps={{ shrink: true }}
+                        InputProps={{ inputProps: { min: 0 } }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
@@ -741,13 +851,13 @@ export default () => {
                         error={errors.nutrition?.protein && touched.nutrition?.protein}
                         helperText={touched.nutrition?.protein && errors.nutrition?.protein}
                         InputLabelProps={{ shrink: true }}
+                        InputProps={{ inputProps: { min: 0 } }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3}>
                       <Field
                         as={TextField}
                         fullWidth
-                        InputLabelProps={{ shrink: true }}
                         type="number"
                         id="carbohydrates"
                         name="nutrition.carbohydrates"
@@ -756,6 +866,7 @@ export default () => {
                         error={errors.nutrition?.carbohydrates && touched.nutrition?.carbohydrates}
                         helperText={touched.nutrition?.carbohydrates && errors.nutrition?.carbohydrates}
                         InputLabelProps={{ shrink: true }}
+                        InputProps={{ inputProps: { min: 0 } }}
                       />
                     </Grid>
                     <Grid item xs={6} md={3} lg={2}>
@@ -769,6 +880,7 @@ export default () => {
                         error={errors.nutrition?.fiber && touched.nutrition?.fiber}
                         helperText={touched.nutrition?.fiber && errors.nutrition?.fiber}
                         InputLabelProps={{ shrink: true }}
+                        InputProps={{ inputProps: { min: 0 } }}
                       />
                     </Grid>
                   </Grid>

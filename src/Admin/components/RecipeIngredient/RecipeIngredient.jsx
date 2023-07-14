@@ -1,13 +1,13 @@
 import { Clear as ClearIcon } from '@mui/icons-material';
 import {
-    Box,
-    FormControl,
-    Grid,
-    IconButton,
-    InputLabel,
-    MenuItem,
-    Select,
-    TextField
+  Box,
+  FormControl,
+  Grid,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField
 } from '@mui/material';
 import { UnitOfMeasurementContext } from 'contexts/UnitOfMeasurementContext';
 import PropTypes from 'prop-types';
@@ -66,6 +66,7 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
             autoFocus
             value={recipeIngredient.amount}
             onChange={handleChange}
+            InputProps={{ inputProps: { min: 0 } }}
           />
         </Grid>
         <Grid item xs={6}>

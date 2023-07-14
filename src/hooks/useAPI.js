@@ -130,6 +130,84 @@ const useAPI = () => {
     });
   };
 
+  const createIngredient = async (ingredient) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/ingredients`,
+      {
+        ...ingredient,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
+  const updateIngredient = async (id, data) => {
+    return axios.put(
+      `${process.env.REACT_APP_API_URL}/ingredients/${id}`,
+      {
+        ...data,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
+  const getPieceOfEquipment = async (id) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/equipment/${id}`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
+      },
+    });
+  };
+
+  const getEquipment = async (parameters = {}) => {
+    const url = new URL(`${process.env.REACT_APP_API_URL}/equipment`);
+    url.search = getSearchParams(parameters);
+
+    return axios.get(url.href, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
+      },
+    });
+  };
+
+
+  const createPieceOfEquipment = async (pieceOfEquipment) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/equipment`,
+      {
+        ...pieceOfEquipment,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
+  const updatePieceOfEquipment = async (id, data) => {
+    return axios.put(
+      `${process.env.REACT_APP_API_URL}/equipment/${id}`,
+      {
+        ...data,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
   const getTag = async (id) => {
     return axios.get(`${process.env.REACT_APP_API_URL}/tags/${id}`, {
       headers: {
@@ -240,34 +318,6 @@ const useAPI = () => {
         Language: currentLanguage
       },
     });
-  };
-
-  const createIngredient = async (ingredient) => {
-    return axios.post(
-      `${process.env.REACT_APP_API_URL}/ingredients`,
-      {
-        ...ingredient,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${tokens.accessToken}`,
-        },
-      }
-    );
-  };
-
-  const updateIngredient = async (id, data) => {
-    return axios.put(
-      `${process.env.REACT_APP_API_URL}/ingredients/${id}`,
-      {
-        ...data,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${tokens.accessToken}`,
-        },
-      }
-    );
   };
 
   const createRecipe = async (recipe) => {
@@ -504,6 +554,12 @@ const useAPI = () => {
     getRecipeInstructions,
     getIngredient,
     getIngredients,
+    createIngredient,
+    updateIngredient,
+    getPieceOfEquipment,
+    createPieceOfEquipment,
+    updatePieceOfEquipment,
+    getEquipment,
     getTag,
     getTags,
     getUnitOfMeasurements,
@@ -514,8 +570,6 @@ const useAPI = () => {
     rateRecipe,
     getUserRecipeRating,
     getRecipeRating,
-    createIngredient,
-    updateIngredient,
     createRecipe,
     uploadRecipeImage,
     createTag,
