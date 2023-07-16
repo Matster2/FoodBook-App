@@ -1,20 +1,19 @@
 import { Clear as ClearIcon } from '@mui/icons-material';
 import {
-    Avatar,
-    Box,
-    Button,
-    Container,
-    CssBaseline,
-    IconButton,
-    Stack,
-    TextField,
-    Typography
+  Avatar,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Stack,
+  TextField,
+  Typography
 } from '@mui/material';
 import Header from 'components/Header';
 import { Field, Form, Formik } from 'formik';
 import useAPI from 'hooks/useAPI';
 import PropTypes from 'prop-types';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import uuid from 'react-uuid';
@@ -185,7 +184,6 @@ export default () => {
 
   return (
     <Container sx={{ pb: 7 }}>
-      <CssBaseline />
       <Header title="Add Author" onBackClick={() => navigate(-1)} />
 
       <Stack direction="column" display="flex" alignItems="center" justifyContent="center">

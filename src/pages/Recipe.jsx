@@ -26,6 +26,7 @@ import RatingFilter from 'components/RatingFilter';
 import RecipeAttributeWidget from 'components/RecipeAttributeWidget';
 import ServingsIncrementor from 'components/ServingsIncrementor';
 import PlanRecipeDialog from 'dialogs/PlanRecipeDialog';
+import RecipeImageViewerDialog from 'dialogs/RecipeImageViewerDialog';
 import useAPI from 'hooks/useAPI';
 import useAuth from 'hooks/useAuth';
 import _ from "lodash";
@@ -34,8 +35,6 @@ import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { BottomSheet } from 'react-spring-bottom-sheet';
-import uuid from 'react-uuid';
-import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { ReactComponent as CookIcon } from 'assets/icons/cook.svg';
 import { ReactComponent as PlannerIcon } from 'assets/icons/planner.svg';
@@ -44,8 +43,6 @@ import { capitalizeFirstLetter, truncateText } from 'utils/stringUtils';
 import { isNull, isUndefined } from 'utils/utils';
 
 import 'react-spring-bottom-sheet/dist/style.css';
-import 'swiper/swiper-bundle.min.css';
-import 'swiper/swiper.min.css';
 import styles from './Recipe.module.css';
 
 const Transition = React.forwardRef((props, ref) => {
@@ -109,7 +106,7 @@ export default () => {
   const [rating, setRating] = useState(undefined);
   const [servings, setServings] = useState(location?.state?.servings);
 
-  const [showImageModal, setShowImageModal] = useState(false);
+  const [showRecipeImageViewerDialog, setShowRecipeImageViewerDialog] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [showPlannerModal, setShowPlannerModal] = useState(false);
 
@@ -230,7 +227,7 @@ export default () => {
   };
 
   const handleImageClick = (url) => {
-    setShowImageModal(true);
+    setShowRecipeImageViewerDialog(true);
   };
 
   const handlePlannerClick = () => {
@@ -342,25 +339,11 @@ export default () => {
 
   return (
     <>
-      <Dialog
-        fullScreen
-        open={showImageModal}
-        onClose={() => { }}
-        // TransitionComponent={Transition}
-        PaperProps={{
-          style: {
-            backgroundColor: '#F6F6F6',
-          },
-        }}
-      >
-        <Swiper className={styles.swiper}>
-          {recipe.images.map((image) => (
-            <SwiperSlide key={uuid()} className={styles.swiperSlide} onDoubleClick={() => setShowImageModal(false)}>
-              <img className={styles.slideImage} src={image} alt="recipe" />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </Dialog>
+      <RecipeImageViewerDialog
+        open={showRecipeImageViewerDialog}
+        onClose={() => setShowRecipeImageViewerDialog(false)}
+        images={recipe.images.map((image) => image.url)}
+      />
 
       {authenticated && (
         <Dialog

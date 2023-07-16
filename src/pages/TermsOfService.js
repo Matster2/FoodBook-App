@@ -1,6 +1,5 @@
-import { Container, CssBaseline } from '@mui/material';
+import { Container } from '@mui/material';
 import Header from 'components/Header';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default () => {
@@ -8,7 +7,6 @@ export default () => {
 
   return (
     <Container>
-      <CssBaseline />
       <Header title="" onBackClick={() => navigate(-1)} />
 
       <h2>

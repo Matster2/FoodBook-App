@@ -1,16 +1,15 @@
-import React from 'react';
-import uuid from 'react-uuid';
-import PropTypes from 'prop-types';
-import { Field } from 'formik';
+import { Clear as ClearIcon } from '@mui/icons-material';
 import {
   Box,
-  TextField,
-  Grid,
   Button,
+  Grid,
   IconButton,
-  Stack
+  Stack,
+  TextField
 } from '@mui/material';
-import { Clear as ClearIcon } from '@mui/icons-material';
+import { Field } from 'formik';
+import PropTypes from 'prop-types';
+import uuid from 'react-uuid';
 
 const RecipeStep = ({ step, onChange, onDelete }) => {
   const handleChange = (e) => {
@@ -64,7 +63,6 @@ const RecipeStep = ({ step, onChange, onDelete }) => {
             id="name"
             label="Name"
             name="name"
-            autoFocus
             value={step.name}
             onChange={handleChange}
           />

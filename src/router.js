@@ -1,4 +1,3 @@
-import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
 import AdminRoute from 'routings/AdminRoute';
@@ -27,6 +26,8 @@ import ForgottenPassword from 'pages/ForgottenPassword';
 import Homepage from 'pages/Homepage';
 import IngredientList from 'pages/IngredientList';
 import NotFound from 'pages/NotFound';
+import Personal from 'pages/Personal';
+import PersonalRecipe from 'pages/PersonalRecipe';
 import Planner from 'pages/Planner';
 import PrivacyPolicy from 'pages/PrivacyPolicy';
 import Recipe from 'pages/Recipe';
@@ -36,6 +37,7 @@ import ResetPassword from 'pages/ResetPassword';
 import Settings from 'pages/Settings';
 import SignIn from 'pages/SignIn';
 import TermsOfService from 'pages/TermsOfService';
+
 
 import MainLayout from 'layouts/MainLayout';
 
@@ -60,6 +62,10 @@ export default createBrowserRouter([
         element: <Favourites />,
       },
       {
+        path: '/personal',
+        element: <Personal />,
+      },
+      {
         path: '/settings',
         element: <Settings />,
       },
@@ -82,6 +88,14 @@ export default createBrowserRouter([
       {
         path: '/contact-us',
         element: <ContactUs />,
+      },
+      {
+        path: '/recipes/:id/edit',
+        element: <PersonalRecipe />
+      },
+      {
+        path: '/recipes/create',
+        element: <PersonalRecipe />
       },
       {
         path: '/planner',

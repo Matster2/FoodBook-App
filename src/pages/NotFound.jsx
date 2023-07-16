@@ -1,19 +1,11 @@
-import React, { useMemo, useEffect, useContext, useState } from 'react';
 import {
-  CssBaseline,
-  Container,
-  Typography,
-  Box,
   Button,
-  InputAdornment,
-  Grid,
-  Avatar,
-  Dialog,
-  Slide,
+  Container,
   Stack,
+  Typography
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
+import { useNavigate } from 'react-router-dom';
 
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
@@ -24,7 +16,6 @@ export default () => {
 
   return (
     <Container>
-      <CssBaseline />
       <Stack
         direction="column"
         gap={2}

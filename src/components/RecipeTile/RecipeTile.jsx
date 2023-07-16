@@ -2,7 +2,6 @@ import { AccessTime as AccessTimeIcon, Star as StarIcon } from '@mui/icons-mater
 import { Box, Card, Grid, Stack, Typography } from '@mui/material';
 import FavouriteHeart from 'components/FavouriteHeart';
 import PropTypes from 'prop-types';
-import React from 'react';
 import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
@@ -26,7 +25,7 @@ const RecipeTile = ({ recipe, onClick }) => {
       <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper}>
         {recipe.images.map((image) => (
           <SwiperSlide className={styles.imageContainer}>
-            <img className={styles.image} src={image} alt="recipe" />
+            <img className={styles.image} src={image.url} alt="recipe" />
           </SwiperSlide>
         ))}
       </Swiper>

@@ -35,7 +35,6 @@ const RecipePieceOfEquipment = ({ recipePieceOfEquipment, onChange, onDelete }) 
             id="name"
             label="Name"
             name="name"
-            autoFocus
             value={recipePieceOfEquipment.name}
             disabled
           />
@@ -56,7 +55,6 @@ const RecipePieceOfEquipment = ({ recipePieceOfEquipment, onChange, onDelete }) 
             label="Amount"
             name="amount"
             type="number"
-            autoFocus
             value={recipePieceOfEquipment.amount}
             onChange={handleChange}
             InputProps={{ inputProps: { min: 1 } }}

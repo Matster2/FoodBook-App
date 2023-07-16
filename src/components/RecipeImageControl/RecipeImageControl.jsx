@@ -1,25 +1,35 @@
+import { Cancel as DeleteIcon } from '@mui/icons-material';
 import { Paper } from '@mui/material';
 import useLongPress from 'hooks/useLongPress';
 import PropTypes from 'prop-types';
-import React from 'react';
 import styles from './RecipeImageControl.module.css';
 
-const RecipeImageControl = ({ src, onDeleteClick }) => {
+const RecipeImageControl = ({ src, onDeleteClick, ...props }) => {
   const defaultOptions = {
     shouldPreventDefault: true,
     delay: 500,
   };
-
-  const onLongClick = () => {
-    onDeleteClick();
+  
+  const handleLongClick = () => {
   };
 
-  const onClick = () => { }
+  const handleClick = () => { }
 
-  const longPressEvent = useLongPress(onLongClick, onClick, defaultOptions);
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    onDeleteClick();
+  }
+
+  const longPressEvent = useLongPress(handleLongClick, handleClick, defaultOptions);
 
   return (
-    <Paper {...longPressEvent} sx={{ p: 0.5 }} className={styles.container}>
+    <Paper {...props} {...longPressEvent} sx={{ p: 0.5 }} className={styles.container}>
+      <div className={styles.deleteButtonContainer}>
+        <DeleteIcon
+          onClick={handleDeleteClick}
+        />
+      </div>
+
       <img alt="recipe" className={styles.image} src={src} />
     </Paper>
   );

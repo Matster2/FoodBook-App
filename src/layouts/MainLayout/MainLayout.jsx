@@ -1,14 +1,13 @@
 import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
 import classnames from 'classnames';
-import React from 'react';
 import { useTranslation } from "react-i18next";
 import { Link, Outlet, matchPath, useLocation } from 'react-router-dom';
 
 import AuthenticationModal from 'modals/AuthenticationModal';
 
 import { ReactComponent as SettingsIcon } from 'assets/icons/cog.svg';
+import { ReactComponent as CookbookIcon } from 'assets/icons/cookbook.svg';
 import { ReactComponent as DiscoverIcon } from 'assets/icons/discover.svg';
-import { ReactComponent as HeartIcon } from 'assets/icons/heart.svg';
 import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as PlannerIcon } from 'assets/icons/planner.svg';
 
@@ -35,7 +34,7 @@ export default () => {
     };
   
     const isDiscoverActive = () => {
-      if (matchPath('/recipes/*', pathname)) {
+      if (matchPath('/recipes/*', pathname) && !(pathname.includes("create") || pathname.includes("edit"))) {
         return true;
       }
   
@@ -49,8 +48,17 @@ export default () => {
       return false;
     };
   
-    const isFavouritesActive = () => {
+    const isCookBookActive = () => {
       if (matchPath('/favourites/*', pathname)) {
+        return true;
+      }
+      if (matchPath('/personal/*', pathname)) {
+        return true;
+      }
+      if (matchPath('/recipes/create', pathname)) {
+        return true;
+      }
+      if (matchPath('/recipes/*/edit', pathname)) {
         return true;
       }
       return false;
@@ -101,12 +109,12 @@ export default () => {
             }
           />
           <BottomNavigationAction
-            className={classnames(styles.navOption, isFavouritesActive() ? styles.navOptionSelected : '')}
+            className={classnames(styles.navOption, isCookBookActive() ? styles.navOptionSelected : '')}
             component={Link}
             to="/favourites"
-            label={t("pages.favourites.title")}
+            label={t("pages.cookbook.title")}
             icon={
-              <HeartIcon className={classnames(styles.navOptionIcon, isFavouritesActive() ? styles.navOptionSelected : '')} />
+              <CookbookIcon className={classnames(styles.navOptionIcon, isCookBookActive() ? styles.navOptionSelected : '')} />
             }
           />
           <BottomNavigationAction

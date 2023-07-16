@@ -1,16 +1,17 @@
 import NiceModal from '@ebay/nice-modal-react';
 import {
-    Box,
-    Button,
-    CircularProgress,
-    Container,
-    CssBaseline,
-    Dialog,
-    Grid,
-    InputAdornment,
-    Slide,
-    TextField,
-    Typography,
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Dialog,
+  Grid,
+  InputAdornment,
+  Slide,
+  Tab,
+  Tabs,
+  TextField,
+  Typography
 } from '@mui/material';
 import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
 import FilterButton from 'components/FilterButton';
@@ -125,8 +126,6 @@ export default () => {
 
   return (
     <Container>
-      <CssBaseline />
-
       <Dialog
         fullScreen
         open={showAdvancedFilters}
@@ -143,6 +142,17 @@ export default () => {
 
       <Header title={t('pages.favourites.title')} onBackClick={() => navigate(-1)} />
 
+      <Tabs
+        sx={{ mb: 2 }}
+        value={"favourites"}
+        onChange={() => {}}
+        textColor="primary"
+        indicatorColor="primary"
+        centered
+      >
+        <Tab value="favourites" label={t('pages.favourites.title')} onClick={() => navigate('/favourites')} />
+        <Tab value="personal" label={t('pages.personal.title')} onClick={() => navigate('/personal')}  />
+      </Tabs>
       <Box sx={{ mb: 3 }}>
         <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
           <Grid item xs>

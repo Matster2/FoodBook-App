@@ -1,5 +1,5 @@
 import NiceModal from '@ebay/nice-modal-react';
-import { Box, Button, CircularProgress, Container, CssBaseline, Grid, IconButton, List, Slide, Stack, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Container, Grid, IconButton, List, Slide, Stack, Typography } from '@mui/material';
 import DatePickerOption from 'components/DatePickerOption/DatePickerOption';
 import Header from 'components/Header';
 import PlannedRecipe from 'components/PlannedRecipe';
@@ -141,8 +141,6 @@ export default () => {
 
   return (
     <Container sx={{ pb: 10 }}>
-      <CssBaseline />
-
       {selectedPlannedRecipe && (
         <PlannedRecipeDialog
           open={showEditPlannedRecipeModal}

@@ -1,5 +1,5 @@
 
-import { Box, CircularProgress, Container, CssBaseline, IconButton, Stack, Typography } from '@mui/material';
+import { Box, CircularProgress, Container, IconButton, Stack, Typography } from '@mui/material';
 import classnames from 'classnames';
 import Header from 'components/Header';
 import IngredientList from 'components/IngredientList';
@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import useAPI from 'hooks/useAPI';
 import useAuth from 'hooks/useAuth';
 import useFilters from 'hooks/useFilters';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { areDatesTheSameDay, getDayName, getMonthName } from 'utils/utils';
@@ -273,8 +273,6 @@ export default () => {
 
 
       <Container sx={{ pb: 10 }}>
-        <CssBaseline />
-
         <Header title={t("pages.ingredientList.title")} onBackClick={() => navigate(-1)} />
 
         <Box>

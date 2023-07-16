@@ -1,15 +1,14 @@
 import NiceModal from '@ebay/nice-modal-react';
 import {
-    Avatar,
-    Box,
-    Container,
-    CssBaseline,
-    Dialog,
-    Grid,
-    InputAdornment,
-    Slide,
-    TextField,
-    Typography,
+  Avatar,
+  Box,
+  Container,
+  Dialog,
+  Grid,
+  InputAdornment,
+  Slide,
+  TextField,
+  Typography
 } from '@mui/material';
 import CategoryChip from 'components/CategoryChip';
 import FilterButton from 'components/FilterButton';
@@ -63,10 +62,13 @@ export default () => {
     }/recipes?random=true&pageSize=25&publishedAfter=${sevenDaysAgo.toISOString()}&sortBy=datepublished&sortDesc=true`
   );
   const { results: recommendedRecipes, totalResults: totalRecommendedRecipes, loading: loadingRecommendedRecipes, refetch: refetchRecommendedRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25`
+    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&personal=false`
   );
   const { results: favouriteRecipes, totalResults: totalFavouriteRecipes, loading: loadingFavouriteRecipes, refetch: refetchFavouriteRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&favourited=true`
+  );
+  const { results: personalRecipes, totalResults: totalPersonalRecipes, loading: loadingPersonalRecipes, refetch: refetchPersonalRecipes } = usePagedFetch(
+    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&favourited=true&personal=true`
   );
 
   const { results: tags, loading: loadingTags, refetch: refetchTags } = usePagedFetch(`${process.env.REACT_APP_API_URL}/tags`);
@@ -76,6 +78,7 @@ export default () => {
     refetchRecentlyAddedRecipes();
     refetchRecommendedRecipes();
     refetchFavouriteRecipes();
+    refetchPersonalRecipes();
     refetchTags();
   }
 
@@ -150,8 +153,6 @@ export default () => {
 
   return (
     <Container sx={{ pb: 7 }}>
-      <CssBaseline />
-
       <Dialog
         fullScreen
         open={showAdvancedFilters}
@@ -259,6 +260,17 @@ export default () => {
             onSeeAllClick={() => navigate('/favourites')}
           >
             {favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}
+          </Section>
+        )}
+
+        {personalRecipes.length > 0 && (
+          <Section
+            title={t('pages.home.sections.personal')}
+            // showSeeAllLink={favouriteRecipes.length < totalFavouriteRecipes}
+            loading={loadingPersonalRecipes}
+            // onSeeAllClick={() => navigate('/favourites')}
+          >
+            {personalRecipes.map((recipe) => renderRecipeTile(recipe))}
           </Section>
         )}
       </PullToRefresh>

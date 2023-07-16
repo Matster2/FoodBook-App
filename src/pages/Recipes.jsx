@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Container, CssBaseline, Dialog, Grid, InputAdornment, Slide, TextField, Typography } from '@mui/material';
+import { Box, CircularProgress, Container, Dialog, Grid, InputAdornment, Slide, TextField, Typography } from '@mui/material';
 import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
 import FilterButton from 'components/FilterButton';
 import Header from 'components/Header';
@@ -99,8 +99,6 @@ export default () => {
   /* Rendering */
   return (
     <Container>
-      <CssBaseline />
-
       <Dialog
         fullScreen
         open={showAdvancedFilters}

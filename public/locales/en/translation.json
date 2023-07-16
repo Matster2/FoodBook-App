@@ -18,6 +18,9 @@
         }
       }
     },
+    "cookbook": {
+      "title": "Cookbook"
+    },
     "register": {
       "title": "Register",
       "alreadyHaveAccount": "Already have an account?",
@@ -49,7 +52,8 @@
         "categories": "Categories",
         "recommended": "Recommendations",
         "recentlyAdded": "Recently Added",
-        "favourites": "Favourite Recipes"
+        "favourites": "Favourite Recipes",
+        "personal": "Your Recipes"
       },
       "components": {
         "inputs": {
@@ -98,6 +102,23 @@
       "title": "Favourites",
       "authenticationRequired": "You must be signed in to see your favourites",
       "noRecipes": "No favourited recipes",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Search recipes"
+          }
+        },
+        "buttons": {
+          "signIn": {
+            "label": "Sign In"
+          }
+        }
+      }
+    },
+    "personal": {
+      "title": "Personal",
+      "authenticationRequired": "You must be signed in to see your personal recipes",
+      "noRecipes": "No personal recipes",
       "components": {
         "inputs": {
           "recipeSearch": {

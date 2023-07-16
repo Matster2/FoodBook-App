@@ -1,8 +1,16 @@
 export const RecipeTypes = {
-    Breakfast: 'breakfast',
-    Lunch: 'lunch',
-    Dinner: 'dinner',
-    Dessert: 'dessert',
-    Snack: 'snack',
-    Drink: 'drink'
+    Breakfast: 'Breakfast',
+    Lunch: 'Lunch',
+    Dinner: 'Dinner',
+    Dessert: 'Dessert',
+    Snack: 'Snack',
+    Drink: 'Drink'
+};
+
+export const RecipeDifficulty = {
+    VeryEasy: 'VeryEasy',
+    Easy: 'Easy',
+    Average: 'Average',
+    Hard: 'Hard',
+    VeryHard: 'VeryHard',
 }

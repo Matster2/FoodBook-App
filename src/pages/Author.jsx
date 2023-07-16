@@ -1,19 +1,18 @@
 import {
-    Avatar,
-    Box,
-    CircularProgress,
-    Container,
-    CssBaseline,
-    Grid,
-    Stack,
-    Typography
+  Avatar,
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Stack,
+  Typography
 } from '@mui/material';
 import AuthorLink from 'components/AuthorLink';
 import Header from 'components/Header';
 import RecipeTile from 'components/RecipeTile';
 import Section from 'components/Section';
 import useAPI from 'hooks/useAPI';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from 'react-router-dom';
 import { truncateText } from 'utils/stringUtils';
@@ -144,8 +143,6 @@ export default () => {
 
   return (
     <Container sx={{ pb: 7 }}>
-      <CssBaseline />
-
       <Header title={t('pages.author.title')} onBackClick={() => navigate(-1)} />
 
       {loadingAuthor && (

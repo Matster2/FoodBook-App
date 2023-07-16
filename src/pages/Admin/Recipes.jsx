@@ -1,28 +1,27 @@
 import {
-    Box,
-    Button,
-    CircularProgress,
-    Container,
-    CssBaseline,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Pagination,
-    Paper,
-    Select,
-    Stack,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Typography
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Paper,
+  Select,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography
 } from '@mui/material';
 import Header from 'components/Header';
 import useAPI from 'hooks/useAPI';
 import useFilters from 'hooks/useFilters';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 
@@ -109,7 +108,6 @@ export default () => {
 
   return (
     <Container sx={{ pb: 7 }}>
-      <CssBaseline />
       <Header title="Recipes" onBackClick={() => navigate(-1)} />
 
       <Stack sx={{ mb: 2 }} direction="row" gap={2}>

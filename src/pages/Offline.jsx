@@ -1,13 +1,11 @@
 import {
-    Box,
-    Button,
-    Container,
-    CssBaseline,
-    Stack,
-    Typography,
+  Box,
+  Button,
+  Container,
+  Stack,
+  Typography
 } from '@mui/material';
 import sleepLogo from 'assets/logo-sleep.svg';
-import React from 'react';
 import { useTranslation } from "react-i18next";
 
 export default () => {
@@ -15,7 +13,6 @@ export default () => {
 
   return (
     <Container>
-      <CssBaseline />
       <Stack
         direction="column"
         gap={2}

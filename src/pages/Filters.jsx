@@ -4,11 +4,10 @@ import {
   Button,
   Chip,
   Container,
-  CssBaseline,
   Grid,
   Stack,
   TextField,
-  Typography,
+  Typography
 } from '@mui/material';
 import FilterOption from 'components/FilterOption';
 import Header from 'components/Header';
@@ -17,7 +16,7 @@ import { TagContext } from 'contexts/TagContext';
 import useAPI from 'hooks/useAPI';
 import useFilters from 'hooks/useFilters';
 import PropTypes from 'prop-types';
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { RecipeTypes } from 'types';
 import { isUndefined } from 'utils/utils';
@@ -193,8 +192,6 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
 
   return (
     <Container component="main" maxWidth="lg">
-      <CssBaseline />
-
       <Header title={t('components.recipeFilters.title')} onBackClick={onClose} />
 
       <Box sx={{ mb: 3 }}>

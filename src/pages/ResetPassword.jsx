@@ -1,9 +1,9 @@
 import NiceModal from '@ebay/nice-modal-react';
-import { Box, Button, Container, CssBaseline, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import logo from 'assets/logo.svg';
 import useAPI from 'hooks/useAPI';
 import useInput from 'hooks/useInput';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -124,7 +124,6 @@ export default () => {
   /* Rendering */
   return (
     <Container>
-      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,

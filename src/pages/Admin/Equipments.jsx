@@ -3,7 +3,6 @@ import {
   Button,
   CircularProgress,
   Container,
-  CssBaseline,
   Pagination,
   Paper,
   Table,
@@ -19,7 +18,7 @@ import Header from 'components/Header';
 import useAPI from 'hooks/useAPI';
 import useFilters from 'hooks/useFilters';
 import useInput from 'hooks/useInput';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 
@@ -95,7 +94,6 @@ export default () => {
 
   return (
     <Container sx={{ pb: 7 }}>
-      <CssBaseline />
       <Header title="Equipment" onBackClick={() => navigate(-1)} />
 
       <Box

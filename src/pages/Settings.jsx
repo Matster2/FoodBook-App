@@ -1,12 +1,12 @@
 import NiceModal from '@ebay/nice-modal-react';
 import {
-    Box,
-    Container,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemText,
-    Typography
+  Box,
+  Container,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography
 } from '@mui/material';
 import logo from 'assets/logo.svg';
 import Header from 'components/Header';
@@ -14,7 +14,7 @@ import LanguageDropdown from 'components/LanguageDropdown';
 import { LanguageContext } from 'contexts/LanguageContext';
 import useAPI from 'hooks/useAPI';
 import useAuth from 'hooks/useAuth';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from 'react-router-dom';
@@ -45,7 +45,7 @@ export default () => {
 
   return (
     <>
-      <Container>
+      <Container>      
         <Header title={t('pages.settings.title')} onBackClick={() => navigate(-1)} />
 
         <Box sx={{ mt: 3 }} display="flex" justifyContent="center">

@@ -1,10 +1,10 @@
-import { Box, Button, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Button, Container, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import Header from 'components/Header';
 import { UnitOfMeasurementContext } from 'contexts/UnitOfMeasurementContext';
 import { Field, Form, Formik } from 'formik';
 import useAPI from 'hooks/useAPI';
 import usePrevious from 'hooks/usePrevious';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import FormModes from 'utils/formModes';
@@ -122,7 +122,6 @@ export default () => {
   /* Rendering */
   return (
     <Container sx={{ pb: 7 }}>
-      <CssBaseline />
       <Header title={mode === FormModes.Create ? "Add Ingredient" : "Edit Ingredient"} onBackClick={() => navigate(-1)} />
 
       <Formik

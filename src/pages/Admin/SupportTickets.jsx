@@ -1,22 +1,21 @@
 import {
-    Box,
-    CircularProgress,
-    Container,
-    CssBaseline,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Pagination,
-    Paper,
-    Select,
-    Slide,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Typography
+  Box,
+  CircularProgress,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Paper,
+  Select,
+  Slide,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography
 } from '@mui/material';
 import Header from 'components/Header';
 import SupportTicketDialog from 'dialogs/SupportTicketDialog';
@@ -126,7 +125,6 @@ export default () => {
       )}
 
       <Container sx={{ pb: 7 }}>
-        <CssBaseline />
         <Header title="Support Tickets" onBackClick={() => navigate(-1)} />
 
         <Box sx={{ mb: 2 }}>

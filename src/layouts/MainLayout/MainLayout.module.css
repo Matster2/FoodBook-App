@@ -26,8 +26,9 @@
 }
 
 .navOptionIcon {
-    width: 18px !important;
+    max-width: 18px !important;
     height: auto;
+    max-height: 20px !important;
     margin-bottom: 5px;
     padding: 0px;
     fill: rgba(50, 50, 50, 0);
