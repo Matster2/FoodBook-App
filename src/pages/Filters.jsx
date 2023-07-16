@@ -12,11 +12,11 @@ import {
 import FilterOption from 'components/FilterOption';
 import Header from 'components/Header';
 import RatingFilter from 'components/RatingFilter';
-import { TagContext } from 'contexts/TagContext';
 import useAPI from 'hooks/useAPI';
 import useFilters from 'hooks/useFilters';
+import useTags from 'hooks/useTags';
 import PropTypes from 'prop-types';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { RecipeTypes } from 'types';
 import { isUndefined } from 'utils/utils';
@@ -25,7 +25,7 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
   const { t } = useTranslation();
   const api = useAPI();
 
-  const { tags } = useContext(TagContext);
+  const { tags } = useTags();
 
   const { filters, setFilter } = useFilters({
     ingredientIds: [],

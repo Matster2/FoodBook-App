@@ -14,11 +14,11 @@ import CategoryChip from 'components/CategoryChip';
 import FilterButton from 'components/FilterButton';
 import RecipeTile from 'components/RecipeTile';
 import Section from 'components/Section';
-import { TagContext } from 'contexts/TagContext';
 import { UserContext } from 'contexts/UserContext';
 import useInput from 'hooks/useInput';
 import usePagedFetch from 'hooks/usePagedFetch';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import useTags from 'hooks/useTags';
+import React, { useContext, useMemo, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
@@ -40,7 +40,7 @@ export default () => {
   const navigate = useNavigate();
   const { authenticated } = useAuth();
 
-  const { setTags } = useContext(TagContext);
+  const { tags, fetch: fetchTags } = useTags();
   const { user } = useContext(UserContext);
 
   const { value: search, onChange: onSearchChange } = useInput('');
@@ -71,15 +71,13 @@ export default () => {
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&favourited=true&personal=true`
   );
 
-  const { results: tags, loading: loadingTags, refetch: refetchTags } = usePagedFetch(`${process.env.REACT_APP_API_URL}/tags`);
-
   /* Handlers */
   const handleRefresh = async () => {
     refetchRecentlyAddedRecipes();
     refetchRecommendedRecipes();
     refetchFavouriteRecipes();
     refetchPersonalRecipes();
-    refetchTags();
+    fetchTags();
   }
 
   const handleAvatarClick = () => {
@@ -126,11 +124,6 @@ export default () => {
       },
     });
   };
-
-  /* Effects */
-  useEffect(() => {
-    setTags(tags);
-  }, [tags]);
 
   /* Rendering */
   const getWelcomeMessage = () => {

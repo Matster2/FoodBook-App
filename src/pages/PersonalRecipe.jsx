@@ -7,41 +7,6 @@ import useAPI from 'hooks/useAPI';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from 'react-router-dom';
-import uuid from 'react-uuid';
-
-const initialRecipeValue = {
-  name: '',
-  description: '',
-  type: undefined,
-  difficulty: undefined,
-  prepTime: undefined,
-  cookTime: undefined,
-  totalTime: undefined,
-  servings: undefined,
-  containsAlcohol: false,
-  steps: [
-    {
-      id: uuid(),
-      name: "",
-      instructions: []
-    }
-  ],
-  ingredients: [],
-  equipment: [],
-  referenceUrl: '',
-  nutrition: {
-    calories: undefined,
-    sugar: undefined,
-    fat: undefined,
-    saturatedFat: undefined,
-    sodium: undefined,
-    protein: undefined,
-    carbohydrates: undefined,
-    fiber: undefined,
-  },
-  tags: [],
-  images: [],
-};
 
 export default () => {
   const { t } = useTranslation();
@@ -50,7 +15,9 @@ export default () => {
   const api = useAPI();
 
   const [loadingRecipe, setLoadingRecipe] = useState(false);
-  const [recipe, setRecipe] = useState(initialRecipeValue);
+  const [recipe, setRecipe] = useState({
+    personal: true
+  });
 
   const fetchRecipe = async () => {
     setLoadingRecipe(true);
@@ -63,9 +30,9 @@ export default () => {
     setLoadingRecipe(false);
   };
 
-  /* Handlers */
-  const handleRecipeChange = (newRecipe) => {
+  const handleSuccess = (newRecipe) => {
     setRecipe(newRecipe);
+    navigate(`/recipes/${newRecipe.id}`)
   }
 
   /* Effects */
@@ -82,6 +49,8 @@ export default () => {
 
         <RecipeForm
           recipe={recipe}
+          onSubmit={handleSubmit}
+          admin={false}
       />
       </Container>
     </>

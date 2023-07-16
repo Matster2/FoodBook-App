@@ -3,10 +3,10 @@ import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
 import FilterButton from 'components/FilterButton';
 import Header from 'components/Header';
 import RecipeTile from 'components/RecipeTile';
-import { TagContext } from 'contexts/TagContext';
 import useAPI from 'hooks/useAPI';
 import useInput from 'hooks/useInput';
-import React, { useContext, useEffect, useState } from 'react';
+import useTags from 'hooks/useTags';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
@@ -24,7 +24,7 @@ export default () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { setTags } = useContext(TagContext);
+  const { fetch: fetchTags } = useTags();
 
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
@@ -37,18 +37,6 @@ export default () => {
   const [loadingTags, setLoadingTags] = useState(false);
   const [loadingRecipes, setLoadingRecipes] = useState(false);
   const [recipes, setRecipes] = useState([]);
-
-  const fetchTags = async () => {
-    setLoadingTags(true);
-    try {
-      setLoadingTags(true);
-      const { data } = await api.getTags();
-      setTags(data.results);
-    } catch {
-      console.log('error fetching tags');
-    }
-    setLoadingTags(false);
-  };
 
   const fetchRecipes = async () => {
     setLoadingRecipes(true);

@@ -525,17 +525,61 @@
         "veryHard": "Very Hard"
       },
       "fields": {
-        "type": "Type",
-        "servings": "Servings",
+        "name": {
+          "name": "Name"
+        },
+        "description": {
+          "name": "Description"
+        },
+        "type": {
+          "name": "Type",
+          "validation": []
+        },
+        "difficulty": {
+          "name": "Difficulty",
+          "validation": []
+        },
+        "prepTime": {
+          "name": "Prep Time",
+          "validation": []
+        },
+        "cookTime": {
+          "name": "Cooking Time",
+          "validation": []
+        },
+        "totalTime": {
+          "name": "Total Time",
+          "validation": []
+        },
+        "servings": {
+          "name": "Servings",
+          "validation": []
+        },
         "nutrition": {
-          "calories": "Calories",
-          "sugar": "Sugar",
-          "fat": "Fat",
-          "saturatedFat": "Saturated Fat",
-          "sodium": "Sodium",
-          "protein": "Protein",
-          "carbohydrates": "Carbohydrates",
-          "fiber": "Fiber"
+          "calories": {
+            "name": "Calories"
+          },          
+          "sugar": {
+            "name": "Sugar"
+          },
+          "fat": {
+            "name": "Fat"
+          },          
+          "saturatedFat": {
+            "name": "Saturated Fat"
+          },
+          "sodium": {
+            "name": "Sodium"
+          },          
+          "protein": {
+            "name": "Carbohydrates"
+          },          
+          "carbohydrates": {
+            "name": "Protein"
+          },          
+          "fiber": {
+            "name": "Fiber"
+          }
         }
       }
     }

@@ -1,15 +1,15 @@
 import {
-    Box,
-    Button,
-    ButtonGroup,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Grid,
-    Stack,
-    Typography
+  Box,
+  Button,
+  ButtonGroup,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  Stack,
+  Typography
 } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
 import useAPI from 'hooks/useAPI';
@@ -170,7 +170,7 @@ const PlannedRecipeDialog = ({ open, onClose, onComplete, transitionComponent, p
             }}
           >
             <Stack direction="column">
-              <Typography textAlign="center" variant='h6'>{t('types.recipe.fields.servings')}</Typography>
+              <Typography textAlign="center" variant='h6'>{t('types.recipe.fields.servings.name')}</Typography>
 
               <ButtonGroup size="small" aria-label="small button group">
                 <Button variant="contained" disabled={servings <= 1} onClick={handleDecrementServings}>-</Button>

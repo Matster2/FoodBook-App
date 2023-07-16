@@ -1,7 +1,6 @@
 import { AccessTime as AccessTimeIcon } from '@mui/icons-material';
 import { Box, Card, Checkbox, Grid, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import React from 'react';
 import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
@@ -41,7 +40,7 @@ const TogglablePlannedRecipe = ({ plannedRecipe, onChange, enabled }) => {
             <Grid container justifyContent="space-between" sx={{ mb: 1 }} display="flex" alignItems="center">
               <Grid item xs={6}>
                 <Stack direction="row" alignItems="center" gap={0.4}>
-                  <Typography>{plannedRecipe.servings} {capitalizeFirstLetter(t('types.recipe.fields.servings'))}</Typography>
+                  <Typography>{plannedRecipe.servings} {capitalizeFirstLetter(t('types.recipe.fields.servings.name'))}</Typography>
                 </Stack>
               </Grid>
               <Grid item xs={6}>

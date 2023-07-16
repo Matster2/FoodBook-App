@@ -11,7 +11,7 @@ export const recipeSchema = yup.object({
   servings: yup.number().integer().required(),
   containsAlcohol: yup.bool().required(),
   nutrition: yup.object({
-    calories: yup.number().integer().required(),
+    calories: yup.number().integer(),
     sugar: yup.number(),
     fat: yup.number(),
     saturatedFat: yup.number(),

@@ -29,35 +29,6 @@ export default () => {
   };
 
   /* Handlers */
-  const handleSubmit = (newRecipe, files) => {
-    console.log("dadsa")
-    if (!recipe.id) {
-      handleCreateRecipe(newRecipe, files);
-    } else {
-      handleUpdateRecipe(newRecipe, files);
-    }
-  }
-
-  const handleCreateRecipe = async (newRecipe, filesToUpload) => {
-    try {
-      const {
-        data: { id },
-      } = await api.createRecipe(data);
-
-      filesToUpload.forEach(async (file, index) => {
-        await api.uploadRecipeImage(id, file, index);
-      });
-
-      toast.success('Recipe successfully created');
-    } catch (e) {
-      console.log(e)
-      toast.error('Unable to create recipe');
-    }
-  }
-
-  const handleUpdateRecipe = (newRecipe) => {
-    
-  }
 
   /* Effects */
   useEffect(() => {
@@ -72,8 +43,8 @@ export default () => {
         <Header title="Add Recipe" onBackClick={() => navigate(-1)} />
 
         <RecipeForm
-          recipe={recipe}
-          onSubmit={handleSubmit}
+          initialValues={recipe}
+          onSubmit={() => {}}
         />
       </Container>
     </>

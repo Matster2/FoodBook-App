@@ -150,7 +150,7 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
           }}
         >
           <Stack direction="column">
-            <Typography textAlign="center" variant='h6'>{t('types.recipe.fields.servings')}</Typography>
+            <Typography textAlign="center" variant='h6'>{t('types.recipe.fields.servings.name')}</Typography>
 
             <ButtonGroup size="small" aria-label="small button group">
               <Button variant="contained" disabled={servings <= 1} onClick={handleDecrementServings}>-</Button>

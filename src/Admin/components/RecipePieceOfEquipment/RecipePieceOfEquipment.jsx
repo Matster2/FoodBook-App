@@ -8,7 +8,6 @@ import {
   TextField
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import React from 'react';
 
 const RecipePieceOfEquipment = ({ recipePieceOfEquipment, onChange, onDelete }) => {
   const handleChange = (e) => {

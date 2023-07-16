@@ -42,6 +42,10 @@ import { ReactComponent as PrepIcon } from 'assets/icons/prep.svg';
 import { capitalizeFirstLetter, truncateText } from 'utils/stringUtils';
 import { isNull, isUndefined } from 'utils/utils';
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
+
 import 'react-spring-bottom-sheet/dist/style.css';
 import styles from './Recipe.module.css';
 
@@ -547,7 +551,7 @@ export default () => {
               recipeServings={recipe.servings}
               defaultValue={servings}
               onChange={onServingsChange}
-              suffixText={capitalizeFirstLetter(t('types.recipe.fields.servings'))}
+              suffixText={capitalizeFirstLetter(t('types.recipe.fields.serving.name'))}
               min={1}
               max={100}
             />

@@ -7,7 +7,6 @@ import {
   Stack,
   TextField
 } from '@mui/material';
-import { Field } from 'formik';
 import PropTypes from 'prop-types';
 import uuid from 'react-uuid';
 
@@ -76,8 +75,7 @@ const RecipeStep = ({ step, onChange, onDelete }) => {
 
       {step.instructions.map((instruction) => (
         <Stack direction="row" gap={1}>
-          <Field
-            as={TextField}
+          <TextField
             margin="normal"
             fullWidth
             multiline

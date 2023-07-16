@@ -16,11 +16,11 @@ const RecipeTile = ({ recipe, onClick }) => {
 
   return (
     <Card sx={{ p: 1 }} className={styles.card} onClick={handleClick}>
-      {recipe?.favourited && (
-        <div className={styles.favourite}>
+      <Stack direction="row" gap={1} className={styles.attachments}>
+        {recipe?.favourited && (
           <FavouriteHeart width={25} favourited={recipe.favourited} />
-        </div>
-      )}
+        )}
+      </Stack>
 
       <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper}>
         {recipe.images.map((image) => (
