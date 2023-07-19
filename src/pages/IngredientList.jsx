@@ -245,7 +245,7 @@ export default () => {
         excludedRecipesString = ` - ${noOfExcludedPlannedRecipes}  ${t('common.words.excluded')}`
       }
       
-      recipesString = `(${plannerIngredientList.breakdown.plannedRecipes.length} ${plannerIngredientList.breakdown.plannedRecipes.length === 1 ? t('common.words.recipe') : t('common.words.recipes')}${excludedRecipesString ?? ''})`;
+      recipesString = `(${plannerIngredientList.breakdown.plannedRecipes.length} ${plannerIngredientList.breakdown.plannedRecipes.length === 1 ? t('types.recipe.name') : t('types.recipe.pluralName')}${excludedRecipesString ?? ''})`;
     }
     
     var dateFrom = dayjs(filters.dateFrom);

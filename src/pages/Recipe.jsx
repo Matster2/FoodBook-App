@@ -1,6 +1,7 @@
 import {
   AccessTime as AccessTimeIcon,
   ChevronLeft as ChevronLeftIcon,
+  Edit as EditIcon,
   Star as StarIcon
 } from '@mui/icons-material';
 import {
@@ -18,6 +19,7 @@ import {
   Stepper,
   Typography,
 } from '@mui/material';
+import classnames from 'classnames';
 import EquipmentList from 'components/EquipmentList';
 import FavouriteHeart from 'components/FavouriteHeart';
 import IngredientList from 'components/IngredientList';
@@ -30,7 +32,7 @@ import RecipeImageViewerDialog from 'dialogs/RecipeImageViewerDialog';
 import useAPI from 'hooks/useAPI';
 import useAuth from 'hooks/useAuth';
 import _ from "lodash";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -92,7 +94,7 @@ export default () => {
 
   const {
     authenticated,
-    claims: { userId },
+    claims: { userId, role },
   } = useAuth();
 
   const api = useAPI();
@@ -115,6 +117,9 @@ export default () => {
   const [showPlannerModal, setShowPlannerModal] = useState(false);
 
   const [isError, setIsError] = useState(false);
+
+  const swiperRef = useRef(null)
+  const headerRef = useRef(null)
 
   const onServingsChange = (newServings) => {
     setServings(newServings);
@@ -248,8 +253,18 @@ export default () => {
   };
 
   const handleAuthorClick = () => {
-    navigate(`/authors/${recipe.author.id}`);
+    if (recipe.author) {
+      navigate(`/authors/${recipe.author.id}`);
+    }
   };
+
+  const handleEditClick = () => {
+    if (recipe.personal) {
+      navigate(`/recipes/${recipe.id}/edit`)
+      return;
+    }
+    navigate(`/admin/recipes/${recipe.id}`)
+  }
 
   /* Effects */
   useEffect(() => {
@@ -270,6 +285,21 @@ export default () => {
   }, [recipe]);
 
   /* Rendering */
+  const hasNutritionValues = useMemo(() => {
+    if (!recipe) {
+      return false;
+    }
+
+    Object.keys(recipe.nutrition).forEach((key) => {
+      var val = recipe.nutrition[key];
+      if (val > 0) {
+        return true;
+      }
+
+      return false;
+  });
+  }, [recipe])
+
   function fixRounding(value, precision) {
     var power = Math.pow(10, precision || 0);
     return Math.round(value * power) / power;
@@ -287,6 +317,14 @@ export default () => {
 
   const renderDescriptionText = (description) => {
     const maxLength = 90;
+
+    if (description.length <= 90) {
+      return (
+        <Typography style={{ whiteSpace: "pre-wrap" }} variant="body2">
+          {description}
+        </Typography>
+      );
+    }
 
     const text = showFullDescription ? description : truncateText(description, maxLength);
 
@@ -342,7 +380,7 @@ export default () => {
   }
 
   return (
-    <>
+    <div style={{ height: '100vh', width: '100%', backgroundColor: '#f5f5f5' }}>
       <RecipeImageViewerDialog
         open={showRecipeImageViewerDialog}
         onClose={() => setShowRecipeImageViewerDialog(false)}
@@ -399,12 +437,12 @@ export default () => {
           }}
         />
       )}
-
       <Grid
         className={styles.header}
         container
         justifyContent="space-between"
         sx={{ mt: 4, mb: 2 }}
+        ref={headerRef}
       >
         <Grid
           item
@@ -447,19 +485,24 @@ export default () => {
         </Grid>
       </Grid>
 
-      <Swiper className={styles.swiper}>
-        {recipe.images.map((image) => (
-          <SwiperSlide className={styles.swiperSlide} onDoubleClick={() => handleImageClick(image)}>
-            <img src={image} className={styles.slideImage} alt="recipe" />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+
+      <Box ref={swiperRef}>
+        <Swiper className={styles.swiper}>
+          {recipe.images.map((image) => (
+            <SwiperSlide className={styles.swiperSlide} onDoubleClick={() => handleImageClick(image)}>
+              <img src={image.url} className={styles.slideImage} alt="recipe" />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </Box>
 
       <BottomSheet
         open
+        scrollLocking={recipe.images.length === 0}
+        enabledGestureInteraction={recipe.images.length === 0}
         blocking={false}
         defaultSnap={({ snapPoints, lastSnap }) => Math.max(...snapPoints)}
-        snapPoints={({ maxHeight }) => [maxHeight - maxHeight / 10, maxHeight - maxHeight / 4, maxHeight / 2]}
+        snapPoints={({ maxHeight }) => recipe.images.length > 0 ? [maxHeight - (maxHeight / 10),  maxHeight - swiperRef.current.clientHeight] : [maxHeight - (maxHeight / 10)]}
       >
         <Container sx={{ mb: 5 }}>
           <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
@@ -497,15 +540,29 @@ export default () => {
             {renderDescriptionText(recipe.description)}
           </Box>
 
-          {author && (
-            <Stack direction="row" display="flex" alignItems="center" onClick={handleAuthorClick}>
-              <Typography className={styles.author} sx={{ mr: 1 }} style={{ fontWeight: 'bold' }}>{t('pages.recipe.author')}:</Typography>
-              <Avatar sx={{ height: 20, width: 20, mr: 1 }} src={author.profilePictureUrl} />
-              <Typography className={styles.author}>
-                {recipe.author.name}
-              </Typography>
-            </Stack>
-          )}
+          <Stack direction="row" display="flex" justifyContent="space-between" alignItems="center">
+            {(author || recipe.personal) && (
+              <Stack direction="row" display="flex" alignItems="center" onClick={handleAuthorClick}>
+                <Typography className={styles.author} sx={{ mr: 1 }} style={{ fontWeight: 'bold' }}>{t('pages.recipe.author')}:</Typography>
+                <Avatar sx={{ height: 21, width: 21, mr: 1, bgcolor: 'var(--primary-colour)' }} src={author?.profilePictureUrl} />
+                
+                <Typography className={styles.author}>
+                  {recipe?.author?.name ?? ""}
+                  {recipe.personal && (
+                    <Typography className={styles.author} sx={{ fontWeight: 'bold'}}>
+                      {`(${t('common.words.you')})`}
+                    </Typography>
+                  )}
+                </Typography>
+              </Stack>
+            )}
+
+            {(recipe.personal || role === 'Administrator') && (
+              <IconButton sx={{ marginLeft: 'auto' }} className={classnames(styles.optionButton, recipe.personal && styles.personalOptionButton)} onClick={handleEditClick}>
+                <EditIcon className={styles.optionIcon} />
+              </IconButton>
+            )}
+          </Stack>
 
           <Stack
             sx={{ my: 2 }}
@@ -546,51 +603,59 @@ export default () => {
             )}
           </Stack>
 
-          <Box sx={{ mt: 2, mb: 1 }} display="flex" alignItems="center" justifyContent="center">
-            <ServingsIncrementor
-              recipeServings={recipe.servings}
-              defaultValue={servings}
-              onChange={onServingsChange}
-              suffixText={capitalizeFirstLetter(t('types.recipe.fields.serving.name'))}
-              min={1}
-              max={100}
-            />
-          </Box>
-
-          <CollapsibleSection
-            title={t('pages.recipe.sections.equipment')}
-          >
-            <EquipmentList
-              equipment={recipe.equipment}
-            />
-          </CollapsibleSection>
-
-          <CollapsibleSection
-            title={t('pages.recipe.sections.ingredients')}
-          >
-            {!isUndefined(servings) && (
-              <IngredientList
-                ingredients={getIngredients()}
-              />
-            )}
-          </CollapsibleSection>
-
-          <CollapsibleSection
-            title={t('pages.recipe.sections.directions')}
-          >
-            {loadingInstructions && (
-              <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
-                <CircularProgress />
+          {recipe.ingredients.length > 0 && (
+            <>          
+              <Box sx={{ mt: 2, mb: 1 }} display="flex" alignItems="center" justifyContent="center">
+                <ServingsIncrementor
+                  recipeServings={recipe.servings}
+                  defaultValue={servings}
+                  onChange={onServingsChange}
+                  suffixText={capitalizeFirstLetter(t('types.recipe.fields.servings.name'))}
+                  min={1}
+                  max={100}
+                />
               </Box>
-            )}
+            
+              <CollapsibleSection
+                title={t('pages.recipe.sections.ingredients')}
+              >
+                {!isUndefined(servings) && (
+                  <IngredientList
+                    ingredients={getIngredients()}
+                  />
+                )}
+              </CollapsibleSection>
+            </>
+          )}
 
-            {instructions && instructions.steps.map((step) => (
-              <RecipeStep
-                key={step.id}
-                step={step}
+          {recipe.equipment.length > 0 && (
+            <CollapsibleSection
+              title={t('pages.recipe.sections.equipment')}
+            >
+              <EquipmentList
+                equipment={recipe.equipment}
               />
-            ))}
-          </CollapsibleSection>
+            </CollapsibleSection>
+          )}
+
+          {recipe.steps.length > 0 && recipe.steps[0].instructions.length > 0 && (
+            <CollapsibleSection
+              title={t('pages.recipe.sections.directions')}
+            >
+              {loadingInstructions && (
+                <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
+                  <CircularProgress />
+                </Box>
+              )}
+
+              {instructions && instructions.steps.map((step) => (
+                <RecipeStep
+                  key={step.id}
+                  step={step}
+                />
+              ))}
+            </CollapsibleSection>
+          )}
 
           {recipe.referenceUrl && (
             <Box display="flex" justifyContent="center" sx={{ mb: 3 }}>
@@ -598,15 +663,17 @@ export default () => {
             </Box>
           )}
 
-          <CollapsibleSection
-            title={t('pages.recipe.sections.nutrition')}
-          >
-            <NutritionList
-              nutrition={recipe.nutrition}
-            />
-          </CollapsibleSection>
+          {hasNutritionValues && (
+            <CollapsibleSection
+              title={t('pages.recipe.sections.nutrition')}
+            >
+              <NutritionList
+                nutrition={recipe.nutrition}
+              />
+            </CollapsibleSection>
+          )}
         </Container>
       </BottomSheet>
-    </>
+    </div>
   );
 };

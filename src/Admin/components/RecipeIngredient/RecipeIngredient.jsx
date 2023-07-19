@@ -11,9 +11,11 @@ import {
 } from '@mui/material';
 import { UnitOfMeasurementContext } from 'contexts/UnitOfMeasurementContext';
 import PropTypes from 'prop-types';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
+import { useTranslation } from "react-i18next";
 
 const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
+  const { t } = useTranslation();
   const { unitOfMeasurements } = useContext(UnitOfMeasurementContext);
 
   const handleChange = (e) => {
@@ -40,7 +42,7 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
             fullWidth
             required
             id="name"
-            label="Name"
+            label={t("types.recipe.fields.ingredients.fields.name.name")}
             name="name"
             value={recipeIngredient.name}
             disabled
@@ -59,7 +61,7 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
             fullWidth
             required
             id="amount"
-            label="Amount"
+            label={t("types.recipe.fields.ingredients.fields.amount.name")}
             name="amount"
             type="number"
             value={recipeIngredient.amount}
@@ -69,12 +71,12 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
         </Grid>
         <Grid item xs={6}>
           <FormControl fullWidth>
-            <InputLabel id="type-label">Type</InputLabel>
+            <InputLabel id="type-label">{t("types.recipe.fields.ingredients.fields.unitOfMeasurement.name")}</InputLabel>
             <Select
               id="id"
               name="unitOfMeasurement.id"
               labelId="type-label"
-              label="Type"
+              label={t("types.recipe.fields.ingredients.fields.unitOfMeasurement.name")}
               onChange={handleUnitOfMeasurementChange}
               value={`${recipeIngredient.unitOfMeasurement.id}`}
             >

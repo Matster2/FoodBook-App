@@ -33,6 +33,7 @@ export default () => {
     states: ['published'],
     sortBy: 'datepublished',
     sortDesc: true,
+    personal: false,
     page: 1,
     pageSize: 50
   });

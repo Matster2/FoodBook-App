@@ -334,6 +334,20 @@ const useAPI = () => {
     );
   };
 
+  
+  const updateRecipe = async (id, data) => {
+    return axios.put(
+      `${process.env.REACT_APP_API_URL}/recipes/${id}`, {
+        ...data
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
   const uploadRecipeImage = async (recipeId, file, sequence) => {
     const formData = new FormData();
     formData.append('file', file);
@@ -348,6 +362,30 @@ const useAPI = () => {
         'Content-Type': 'multipart/form-data',
       },
     });
+  };  
+  
+  const removeRecipeImage = async (id) => {
+    return axios.delete(
+      `${process.env.REACT_APP_API_URL}/recipe-images/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+  
+  const updateRecipeImageIndex = async (id, sequence) => {
+    return axios.put(
+      `${process.env.REACT_APP_API_URL}/recipe-images/${id}/index`, {
+        sequence
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
   };
 
   const createTag = async (tag) => {
@@ -539,7 +577,47 @@ const useAPI = () => {
         Language: currentLanguage
       },
     });
+  };  
+
+  const addTagToRecipe = async (recipeId, tagId) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/recipes/${recipeId}/tags/${tagId}`, {},
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
   };
+
+  const removeTagFromRecipe = async (recipeId, tagId) => {
+    return axios.delete(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}/tags/${tagId}`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  }; 
+
+  const publishRecipe = async (recipeId) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/recipes/${recipeId}/publish`, {},
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
+  const deleteRecipe = async (recipeId) => {
+    return axios.delete(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
+  
 
   return {
     getSupportedLanguages,
@@ -571,7 +649,10 @@ const useAPI = () => {
     getUserRecipeRating,
     getRecipeRating,
     createRecipe,
+    updateRecipe,
     uploadRecipeImage,
+    removeRecipeImage,
+    updateRecipeImageIndex,
     createTag,
     updateTag,
     createAuthor,
@@ -587,7 +668,11 @@ const useAPI = () => {
     getSupportTickets,
     resolveSupportTicket,
     getLog,
-    getLogs
+    getLogs,
+    addTagToRecipe,
+    removeTagFromRecipe,
+    publishRecipe,
+    deleteRecipe
   };
 };
 

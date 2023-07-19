@@ -34,7 +34,6 @@ export default () => {
     pageSize: 40,
   });
 
-  const [loadingTags, setLoadingTags] = useState(false);
   const [loadingRecipes, setLoadingRecipes] = useState(false);
   const [recipes, setRecipes] = useState([]);
 

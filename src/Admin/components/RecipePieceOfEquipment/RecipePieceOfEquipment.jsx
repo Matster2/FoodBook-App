@@ -8,8 +8,11 @@ import {
   TextField
 } from '@mui/material';
 import PropTypes from 'prop-types';
+import { useTranslation } from "react-i18next";
 
 const RecipePieceOfEquipment = ({ recipePieceOfEquipment, onChange, onDelete }) => {
+  const { t } = useTranslation();
+
   const handleChange = (e) => {
     onChange({
       ...recipePieceOfEquipment,
@@ -32,7 +35,7 @@ const RecipePieceOfEquipment = ({ recipePieceOfEquipment, onChange, onDelete }) 
             fullWidth
             required
             id="name"
-            label="Name"
+            label={t("types.recipe.fields.equipment.fields.name.name")}
             name="name"
             value={recipePieceOfEquipment.name}
             disabled
@@ -51,7 +54,7 @@ const RecipePieceOfEquipment = ({ recipePieceOfEquipment, onChange, onDelete }) 
             fullWidth
             required
             id="amount"
-            label="Amount"
+            label={t("types.recipe.fields.equipment.fields.amount.name")}
             name="amount"
             type="number"
             value={recipePieceOfEquipment.amount}
@@ -70,7 +73,7 @@ const RecipePieceOfEquipment = ({ recipePieceOfEquipment, onChange, onDelete }) 
                 onChange={handleCheckboxChange}
               />
             }
-            label="Depends On Serving"
+            label={t("types.recipe.fields.equipment.fields.dependsOnServing.name")}
           />
         </Grid>
       </Grid>

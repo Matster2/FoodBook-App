@@ -1,13 +1,13 @@
 import { Box, Icon, Stack, Typography } from '@mui/material';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from "react-i18next";
+import { isUndefined } from 'utils/utils';
 import styles from './RecipeAttributeWidget.module.css';
 
 import { ReactComponent as AlcoholIcon } from 'assets/icons/alcohol.svg';
 import { ReactComponent as CaloriesIcon } from 'assets/icons/calories.svg';
-import { isUndefined } from 'utils/utils';
 
 const RecipeAttributeWidget = ({ type, value }) => {
   const { t } = useTranslation();
@@ -44,7 +44,7 @@ const RecipeAttributeWidget = ({ type, value }) => {
 };
 
 RecipeAttributeWidget.propTypes = {
-  type: PropTypes.oneOf(["calories"])
+  type: PropTypes.oneOf(["calories", "alcohol"])
 };
 
 RecipeAttributeWidget.defaultProps = {

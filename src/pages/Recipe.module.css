@@ -78,3 +78,62 @@
 .cookTimeValue {
   font-size: 12px !important;
 }
+
+
+.optionButton {
+  border-radius: 10px !important;
+  stroke: black;
+  fill: none;
+  padding: 7px !important;
+  width: 30px !important;
+  background: #FB6B1C !important;
+}
+
+.optionButtonDisabled {
+  background: #999999 !important;
+}
+
+.optionIcon {
+  stroke-width: 0 !important;
+  font-size: 30px !important;
+  margin: 0px;
+  max-height: 15px !important;
+  padding: 0px;
+  stroke: white !important;
+  fill: white !important;
+}
+
+
+.personalOptionButton {
+  background: #259fd5 !important;
+}
+
+.swiper {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.swiperSlide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  background-color: black;
+}
+
+.slideImage {
+  width: 100%;
+}

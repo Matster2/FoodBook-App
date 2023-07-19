@@ -12,15 +12,16 @@
 }
 
 .deleteButtonContainer {
-    width: 45px;
+    width: fit-content;
     position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
     top: 0px;
     right: 0px;
-    padding: 10px;
+    padding: 5px;
     transform: translate(40%, -40%);
+    cursor: pointer;
 }
 
 .deleteButtonContainer * {
@@ -28,7 +29,7 @@
     background-color: white !important;
     border-radius: 100% !important;
     color: rgb(221, 0, 0) !important;
-    visibility: hidden !important;
+    cursor: pointer;
 }
 
 .deleteButtonContainer:hover {

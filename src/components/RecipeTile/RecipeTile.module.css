@@ -13,10 +13,15 @@
   font-size: 12px !important;
 }
 
-.swiper {
-  overflow: hidden;
-  height: 110px;
+.imagesContainer {
+  height: 80px;
+  min-width: 90px;
   margin-bottom: 6px;
+}
+
+.swiper {
+  height: 100%;
+  overflow: hidden;
 }
 
 .imageContainer {
@@ -47,4 +52,15 @@
   right: 0px;
   margin-top: 12px;
   margin-right: 12px;
+}
+
+.noImages {
+  height: 100%;
+  background-color: rgb(228, 228, 228);
+  border-radius: 6px !important;
+}
+
+.noImagesIcon {
+  width: 20px !important;
+  color: rgb(179, 179, 179) !important;
 }

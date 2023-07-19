@@ -40,7 +40,7 @@ export default () => {
   const navigate = useNavigate();
   const { authenticated } = useAuth();
 
-  const { tags, fetch: fetchTags } = useTags();
+  const { loading: loadingTags, tags, fetch: fetchTags } = useTags();
   const { user } = useContext(UserContext);
 
   const { value: search, onChange: onSearchChange } = useInput('');
@@ -228,7 +228,7 @@ export default () => {
           <Section
             title={t('pages.home.sections.recentlyAdded')}
             showSeeAllLink={recentlyAddedRecipes.length < totalRecentlyAddedRecipes}
-            onClick={() => {
+            onSeeAllClick={(e) => {
               navigate('/recipes', {
                 state: {
                   filters: {

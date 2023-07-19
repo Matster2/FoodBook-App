@@ -185,6 +185,16 @@
       "title": "Reset Your Password"
     }
   },
+  "dialogs": {
+    "deleteRecipeImage": {
+      "title": "Delete Image",
+      "description": "Are you sure you want to remove this image?"
+    },
+    "publishRecipe": {
+      "title": "Publish Recipe",
+      "description": "Are you sure you want to publish this recipe? Once published this recipe will be visible to all users and it cannot then be deleted."
+    }
+  },
   "forms": {
     "auth": {
       "register": {
@@ -468,6 +478,24 @@
         "success": "Recipe removed from planner.",
         "error": "Unable remove recipe from planner. Please try again later."
       }
+    },
+    "recipes": {      
+      "create": {
+        "success": "Recipe has been created.",
+        "error": "Unable to create recipe. Please try again later."
+      },   
+      "update": {
+        "success": "Recipe has been updated.",
+        "error": "Unable to update recipe. Please try again later."
+      },   
+      "delete": {
+        "success": "Recipe has been deleted.",
+        "error": "Unable to delete recipe. Please try again later."
+      },   
+      "publish": {
+        "success": "Recipe has been published.",
+        "error": "Unable to publish recipe. Please try again later."
+      }
     }
   },
   "types": {
@@ -485,7 +513,33 @@
         }
       }
     },
+    "tag": {
+      "name": "Tag",
+      "pluralName": "Tags"
+    },
+    "author": {
+      "name": "Author",
+      "pluralName": "Authors"
+    },
+    "ingredient": {
+      "name": "Ingredient",
+      "pluralName": "Ingredients"
+    },
+    "equipment": {
+      "name": "Piece Of Equipment",
+      "pluralName": "Equipment"
+    },
     "recipe": {
+      "name": "Recipe",
+      "pluralName": "Recipes",
+
+      "actions": {
+        "create": "Create",
+        "update": "Update",
+        "delete": "Delete",
+        "publish": "Publish"
+      },
+
       "times": {
         "slow": "Slow",
         "medium": "Medium",
@@ -526,36 +580,102 @@
       },
       "fields": {
         "name": {
-          "name": "Name"
+          "name": "Name",
+          "validation": {
+            "required": "Please provide a name for this recipe."
+          }
         },
         "description": {
-          "name": "Description"
+          "name": "Description",
+          "validation": {
+            "required": "Please provide a description."
+          }
         },
         "type": {
           "name": "Type",
-          "validation": []
+          "validation": {
+            "required": "Please select a type"
+          }
         },
         "difficulty": {
           "name": "Difficulty",
-          "validation": []
+          "validation": {
+            "required": "Please select a dificulty"
+          }
         },
         "prepTime": {
           "name": "Prep Time",
-          "validation": []
+          "validation": {
+            "required": "Please set the preperation time this recipe takes"
+          }
         },
         "cookTime": {
           "name": "Cooking Time",
-          "validation": []
+          "validation": {
+            "required": "Please set the cooking time this recipe takes"
+          }
         },
         "totalTime": {
           "name": "Total Time",
-          "validation": []
+          "validation": {
+            "required": "Please set the total time this recipe takes"
+          }
         },
         "servings": {
           "name": "Servings",
-          "validation": []
+          "validation": {
+            "required": "The number of servings must be provided"
+          }
+        },
+        "steps": {
+          "name": "Steps",
+          "singularName": "Step",
+
+          "fields": {
+            "name": {
+              "name": "Name"
+            }
+          },
+          "instructions": {
+            "name": "Instructions",
+            "singularName": "Instruction",
+
+            "fields": {
+              "instruction": {
+                "name": "Instruction"
+              }
+            }
+          }
+        },
+        "ingredients": {
+          "fields": {
+            "amount": {
+              "name": "Amount"
+            },
+            "name": {
+              "name": "Name"
+            },
+            "unitOfMeasurement": {
+              "name": "Type"
+            }
+          }
+        },
+        "equipment": {
+          "fields": {
+            "amount": {
+              "name": "Amount"
+            },
+            "name": {
+              "name": "Name"
+            },
+            "dependsOnServing": {
+              "name": "Depends On Serving"
+            }
+          }
         },
         "nutrition": {
+          "name": "Nutrition",
+
           "calories": {
             "name": "Calories"
           },          
@@ -580,19 +700,32 @@
           "fiber": {
             "name": "Fiber"
           }
+        },
+        "containsAlcohol": {
+          "name": "Contains Alcohol"
+        },
+        "referenceUrl": {
+          "name": "Reference URL"
         }
       }
     }
   },
   "common": {
     "words": {
+      "actions": {
+        "add": "Add",
+        "create": "Create",
+        "update": "Update",
+        "delete": "Delete"
+      },
       "no": "No",
       "yes": "Yes",
       "day": "Day",
       "days": "Days",
-      "recipe": "Recipe",
-      "recipes": "Recipes",
-      "excluded": "Excluded"
+      "excluded": "Excluded",
+      "you": "You",
+      "image": "Image",
+      "images": "Images"
     },
     "version": "Version",
     "time": {

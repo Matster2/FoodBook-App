@@ -1,4 +1,6 @@
 import {
+  Box,
+  CircularProgress,
   Container
 } from '@mui/material';
 import Header from 'components/Header';
@@ -29,6 +31,9 @@ export default () => {
   };
 
   /* Handlers */
+  const handleSubmit = (newRecipe) => {
+    navigate(`/recipes/${newRecipe.id}`)
+  }
 
   /* Effects */
   useEffect(() => {
@@ -40,12 +45,21 @@ export default () => {
   return (
     <>
       <Container sx={{ pb: 7 }}>
-        <Header title="Add Recipe" onBackClick={() => navigate(-1)} />
+        <Header title={`${id ? t("common.words.actions.update") : t("common.words.actions.add")} ${t("types.recipe.name")}`} onBackClick={() => navigate(-1)} />
 
-        <RecipeForm
-          initialValues={recipe}
-          onSubmit={() => {}}
-        />
+        {loadingRecipe && (
+          <Box sx={{ mt: 2, mb: 4 }} display="flex" justifyContent="center">
+            <CircularProgress />
+          </Box>
+        )}
+
+        {!loadingRecipe && (
+          <RecipeForm
+            recipe={recipe}
+            onSubmit={handleSubmit}
+            admin={true}
+          />
+        )}
       </Container>
     </>
   );

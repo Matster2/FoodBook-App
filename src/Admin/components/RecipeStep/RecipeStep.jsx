@@ -8,9 +8,12 @@ import {
   TextField
 } from '@mui/material';
 import PropTypes from 'prop-types';
+import { useTranslation } from "react-i18next";
 import uuid from 'react-uuid';
 
 const RecipeStep = ({ step, onChange, onDelete }) => {
+  const { t } = useTranslation();
+  
   const handleChange = (e) => {
     onChange({
       ...step,
@@ -60,7 +63,7 @@ const RecipeStep = ({ step, onChange, onDelete }) => {
           <TextField
             fullWidth
             id="name"
-            label="Name"
+            label={t("types.recipe.fields.steps.fields.name.name")}
             name="name"
             value={step.name}
             onChange={handleChange}
@@ -83,7 +86,7 @@ const RecipeStep = ({ step, onChange, onDelete }) => {
             required
             value={instruction.instruction}
             onChange={(e) => handleInstructionChange(instruction.id, e.target.value)}
-            label="instruction"
+            label={t("types.recipe.fields.steps.instructions.fields.instruction.name")}
             id="instruction"
           />
 
@@ -94,7 +97,7 @@ const RecipeStep = ({ step, onChange, onDelete }) => {
       ))}
 
       <Button type="button" onClick={handleAddInstructionClick} variant="contained">
-        Add Instruction
+        {`${t("common.words.actions.add")} ${t("types.recipe.fields.steps.instructions.singularName")}`}
       </Button>
     </Box>
   );

@@ -1,6 +1,6 @@
-import { AccessTime as AccessTimeIcon, Star as StarIcon } from '@mui/icons-material';
+import { AccessTime as AccessTimeIcon, RestaurantMenu as RecipeIcon, Star as StarIcon } from '@mui/icons-material';
 import { Box, Card, Grid, Stack, Typography } from '@mui/material';
-import FavouriteHeart from 'components/FavouriteHeart';
+import RecipeTileAttachment from 'components/RecipeTileAttachment';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -16,19 +16,33 @@ const RecipeTile = ({ recipe, onClick }) => {
 
   return (
     <Card sx={{ p: 1 }} className={styles.card} onClick={handleClick}>
-      <Stack direction="row" gap={1} className={styles.attachments}>
+      <Stack direction="row" gap={0.5} className={styles.attachments}>
+        {recipe?.personal && (
+          <RecipeTileAttachment type="personal" />
+        )}
         {recipe?.favourited && (
-          <FavouriteHeart width={25} favourited={recipe.favourited} />
+          <RecipeTileAttachment type="favourite" />
         )}
       </Stack>
 
-      <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper}>
-        {recipe.images.map((image) => (
-          <SwiperSlide className={styles.imageContainer}>
-            <img className={styles.image} src={image.url} alt="recipe" />
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      <Box className={styles.imagesContainer}>
+        {recipe.images.length > 0 && (
+          <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper}>
+            {recipe.images.map((image) => (
+              <SwiperSlide className={styles.imageContainer}>
+                <img className={styles.image} src={image.url} alt="recipe" />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
+
+        {recipe.images.length === 0 && (
+          <Box className={styles.noImages} display="flex" justifyContent="center" alignItems="center">
+            <RecipeIcon className={styles.noImagesIcon} />
+          </Box>
+        )}
+      </Box>
+
       <Box>
         <Grid container justifyContent="space-between" sx={{ mb: 1 }}>
           <Grid item>

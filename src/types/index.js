@@ -14,3 +14,9 @@ export const RecipeDifficulty = {
     Hard: 'Hard',
     VeryHard: 'VeryHard',
 }
+
+export const RecipeStates = {
+    Draft: 'Draft',
+    Published: 'Published',
+    Archived: 'Archived'
+}

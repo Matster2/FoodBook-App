@@ -17,7 +17,7 @@ const RecipeImageViewerDialog = ({
     <Dialog
       fullScreen
       open={open}
-      onClose={() => { }}
+      onClose={onClose}
       // TransitionComponent={Transition}
       PaperProps={{
         style: {
@@ -27,7 +27,7 @@ const RecipeImageViewerDialog = ({
     >
       <Swiper className={styles.swiper}>
         {images.map((image) => (
-          <SwiperSlide key={uuid()} className={styles.swiperSlide} onDoubleClick={onClose}>
+          <SwiperSlide key={uuid()} className={styles.swiperSlide} onClick={onClose}>
             <img className={styles.slideImage} src={image} alt="recipe" />
           </SwiperSlide>
         ))}

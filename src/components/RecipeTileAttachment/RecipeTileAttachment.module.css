@@ -1,0 +1,14 @@
+.box {
+  background: #ffffff;
+  border-radius: 5px !important;
+  stroke: black;
+  fill: none;
+  padding: 5px !important;
+  width: 20px !important;
+  height: 20px !important;
+  fill: white !important;
+}
+
+.icon {
+  max-width: 100% !important;
+}

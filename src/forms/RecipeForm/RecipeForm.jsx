@@ -4,8 +4,14 @@ import {
   Box,
   Button,
   Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   Grid,
   IconButton,
   InputLabel,
@@ -21,19 +27,22 @@ import RecipePieceOfEquipment from 'Admin/components/RecipePieceOfEquipment';
 import RecipeStep from 'Admin/components/RecipeStep';
 import FilterOption from 'components/FilterOption';
 import RecipeImageControl from 'components/RecipeImageControl';
-import RecipeImageActionDialog from 'dialogs/RecipeImageActionDialog';
 import RecipeImageViewerDialog from 'dialogs/RecipeImageViewerDialog';
 import { useFormik } from 'formik';
 import useAPI from 'hooks/useAPI';
 import useSearch from 'hooks/useSearch';
 import useTags from 'hooks/useTags';
 import useUnitOfMeasurements from 'hooks/useUnitOfMeasurements';
+import isObject from "lodash/isObject";
 import { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { isMobile } from 'react-device-detect';
+import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
+import { useNavigate } from 'react-router-dom';
 import uuid from 'react-uuid';
-import { RecipeDifficulty, RecipeTypes } from 'types';
-import { recipeSchema } from 'types/schemas';
+import { RecipeDifficulty, RecipeStates, RecipeTypes } from 'types';
+import { getRecipeScheme } from 'types/schemas';
 import FormModes from 'utils/formModes';
 import { lowercaseFirstLetter } from 'utils/stringUtils';
 import { isNullOrUndefined, isUndefined, reorder } from 'utils/utils';
@@ -75,6 +84,7 @@ const initialRecipeValue = {
 
 export default ({ recipe: initialValues, onSubmit, admin }) => {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const api = useAPI();
 
   const { fetch: fetchUnitOfMeasurements } = useUnitOfMeasurements();
@@ -114,45 +124,125 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   const [filesToUpload, setFilesToUpload] = useState([]);
   
   const [showRecipeImageViewerDialog, setShowRecipeImageViewerDialog] = useState(false);
-  const [showRecipeImageActionDialog, setShowRecipeImageActionDialog] = useState(false);
+  const [showDeleteRecipeImageDialog, setShowDeleteRecipeImageDialog] = useState(false);
+  const [showPublishDialog, setShowPublishDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
-  const [selectedRecipeImageId, setSelectedRecipeImageId] = useState();
+  const [selectedRecipeImage, setSelectedRecipeImage] = useState();
 
-  const handleCreateRecipe = async (data, filesToUpload) => {
-    console.log("Creating recipe");
+  const originalRecipe = {
+    ...initialRecipeValue,
+    ...initialValues,
+    languageCode: i18n.resolvedLanguage
+  };
 
+  const handleCreateRecipe = async (newRecipe, filesToUpload) => {
     try {
       const {
         data: { id },
-      } = await api.createRecipe(data);
-
-      filesToUpload.forEach(async (file, index) => {
-        await api.uploadRecipeImage(id, file, index);
+      } = await api.createRecipe({
+        ...newRecipe,
+        ingredients: newRecipe.ingredients.map(x => ({
+          ingredientId: x.id,
+          unitOfMeasurementId: x.unitOfMeasurement.id,
+          amount: x.amount,
+          optional: x.optional
+        })),
+        equipment: newRecipe.equipment.map(x => ({
+          equipmentId: x.id,
+          amount: x.amount,
+          dependsOnServings: x.dependsOnServings
+        })),
       });
 
-      toast.success('Recipe successfully created');
+      filesToUpload.forEach(async (imageFile, index) => {
+        await api.uploadRecipeImage(id, imageFile.file, index);
+      });
+
+      toast.success(t("requests.recipes.create.success"));
       onSubmit({
-        ...data,
+        ...newRecipe,
         id,
       });
     } catch (e) {
       console.log(e)
-      toast.error('Unable to create recipe');
+      toast.error(t("requests.recipes.create.error"));
     }
   }
 
   const handleUpdateRecipe = async (newRecipe) => {
-    console.log("Update recipe");    
+    try {
+      await api.updateRecipe(newRecipe.id, {
+        ...newRecipe,
+        ingredients: newRecipe.ingredients.map(x => ({
+          ingredientId: x.id,
+          unitOfMeasurementId: x.unitOfMeasurement.id,
+          amount: x.amount,
+          optional: x.optional
+        })),
+        equipment: newRecipe.equipment.map(x => ({
+          equipmentId: x.id,
+          amount: x.amount,
+          dependsOnServings: x.dependsOnServings
+        })),
+      });
+
+      // handle images
+      const imagesToRemove = originalRecipe.images.filter(x => !newRecipe.images.some(image => x.id === image.id));
+      imagesToRemove.forEach(async (image) => {
+        try {
+          await api.removeRecipeImage(image.id);
+        } catch {}
+      })
+
+      recipe.images.forEach(async (image, index) => {
+        try {
+          if (originalRecipe.images.some(x => x.id === image.id)) {
+            var oldIndex = originalRecipe.images.findIndex(x => x.id === image.id);
+  
+            if (oldIndex !== index) {
+              await api.updateRecipeImageIndex(image.id, index);
+            }
+          } else {
+            var imageFile = filesToUpload.find(x => x.id === image.id);            
+            await api.uploadRecipeImage(recipe.id, imageFile.file, index);
+          }
+        } catch (e) {
+          console.log(e)
+        }
+      });
+
+      // handle tags
+      const tagsToAdd = newRecipe.tags.filter(x => !originalRecipe.tags.some(tag => x.id === tag.id));
+      tagsToAdd.forEach(async (tag) => {
+        try {
+          await api.addTagToRecipe(recipe.id, tag.id);
+        } catch {}
+      })
+
+      const tagsToRemove = originalRecipe.tags.filter(x => !newRecipe.tags.some(tag => x.id === tag.id));
+      tagsToRemove.forEach(async (tag) => {
+        try {
+          await api.removeTagFromRecipe(recipe.id, tag.id);
+        } catch {}
+      })
+      
+      toast.success(t("requests.recipes.update.success"));
+      onSubmit({
+        ...newRecipe,
+      });
+    } catch (e) {
+      console.log(e)
+      toast.error(t("requests.recipes.update.error"));
+    }
   }
 
-  const { handleSubmit, values: recipe, setValues: setRecipe, handleChange, errors, touched } = useFormik({
+  const formik = useFormik({
     initialValues: {
-      ...initialRecipeValue,
-      ...initialValues,
-      languageCode: i18n.resolvedLanguage
+      ...originalRecipe
     },
     enableReinitialize: true,
-    validationSchema: recipeSchema,
+    validationSchema: getRecipeScheme(),
     onSubmit: async (values) => {
       if (!recipe.id) {
         await handleCreateRecipe(values, filesToUpload);
@@ -161,6 +251,8 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       }
     },
   });
+  
+  const { handleSubmit, values: recipe, setValues: setRecipe, handleChange, errors, touched } = formik;
 
   /* Handlers */
   const handleSetAuthor = (author) => {
@@ -318,35 +410,42 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   const handleUploadImage = (e) => {
     const file = e.target.files[0];
     const url = URL.createObjectURL(file);
+    const newImage = {
+      id: uuid(),
+      url
+    }
 
     setRecipe((state) => ({
       ...state,
       images: [
-        ...recipe.images, {
-          id: uuid(),
-          url
-        }        
+        ...recipe.images, newImage       
       ],
     }));
-    setFilesToUpload((state) => [...state, file]);
+    setFilesToUpload((state) => [...state, {
+      id: newImage.id,
+      file,
+    }]);
   };
 
-  const handleDeleteImage = (id) => {
-    const images = recipe.images.filter((x) => x.id !== id);
+  const handleDeleteImage = (image) => {
+    const images = recipe.images.filter((x) => x.id !== image.id);
 
     setRecipe((state) => ({
       ...state,
       images,
     }));
+
+    setShowDeleteRecipeImageDialog(false);
+    setSelectedRecipeImage(undefined);
   };
 
-  const handleImageClick = (url) => {
-    setShowRecipeImageDialog(true);
+  const handleImageClick = (image) => {
+    setShowRecipeImageViewerDialog(true);
   };  
   
-  const handleImageLongClick = (id) => {
-    setSelectedRecipeImageId(id)
-    setShowImageActionDialog(true);
+  const handleImageDeleteClick = (image) => {
+    setSelectedRecipeImage(image)
+    setShowDeleteRecipeImageDialog(true);
   };
 
   const handleImageDragEnd = (result) => {    
@@ -366,6 +465,33 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       images: images,
     }));
   }
+  
+  const handlePublishRecipe = async () => {    
+    try {
+      await api.publishRecipe(recipe.id);
+      setRecipe({
+        ...recipe,
+        state: RecipeStates.Published
+      })
+      toast.success(t("requests.recipes.publish.success"));
+    } catch (e) {
+      toast.error(`${t("requests.recipes.publish.error")}. \n ${e.response.data}`);
+    }
+
+    setShowPublishDialog(false);
+  }
+
+  const handleDeleteRecipe = async () => {    
+    try {
+      await api.deleteRecipe(recipe.id);
+
+      toast.success(t("requests.recipes.delete.success"));
+      navigate('/')
+    } catch (e) {
+      console.log(e)
+      toast.error(t("requests.recipes.delete.error"));
+    }
+  }
 
   /* Effects */
   useEffect(() => {
@@ -373,7 +499,24 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     fetchTags();
   }, []);
 
-  console.log(errors)
+  
+  const getFirstErrorKey = (object, keys = []) => {
+    const firstErrorKey = Object.keys(object)[0];
+    if (isObject(object[firstErrorKey])) {
+      return getFirstErrorKey(object[firstErrorKey], [...keys, firstErrorKey]);
+    }
+    return [...keys, firstErrorKey].join(".");
+  };
+
+  useEffect(() => {
+    if (!formik.isValid && formik.submitCount !== 0 && formik.isSubmitting) {
+      const firstErrorKey = getFirstErrorKey(formik.errors);
+      if (global.window.document.getElementsByName(firstErrorKey).length) {
+        global.window.document.getElementsByName(firstErrorKey)[0].focus();
+      }
+    }
+  }, [formik.submitCount, formik.isValid, formik.errors, formik.isSubmitting]);
+
 
   /* Rendering */
   return (
@@ -384,12 +527,107 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         images={recipe.images.map((image) => image.url)}
       />
 
-      <RecipeImageActionDialog
-        open={showRecipeImageActionDialog}
-        onClose={() => setShowRecipeImageActionDialog(false)}
-      />
+      <Dialog
+        open={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+        aria-labelledby="delete-recipe-dialog-title"
+        aria-describedby="delete-recipe-dialog-description"
+      >
+        <DialogTitle sx={{ mt: 2 }} id="delete-recipe-dialog-title">
+          Delete Recipe
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-recipe-dialog-description">
+            Are you sure you want to delete this recipe? Once deleted it cannot be recovered.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowDeleteDialog(false)}>
+            {t('common.words.no')}
+          </Button>
+          <Button onClick={handleDeleteRecipe} autoFocus>
+            {t('common.words.yes')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={showPublishDialog}
+        onClose={() => setShowPublishDialog(false)}
+        aria-labelledby="publish-recipe-dialog-title"
+        aria-describedby="publish-recipe-dialog-description"
+      >
+        <DialogTitle sx={{ mt: 2 }} id="publish-recipe-dialog-title">
+          {t("dialogs.publishRecipe.title")}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="publish-recipe-dialog-description">
+          {t("dialogs.publishRecipe.description")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowDeleteDialog(false)}>
+            {t('common.words.no')}
+          </Button>
+          <Button onClick={handlePublishRecipe} autoFocus>
+            {t('common.words.yes')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={showDeleteRecipeImageDialog}
+        onClose={() => setShowDeleteRecipeImageDialog(false)}
+        aria-labelledby="delete-recipe-image-dialog-title"
+        aria-describedby="delete-recipe-image-dialog-description"
+      >
+        <DialogTitle sx={{ mt: 2 }} id="delete-recipe-image-dialog-title">
+          {t("dialogs.deleteRecipeImage.title")}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-recipe-image-dialog-description">
+          {t("dialogs.deleteRecipeImage.description")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowDeleteRecipeImageDialog(false)}>
+            {t('common.words.no')}
+          </Button>
+          <Button onClick={() => handleDeleteImage(selectedRecipeImage)} autoFocus>
+            {t('common.words.yes')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {!recipe.personal && (
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="body1" sx={{ color: 'var(--primary-colour)', fontWeight: 'bold' }}>{recipe.state}</Typography>
+        </Box>
+      )}
+
+      <Stack display="flex" direction="row" justifyContent="end" gap={1} sx={{ mb: 2}}>
+        {(mode === FormModes.Update && !recipe.personal && recipe.state === RecipeStates.Draft) && (
+          <Button
+            type="button"
+            variant="contained"
+            onClick={() => setShowPublishDialog(true)}
+          >
+          {t("types.recipe.actions.publish")}
+          </Button>
+        )}
+        {(mode === FormModes.Update && (recipe.personal || recipe.state === RecipeStates.Draft)) && (
+          <Button
+            type="button"
+            variant="contained"
+            onClick={() => setShowDeleteDialog(true)}
+          >
+            {t("types.recipe.actions.delete")}
+          </Button>
+        )}
+      </Stack>
+
       <Box>
-        <Typography variant="body2">{recipe.images.length} {recipe.images.length === 1 ? "Image" : "Images"}</Typography>
+        <Typography variant="body2">{recipe.images.length} {recipe.images.length === 1 ? t("common.words.image") : t("common.words.images")}</Typography>
 
         <List sx={{ overflow: "auto" }}>
           <DragDropContext onDragEnd={handleImageDragEnd}>
@@ -412,8 +650,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             src={image.url}
-                            onDeleteClick={() => handleDeleteImage(image.id)}
-                            onLongClick={handleImageLongClick}
+                            alwaysShowDelete={isMobile}
+                            onClick={() => handleImageClick(image)}
+                            onDeleteClick={() => handleImageDeleteClick(image)}
                           />
                         </div>
                       )}
@@ -462,8 +701,13 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               helperText={touched.description && errors.description}
             />
 
-            <FormControl fullWidth sx={{ mt: 2, mb: 1 }}>
-              <InputLabel id="type-label">Type</InputLabel>
+            <FormControl
+              fullWidth
+              sx={{ mt: 2, mb: 1 }} 
+              required
+              error={errors.type && touched.type}
+            >
+              <InputLabel id="type-label">{t('types.recipe.fields.type.name')}</InputLabel>
               <Select
                 id="id"
                 name="type"
@@ -471,17 +715,22 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                 label={t("types.recipe.fields.type.name")}
                 value={`${recipe.type}`}
                 onChange={handleChange}
-                error={errors.type && touched.type}
-                helperText={touched.type && errors.type}
               >
                 {typeOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{touched.type && errors.type}</FormHelperText>
             </FormControl>
 
-            <FormControl fullWidth sx={{ mt: 2, mb: 1 }}>
-              <InputLabel id="difficulty-label">Difficulty</InputLabel>
+
+            <FormControl
+              fullWidth
+              sx={{ mt: 2, mb: 1 }} 
+              required
+              error={errors.difficulty && touched.difficulty}
+            >
+              <InputLabel id="difficulty-label">{t('types.recipe.fields.difficulty.name')}</InputLabel>
               <Select
                 id="id"
                 name="difficulty"
@@ -489,13 +738,12 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                 label={t("types.recipe.fields.difficulty.name")}
                 value={`${recipe.difficulty}`}
                 onChange={handleChange}
-                error={errors.difficulty && touched.difficulty}
-                helperText={touched.difficulty && errors.difficulty}
               >
                 {difficultyOptions.map((option) => (
                   <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{touched.difficulty && errors.difficulty}</FormHelperText>
             </FormControl>
 
             <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -559,8 +807,8 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                   required
                   id="servings"
                   name="servings"
-                  label="Servings"
-                  value={recipe.totalTime}
+                  label={t("types.recipe.fields.servings.name")}
+                  value={recipe.servings}
                   onChange={handleChange}
                   error={!isUndefined(errors.servings)}
                   helperText={errors.servings?.message}
@@ -574,13 +822,13 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               <FormControlLabel
                 control={<Checkbox />}
                 name="containsAlcohol"
-                label="Contains Alcohol"
+                label={t("types.recipe.fields.containsAlcohol.name")}
               />
             </Box>
 
             {admin && (
               <Box sx={{ mt: 5 }}>
-                <Typography variant="h6">Author</Typography>
+                <Typography variant="h6">{t("types.author.name")}</Typography>
 
                 {!isNullOrUndefined(recipe.author) && (
                   <Box>
@@ -598,7 +846,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                   <Autocomplete
                     options={authorSearchResults.map((author) => ({ label: author.name, author }))}
                     // eslint-disable-next-line react/jsx-props-no-spreading
-                    renderInput={(params) => <TextField {...params} label="Author" />}
+                    renderInput={(params) => <TextField {...params} label={t("types.author.name")} />}
                     value={authorSearch}
                     inputValue={authorSearch}
                     onInputChange={(event, newValue) => {
@@ -616,7 +864,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
             )}
 
             <Box sx={{ mt: 5 }}>
-              <Typography variant="h6">Ingredients</Typography>
+              <Typography variant="h6">{t("types.ingredient.pluralName")}</Typography>
 
               <Box>
                 {recipe.ingredients.map((recipeIngredient) => (
@@ -640,7 +888,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                   )
                   .map((ingredient) => ({ label: ingredient.name, ingredient }))}
                 // eslint-disable-next-line react/jsx-props-no-spreading
-                renderInput={(params) => <TextField {...params} label="Add Ingredient" />}
+                renderInput={(params) => <TextField {...params} label={`${t("common.words.actions.add")} ${t("types.ingredient.name")}`} />}
                 value={ingredientSearch}
                 inputValue={ingredientSearch}
                 onInputChange={(event, newValue) => {
@@ -657,7 +905,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
             
             <Box sx={{ mt: 5 }}>
-              <Typography variant="h6">Equipment</Typography>
+              <Typography variant="h6">{t("types.equipment.pluralName")}</Typography>
 
               <Box>
                 {recipe.equipment.map((recipePieceOfEquipment) => (
@@ -681,7 +929,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                   )
                   .map((pieceOfEquipment) => ({ label: pieceOfEquipment.name, pieceOfEquipment }))}
                 // eslint-disable-next-line react/jsx-props-no-spreading
-                renderInput={(params) => <TextField {...params} label="Add Piece Of Equipment" />}
+                renderInput={(params) => <TextField {...params} label={`${t("common.words.actions.add")} ${t("types.equipment.name")}`}  />}
                 value={equipmentSearch}
                 inputValue={equipmentSearch}
                 onInputChange={(event, newValue) => {
@@ -697,7 +945,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
             </Box>
 
             <Box sx={{ mt: 5 }}>
-              <Typography variant="h6">Instructions</Typography>
+              <Typography sx={{ mb: 2 }} variant="h6">{t("types.recipe.fields.steps.instructions.name")}</Typography>
 
               {recipe.steps.map((step) => (
                 <RecipeStep
@@ -709,12 +957,12 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               ))}
 
               <Button sx={{ mt: 2 }} type="button" onClick={handleAddStepClick} variant="contained">
-                Add Step
+                {`${t("common.words.actions.add")} ${t("types.recipe.fields.steps.singularName")}`}
               </Button>
             </Box>
 
             <Box sx={{ mt: 5 }}>
-              <Typography variant="h6">Nutriton</Typography>
+              <Typography sx={{ mb: 2 }} variant="h6">{t("types.recipe.fields.nutrition.name")}</Typography>
 
               <Grid container spacing={2}>
                 <Grid item xs={6} md={3} lg={2}>
@@ -723,7 +971,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     type="number"
                     id="calories"
                     name="nutrition.calories"
-                    label="Calories"
+                    label={t("types.recipe.fields.nutrition.calories.name")}
                     value={recipe.nutrition.calories}
                     onChange={handleChange}
                     error={errors.nutrition?.calories && touched.nutrition?.calories}
@@ -733,20 +981,12 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                   />
                 </Grid>
                 <Grid item xs={6} md={3} lg={2}>
-                  {/* <NutritionField
-                    id="sugar"
-                    label="Sugar"
-                    value={recipe.nutrition.sugar}
-                    errors={errors}
-                    touched={touched}
-                  /> */}
-
                   <TextField
                     fullWidth
                     type="number"
                     id="nutrition.sugar"
                     name="nutrition.sugar"
-                    label="Sugar"
+                    label={t("types.recipe.fields.nutrition.sugar.name")}
                     value={recipe.nutrition.sugar}
                     onChange={handleChange}
                     error={errors.nutrition?.sugar && touched.nutrition?.sugar}
@@ -761,8 +1001,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     type="number"
                     id="fat"
                     name="nutrition.fat"
+                    label={t("types.recipe.fields.nutrition.fat.name")}
                     value={recipe.nutrition.fat}
-                    label="Fat"
+                    onChange={handleChange}
                     error={errors.nutrition?.fat && touched.nutrition?.fat}
                     helperText={touched.nutrition?.fat && errors.nutrition?.fat}
                     InputLabelProps={{ shrink: true }}
@@ -775,8 +1016,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     type="number"
                     id="saturatedFat"
                     name="nutrition.saturatedFat"
-                    label="Saturated Fat"
+                    label={t("types.recipe.fields.nutrition.saturatedFat.name")}
                     value={recipe.nutrition.saturatedFat}
+                    onChange={handleChange}
                     error={errors.nutrition?.saturatedFat && touched.nutrition?.saturatedFat}
                     helperText={touched.nutrition?.saturatedFat && errors.nutrition?.saturatedFat}
                     InputLabelProps={{ shrink: true }}
@@ -789,8 +1031,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     type="number"
                     id="sodium"
                     name="nutrition.sodium"
+                    label={t("types.recipe.fields.nutrition.sodium.name")}
                     value={recipe.nutrition.sodium}
-                    label="Sodium"
+                    onChange={handleChange}
                     error={errors.nutrition?.sodium && touched.nutrition?.sodium}
                     helperText={touched.nutrition?.sodium && errors.nutrition?.sodium}
                     InputLabelProps={{ shrink: true }}
@@ -803,8 +1046,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     type="number"
                     id="protein"
                     name="nutrition.protein"
+                    label={t("types.recipe.fields.nutrition.protein.name")}
                     value={recipe.nutrition.protein}
-                    label="Protein"
+                    onChange={handleChange}
                     error={errors.nutrition?.protein && touched.nutrition?.protein}
                     helperText={touched.nutrition?.protein && errors.nutrition?.protein}
                     InputLabelProps={{ shrink: true }}
@@ -817,8 +1061,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     type="number"
                     id="carbohydrates"
                     name="nutrition.carbohydrates"
+                    label={t("types.recipe.fields.nutrition.carbohydrates.name")}
                     value={recipe.nutrition.carbohydrates}
-                    label="Carbohydrates"
+                    onChange={handleChange}
                     error={errors.nutrition?.carbohydrates && touched.nutrition?.carbohydrates}
                     helperText={touched.nutrition?.carbohydrates && errors.nutrition?.carbohydrates}
                     InputLabelProps={{ shrink: true }}
@@ -831,7 +1076,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     type="number"
                     id="fiber"
                     name="nutrition.fiber"
-                    label="Fiber"
+                    label={t("types.recipe.fields.nutrition.fiber.name")}
+                    value={recipe.nutrition.fiber}
+                    onChange={handleChange}
                     error={errors.nutrition?.fiber && touched.nutrition?.fiber}
                     helperText={touched.nutrition?.fiber && errors.nutrition?.fiber}
                     InputLabelProps={{ shrink: true }}
@@ -843,7 +1090,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
             {tags.length > 0 && (
               <Box sx={{ mt: 5 }}>
-                <Typography variant="h6">Tags</Typography>
+                <Typography sx={{ mb: 2 }} variant="h6">{t("types.tag.pluralName")}</Typography>
   
                 <Stack direction="row" alignItems="center" gap={2} sx={{ mt: 1, flexWrap: 'wrap', gap: 1 }}>
                   {tags.map((tag) => (
@@ -865,7 +1112,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                 margin="normal"
                 id="referenceUrl"
                 name="referenceUrl"
-                label="Reference URL"
+                label={t("types.recipe.fields.referenceUrl.name")}
                 value={recipe.referenceUrl}
                 onChange={handleChange}
                 error={errors.referenceUrl && touched.referenceUrl}
@@ -881,7 +1128,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               }}
             >
               <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                {mode === FormModes.Create ? "Create" : "Update"}
+                {mode === FormModes.Create ? t("types.recipe.actions.create") : t("types.recipe.actions.update")}
               </Button>
             </Box>
           </Box>
