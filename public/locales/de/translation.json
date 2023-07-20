@@ -18,6 +18,9 @@
         }
       }
     },
+    "cookbook": {
+      "title": "Kochbuch"
+    },
     "register": {
       "title": "Registrieren",
       "alreadyHaveAccount": "Sie haben bereits ein Konto?",
@@ -49,7 +52,8 @@
         "categories": "Kategorien",
         "recommended": "Empfehlungen",
         "recentlyAdded": "Kürzlich hinzugefügt",
-        "favourites": "Lieblingsrezepte"
+        "favourites": "Lieblingsrezepte",
+        "personal": "Ihre Rezepte"
       },
       "components": {
         "inputs": {
@@ -75,6 +79,7 @@
       "prepTime": "Vorbereitungszeit",
       "cookingTime": "Kochzeit",
       "sections": {
+        "equipment": "Ausrüstung",
         "ingredients": "Zutaten",
         "directions": "Richtungen",
         "nutrition": "Ernährung",
@@ -97,6 +102,23 @@
       "title": "Favoriten",
       "authenticationRequired": "Sie müssen angemeldet sein, um Ihre Favoriten anzuzeigen",
       "noRecipes": "Keine Lieblingsrezepte",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Rezepte suchen"
+          }
+        },
+        "buttons": {
+          "signIn": {
+            "label": "Anmelden"
+          }
+        }
+      }
+    },
+    "personal": {
+      "title": "persönlich",
+      "authenticationRequired": "Sie müssen angemeldet sein, um Ihre persönlichen Rezepte sehen zu können",
+      "noRecipes": "Keine persönlichen Rezepte",
       "components": {
         "inputs": {
           "recipeSearch": {
@@ -161,6 +183,16 @@
     },
     "resetPassword": {
       "title": "Setze dein Passwort zurück"
+    }
+  },
+  "dialogs": {
+    "deleteRecipeImage": {
+      "title": "Lösche Bild",
+      "description": "Möchten Sie dieses Bild wirklich entfernen?"
+    },
+    "publishRecipe": {
+      "title": "Rezept veröffentlichen",
+      "description": "Möchten Sie dieses Rezept wirklich veröffentlichen? "
     }
   },
   "forms": {
@@ -446,6 +478,24 @@
         "success": "Rezept aus Planer entfernt.",
         "error": "Das Rezept konnte nicht aus dem Planer entfernt werden. "
       }
+    },
+    "recipes": {
+      "create": {
+        "success": "Rezept wurde erstellt.",
+        "error": "Rezept kann nicht erstellt werden. "
+      },
+      "update": {
+        "success": "Rezept wurde aktualisiert.",
+        "error": "Rezept kann nicht aktualisiert werden. "
+      },
+      "delete": {
+        "success": "Rezept wurde gelöscht.",
+        "error": "Rezept kann nicht gelöscht werden. "
+      },
+      "publish": {
+        "success": "Rezept wurde veröffentlicht.",
+        "error": "Rezept kann nicht veröffentlicht werden. "
+      }
     }
   },
   "types": {
@@ -463,7 +513,31 @@
         }
       }
     },
+    "tag": {
+      "name": "Schild",
+      "pluralName": "Stichworte"
+    },
+    "author": {
+      "name": "Autor",
+      "pluralName": "Autoren"
+    },
+    "ingredient": {
+      "name": "Zutat",
+      "pluralName": "Zutaten"
+    },
+    "equipment": {
+      "name": "Gerät",
+      "pluralName": "Ausrüstung"
+    },
     "recipe": {
+      "name": "Rezept",
+      "pluralName": "Rezepte",
+      "actions": {
+        "create": "Erstellen",
+        "update": "Aktualisieren",
+        "delete": "Löschen",
+        "publish": "Veröffentlichen"
+      },
       "times": {
         "slow": "Langsam",
         "medium": "Mittel",
@@ -503,30 +577,150 @@
         "veryHard": "Sehr schwer"
       },
       "fields": {
-        "type": "Typ",
-        "servings": "Portionen",
+        "name": {
+          "name": "Name",
+          "validation": {
+            "required": "Bitte geben Sie einen Namen für dieses Rezept ein."
+          }
+        },
+        "description": {
+          "name": "Beschreibung",
+          "validation": {
+            "required": "Bitte geben Sie eine Beschreibung an."
+          }
+        },
+        "type": {
+          "name": "Typ",
+          "validation": {
+            "required": "Bitte wählen Sie einen Typ aus"
+          }
+        },
+        "difficulty": {
+          "name": "Schwierigkeit",
+          "validation": {
+            "required": "Bitte wählen Sie einen Schwierigkeitsgrad aus"
+          }
+        },
+        "prepTime": {
+          "name": "Vorbereitungszeit",
+          "validation": {
+            "required": "Bitte stellen Sie die Zubereitungszeit ein, die dieses Rezept benötigt"
+          }
+        },
+        "cookTime": {
+          "name": "Kochzeit",
+          "validation": {
+            "required": "Bitte stellen Sie die Garzeit für dieses Rezept ein"
+          }
+        },
+        "totalTime": {
+          "name": "Gesamtzeit",
+          "validation": {
+            "required": "Bitte legen Sie die Gesamtzeit fest, die dieses Rezept benötigt"
+          }
+        },
+        "servings": {
+          "name": "Portionen",
+          "validation": {
+            "required": "Die Anzahl der Portionen muss angegeben werden"
+          }
+        },
+        "steps": {
+          "name": "Schritte",
+          "singularName": "Schritt",
+          "fields": {
+            "name": {
+              "name": "Name"
+            }
+          },
+          "instructions": {
+            "name": "Anweisungen",
+            "singularName": "Anweisung",
+            "fields": {
+              "instruction": {
+                "name": "Anweisung"
+              }
+            }
+          }
+        },
+        "ingredients": {
+          "fields": {
+            "amount": {
+              "name": "Menge"
+            },
+            "name": {
+              "name": "Name"
+            },
+            "unitOfMeasurement": {
+              "name": "Typ"
+            }
+          }
+        },
+        "equipment": {
+          "fields": {
+            "amount": {
+              "name": "Menge"
+            },
+            "name": {
+              "name": "Name"
+            },
+            "dependsOnServing": {
+              "name": "Hängt vom Servieren ab"
+            }
+          }
+        },
         "nutrition": {
-          "calories": "Kalorien",
-          "sugar": "Zucker",
-          "fat": "Fett",
-          "saturatedFat": "Gesättigte Fettsäuren",
-          "sodium": "Natrium",
-          "protein": "Eiweiß",
-          "carbohydrates": "Kohlenhydrate",
-          "fiber": "Faser"
+          "name": "Ernährung",
+          "calories": {
+            "name": "Kalorien"
+          },
+          "sugar": {
+            "name": "Zucker"
+          },
+          "fat": {
+            "name": "Fett"
+          },
+          "saturatedFat": {
+            "name": "Gesättigte Fettsäuren"
+          },
+          "sodium": {
+            "name": "Natrium"
+          },
+          "protein": {
+            "name": "Kohlenhydrate"
+          },
+          "carbohydrates": {
+            "name": "Eiweiß"
+          },
+          "fiber": {
+            "name": "Faser"
+          }
+        },
+        "containsAlcohol": {
+          "name": "Enthält Alkohol"
+        },
+        "referenceUrl": {
+          "name": "Referenz-URL"
         }
       }
     }
   },
   "common": {
     "words": {
+      "actions": {
+        "add": "Hinzufügen",
+        "create": "Erstellen",
+        "update": "Aktualisieren",
+        "delete": "Löschen"
+      },
       "no": "NEIN",
       "yes": "Ja",
       "day": "Tag",
       "days": "Tage",
-      "recipe": "Rezept",
-      "recipes": "Rezepte",
-      "excluded": "Ausgeschlossen"
+      "excluded": "Ausgeschlossen",
+      "you": "Du",
+      "image": "Bild",
+      "images": "Bilder"
     },
     "version": "Ausführung",
     "time": {

@@ -18,6 +18,9 @@
         }
       }
     },
+    "cookbook": {
+      "title": "Кулінарна книга"
+    },
     "register": {
       "title": "зареєструватися",
       "alreadyHaveAccount": "Вже є аккаунт?",
@@ -49,7 +52,8 @@
         "categories": "Категорії",
         "recommended": "Рекомендації",
         "recentlyAdded": "Нещодавно додані",
-        "favourites": "Улюблені рецепти"
+        "favourites": "Улюблені рецепти",
+        "personal": "Ваші рецепти"
       },
       "components": {
         "inputs": {
@@ -75,6 +79,7 @@
       "prepTime": "Час підготовки",
       "cookingTime": "Час приготування",
       "sections": {
+        "equipment": "Обладнання",
         "ingredients": "Інгредієнти",
         "directions": "Напрямки",
         "nutrition": "Харчування",
@@ -97,6 +102,23 @@
       "title": "Вибране",
       "authenticationRequired": "Ви повинні увійти в систему, щоб побачити свої улюблені",
       "noRecipes": "Немає улюблених рецептів",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Пошук рецептів"
+          }
+        },
+        "buttons": {
+          "signIn": {
+            "label": "Увійти"
+          }
+        }
+      }
+    },
+    "personal": {
+      "title": "Особисті",
+      "authenticationRequired": "Ви повинні увійти, щоб побачити свої особисті рецепти",
+      "noRecipes": "Жодних особистих рецептів",
       "components": {
         "inputs": {
           "recipeSearch": {
@@ -161,6 +183,16 @@
     },
     "resetPassword": {
       "title": "Скинути пароль"
+    }
+  },
+  "dialogs": {
+    "deleteRecipeImage": {
+      "title": "Видалити зображення",
+      "description": "Ви впевнені, що хочете видалити це зображення?"
+    },
+    "publishRecipe": {
+      "title": "Опублікувати рецепт",
+      "description": "Ви впевнені, що хочете опублікувати цей рецепт? "
     }
   },
   "forms": {
@@ -446,6 +478,24 @@
         "success": "Рецепт видалено з планувальника.",
         "error": "Не вдалося видалити рецепт із планувальника. "
       }
+    },
+    "recipes": {
+      "create": {
+        "success": "Рецепт створено.",
+        "error": "Не вдалося створити рецепт. "
+      },
+      "update": {
+        "success": "Рецепт оновлено.",
+        "error": "Не вдалося оновити рецепт. "
+      },
+      "delete": {
+        "success": "Рецепт видалено.",
+        "error": "Не вдалося видалити рецепт. "
+      },
+      "publish": {
+        "success": "Рецепт опубліковано.",
+        "error": "Не вдалося опублікувати рецепт. "
+      }
     }
   },
   "types": {
@@ -463,7 +513,31 @@
         }
       }
     },
+    "tag": {
+      "name": "Тег",
+      "pluralName": "Теги"
+    },
+    "author": {
+      "name": "Автор",
+      "pluralName": "Автори"
+    },
+    "ingredient": {
+      "name": "Інгредієнт",
+      "pluralName": "Інгредієнти"
+    },
+    "equipment": {
+      "name": "Частина обладнання",
+      "pluralName": "Обладнання"
+    },
     "recipe": {
+      "name": "рецепт",
+      "pluralName": "рецепти",
+      "actions": {
+        "create": "Створити",
+        "update": "оновлення",
+        "delete": "Видалити",
+        "publish": "Опублікувати"
+      },
       "times": {
         "slow": "Повільно",
         "medium": "Середній",
@@ -503,30 +577,150 @@
         "veryHard": "Дуже важкий"
       },
       "fields": {
-        "type": "Тип",
-        "servings": "Порції",
+        "name": {
+          "name": "Ім'я",
+          "validation": {
+            "required": "Назвіть, будь ласка, цей рецепт."
+          }
+        },
+        "description": {
+          "name": "опис",
+          "validation": {
+            "required": "Будь ласка, надайте опис."
+          }
+        },
+        "type": {
+          "name": "Тип",
+          "validation": {
+            "required": "Виберіть тип"
+          }
+        },
+        "difficulty": {
+          "name": "Складність",
+          "validation": {
+            "required": "Будь ласка, виберіть складність"
+          }
+        },
+        "prepTime": {
+          "name": "Час підготовки",
+          "validation": {
+            "required": "Будь ласка, встановіть час приготування цього рецепту"
+          }
+        },
+        "cookTime": {
+          "name": "Час приготування",
+          "validation": {
+            "required": "Будь ласка, встановіть час приготування за цим рецептом"
+          }
+        },
+        "totalTime": {
+          "name": "Загальний час",
+          "validation": {
+            "required": "Будь ласка, встановіть загальний час, який займає цей рецепт"
+          }
+        },
+        "servings": {
+          "name": "Порції",
+          "validation": {
+            "required": "Необхідно вказати кількість порцій"
+          }
+        },
+        "steps": {
+          "name": "Кроки",
+          "singularName": "Крок",
+          "fields": {
+            "name": {
+              "name": "Ім'я"
+            }
+          },
+          "instructions": {
+            "name": "Інструкції",
+            "singularName": "Інструкція",
+            "fields": {
+              "instruction": {
+                "name": "Інструкція"
+              }
+            }
+          }
+        },
+        "ingredients": {
+          "fields": {
+            "amount": {
+              "name": "Сума"
+            },
+            "name": {
+              "name": "Ім'я"
+            },
+            "unitOfMeasurement": {
+              "name": "Тип"
+            }
+          }
+        },
+        "equipment": {
+          "fields": {
+            "amount": {
+              "name": "Сума"
+            },
+            "name": {
+              "name": "Ім'я"
+            },
+            "dependsOnServing": {
+              "name": "Залежить від подачі"
+            }
+          }
+        },
         "nutrition": {
-          "calories": "Калорії",
-          "sugar": "цукор",
-          "fat": "Жир",
-          "saturatedFat": "Насичених жирів",
-          "sodium": "натрію",
-          "protein": "білок",
-          "carbohydrates": "вуглеводи",
-          "fiber": "клітковина"
+          "name": "Харчування",
+          "calories": {
+            "name": "Калорії"
+          },
+          "sugar": {
+            "name": "цукор"
+          },
+          "fat": {
+            "name": "Жир"
+          },
+          "saturatedFat": {
+            "name": "Насичених жирів"
+          },
+          "sodium": {
+            "name": "натрію"
+          },
+          "protein": {
+            "name": "вуглеводи"
+          },
+          "carbohydrates": {
+            "name": "білок"
+          },
+          "fiber": {
+            "name": "клітковина"
+          }
+        },
+        "containsAlcohol": {
+          "name": "Містить алкоголь"
+        },
+        "referenceUrl": {
+          "name": "Посилання URL"
         }
       }
     }
   },
   "common": {
     "words": {
+      "actions": {
+        "add": "додати",
+        "create": "Створити",
+        "update": "оновлення",
+        "delete": "Видалити"
+      },
       "no": "Немає",
       "yes": "Так",
       "day": "День",
       "days": "днів",
-      "recipe": "рецепт",
-      "recipes": "рецепти",
-      "excluded": "Виключено"
+      "excluded": "Виключено",
+      "you": "ви",
+      "image": "Зображення",
+      "images": "Зображення"
     },
     "version": "Версія",
     "time": {

@@ -18,6 +18,9 @@
         }
       }
     },
+    "cookbook": {
+      "title": "Кулинарная книга"
+    },
     "register": {
       "title": "регистр",
       "alreadyHaveAccount": "У вас уже есть аккаунт?",
@@ -49,7 +52,8 @@
         "categories": "Категории",
         "recommended": "Рекомендации",
         "recentlyAdded": "Недавно добавленный",
-        "favourites": "Любимые рецепты"
+        "favourites": "Любимые рецепты",
+        "personal": "Ваши рецепты"
       },
       "components": {
         "inputs": {
@@ -75,6 +79,7 @@
       "prepTime": "Время подготовки",
       "cookingTime": "Время готовить",
       "sections": {
+        "equipment": "Оборудование",
         "ingredients": "Ингредиенты",
         "directions": "Направления",
         "nutrition": "Питание",
@@ -97,6 +102,23 @@
       "title": "Избранное",
       "authenticationRequired": "Вы должны войти в систему, чтобы увидеть избранное",
       "noRecipes": "Нет избранных рецептов",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Поиск рецептов"
+          }
+        },
+        "buttons": {
+          "signIn": {
+            "label": "Войти"
+          }
+        }
+      }
+    },
+    "personal": {
+      "title": "Личный",
+      "authenticationRequired": "Вы должны войти в систему, чтобы увидеть ваши личные рецепты",
+      "noRecipes": "Никаких личных рецептов.",
       "components": {
         "inputs": {
           "recipeSearch": {
@@ -161,6 +183,16 @@
     },
     "resetPassword": {
       "title": "Сбросить пароль"
+    }
+  },
+  "dialogs": {
+    "deleteRecipeImage": {
+      "title": "Удалить изображение",
+      "description": "Вы уверены, что хотите удалить это изображение?"
+    },
+    "publishRecipe": {
+      "title": "Опубликовать рецепт",
+      "description": "Вы уверены, что хотите опубликовать этот рецепт? "
     }
   },
   "forms": {
@@ -446,6 +478,24 @@
         "success": "Рецепт удален из планировщика.",
         "error": "Не удалось удалить рецепт из планировщика. "
       }
+    },
+    "recipes": {
+      "create": {
+        "success": "Рецепт создан.",
+        "error": "Не удалось создать рецепт. "
+      },
+      "update": {
+        "success": "Рецепт обновлен.",
+        "error": "Не удалось обновить рецепт. "
+      },
+      "delete": {
+        "success": "Рецепт удален.",
+        "error": "Не удалось удалить рецепт. "
+      },
+      "publish": {
+        "success": "Рецепт опубликован.",
+        "error": "Не удалось опубликовать рецепт. "
+      }
     }
   },
   "types": {
@@ -463,7 +513,31 @@
         }
       }
     },
+    "tag": {
+      "name": "Ярлык",
+      "pluralName": "Теги"
+    },
+    "author": {
+      "name": "Автор",
+      "pluralName": "Авторы"
+    },
+    "ingredient": {
+      "name": "Ингредиент",
+      "pluralName": "Ингредиенты"
+    },
+    "equipment": {
+      "name": "Часть оборудования",
+      "pluralName": "Оборудование"
+    },
     "recipe": {
+      "name": "Рецепт",
+      "pluralName": "Рецепты",
+      "actions": {
+        "create": "Создавать",
+        "update": "Обновлять",
+        "delete": "Удалить",
+        "publish": "Публиковать"
+      },
       "times": {
         "slow": "Медленный",
         "medium": "Середина",
@@ -503,30 +577,150 @@
         "veryHard": "Очень сложно"
       },
       "fields": {
-        "type": "Тип",
-        "servings": "Порции",
+        "name": {
+          "name": "Имя",
+          "validation": {
+            "required": "Укажите название этого рецепта."
+          }
+        },
+        "description": {
+          "name": "Описание",
+          "validation": {
+            "required": "Пожалуйста, дайте описание."
+          }
+        },
+        "type": {
+          "name": "Тип",
+          "validation": {
+            "required": "Пожалуйста, выберите тип"
+          }
+        },
+        "difficulty": {
+          "name": "Сложность",
+          "validation": {
+            "required": "Пожалуйста, выберите сложность"
+          }
+        },
+        "prepTime": {
+          "name": "Время подготовки",
+          "validation": {
+            "required": "Пожалуйста, установите время приготовления этого рецепта"
+          }
+        },
+        "cookTime": {
+          "name": "Время готовить",
+          "validation": {
+            "required": "Пожалуйста, установите время приготовления по этому рецепту"
+          }
+        },
+        "totalTime": {
+          "name": "Общее время",
+          "validation": {
+            "required": "Укажите общее время, которое занимает этот рецепт."
+          }
+        },
+        "servings": {
+          "name": "Порции",
+          "validation": {
+            "required": "Необходимо указать количество порций."
+          }
+        },
+        "steps": {
+          "name": "Шаги",
+          "singularName": "Шаг",
+          "fields": {
+            "name": {
+              "name": "Имя"
+            }
+          },
+          "instructions": {
+            "name": "инструкции",
+            "singularName": "Инструкция",
+            "fields": {
+              "instruction": {
+                "name": "Инструкция"
+              }
+            }
+          }
+        },
+        "ingredients": {
+          "fields": {
+            "amount": {
+              "name": "Количество"
+            },
+            "name": {
+              "name": "Имя"
+            },
+            "unitOfMeasurement": {
+              "name": "Тип"
+            }
+          }
+        },
+        "equipment": {
+          "fields": {
+            "amount": {
+              "name": "Количество"
+            },
+            "name": {
+              "name": "Имя"
+            },
+            "dependsOnServing": {
+              "name": "Зависит от подачи"
+            }
+          }
+        },
         "nutrition": {
-          "calories": "Калории",
-          "sugar": "Сахар",
-          "fat": "Толстый",
-          "saturatedFat": "Насыщенный жир",
-          "sodium": "натрий",
-          "protein": "белок",
-          "carbohydrates": "Углеводы",
-          "fiber": "Волокно"
+          "name": "Питание",
+          "calories": {
+            "name": "Калории"
+          },
+          "sugar": {
+            "name": "Сахар"
+          },
+          "fat": {
+            "name": "Толстый"
+          },
+          "saturatedFat": {
+            "name": "Насыщенный жир"
+          },
+          "sodium": {
+            "name": "натрий"
+          },
+          "protein": {
+            "name": "Углеводы"
+          },
+          "carbohydrates": {
+            "name": "белок"
+          },
+          "fiber": {
+            "name": "Волокно"
+          }
+        },
+        "containsAlcohol": {
+          "name": "Содержит алкоголь"
+        },
+        "referenceUrl": {
+          "name": "URL ссылки"
         }
       }
     }
   },
   "common": {
     "words": {
+      "actions": {
+        "add": "Добавлять",
+        "create": "Создавать",
+        "update": "Обновлять",
+        "delete": "Удалить"
+      },
       "no": "Нет",
       "yes": "Да",
       "day": "День",
-      "days": "Дней",
-      "recipe": "Рецепт",
-      "recipes": "Рецепты",
-      "excluded": "Исключенный"
+      "days": "Дни",
+      "excluded": "Исключенный",
+      "you": "Ты",
+      "image": "Изображение",
+      "images": "Изображений"
     },
     "version": "Версия",
     "time": {

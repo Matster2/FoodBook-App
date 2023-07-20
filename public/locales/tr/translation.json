@@ -18,6 +18,9 @@
         }
       }
     },
+    "cookbook": {
+      "title": "Yemek kitabı"
+    },
     "register": {
       "title": "Kayıt olmak",
       "alreadyHaveAccount": "Zaten hesabınız var mı?",
@@ -49,7 +52,8 @@
         "categories": "Kategoriler",
         "recommended": "öneriler",
         "recentlyAdded": "Son Eklenenler",
-        "favourites": "Favori Tarifler"
+        "favourites": "Favori Tarifler",
+        "personal": "Tarifleriniz"
       },
       "components": {
         "inputs": {
@@ -75,6 +79,7 @@
       "prepTime": "Hazırlık zamanı",
       "cookingTime": "Pişirme süresi",
       "sections": {
+        "equipment": "Teçhizat",
         "ingredients": "İçindekiler",
         "directions": "Talimatlar",
         "nutrition": "Beslenme",
@@ -97,6 +102,23 @@
       "title": "Favoriler",
       "authenticationRequired": "Favorilerinizi görmek için giriş yapmalısınız",
       "noRecipes": "Favori tarif yok",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Tarif ara"
+          }
+        },
+        "buttons": {
+          "signIn": {
+            "label": "Kayıt olmak"
+          }
+        }
+      }
+    },
+    "personal": {
+      "title": "Kişisel",
+      "authenticationRequired": "Kişisel tariflerinizi görmek için giriş yapmalısınız.",
+      "noRecipes": "Kişisel tarif yok",
       "components": {
         "inputs": {
           "recipeSearch": {
@@ -161,6 +183,16 @@
     },
     "resetPassword": {
       "title": "Parolanızı Sıfırlayın"
+    }
+  },
+  "dialogs": {
+    "deleteRecipeImage": {
+      "title": "Resmi Sil",
+      "description": "Bu resmi kaldırmak istediğinizden emin misiniz?"
+    },
+    "publishRecipe": {
+      "title": "Tarifi Yayınla",
+      "description": "Bu tarifi yayınlamak istediğinizden emin misiniz? "
     }
   },
   "forms": {
@@ -446,6 +478,24 @@
         "success": "Tarif planlayıcıdan kaldırıldı.",
         "error": "Tarif planlayıcıdan kaldırılamıyor. "
       }
+    },
+    "recipes": {
+      "create": {
+        "success": "Tarif oluşturuldu.",
+        "error": "Tarif oluşturulamıyor. "
+      },
+      "update": {
+        "success": "Tarif güncellendi.",
+        "error": "Tarif güncellenemiyor. "
+      },
+      "delete": {
+        "success": "Tarif silindi.",
+        "error": "Tarif silinemiyor. "
+      },
+      "publish": {
+        "success": "Tarif yayınlandı.",
+        "error": "Tarif yayınlanamıyor. "
+      }
     }
   },
   "types": {
@@ -463,7 +513,31 @@
         }
       }
     },
+    "tag": {
+      "name": "Etiket",
+      "pluralName": "Etiketler"
+    },
+    "author": {
+      "name": "Yazar",
+      "pluralName": "Yazarlar"
+    },
+    "ingredient": {
+      "name": "Bileşen",
+      "pluralName": "İçindekiler"
+    },
+    "equipment": {
+      "name": "Ekipman Parçası",
+      "pluralName": "Teçhizat"
+    },
     "recipe": {
+      "name": "Yemek tarifi",
+      "pluralName": "tarifler",
+      "actions": {
+        "create": "Yaratmak",
+        "update": "Güncelleme",
+        "delete": "Silmek",
+        "publish": "Yayınla"
+      },
       "times": {
         "slow": "Yavaş",
         "medium": "Orta",
@@ -503,30 +577,150 @@
         "veryHard": "Çok zor"
       },
       "fields": {
-        "type": "Tip",
-        "servings": "Porsiyon",
+        "name": {
+          "name": "İsim",
+          "validation": {
+            "required": "Lütfen bu tarif için bir isim verin."
+          }
+        },
+        "description": {
+          "name": "Tanım",
+          "validation": {
+            "required": "Lütfen bir tanım girin."
+          }
+        },
+        "type": {
+          "name": "Tip",
+          "validation": {
+            "required": "Lütfen bir tür seçin"
+          }
+        },
+        "difficulty": {
+          "name": "Zorluk",
+          "validation": {
+            "required": "Lütfen bir zorluk seçin"
+          }
+        },
+        "prepTime": {
+          "name": "Hazırlık zamanı",
+          "validation": {
+            "required": "Lütfen bu tarifin hazırlanma süresini ayarlayın"
+          }
+        },
+        "cookTime": {
+          "name": "Pişirme süresi",
+          "validation": {
+            "required": "Lütfen bu tarifin pişirme süresini ayarlayın"
+          }
+        },
+        "totalTime": {
+          "name": "Toplam zaman",
+          "validation": {
+            "required": "Lütfen bu tarifin aldığı toplam süreyi ayarlayın"
+          }
+        },
+        "servings": {
+          "name": "Porsiyon",
+          "validation": {
+            "required": "Porsiyon sayısı sağlanmalıdır"
+          }
+        },
+        "steps": {
+          "name": "Adımlar",
+          "singularName": "Adım",
+          "fields": {
+            "name": {
+              "name": "İsim"
+            }
+          },
+          "instructions": {
+            "name": "Talimatlar",
+            "singularName": "Talimat",
+            "fields": {
+              "instruction": {
+                "name": "Talimat"
+              }
+            }
+          }
+        },
+        "ingredients": {
+          "fields": {
+            "amount": {
+              "name": "Miktar"
+            },
+            "name": {
+              "name": "İsim"
+            },
+            "unitOfMeasurement": {
+              "name": "Tip"
+            }
+          }
+        },
+        "equipment": {
+          "fields": {
+            "amount": {
+              "name": "Miktar"
+            },
+            "name": {
+              "name": "İsim"
+            },
+            "dependsOnServing": {
+              "name": "Hizmete bağlıdır"
+            }
+          }
+        },
         "nutrition": {
-          "calories": "kalori",
-          "sugar": "Şeker",
-          "fat": "Yağ",
-          "saturatedFat": "Doymuş yağ",
-          "sodium": "Sodyum",
-          "protein": "Protein",
-          "carbohydrates": "karbonhidratlar",
-          "fiber": "Lif"
+          "name": "Beslenme",
+          "calories": {
+            "name": "kalori"
+          },
+          "sugar": {
+            "name": "Şeker"
+          },
+          "fat": {
+            "name": "Yağ"
+          },
+          "saturatedFat": {
+            "name": "Doymuş yağ"
+          },
+          "sodium": {
+            "name": "Sodyum"
+          },
+          "protein": {
+            "name": "karbonhidratlar"
+          },
+          "carbohydrates": {
+            "name": "Protein"
+          },
+          "fiber": {
+            "name": "Lif"
+          }
+        },
+        "containsAlcohol": {
+          "name": "Alkol İçeriyor"
+        },
+        "referenceUrl": {
+          "name": "Referans URL'si"
         }
       }
     }
   },
   "common": {
     "words": {
+      "actions": {
+        "add": "Eklemek",
+        "create": "Yaratmak",
+        "update": "Güncelleme",
+        "delete": "Silmek"
+      },
       "no": "HAYIR",
       "yes": "Evet",
       "day": "Gün",
-      "days": "gün",
-      "recipe": "Yemek tarifi",
-      "recipes": "tarifler",
-      "excluded": "hariç"
+      "days": "günler",
+      "excluded": "hariç",
+      "you": "Sen",
+      "image": "resim",
+      "images": "Görüntüler"
     },
     "version": "Sürüm",
     "time": {
