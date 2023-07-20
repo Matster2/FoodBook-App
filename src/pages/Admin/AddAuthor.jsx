@@ -17,6 +17,7 @@ import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import uuid from 'react-uuid';
+import { isUndefined } from 'utils/utils';
 import * as yup from 'yup';
 
 const AuthorLink = ({ authorLink, onChange, onDelete }) => {
@@ -138,7 +139,9 @@ export default () => {
         data: { id },
       } = await api.createAuthor(data);
 
-      await api.uploadAuthorProfilePicture(id, profilePictureFile);
+      if (!isUndefined(profilePictureFile)) {
+        await api.uploadAuthorProfilePicture(id, profilePictureFile);
+      }
 
       toast.success('Author successfully created');
       formRef.current?.resetForm();
