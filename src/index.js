@@ -4,6 +4,7 @@ import App from './App';
 import Providers from './contexts/Providers';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 import './i18n';
 
