@@ -1,6 +1,13 @@
 {
   "short_name": "FoodBook",
   "name": "FoodBook",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#fb6b1c",
+  "background_color": "#ffffff",
+  "description": "FoodBook: The perfect recipe app to ignite your culinary journey! Browse through an array of tantalizing recipes and effortlessly plan your cooking schedule. With FoodBook, you can access a treasure trove of delectable dishes, organize your meals, and stay on top of your cooking game. From breakfast to dinner, let FoodBook be your trusted companion for recipe inspiration and efficient meal planning. Get ready to savor every bite and make your kitchen a place of culinary delight!",
+  "dir": "auto",
+  "lang": "en",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",
@@ -39,25 +46,12 @@
       "purpose": "maskable any"
     },
     {
-      "src": "assets/icons/icon-284x284.png",
-      "sizes": "284x284",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
       "src": "assets/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#fb6b1c",
-  "background_color": "#ffffff",
-  "description": "FoodBook: The perfect recipe app to ignite your culinary journey! Browse through an array of tantalizing recipes and effortlessly plan your cooking schedule. With FoodBook, you can access a treasure trove of delectable dishes, organize your meals, and stay on top of your cooking game. From breakfast to dinner, let FoodBook be your trusted companion for recipe inspiration and efficient meal planning. Get ready to savor every bite and make your kitchen a place of culinary delight!",
-  "dir": "auto",
-  "lang": "en",
   "orientation": "portrait",
   "display_override": [
     "standalone"
