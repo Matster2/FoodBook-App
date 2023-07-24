@@ -1,6 +1,7 @@
 {
   "short_name": "FoodBook",
   "name": "FoodBook",
+  "id": "/",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#fb6b1c",

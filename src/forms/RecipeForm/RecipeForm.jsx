@@ -50,8 +50,8 @@ import { isNullOrUndefined, isUndefined, reorder } from 'utils/utils';
 const initialRecipeValue = {
   name: '',
   description: '',
-  type: undefined,
-  difficulty: undefined,
+  type: RecipeTypes.Breakfast,
+  difficulty: RecipeDifficulty.Average,
   prepTime: 0,
   cookTime: 0,
   totalTime: 1,
@@ -270,10 +270,12 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   }
 
   const handleAddIngredient = (ingredient) => {
+    var existingIngredient = recipe.ingredients.find(x => x.id === ingredient.id)
+
     const recipeIngredient = {
       ...ingredient,
       amount: undefined,
-      optional: false,
+      optional: existingIngredient ? !existingIngredient.optional: false,
       unitOfMeasurement: {
         id: ingredient.defaultUnitOfMeasurement.id,
       },
@@ -320,9 +322,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   };
 
   const handleRecipeIngredientChange = (newRecipeIngredient) => {
-    const newRecipeIngredients = recipe.ingredients;
+    const newRecipeIngredients = [ ...recipe.ingredients];
 
-    const index = newRecipeIngredients.findIndex((x) => x.id === newRecipeIngredient.id);
+    const index = newRecipeIngredients.findIndex((x) => x.id === newRecipeIngredient.id && x.optional === newRecipeIngredient.optional);
 
     newRecipeIngredients[index] = newRecipeIngredient;
 
@@ -334,7 +336,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
   const handleDeleteRecipeIngredient = (newRecipeIngredient) => {
     const newRecipeIngredients = recipe.ingredients.filter(
-      (x) => x.id !== newRecipeIngredient.id
+      (x) => !(x.id === newRecipeIngredient.id && x.optional === newRecipeIngredient.optional)
     );
 
     setRecipe((state) => ({
@@ -343,8 +345,10 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }));
   };
 
+  console.log(recipe.ingredients)
+
   const handleRecipePieceOfEquipmentChange = (newRecipePieceOfEquipment) => {
-    const newRecipeEquipment = recipe.equipment;
+    const newRecipeEquipment = [...recipe.equipment];
 
     const index = newRecipeEquipment.findIndex((x) => x.id === newRecipePieceOfEquipment.id);
 
@@ -368,7 +372,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   };
 
   const handleAddStepClick = () => {
-    const newSteps = recipe.steps;
+    const newSteps = [...recipe.steps];
 
     newSteps.push({
       id: uuid(),
@@ -873,6 +877,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     recipeIngredient={recipeIngredient}
                     onChange={handleRecipeIngredientChange}
                     onDelete={handleDeleteRecipeIngredient}
+                    optionalDisabled={recipe.ingredients.filter(x => x.id === recipeIngredient.id).length > 1}
                   />
                 ))}
               </Box>
@@ -882,9 +887,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                 options={ingredientSearchResults
                   .filter(
                     (ingredient) =>
-                      !recipe.ingredients.some(
+                      recipe.ingredients.filter(
                         (recipeIngredient) => recipeIngredient.id === ingredient.id
-                      )
+                      ).length < 2
                   )
                   .map((ingredient) => ({ label: ingredient.name, ingredient }))}
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -1055,7 +1060,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     InputProps={{ inputProps: { min: 0 } }}
                   />
                 </Grid>
-                <Grid item xs={6} md={3}>
+                <Grid item xs={6} md={3} lg={2}>
                   <TextField
                     fullWidth
                     type="number"

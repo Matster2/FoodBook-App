@@ -570,12 +570,14 @@ export default () => {
             justifyContent="center"
             gap={3}
           >
-            <Box maxWidth={100} textAlign="center">
-              <RecipeAttributeWidget
-                type="calories"
-                value={recipe.nutrition.calories}
-              />
-            </Box>
+            {recipe.nutrition.calories && (
+              <Box maxWidth={100} textAlign="center">
+                <RecipeAttributeWidget
+                  type="calories"
+                  value={recipe.nutrition.calories}
+                />
+              </Box>
+            )}
 
             {recipe.containsAlcohol && (
               <Box maxWidth={100} textAlign="center">

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { Stack, Typography } from '@mui/material';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import { Stack, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import styles from './ServingsIncrementor.module.css';
 
 const ServingsIncrementor = ({ defaultValue, recipeServings, onChange, suffixText, min, max }) => {
@@ -43,7 +43,7 @@ const ServingsIncrementor = ({ defaultValue, recipeServings, onChange, suffixTex
 
   return (
     <Stack direction="row" alignItems="center" display="inline-flex">
-      <button className={classnames(styles.button, isDecrementDisabled && styles.disabled)} disabled={isDecrementDisabled} onClick={handleDecrementClick}>-</button>
+      <button className={classnames(styles.button, isDecrementDisabled && styles.disabled)} style={{ lineHeight: '20px' }} disabled={isDecrementDisabled} onClick={handleDecrementClick}>-</button>
       <Typography className={styles.text}>{getText()}</Typography>
       <button className={classnames(styles.button, isIncrementDisabled && styles.disabled)} disabled={isIncrementDisabled} onClick={handleIncrementClick}>+</button>
     </Stack>

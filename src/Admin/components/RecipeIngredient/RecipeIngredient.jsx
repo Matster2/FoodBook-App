@@ -1,12 +1,14 @@
 import { Clear as ClearIcon } from '@mui/icons-material';
 import {
   Box,
+  Checkbox,
   FormControl,
-  Grid,
+  FormControlLabel,
   IconButton,
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   TextField
 } from '@mui/material';
 import { UnitOfMeasurementContext } from 'contexts/UnitOfMeasurementContext';
@@ -14,7 +16,7 @@ import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { useTranslation } from "react-i18next";
 
-const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
+const RecipeIngredient = ({ recipeIngredient, onChange, onDelete, optionalDisabled }) => {
   const { t } = useTranslation();
   const { unitOfMeasurements } = useContext(UnitOfMeasurementContext);
 
@@ -34,59 +36,78 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete }) => {
     })
   }
 
+  const handleCheckboxChange = (e) => {
+    onChange({
+      ...recipeIngredient,
+      [e.target.name]: e.target.checked,
+    });
+  };
+
   return (
     <Box sx={{ py: 2 }}>
-      <Grid container spacing={1} justifyContent="space-between">
-        <Grid item xs={9} sx={{ mb: 1 }}>
-          <TextField
-            fullWidth
-            required
-            id="name"
-            label={t("types.recipe.fields.ingredients.fields.name.name")}
-            name="name"
-            value={recipeIngredient.name}
-            disabled
-          />
-        </Grid>
-        <Grid item xs="auto">
-          <IconButton onClick={() => onDelete(recipeIngredient)}>
-            <ClearIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
+      <Stack display="flex" direction="row" justifyContent="center" gap={1} sx={{ mb: 1 }}>
+        <TextField
+          fullWidth
+          required
+          id="name"
+          label={t("types.recipe.fields.ingredients.fields.name.name")}
+          name="name"
+          value={recipeIngredient.name}
+          disabled
+        />
+        
+        <IconButton onClick={() => onDelete(recipeIngredient)}>
+          <ClearIcon />
+        </IconButton>
+      </Stack>
 
-      <Grid container spacing={1}>
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
-            required
-            id="amount"
-            label={t("types.recipe.fields.ingredients.fields.amount.name")}
-            name="amount"
-            type="number"
-            value={recipeIngredient.amount}
-            onChange={handleChange}
-            InputProps={{ inputProps: { min: 0 } }}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <FormControl fullWidth>
-            <InputLabel id="type-label">{t("types.recipe.fields.ingredients.fields.unitOfMeasurement.name")}</InputLabel>
-            <Select
-              id="id"
-              name="unitOfMeasurement.id"
-              labelId="type-label"
-              label={t("types.recipe.fields.ingredients.fields.unitOfMeasurement.name")}
-              onChange={handleUnitOfMeasurementChange}
-              value={`${recipeIngredient.unitOfMeasurement.id}`}
-            >
-              {unitOfMeasurements.map((unitOfMeasurement) => (
-                <MenuItem key={unitOfMeasurement.id} value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
+      <Stack display="flex" direction="row" justifyContent="center" gap={1}>
+        <TextField
+          fullWidth
+          required
+          sx={{ flex: 1 }}
+          id="amount"
+          label={t("types.recipe.fields.ingredients.fields.amount.name")}
+          name="amount"
+          type="number"
+          value={recipeIngredient.amount}
+          onChange={handleChange}
+          InputProps={{ 
+            min: 0,
+            step: "any"
+          }}
+        />
+        <FormControl 
+          fullWidth
+          sx={{ flex: 2 }}
+        >
+          <InputLabel id="type-label">{t("types.recipe.fields.ingredients.fields.unitOfMeasurement.name")}</InputLabel>
+          <Select
+            id="id"
+            name="unitOfMeasurement.id"
+            labelId="type-label"
+            label={t("types.recipe.fields.ingredients.fields.unitOfMeasurement.name")}
+            onChange={handleUnitOfMeasurementChange}
+            value={`${recipeIngredient.unitOfMeasurement.id}`}
+          >
+            {unitOfMeasurements.map((unitOfMeasurement) => (
+              <MenuItem key={unitOfMeasurement.id} value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControlLabel
+          control={
+            <Checkbox
+              id="optional"
+              name="optional"  
+              checked={recipeIngredient.optional}              
+              onChange={handleCheckboxChange}
+              disabled={optionalDisabled}
+            />
+          }
+          label={t("types.recipe.fields.ingredients.fields.optional.name")}
+        />
+      </Stack>
     </Box>
   );
 };
@@ -106,6 +127,7 @@ RecipeIngredient.propTypes = {
 RecipeIngredient.defaultProps = {
   onChange: () => { },
   onDelete: () => { },
+  optionalDisabled: false
 };
 
 export default RecipeIngredient

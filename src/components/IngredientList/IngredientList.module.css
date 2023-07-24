@@ -10,3 +10,9 @@
 .checkbox {
     padding: 0px !important;
 }
+
+.optional {
+    font-size: 12px !important;
+    font-weight: bold !important;
+    color: rgb(183, 183, 183) !important;
+}

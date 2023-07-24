@@ -1,12 +1,14 @@
 import { Box, Checkbox, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import React from 'react';
+import { useTranslation } from "react-i18next";
 import Fraction from 'utils/fraction';
 import styles from './IngredientList.module.css';
 
 const unitOfMeasurementsThatMustBeAWholeNumber = ['milligram', 'milliliter'];
 
 const IngredientList = ({ ingredients, enableCheckboxes }) => {
+  const { t } = useTranslation();
+  
   const getUnitName = (unitOfMeasurement, amount) => {
     if (unitOfMeasurement.code === 'unit') {
       return '';
@@ -94,8 +96,19 @@ const IngredientList = ({ ingredients, enableCheckboxes }) => {
   return (
     <>
       {ingredients
+        .filter(x => !x.optional)
         .sort(compare)
         .map((ingredient) => renderIngredient(ingredient))}
+
+      {ingredients.some(x => x.optional) && (
+        <Box>
+          <Typography className={styles.optional} sx={{ mt: 1.5 }}>{t("types.recipe.fields.ingredients.fields.optional.name")}</Typography>
+          {ingredients
+            .filter(x => x.optional)
+            .sort(compare)
+            .map((ingredient) => renderIngredient(ingredient))}
+        </Box>
+      )}
     </>
   );
 };
