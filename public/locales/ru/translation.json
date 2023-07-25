@@ -83,7 +83,8 @@
         "ingredients": "Ингредиенты",
         "directions": "Направления",
         "nutrition": "Питание",
-        "reference": "Ссылка"
+        "reference": "Ссылка",
+        "variants": "Варианты"
       },
       "seeFullRecipe": "Полный рецепт смотрите здесь"
     },
@@ -163,7 +164,7 @@
       "title": "Настройки",
       "options": {
         "signIn": "Войти",
-        "admin": "Администратор",
+        "admin": "Админ",
         "account": "Счет",
         "contactUs": "Связаться с нами",
         "privacyPolicy": "политика конфиденциальности",
@@ -186,6 +187,10 @@
     }
   },
   "dialogs": {
+    "deleteRecipe": {
+      "title": "Удалить рецепт",
+      "description": "Вы уверены, что хотите удалить этот рецепт? "
+    },
     "deleteRecipeImage": {
       "title": "Удалить изображение",
       "description": "Вы уверены, что хотите удалить это изображение?"
@@ -351,6 +356,14 @@
       "buttons": {
         "submit": {
           "label": "Отправлять"
+        }
+      }
+    },
+    "recipe": {
+      "copiedFrom": "Скопировано из",
+      "inputs": {
+        "isVariant": {
+          "label": "Является вариантом"
         }
       }
     }
@@ -653,6 +666,9 @@
             },
             "unitOfMeasurement": {
               "name": "Тип"
+            },
+            "optional": {
+              "name": "Необязательный"
             }
           }
         },

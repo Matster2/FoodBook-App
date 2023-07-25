@@ -83,7 +83,8 @@
         "ingredients": "Ingredientes",
         "directions": "Direcciones",
         "nutrition": "Nutrición",
-        "reference": "Referencia"
+        "reference": "Referencia",
+        "variants": "variantes"
       },
       "seeFullRecipe": "Ver receta completa aquí"
     },
@@ -186,6 +187,10 @@
     }
   },
   "dialogs": {
+    "deleteRecipe": {
+      "title": "Eliminar Receta",
+      "description": "¿Seguro que quieres eliminar esta receta? "
+    },
     "deleteRecipeImage": {
       "title": "Eliminar Imagen",
       "description": "¿Está seguro de que desea eliminar esta imagen?"
@@ -351,6 +356,14 @@
       "buttons": {
         "submit": {
           "label": "Enviar"
+        }
+      }
+    },
+    "recipe": {
+      "copiedFrom": "Copiado de",
+      "inputs": {
+        "isVariant": {
+          "label": "es una variante de"
         }
       }
     }
@@ -653,6 +666,9 @@
             },
             "unitOfMeasurement": {
               "name": "Tipo"
+            },
+            "optional": {
+              "name": "Opcional"
             }
           }
         },

@@ -1,5 +1,6 @@
 import { AccessTime as AccessTimeIcon, Edit as EditIcon } from '@mui/icons-material';
 import { Box, Card, Grid, Stack, Typography } from '@mui/material';
+import RecipeImage from 'components/RecipeImage';
 import useLongPress from 'hooks/useLongPress';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
@@ -43,13 +44,19 @@ const PlannedRecipe = ({ plannedRecipe, onClick, onEditClick }) => {
 
       <Grid container gap={2}>
         <Grid item xs={3} justifyContent="center">
-          <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper} onClick={handleClick}>
-            {plannedRecipe.recipe.images.map((image) => (
-              <SwiperSlide className={styles.imageContainer}>
-                <img className={styles.image} src={image.url} alt="recipe" />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          {plannedRecipe.recipe.images.length > 0 && (
+            <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper} onClick={handleClick}>
+              {plannedRecipe.recipe.images.map((image) => (
+                <SwiperSlide className={styles.imageContainer}>
+                  <RecipeImage src={image.url} alt="recipe" />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
+
+          {plannedRecipe.recipe.images.length === 0 && (
+            <RecipeImage />
+          )}
         </Grid>
         <Grid item xs display="flex" alignItems="center">
           <Box display="flex" flexDirection="column" width="100%">

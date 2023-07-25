@@ -83,7 +83,8 @@
         "ingredients": "İçindekiler",
         "directions": "Talimatlar",
         "nutrition": "Beslenme",
-        "reference": "Referans"
+        "reference": "Referans",
+        "variants": "Varyantlar"
       },
       "seeFullRecipe": "Tam Tarife Buradan Bakın"
     },
@@ -147,7 +148,7 @@
     "ingredientList": {
       "title": "Malzeme listesi",
       "noPlannedRecipesDay": "Bu gün için planlanmış tarifiniz yok",
-      "noPlannedRecipesDays": "Bu günlerde planlanmış tarifiniz yok"
+      "noPlannedRecipesDays": "Bu günlerde planlanmış bir tarifiniz yok"
     },
     "author": {
       "title": "",
@@ -186,6 +187,10 @@
     }
   },
   "dialogs": {
+    "deleteRecipe": {
+      "title": "Tarifi Sil",
+      "description": "Bu tarifi silmek istediğinizden emin misiniz? "
+    },
     "deleteRecipeImage": {
       "title": "Resmi Sil",
       "description": "Bu resmi kaldırmak istediğinizden emin misiniz?"
@@ -351,6 +356,14 @@
       "buttons": {
         "submit": {
           "label": "Göndermek"
+        }
+      }
+    },
+    "recipe": {
+      "copiedFrom": "Şuradan kopyalandı:",
+      "inputs": {
+        "isVariant": {
+          "label": "bir çeşididir"
         }
       }
     }
@@ -653,6 +666,9 @@
             },
             "unitOfMeasurement": {
               "name": "Tip"
+            },
+            "optional": {
+              "name": "İsteğe bağlı"
             }
           }
         },
@@ -716,7 +732,7 @@
       "no": "HAYIR",
       "yes": "Evet",
       "day": "Gün",
-      "days": "günler",
+      "days": "gün",
       "excluded": "hariç",
       "you": "Sen",
       "image": "resim",

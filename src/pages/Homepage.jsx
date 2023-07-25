@@ -59,10 +59,10 @@ export default () => {
 
   const { results: recentlyAddedRecipes, totalResults: totalRecentlyAddedRecipes, loading: loadingRecentlyAddedRecipes, refetch: refetchRecentlyAddedRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL
-    }/recipes?random=true&pageSize=25&publishedAfter=${sevenDaysAgo.toISOString()}&sortBy=datepublished&sortDesc=true`
+    }/recipes?random=true&pageSize=25&publishedAfter=${sevenDaysAgo.toISOString()}&sortBy=datepublished&sortDesc=true&states=Published`
   );
   const { results: recommendedRecipes, totalResults: totalRecommendedRecipes, loading: loadingRecommendedRecipes, refetch: refetchRecommendedRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&personal=false`
+    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&personal=false&states=Published`
   );
   const { results: favouriteRecipes, totalResults: totalFavouriteRecipes, loading: loadingFavouriteRecipes, refetch: refetchFavouriteRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&favourited=true`

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, useParams } from 'react-router-dom';
 
 import AdminRoute from 'routings/AdminRoute';
 import AuthRoute from 'routings/AuthRoute';
@@ -30,7 +30,7 @@ import Personal from 'pages/Personal';
 import PersonalRecipe from 'pages/PersonalRecipe';
 import Planner from 'pages/Planner';
 import PrivacyPolicy from 'pages/PrivacyPolicy';
-import Recipe from 'pages/Recipe';
+import _Recipe from 'pages/Recipe';
 import Recipes from 'pages/Recipes';
 import Register from 'pages/Register';
 import ResetPassword from 'pages/ResetPassword';
@@ -38,8 +38,13 @@ import Settings from 'pages/Settings';
 import SignIn from 'pages/SignIn';
 import TermsOfService from 'pages/TermsOfService';
 
-
 import MainLayout from 'layouts/MainLayout';
+
+const Recipe = () => {
+  const { id } = useParams();
+
+  return <_Recipe key={id} />
+}
 
 export default createBrowserRouter([
   {
@@ -252,6 +257,7 @@ export default createBrowserRouter([
     ]
   },
   {
+    element: <MainLayout />, // Change when hidable
     children: [
       {
         path: '/sign-in',
@@ -283,7 +289,7 @@ export default createBrowserRouter([
       },
       {
         path: '/recipes/:id',
-        element: <Recipe />,
+        element: <Recipe />
       },
       {
         path: '/privacy-policy',

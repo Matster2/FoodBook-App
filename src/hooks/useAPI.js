@@ -618,6 +618,19 @@ const useAPI = () => {
   };
 
   
+  const addRecipeVariantRelationship = async (recipeId, variantRecipeId) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/recipes/${recipeId}/variants`,
+      {
+        variantRecipeId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
 
   return {
     getSupportedLanguages,
@@ -672,7 +685,8 @@ const useAPI = () => {
     addTagToRecipe,
     removeTagFromRecipe,
     publishRecipe,
-    deleteRecipe
+    deleteRecipe,
+    addRecipeVariantRelationship
   };
 };
 

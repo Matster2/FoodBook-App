@@ -26,11 +26,14 @@ import IngredientList from 'components/IngredientList';
 import NutritionList from 'components/NutritionList';
 import RatingFilter from 'components/RatingFilter';
 import RecipeAttributeWidget from 'components/RecipeAttributeWidget';
+import RecipeTile from 'components/RecipeTile';
+import Section from 'components/Section';
 import ServingsIncrementor from 'components/ServingsIncrementor';
 import PlanRecipeDialog from 'dialogs/PlanRecipeDialog';
 import RecipeImageViewerDialog from 'dialogs/RecipeImageViewerDialog';
 import useAPI from 'hooks/useAPI';
 import useAuth from 'hooks/useAuth';
+import usePagedFetch from 'hooks/usePagedFetch';
 import _ from "lodash";
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -39,6 +42,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { BottomSheet } from 'react-spring-bottom-sheet';
 
 import { ReactComponent as CookIcon } from 'assets/icons/cook.svg';
+import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
 import { ReactComponent as PlannerIcon } from 'assets/icons/planner.svg';
 import { ReactComponent as PrepIcon } from 'assets/icons/prep.svg';
 import { capitalizeFirstLetter, truncateText } from 'utils/stringUtils';
@@ -49,6 +53,7 @@ import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
 import 'react-spring-bottom-sheet/dist/style.css';
+import { RecipeStates } from 'types';
 import styles from './Recipe.module.css';
 
 const Transition = React.forwardRef((props, ref) => {
@@ -98,6 +103,11 @@ export default () => {
   } = useAuth();
 
   const api = useAPI();
+ 
+  const { results: variants, totalResults: totalVariants, loading: loadingVariants } = usePagedFetch(
+    `${process.env.REACT_APP_API_URL
+    }/recipes?random=true&pageSize=25&variantOfRecipeId=${id}`
+  );
 
   const [loadingRecipe, setLoadingRecipe] = useState();
   const [recipe, setRecipe] = useState();
@@ -259,12 +269,25 @@ export default () => {
   };
 
   const handleEditClick = () => {
-    if (recipe.personal) {
-      navigate(`/recipes/${recipe.id}/edit`)
-      return;
-    }
-    navigate(`/admin/recipes/${recipe.id}`)
+    const url = role === 'Administrator'
+      ? `/admin/recipes/${recipe.id}`
+      : `/recipes/${recipe.id}/edit`;
+
+    navigate(url);
   }
+
+  const handleCopyClick = () => {
+    navigate(`/recipes/create`, {
+      state: {
+        personal: true,
+        descendantOfRecipeId: id
+      }
+    })    
+  }
+
+  const handleRecipeClick = (id) => {
+    navigate(`/recipes/${id}`);
+  };
 
   /* Effects */
   useEffect(() => {
@@ -290,14 +313,10 @@ export default () => {
       return false;
     }
 
-    Object.keys(recipe.nutrition).forEach((key) => {
+    return Object.keys(recipe.nutrition).some(key => {
       var val = recipe.nutrition[key];
-      if (val > 0) {
-        return true;
-      }
-
-      return false;
-  });
+      return val > 0
+    });
   }, [recipe])
 
   function fixRounding(value, precision) {
@@ -374,6 +393,16 @@ export default () => {
 
     return parts.join(" ");
   }
+
+  const renderRecipeTile = (recipe) => (
+    <Box
+      sx={{
+        maxWidth: 150,
+      }}
+    >
+      <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+    </Box>
+  );  
 
   if (isUndefined(recipe)) {
     return <div />;
@@ -485,7 +514,6 @@ export default () => {
         </Grid>
       </Grid>
 
-
       <Box ref={swiperRef}>
         <Swiper className={styles.swiper}>
           {recipe.images.map((image) => (
@@ -504,7 +532,7 @@ export default () => {
         defaultSnap={({ snapPoints, lastSnap }) => Math.max(...snapPoints)}
         snapPoints={({ maxHeight }) => recipe.images.length > 0 ? [maxHeight - (maxHeight / 10),  maxHeight - swiperRef.current.clientHeight] : [maxHeight - (maxHeight / 10)]}
       >
-        <Container sx={{ mb: 5 }}>
+        <Container sx={{ mb: 12 }}>
           <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
             <Grid item>
               <Stack direction="row" alignItems="center" gap={0.4}>
@@ -557,11 +585,19 @@ export default () => {
               </Stack>
             )}
 
-            {(recipe.personal || role === 'Administrator') && (
-              <IconButton sx={{ marginLeft: 'auto' }} className={classnames(styles.optionButton, recipe.personal && styles.personalOptionButton)} onClick={handleEditClick}>
-                <EditIcon className={styles.optionIcon} />
-              </IconButton>
-            )}
+            <Stack direction="row" display="flex" sx={{ marginLeft: 'auto' }} alignItems="center" gap={1}>
+              {(recipe.personal || recipe.State !== RecipeStates.Draft) && (
+                <IconButton sx={{ marginLeft: 'auto' }} className={classnames(styles.optionButton, styles.personalOptionButton)} onClick={handleCopyClick}>
+                  <CopyIcon className={styles.optionIcon} />
+                </IconButton>
+              )}
+
+              {(recipe.personal || role === 'Administrator') && (
+                <IconButton sx={{ marginLeft: 'auto' }} className={classnames(styles.optionButton, recipe.personal && styles.personalOptionButton)} onClick={handleEditClick}>
+                  <EditIcon className={styles.optionIcon} />
+                </IconButton>
+              )}
+            </Stack>
           </Stack>
 
           <Stack
@@ -673,6 +709,15 @@ export default () => {
                 nutrition={recipe.nutrition}
               />
             </CollapsibleSection>
+          )}
+
+          {variants.length > 0 && (
+            <Section
+              title={t('pages.recipe.sections.variants')}
+              loading={loadingVariants}
+            >
+              {variants.map((recipe) => renderRecipeTile(recipe))}
+            </Section>
           )}
         </Container>
       </BottomSheet>

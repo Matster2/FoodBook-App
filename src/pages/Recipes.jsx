@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
+import { RecipeStates } from 'types';
 import Filters from './Filters';
 import styles from './Recipes.module.css';
 
@@ -32,6 +33,7 @@ export default () => {
   const [filters, setFilters] = useState({
     ...location?.state?.filters,
     pageSize: 40,
+    states: [ RecipeStates.Published ]
   });
 
   const [loadingRecipes, setLoadingRecipes] = useState(false);

@@ -15,14 +15,19 @@
     color: #828282 !important;
 }
 
+.bottomNav * {
+    font-size: 10px !important;
+}
+
 .bottomNav a:visited {
     color: #828282 !important;
 }
 
 .navOption {
     min-width: 20% !important;
-    padding: 0px !important;
+    padding: 0px 1px !important;
     margin: 0px !important;
+    text-align: center;
 }
 
 .navOptionIcon {

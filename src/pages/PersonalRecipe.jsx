@@ -8,13 +8,14 @@ import RecipeForm from 'forms/RecipeForm';
 import useAPI from 'hooks/useAPI';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export default () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
   const api = useAPI();
+  const location = useLocation();
 
   const [loadingRecipe, setLoadingRecipe] = useState(false);
   const [recipe, setRecipe] = useState({
@@ -25,7 +26,27 @@ export default () => {
     setLoadingRecipe(true);
     try {
       const { data } = await api.getRecipe(id);
-      setRecipe(data);
+      setRecipe({
+        ...location?.state,
+        ...data,
+        personal: true
+      });
+    } catch (e) {
+      console.log('error fetching recipe');
+    }
+    setLoadingRecipe(false);
+  };
+
+  const fetchFromDescendantRecipe = async () => {
+    setLoadingRecipe(true);
+    try {
+      const { data } = await api.getRecipe(location?.state?.descendantOfRecipeId);
+      setRecipe({
+        ...location?.state,
+        ...data,
+        personal: true,
+        id: undefined
+      });
     } catch (e) {
       console.log('error fetching recipe');
     }
@@ -41,6 +62,8 @@ export default () => {
   useEffect(() => {
     if (id) {
       fetchRecipe();
+    } else if (location?.state?.descendantOfRecipeId) {
+      fetchFromDescendantRecipe();
     }
   }, []);
 

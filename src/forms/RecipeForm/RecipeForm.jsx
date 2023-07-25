@@ -26,6 +26,7 @@ import RecipeIngredient from 'Admin/components/RecipeIngredient';
 import RecipePieceOfEquipment from 'Admin/components/RecipePieceOfEquipment';
 import RecipeStep from 'Admin/components/RecipeStep';
 import FilterOption from 'components/FilterOption';
+import RecipeImage from 'components/RecipeImage';
 import RecipeImageControl from 'components/RecipeImageControl';
 import RecipeImageViewerDialog from 'dialogs/RecipeImageViewerDialog';
 import { useFormik } from 'formik';
@@ -46,8 +47,10 @@ import { getRecipeScheme } from 'types/schemas';
 import FormModes from 'utils/formModes';
 import { lowercaseFirstLetter } from 'utils/stringUtils';
 import { isNullOrUndefined, isUndefined, reorder } from 'utils/utils';
+import styles from './RecipeForm.module.css';
 
 const initialRecipeValue = {
+  state: RecipeStates.Draft,
   name: '',
   description: '',
   type: RecipeTypes.Breakfast,
@@ -80,6 +83,7 @@ const initialRecipeValue = {
   personal: false,
   tags: [],
   images: [],
+  isVariant: false
 };
 
 export default ({ recipe: initialValues, onSubmit, admin }) => {
@@ -130,11 +134,25 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
   const [selectedRecipeImage, setSelectedRecipeImage] = useState();
 
+  const [loadingDescendantRecipe, setLoadingDescendantRecipe] = useState();
+  const [descendantRecipe, setDescendantRecipe] = useState();
+
   const originalRecipe = {
     ...initialRecipeValue,
     ...initialValues,
     languageCode: i18n.resolvedLanguage
   };
+
+  const fetchDescendantRecipe = async () => {
+    setLoadingDescendantRecipe(true);
+    try {
+      const { data } = await api.getRecipe(recipe?.descendantOfRecipeId);
+      setDescendantRecipe(data);
+    } catch (e) {
+      console.log(e);
+    }
+    setLoadingDescendantRecipe(false);
+  }
 
   const handleCreateRecipe = async (newRecipe, filesToUpload) => {
     try {
@@ -156,8 +174,16 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       });
 
       filesToUpload.forEach(async (imageFile, index) => {
-        await api.uploadRecipeImage(id, imageFile.file, index);
+        try {
+          await api.uploadRecipeImage(id, imageFile.file, index);
+        } catch {}
       });
+
+      if (!isUndefined(descendantRecipe) && recipe.isVariant) {
+        try {
+          await api.addRecipeVariantRelationship(descendantRecipe.id, id);
+        } catch {}
+      }
 
       toast.success(t("requests.recipes.create.success"));
       onSubmit({
@@ -170,6 +196,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }
   }
 
+  
   const handleUpdateRecipe = async (newRecipe) => {
     try {
       await api.updateRecipe(newRecipe.id, {
@@ -345,8 +372,6 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }));
   };
 
-  console.log(recipe.ingredients)
-
   const handleRecipePieceOfEquipmentChange = (newRecipePieceOfEquipment) => {
     const newRecipeEquipment = [...recipe.equipment];
 
@@ -501,6 +526,10 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   useEffect(() => {
     fetchUnitOfMeasurements();
     fetchTags();
+
+    if (recipe?.descendantOfRecipeId) {
+      fetchDescendantRecipe();
+    }
   }, []);
 
   
@@ -520,8 +549,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       }
     }
   }, [formik.submitCount, formik.isValid, formik.errors, formik.isSubmitting]);
-
-
+  
   /* Rendering */
   return (
     <>
@@ -538,11 +566,11 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         aria-describedby="delete-recipe-dialog-description"
       >
         <DialogTitle sx={{ mt: 2 }} id="delete-recipe-dialog-title">
-          Delete Recipe
+          {t("dialogs.deleteRecipe.title")}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-recipe-dialog-description">
-            Are you sure you want to delete this recipe? Once deleted it cannot be recovered.
+            {t("dialogs.deleteRecipe.description")}            
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -603,7 +631,30 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         </DialogActions>
       </Dialog>
 
-      {!recipe.personal && (
+      {(mode === FormModes.Create && !isUndefined(descendantRecipe)) && (
+        <Box sx={{ mt: 2 }}> 
+          <Typography sx={{ fontSize: 12, fontWeight: 'bold', mb: 1 }}>{`${t('forms.recipe.copiedFrom')}:`}</Typography>
+
+          <Stack display="flex" direction="row" alignItems="center" gap={1}>
+            <Box className={styles.imagesContainer}>
+              <RecipeImage src={descendantRecipe?.images && descendantRecipe.images.length > 0 ? descendantRecipe.images[0].url : undefined} />
+            </Box>
+
+            <Typography sx={{ fontWeight: 'bold' }}>{descendantRecipe.name}</Typography>
+          </Stack>
+
+          <FormControlLabel
+            control={<Checkbox
+              value={recipe.isVariant}
+              onChange={handleChange}  
+            />}            
+            name="isVariant"
+            label={`${t('forms.recipe.inputs.isVariant.label')} ${descendantRecipe.name}`}
+          />
+        </Box>
+      )}
+      
+      {(!recipe.personal && mode === FormModes.Update) && (
         <Box sx={{ mb: 2 }}>
           <Typography variant="body1" sx={{ color: 'var(--primary-colour)', fontWeight: 'bold' }}>{recipe.state}</Typography>
         </Box>
@@ -671,7 +722,6 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
         <input type="file" onChange={handleUploadImage} />
       </Box>
-
 
       <Box sx={{ mb: 2 }}>
         <form onSubmit={handleSubmit}>          
@@ -824,7 +874,10 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
             <Box sx={{ mt: 2 }}>              
               <FormControlLabel
-                control={<Checkbox />}
+                control={<Checkbox
+                  value={recipe.containsAlcohol}
+                  onChange={handleChange}  
+                />}   
                 name="containsAlcohol"
                 label={t("types.recipe.fields.containsAlcohol.name")}
               />

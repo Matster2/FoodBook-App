@@ -1,0 +1,23 @@
+.image {
+  border-radius: 10px !important;
+  max-width: 100%;
+  height: auto;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+
+.noImages {
+  height: 100%;
+  background-color: rgb(228, 228, 228);
+  border-radius: 6px !important;
+}
+
+.noImagesIcon {
+  width: 20px !important;
+  color: rgb(179, 179, 179) !important;
+}

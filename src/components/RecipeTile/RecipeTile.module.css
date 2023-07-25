@@ -53,14 +53,3 @@
   margin-top: 12px;
   margin-right: 12px;
 }
-
-.noImages {
-  height: 100%;
-  background-color: rgb(228, 228, 228);
-  border-radius: 6px !important;
-}
-
-.noImagesIcon {
-  width: 20px !important;
-  color: rgb(179, 179, 179) !important;
-}

@@ -80,8 +80,8 @@ export default () => {
       <Box sx={{ pb: 4 }}>
         <AuthenticationModal id="authentication-modal" />
   
-        <Outlet />
-  
+        <Outlet style={{ marginBottom: 40 }} />
+
         <BottomNavigation showLabels className={styles.bottomNav} sx={{ position: 'fixed', bottom: 0, zIndex: 999 }} elevation={3}>
           <BottomNavigationAction
             className={classnames(styles.navOption, isHomeActive() ? styles.navOptionSelected : '')}

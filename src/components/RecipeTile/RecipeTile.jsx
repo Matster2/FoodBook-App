@@ -1,5 +1,6 @@
-import { AccessTime as AccessTimeIcon, RestaurantMenu as RecipeIcon, Star as StarIcon } from '@mui/icons-material';
+import { AccessTime as AccessTimeIcon, Star as StarIcon } from '@mui/icons-material';
 import { Box, Card, Grid, Stack, Typography } from '@mui/material';
+import RecipeImage from 'components/RecipeImage';
 import RecipeTileAttachment from 'components/RecipeTileAttachment';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
@@ -30,16 +31,14 @@ const RecipeTile = ({ recipe, onClick }) => {
           <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper}>
             {recipe.images.map((image) => (
               <SwiperSlide className={styles.imageContainer}>
-                <img className={styles.image} src={image.url} alt="recipe" />
+                <RecipeImage src={image.url} alt="recipe" />
               </SwiperSlide>
             ))}
           </Swiper>
         )}
 
         {recipe.images.length === 0 && (
-          <Box className={styles.noImages} display="flex" justifyContent="center" alignItems="center">
-            <RecipeIcon className={styles.noImagesIcon} />
-          </Box>
+          <RecipeImage />
         )}
       </Box>
 
