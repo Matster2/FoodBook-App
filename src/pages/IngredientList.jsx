@@ -11,14 +11,14 @@ import useFilters from 'hooks/useFilters';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { areDatesTheSameDay, getDayName, getMonthName } from 'utils/utils';
+import { lowercaseFirstLetter } from 'utils/stringUtils';
+import { areDatesTheSameDay, getDayName, getMonthName, isUndefined, toISOLocal } from 'utils/utils';
 
 import { CalendarMonth as CalendarIcon, RestaurantMenu as RecipesIcon, Done as TickIcon } from '@mui/icons-material';
 import { ReactComponent as IngredientBreakdownIcon } from 'assets/icons/ingredient-breakdown.svg';
 import { ReactComponent as IngredientOverviewIcon } from 'assets/icons/ingredient-overview.svg';
 import IngredientListDateDialog from 'dialogs/IngredientListDateDialog';
 import { RecipeTypes } from 'types';
-import { isUndefined, toISOLocal } from 'utils/utils';
 import styles from './IngredientList.module.css';
 
 const formatDate = (date) => {
@@ -82,7 +82,7 @@ const PlannedRecipesView = ({ plannedRecipes, excludedPlannedRecipeIds, handlePl
 
             return (
               <Box sx={{ mb: 2 }}>
-                <Typography variant='h6'>{t(`types.recipe.types.${recipeType}.displayName`)}</Typography>
+                <Typography variant='h6'>{t(`types.recipe.types.${lowercaseFirstLetter(recipeType)}.displayName`)}</Typography>
 
                 <Stack direction="column" gap={1}>
                   {recipes.map((plannedRecipe) => (

@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
+import { getFormattedTimeString } from 'utils/utils';
 import styles from './RecipeTile.module.css';
 
 const RecipeTile = ({ recipe, onClick }) => {
@@ -53,7 +54,7 @@ const RecipeTile = ({ recipe, onClick }) => {
           <Grid item>
             <Stack direction="row" alignItems="center" gap={0.4}>
               <AccessTimeIcon className={styles.icon} />
-              <Typography>{recipe.totalTime} {t('common.time.mins')}</Typography>
+              <Typography>{getFormattedTimeString(recipe.totalTime)}</Typography>
             </Stack>
           </Grid>
           {/* <Grid item>

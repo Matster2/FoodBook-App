@@ -46,7 +46,7 @@ import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
 import { ReactComponent as PlannerIcon } from 'assets/icons/planner.svg';
 import { ReactComponent as PrepIcon } from 'assets/icons/prep.svg';
 import { capitalizeFirstLetter, truncateText } from 'utils/stringUtils';
-import { isNull, isUndefined } from 'utils/utils';
+import { getFormattedTimeString, isNull, isUndefined } from 'utils/utils';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
@@ -377,23 +377,6 @@ export default () => {
     );
   };
 
-  const renderTime = (totalMinutes) => {
-    const hours = Math.floor(totalMinutes / 60);
-    const mins = totalMinutes % 60;
-
-    const parts = []
-
-    if (hours > 0) {
-      parts.push(`${hours} h`)
-    }
-
-    if (mins > 0) {
-      parts.push(mins > 1 ? `${mins} ${t('common.time.mins')}` : `${mins} ${t('common.time.min')}`)
-    }
-
-    return parts.join(" ");
-  }
-
   const renderRecipeTile = (recipe) => (
     <Box
       sx={{
@@ -537,7 +520,7 @@ export default () => {
             <Grid item>
               <Stack direction="row" alignItems="center" gap={0.4}>
                 <AccessTimeIcon className={styles.icon} />
-                <Typography sx={{ fontSize: 15 }}>{renderTime(recipe.totalTime)}</Typography>
+                <Typography sx={{ fontSize: 15 }}>{getFormattedTimeString(recipe.totalTime)}</Typography>
               </Stack>
             </Grid>
             <Grid
@@ -586,13 +569,13 @@ export default () => {
             )}
 
             <Stack direction="row" display="flex" sx={{ marginLeft: 'auto' }} alignItems="center" gap={1}>
-              {(recipe.personal || recipe.State !== RecipeStates.Draft) && (
+              {authenticated && (recipe.personal || recipe.State !== RecipeStates.Draft) && (
                 <IconButton sx={{ marginLeft: 'auto' }} className={classnames(styles.optionButton, styles.personalOptionButton)} onClick={handleCopyClick}>
                   <CopyIcon className={styles.optionIcon} />
                 </IconButton>
               )}
 
-              {(recipe.personal || role === 'Administrator') && (
+              {authenticated && (recipe.personal || role === 'Administrator') && (
                 <IconButton sx={{ marginLeft: 'auto' }} className={classnames(styles.optionButton, recipe.personal && styles.personalOptionButton)} onClick={handleEditClick}>
                   <EditIcon className={styles.optionIcon} />
                 </IconButton>
@@ -629,14 +612,14 @@ export default () => {
               <Box display="flex" alignItems="center" justifyContent="center">
                 <PrepIcon className={styles.cookTimeIcon} />
                 <Typography display="inline" className={styles.cookTimeHeading}>{t('pages.recipe.prepTime')}</Typography>
-                <Typography display="inline" className={styles.cookTimeValue}>{renderTime(recipe.prepTime)}</Typography>
+                <Typography display="inline" className={styles.cookTimeValue}>{getFormattedTimeString(recipe.prepTime)}</Typography>
               </Box>
             )}
             {recipe.cookTime > 0 && (
               <Box display="flex" alignItems="center" justifyContent="center">
                 <CookIcon className={styles.cookTimeIcon} />
                 <Typography display="inline" className={styles.cookTimeHeading}>{t('pages.recipe.cookingTime')}</Typography>
-                <Typography display="inline" className={styles.cookTimeValue}>{renderTime(recipe.cookTime)}</Typography>
+                <Typography display="inline" className={styles.cookTimeValue}>{getFormattedTimeString(recipe.cookTime)}</Typography>
               </Box>
             )}
           </Stack>

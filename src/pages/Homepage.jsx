@@ -204,12 +204,13 @@ export default () => {
 
         {categories.length > 0 && (
           <Section
+            sx={{ mb: 0.5 }}
             title={t('pages.home.sections.categories')}
             //showSeeAllLink={categories.length < totalCategories}
             loading={loadingTags}
           >
             {categories.map((category) => (
-              <CategoryChip key={category.id} category={category} onClick={handleCategoryClick} />
+              <CategoryChip key={category.id} sx={{ mb: 1.5 }} category={category} onClick={handleCategoryClick} />
             ))}
           </Section>
         )}

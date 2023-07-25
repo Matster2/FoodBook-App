@@ -447,7 +447,8 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     setRecipe((state) => ({
       ...state,
       images: [
-        ...recipe.images, newImage       
+        ...recipe.images, 
+        newImage       
       ],
     }));
     setFilesToUpload((state) => [...state, {

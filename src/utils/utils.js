@@ -98,3 +98,22 @@ export const reorder = (list, startIndex, endIndex) => {
 
   return result;
 };
+
+export const getFormattedTimeString = (totalMinutes) => {
+  const t = i18n.t;
+
+  const hours = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+
+  const parts = []
+
+  if (hours > 0) {
+    parts.push(`${hours} h`)
+  }
+
+  if (mins > 0) {
+    parts.push(mins > 1 ? `${mins} ${t('common.time.mins')}` : `${mins} ${t('common.time.min')}`)
+  }
+
+  return parts.join(" ");
+}

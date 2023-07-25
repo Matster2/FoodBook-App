@@ -96,11 +96,19 @@ export default createBrowserRouter([
       },
       {
         path: '/recipes/:id/edit',
-        element: <PersonalRecipe />
+        element: (
+          <AuthRoute>
+            <PersonalRecipe />
+          </AuthRoute>
+        ),
       },
       {
         path: '/recipes/create',
-        element: <PersonalRecipe />
+        element: (
+          <AuthRoute>
+            <PersonalRecipe />
+          </AuthRoute>
+        ),
       },
       {
         path: '/planner',

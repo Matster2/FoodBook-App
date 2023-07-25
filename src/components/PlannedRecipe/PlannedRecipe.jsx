@@ -8,6 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import { capitalizeFirstLetter } from 'utils/stringUtils';
+import { getFormattedTimeString } from 'utils/utils';
 import styles from './PlannedRecipe.module.css';
 
 const defaultOptions = {
@@ -65,13 +66,13 @@ const PlannedRecipe = ({ plannedRecipe, onClick, onEditClick }) => {
             <Grid container justifyContent="space-between" sx={{ mb: 1 }} display="flex" alignItems="center">
               <Grid item xs={6}>
                 <Stack direction="row" alignItems="center" gap={0.4}>
-                  <Typography>{plannedRecipe.servings} {capitalizeFirstLetter(t('types.recipe.fields.servings'))}</Typography>
+                  <Typography>{plannedRecipe.servings} {capitalizeFirstLetter(t('types.recipe.fields.servings.name'))}</Typography>
                 </Stack>
               </Grid>
               <Grid item xs={6}>
                 <Stack direction="row" alignItems="center" gap={0.4}>
                   <AccessTimeIcon className={styles.icon} />
-                  <Typography>{plannedRecipe.recipe.totalTime} {t('common.time.mins')}</Typography>
+                  <Typography>{getFormattedTimeString(plannedRecipe.recipe.totalTime)}</Typography>
                 </Stack>
               </Grid>
             </Grid>

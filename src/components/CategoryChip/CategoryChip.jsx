@@ -1,11 +1,11 @@
 import { Chip, Icon } from '@mui/material';
 import categoryIcons from 'config/categoryIcons';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { isNullOrEmpty } from 'utils/utils';
 import styles from './CategoryChip.module.css';
 
-const CategoryChip = ({ category, onClick }) => {
+const CategoryChip = ({ category, onClick, ...props }) => {
   const [icon, setIcon] = useState(categoryIcons.default);
 
   const handleClick = () => {
@@ -29,6 +29,7 @@ const CategoryChip = ({ category, onClick }) => {
         </Icon>
       }
       onClick={handleClick}
+      {...props}
     />
   );
 };

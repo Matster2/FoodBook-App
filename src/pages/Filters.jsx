@@ -18,7 +18,8 @@ import useTags from 'hooks/useTags';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { RecipeTypes } from 'types';
+import { RecipeDifficulty, RecipeTypes } from 'types';
+import { lowercaseFirstLetter } from 'utils/stringUtils';
 import { isUndefined } from 'utils/utils';
 
 const Filters = ({ filters: originalFilters, onApply, onClose }) => {
@@ -43,55 +44,17 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
   const [selectedTime, setSelectedTime] = useState();
 
   console.log(filters)
+  
+  const typeOptions = Object.entries(RecipeTypes).map(( [k, v] ) => ({
+    label: t(`types.recipe.types.${lowercaseFirstLetter(k)}.name`),
+    value: v
+  }));
 
-  const typeOptions = [
-    {
-      value: RecipeTypes.Breakfast,
-      label: t('types.recipe.types.breakfast.displayName')
-    },
-    {
-      value: RecipeTypes.Lunch,
-      label: t('types.recipe.types.lunch.displayName')
-    },
-    {
-      value: RecipeTypes.Dinner,
-      label: t('types.recipe.types.dinner.displayName')
-    },
-    {
-      value: RecipeTypes.Dessert,
-      label: t('types.recipe.types.dessert.displayName')
-    },
-    {
-      value: RecipeTypes.Snack,
-      label: t('types.recipe.types.snack.displayName')
-    },
-    {
-      value: RecipeTypes.Drink,
-      label: t('types.recipe.types.drink.displayName')
-    }
-  ];
-  const difficultyOptions = [
-    {
-      value: 'veryEasy',
-      label: t('types.recipe.difficulty.veryEasy')
-    },
-    {
-      value: 'easy',
-      label: t('types.recipe.difficulty.easy')
-    },
-    {
-      value: 'average',
-      label: t('types.recipe.difficulty.average')
-    },
-    {
-      value: 'hard',
-      label: t('types.recipe.difficulty.hard')
-    },
-    {
-      value: 'veryHard',
-      label: t('types.recipe.difficulty.veryHard')
-    }
-  ];
+  const difficultyOptions = Object.entries(RecipeDifficulty).map(( [k, v] ) => ({
+    label: t(`types.recipe.difficulty.${lowercaseFirstLetter(k)}`),
+    value: v
+  }));
+
   const timeOptions = [
     {
       label: t('types.recipe.times.fast'),
@@ -191,7 +154,7 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
   }, [ingredientSearch]);
 
   return (
-    <Container component="main" maxWidth="lg">
+    <Container component="main" maxWidth="lg" sx={{ mb: 10 }}>
       <Header title={t('components.recipeFilters.title')} onBackClick={onClose} />
 
       <Box sx={{ mb: 3 }}>
