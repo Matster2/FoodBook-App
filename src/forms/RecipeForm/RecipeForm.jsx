@@ -34,7 +34,7 @@ import useSearch from 'hooks/useSearch';
 import useTags from 'hooks/useTags';
 import useUnitOfMeasurements from 'hooks/useUnitOfMeasurements';
 import isObject from "lodash/isObject";
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { isMobile } from 'react-device-detect';
 import toast from 'react-hot-toast';
@@ -105,17 +105,17 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     value: v
   }));
   
-  const [ingredientSearch, setIngredientSearch, ingredientSearchResults] = useSearch(async () => {
+  const [ingredientSearch, setIngredientSearch, ingredientSearchResults, searchingIngredients] = useSearch(async () => {
     const { data: { results } } = await api.getIngredients({ search: ingredientSearch, pageSize: 50, sortBy: 'name' });
     return results;
   }, { delay: 2000 })
 
-  const [equipmentSearch, setEquipmentSearch, equipmentSearchResults] = useSearch(async () => {
+  const [equipmentSearch, setEquipmentSearch, equipmentSearchResults, searchingEquipment] = useSearch(async () => {
     const { data: { results } } = await api.getEquipment({ search: equipmentSearch, pageSize: 50, sortBy: 'name' });
     return results;
   }, { delay: 2000 })
 
-  const [authorSearch, setAuthorSearch, authorSearchResults] = useSearch(async () => {
+  const [authorSearch, setAuthorSearch, authorSearchResults, searchingAuthors] = useSearch(async () => {
     if (!admin) {
       return [];
     }
@@ -550,6 +550,44 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }
   }, [formik.submitCount, formik.isValid, formik.errors, formik.isSubmitting]);
   
+  const ImageList = useMemo(() => (
+    <List sx={{ overflow: "auto" }}>
+      <DragDropContext onDragEnd={handleImageDragEnd}>
+        <Droppable droppableId="droppable" direction="horizontal">
+          {(provided, snapshot) => (
+            <Stack direction="row" gap={2} alignItems="center"
+              ref={provided.innerRef}
+              style={{ maxWidth: 'fit-content' }}
+              {...provided.droppableProps}
+            >
+              {recipe.images.map((image, index) => (
+                <Draggable key={image.id} draggableId={image.id} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      style={{ maxWidth: 'fit-content' }}
+                      ref={provided.innerRef}
+                      onClick={handleImageClick}
+                    >
+                      <RecipeImageControl
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        src={image.url}
+                        alwaysShowDelete={isMobile}
+                        onClick={() => handleImageClick(image)}
+                        onDeleteClick={() => handleImageDeleteClick(image)}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </Stack>
+          )}
+        </Droppable>
+      </DragDropContext> 
+    </List>
+  ), [recipe.images, filesToUpload])
+
   /* Rendering */
   return (
     <>
@@ -683,43 +721,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
       <Box>
         <Typography variant="body2">{recipe.images.length} {recipe.images.length === 1 ? t("common.words.image") : t("common.words.images")}</Typography>
-
-        <List sx={{ overflow: "auto" }}>
-          <DragDropContext onDragEnd={handleImageDragEnd}>
-            <Droppable droppableId="droppable" direction="horizontal">
-              {(provided, snapshot) => (
-                <Stack direction="row" gap={2} alignItems="center"
-                  ref={provided.innerRef}
-                  style={{ maxWidth: 'fit-content' }}
-                  {...provided.droppableProps}
-                >
-                  {recipe.images.map((image, index) => (
-                    <Draggable key={image.id} draggableId={image.id} index={index}>
-                      {(provided, snapshot) => (
-                        <div
-                          style={{ maxWidth: 'fit-content' }}
-                          ref={provided.innerRef}
-                          onClick={handleImageClick}
-                        >
-                          <RecipeImageControl
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            src={image.url}
-                            alwaysShowDelete={isMobile}
-                            onClick={() => handleImageClick(image)}
-                            onDeleteClick={() => handleImageDeleteClick(image)}
-                          />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </Stack>
-              )}
-            </Droppable>
-          </DragDropContext> 
-        </List>
-
+        {ImageList}
         <input type="file" onChange={handleUploadImage} />
       </Box>
 
@@ -900,6 +902,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
                 {isNullOrUndefined(recipe.author) && (
                   <Autocomplete
+                    loading={searchingAuthors}
                     options={authorSearchResults.map((author) => ({ label: author.name, author }))}
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     renderInput={(params) => <TextField {...params} label={t("types.author.name")} />}
@@ -935,6 +938,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               </Box>
 
               <Autocomplete
+                loading={searchingIngredients}
                 sx={{ mt: 3 }}
                 options={ingredientSearchResults
                   .filter(
@@ -976,6 +980,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               </Box>
 
               <Autocomplete
+                loading={searchingEquipment}
                 sx={{ mt: 3 }}
                 options={equipmentSearchResults
                   .filter(
