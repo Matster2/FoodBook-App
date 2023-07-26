@@ -26,7 +26,6 @@ import RecipeIngredient from 'Admin/components/RecipeIngredient';
 import RecipePieceOfEquipment from 'Admin/components/RecipePieceOfEquipment';
 import RecipeStep from 'Admin/components/RecipeStep';
 import FilterOption from 'components/FilterOption';
-import RecipeImage from 'components/RecipeImage';
 import RecipeImageControl from 'components/RecipeImageControl';
 import RecipeImageViewerDialog from 'dialogs/RecipeImageViewerDialog';
 import { useFormik } from 'formik';
@@ -636,9 +635,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         <Box sx={{ mt: 2 }}> 
           <Typography sx={{ fontSize: 12, fontWeight: 'bold', mb: 1 }}>{`${t('forms.recipe.copiedFrom')}:`}</Typography>
 
-          <Stack display="flex" direction="row" alignItems="center" gap={1}>
-            <Box className={styles.imagesContainer}>
-              <RecipeImage src={descendantRecipe?.images && descendantRecipe.images.length > 0 ? descendantRecipe.images[0].url : undefined} />
+          <Stack display="flex" direction="row" alignItems="center" gap={2}>
+            <Box className={styles.imageContainer}>
+              <img className={styles.image} src={descendantRecipe?.images && descendantRecipe.images.length > 0 ? descendantRecipe.images[0].url : undefined} />
             </Box>
 
             <Typography sx={{ fontWeight: 'bold' }}>{descendantRecipe.name}</Typography>
@@ -742,7 +741,6 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
             />
             
             <TextField
-              required
               fullWidth
               margin="normal"
               id="description"

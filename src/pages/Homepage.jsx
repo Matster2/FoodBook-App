@@ -17,7 +17,6 @@ import Section from 'components/Section';
 import { UserContext } from 'contexts/UserContext';
 import useInput from 'hooks/useInput';
 import usePagedFetch from 'hooks/usePagedFetch';
-import useTags from 'hooks/useTags';
 import React, { useContext, useMemo, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
@@ -40,14 +39,13 @@ export default () => {
   const navigate = useNavigate();
   const { authenticated } = useAuth();
 
-  const { loading: loadingTags, tags, fetch: fetchTags } = useTags();
   const { user } = useContext(UserContext);
 
   const { value: search, onChange: onSearchChange } = useInput('');
   const [filters] = useState({});
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  const { results: categories, totalResults: totalCategories } = usePagedFetch(
+  const { results: categories, loading: loadingCategories, refetch: fetchTags } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/tags?random=true&pageSize=10`
   );
 
@@ -207,7 +205,7 @@ export default () => {
             sx={{ mb: 0.5 }}
             title={t('pages.home.sections.categories')}
             //showSeeAllLink={categories.length < totalCategories}
-            loading={loadingTags}
+            loading={loadingCategories}
           >
             {categories.map((category) => (
               <CategoryChip key={category.id} sx={{ mb: 1.5 }} category={category} onClick={handleCategoryClick} />

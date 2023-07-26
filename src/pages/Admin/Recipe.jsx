@@ -9,6 +9,7 @@ import useAPI from 'hooks/useAPI';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { RecipeStates } from 'types';
 
 export default () => {
   const { t } = useTranslation();
@@ -21,13 +22,31 @@ export default () => {
   const [loadingRecipe, setLoadingRecipe] = useState(false);
   const [recipe, setRecipe] = useState();
 
-  const fetchRecipe = async (recipeId) => {
+  const fetchRecipe = async () => {
     setLoadingRecipe(true);
     try {
-      const { data } = await api.getRecipe(recipeId);
+      const { data } = await api.getRecipe(id);
       setRecipe({
         ...location?.state,
         ...data
+      });
+    } catch (e) {
+      console.log('error fetching recipe');
+    }
+    setLoadingRecipe(false);
+  };
+
+  const fetchFromDescendantRecipe = async () => {
+    setLoadingRecipe(true);
+    try {
+      const { data } = await api.getRecipe(location?.state?.descendantOfRecipeId);
+      setRecipe({
+        ...location?.state,
+        ...data,
+        state: RecipeStates.Draft,
+        images: [],
+        id: undefined,
+        descendantOfRecipeId: location?.state?.descendantOfRecipeId
       });
     } catch (e) {
       console.log('error fetching recipe');
@@ -43,9 +62,9 @@ export default () => {
   /* Effects */
   useEffect(() => {
     if (id) {
-      fetchRecipe(id);
+      fetchRecipe();
     } else if (location?.state?.descendantOfRecipeId) {
-      fetchRecipe(location?.state?.descendantOfRecipeId);
+      fetchFromDescendantRecipe();
     }
   }, []);
 

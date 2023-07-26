@@ -514,16 +514,22 @@
   "types": {
     "log": {
       "fields": {
-        "message": "повідомлення"
+        "message": {
+          "name": "повідомлення"
+        }
       }
     },
     "supportTicket": {
       "fields": {
-        "from": "Від",
-        "message": "повідомлення",
-        "actions": {
-          "resolve": "Розв'язати"
+        "from": {
+          "name": "Від"
+        },
+        "message": {
+          "name": "повідомлення"
         }
+      },
+      "actions": {
+        "resolve": "Розв'язати"
       }
     },
     "tag": {
@@ -761,7 +767,7 @@
         "may": "Може",
         "june": "червень",
         "july": "липень",
-        "august": "Серпень",
+        "august": "серпень",
         "september": "Вересень",
         "october": "жовтень",
         "november": "Листопад",

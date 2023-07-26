@@ -514,16 +514,22 @@
   "types": {
     "log": {
       "fields": {
-        "message": "İleti"
+        "message": {
+          "name": "İleti"
+        }
       }
     },
     "supportTicket": {
       "fields": {
-        "from": "İtibaren",
-        "message": "İleti",
-        "actions": {
-          "resolve": "çözmek"
+        "from": {
+          "name": "İtibaren"
+        },
+        "message": {
+          "name": "İleti"
         }
+      },
+      "actions": {
+        "resolve": "çözmek"
       }
     },
     "tag": {

@@ -12,6 +12,7 @@ import {
   Typography
 } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
+import RecipeImage from 'components/RecipeImage';
 import useAPI from 'hooks/useAPI';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -40,7 +41,9 @@ interface PlannedRecipe {
 
   recipe: {
     name: string;
-    images: string[];
+    images: {
+      url: string
+    }[];
   }
 }
 
@@ -146,14 +149,20 @@ const PlannedRecipeDialog = ({ open, onClose, onComplete, transitionComponent, p
           <Typography variant="h5" sx={{ mb: 2 }} className={styles.date}>{getDateString()}</Typography>
 
           <Grid container gap={2}>
-            <Grid item xs={3} justifyContent="center">
-              <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper}>
-                {plannedRecipe.recipe.images.length > 0 && (
-                  <SwiperSlide className={styles.imageContainer}>
-                    <img className={styles.image} src={plannedRecipe.recipe.images[0]} alt="recipe" />
-                  </SwiperSlide>
-                )}
-              </Swiper>
+            <Grid item xs={3} justifyContent="center" sx={{ minHeight: 50 }}>
+              {plannedRecipe.recipe.images.length > 0 && (
+                <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper}>
+                  {plannedRecipe.recipe.images.length > 0 && (
+                    <SwiperSlide className={styles.imageContainer}>
+                      <img className={styles.image} src={plannedRecipe.recipe.images[0].url} alt="recipe" />
+                    </SwiperSlide>
+                  )}
+                </Swiper>
+              )}              
+
+              {plannedRecipe.recipe.images.length === 0 && (
+                <RecipeImage className="" src={undefined} />
+              )}
             </Grid>
             <Grid item xs display="flex" alignItems="center">
               <Box display="flex" flexDirection="column" width="100%">

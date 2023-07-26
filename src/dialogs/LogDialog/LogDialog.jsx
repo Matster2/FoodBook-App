@@ -1,5 +1,4 @@
 import { Box, Dialog, Stack, Typography } from '@mui/material';
-import React from 'react';
 import { useTranslation } from "react-i18next";
 
 import useAPI from 'hooks/useAPI';
@@ -52,7 +51,7 @@ const LogDialog = ({ open, onClose, log, transitionComponent }) => {
         </Stack>
 
         <Box sx={{ mt: 2 }}>
-          <Typography variant='h6'>{t('types.log.fields.message')}</Typography>
+          <Typography variant='h6'>{t('types.log.fields.message.name')}</Typography>
           <Typography>{log.message}</Typography>
         </Box>
       </Box>

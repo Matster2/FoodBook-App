@@ -514,16 +514,22 @@
   "types": {
     "log": {
       "fields": {
-        "message": "Сообщение"
+        "message": {
+          "name": "Сообщение"
+        }
       }
     },
     "supportTicket": {
       "fields": {
-        "from": "От",
-        "message": "Сообщение",
-        "actions": {
-          "resolve": "Решать"
+        "from": {
+          "name": "От"
+        },
+        "message": {
+          "name": "Сообщение"
         }
+      },
+      "actions": {
+        "resolve": "Решать"
       }
     },
     "tag": {

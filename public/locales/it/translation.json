@@ -514,16 +514,22 @@
   "types": {
     "log": {
       "fields": {
-        "message": "Messaggio"
+        "message": {
+          "name": "Messaggio"
+        }
       }
     },
     "supportTicket": {
       "fields": {
-        "from": "Da",
-        "message": "Messaggio",
-        "actions": {
-          "resolve": "Risolvere"
+        "from": {
+          "name": "Da"
+        },
+        "message": {
+          "name": "Messaggio"
         }
+      },
+      "actions": {
+        "resolve": "Risolvere"
       }
     },
     "tag": {

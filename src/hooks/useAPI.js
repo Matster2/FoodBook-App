@@ -220,7 +220,6 @@ const useAPI = () => {
   const getTags = async (parameters = {}) => {
     const url = new URL(`${process.env.REACT_APP_API_URL}/tags`);
     url.search = getSearchParams(parameters);
-
     return axios.get(url.href, {
       headers: {
         Authorization: `Bearer ${tokens.accessToken}`,

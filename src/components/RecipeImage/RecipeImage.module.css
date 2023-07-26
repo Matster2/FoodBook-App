@@ -10,6 +10,11 @@
   bottom: 0;
 }
 
+.imageContainer {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
 
 .noImages {
   height: 100%;

@@ -42,8 +42,6 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
 
   const [ingredientSearch, setIngredientSearch] = useState('');
   const [selectedTime, setSelectedTime] = useState();
-
-  console.log(filters)
   
   const typeOptions = Object.entries(RecipeTypes).map(( [k, v] ) => ({
     label: t(`types.recipe.types.${lowercaseFirstLetter(k)}.name`),

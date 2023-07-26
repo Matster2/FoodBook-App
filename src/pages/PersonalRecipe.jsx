@@ -9,6 +9,7 @@ import useAPI from 'hooks/useAPI';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { RecipeStates } from 'types';
 
 export default () => {
   const { t } = useTranslation();
@@ -45,9 +46,22 @@ export default () => {
         ...location?.state,
         ...data,
         personal: true,
-        id: undefined
+        state: RecipeStates.Draft,
+        images: [],
+        id: undefined,
+        descendantOfRecipeId: location?.state?.descendantOfRecipeId
       });
+      console.log({
+        ...location?.state,
+        ...data,
+        personal: true,
+        state: RecipeStates.Draft,
+        images: [],
+        id: undefined,
+        descendantOfRecipeId: location?.state?.descendantOfRecipeId
+      })
     } catch (e) {
+      console.log(e)
       console.log('error fetching recipe');
     }
     setLoadingRecipe(false);

@@ -1,5 +1,5 @@
 import { Box, Button, Chip, CircularProgress, Dialog, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 
@@ -98,10 +98,10 @@ const SupportTicketDialog = ({ open, onClose, id, transitionComponent }) => {
               <Chip label={supportTicket.status} />
             </Stack>
 
-            <Typography sx={{ mt: 2 }}><b>{t('types.supportTicket.from')}:</b> {supportTicket.email}</Typography>
+            <Typography sx={{ mt: 2 }}><b>{t('types.supportTicket.fields.from.name')}:</b> {supportTicket.email}</Typography>
 
             <Box sx={{ mt: 2 }}>
-              <Typography variant='h6'>{t('types.supportTicket.message')}</Typography>
+              <Typography variant='h6'>{t('types.supportTicket.fields.message.name')}</Typography>
               <Typography>{supportTicket.message}</Typography>
             </Box>
 

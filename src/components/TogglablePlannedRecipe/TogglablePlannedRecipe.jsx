@@ -9,12 +9,16 @@ import 'swiper/swiper.min.css';
 import { capitalizeFirstLetter } from 'utils/stringUtils';
 import styles from './TogglablePlannedRecipe.module.css';
 
-const TogglablePlannedRecipe = ({ plannedRecipe, onChange, enabled }) => {
+const TogglablePlannedRecipe = ({ plannedRecipe, onChange, onClick, enabled }) => {
   const { t } = useTranslation();
 
   const handleChange = (event) => {
     onChange(event.target.checked);
   };
+
+  const handleClick = () => {
+    onClick();
+  }
 
   return (
     <Card sx={{ p: 1, pr: 2 }} className={styles.card}>
@@ -37,7 +41,7 @@ const TogglablePlannedRecipe = ({ plannedRecipe, onChange, enabled }) => {
           )}
 
           {plannedRecipe.recipe.images.length === 0 && (
-            <RecipeImage />
+            <RecipeImage src={undefined}  />
           )}
         </Grid>
         <Grid item xs display="flex" alignItems="center">
@@ -85,6 +89,7 @@ TogglablePlannedRecipe.propTypes = {
 
 TogglablePlannedRecipe.defaultProps = {
   onChange: () => { },
+  onClick: () => { }
 };
 
 export default TogglablePlannedRecipe;

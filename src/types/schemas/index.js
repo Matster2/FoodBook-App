@@ -4,7 +4,7 @@ import * as yup from 'yup';
 export const getRecipeScheme = () => {
   return yup.object({
     name: yup.string().required(t('types.recipe.fields.name.validation.required')),
-    description: yup.string().required(t('types.recipe.fields.description.validation.required')),
+    description: yup.string(),
     type: yup.string().required(t('types.recipe.fields.type.validation.required')),
     difficulty: yup.string().required(t('types.recipe.fields.difficulty.validation.required')),
     prepTime: yup.number().integer().required(t('types.recipe.fields.prepTime.validation.required')),

@@ -1,15 +1,15 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
-import { Toaster } from 'react-hot-toast';
-import { RouterProvider } from 'react-router-dom';
-
 import { AppContext } from 'contexts/AppContext';
 import { LanguageContext } from 'contexts/LanguageContext';
 import { UserContext } from 'contexts/UserContext';
 import useAPI from 'hooks/useAPI';
 import useAuth from 'hooks/useAuth';
+import useTags from 'hooks/useTags';
+import { useContext, useEffect, useState } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { RouterProvider } from 'react-router-dom';
 
 import OfflinePage from 'pages/Offline';
 
@@ -24,8 +24,7 @@ const App = () => {
   const { setSupportedLanguages } = useContext(LanguageContext);
   const { initialized, setInitialized } = useContext(AppContext);
   const { setUser } = useContext(UserContext);
-
-  
+  const { fetch: fetchTags  } = useTags();
 
   let isRefreshing = false;
   let failedQueue = [];
@@ -102,6 +101,7 @@ const App = () => {
 
   useEffect(() => {
     fetchSupportedLanguages();
+    fetchTags();
     setInitialized(true);
   }, []);
 
