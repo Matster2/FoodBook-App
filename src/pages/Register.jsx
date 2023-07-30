@@ -242,8 +242,8 @@ const Register = ({ onSignInClick, onComplete }) => {
 };
 
 Register.propTypes = {
-  onSignInClick: PropTypes.func.isRequired,
-  onComplete: PropTypes.func.isRequired,
+  onSignInClick: PropTypes.func,
+  onComplete: PropTypes.func,
 };
 
 export default Register;

@@ -10,6 +10,7 @@
     "@hookform/resolvers": "^3.0.0",
     "@meinefinsternis/react-horizontal-date-picker": "^1.0.1",
     "@mui/icons-material": "^5.11.11",
+    "@mui/lab": "^5.0.0-alpha.137",
     "@mui/material": "^5.11.12",
     "@mui/styled-engine-sc": "^5.11.11",
     "@mui/x-date-pickers": "^6.9.2",

@@ -145,8 +145,12 @@ const ForgottenPassword = ({ onSignInClick, onComplete }) => {
 };
 
 ForgottenPassword.propTypes = {
-  onSignInClick: PropTypes.func.isRequired,
-  onComplete: PropTypes.func.isRequired,
+  onSignInClick: PropTypes.func,
+  onComplete: PropTypes.func,
+};
+
+ForgottenPassword.defaultProps = {
+  onComplete: () => {}
 };
 
 export default ForgottenPassword;

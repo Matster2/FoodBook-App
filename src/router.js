@@ -40,6 +40,11 @@ import TermsOfService from 'pages/TermsOfService';
 
 import MainLayout from 'layouts/MainLayout';
 
+const ErrorBoundary = () => {
+  // let error = useRouteError();
+  return <NotFound />;
+} 
+
 const Recipe = () => {
   const { id } = useParams();
 
@@ -49,6 +54,7 @@ const Recipe = () => {
 export default createBrowserRouter([
   {
     element: <MainLayout />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: '/',
@@ -266,6 +272,7 @@ export default createBrowserRouter([
   },
   {
     element: <MainLayout />, // Change when hidable
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: '/sign-in',
@@ -310,6 +317,7 @@ export default createBrowserRouter([
     ],
   },
   {
+    errorElement: <ErrorBoundary />,
     children: [
       {
         path: '*',

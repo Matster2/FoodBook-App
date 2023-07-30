@@ -17,6 +17,7 @@ import router from 'router';
 
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 
+
 const App = () => {
   const { authenticated, refreshTokens } = useAuth();
   const api = useAPI();

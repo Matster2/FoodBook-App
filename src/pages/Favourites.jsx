@@ -1,4 +1,5 @@
 import NiceModal from '@ebay/nice-modal-react';
+import { Masonry } from '@mui/lab';
 import {
   Box,
   Button,
@@ -157,7 +158,7 @@ export default () => {
               }}
             />
           </Grid>
-          <Grid xs="auto">
+          <Grid item  xs="auto">
             <FilterButton onClick={handleAdvancedFiltersClick} />
           </Grid>
         </Grid>
@@ -176,26 +177,11 @@ export default () => {
           </Box>
         )}
 
-        <Grid container spacing={1}>
-          <Grid item xs={6}>
-            {recipes
-              .filter((_, index) => !(index % 2))
-              .map((recipe) => (
-                <Box sx={{ mb: 1 }}>
-                  <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-                </Box>
-              ))}
-          </Grid>
-          <Grid item xs={6}>
-            {recipes
-              .filter((_, index) => index % 2)
-              .map((recipe) => (
-                <Box sx={{ mb: 1 }}>
-                  <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-                </Box>
-              ))}
-          </Grid>
-        </Grid>
+        <Masonry columns={{ xs: 2, sm: 4, md: 6 }} spacing={1}>
+          {recipes.map((recipe, index) => (
+            <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+          ))}
+        </Masonry>
       </PullToRefresh>
     </Container>
   );

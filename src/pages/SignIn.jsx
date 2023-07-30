@@ -204,9 +204,13 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
 };
 
 SignIn.propTypes = {
-  onSignUpClick: PropTypes.func.isRequired,
-  onForgottenPasswordClick: PropTypes.func.isRequired,
-  onComplete: PropTypes.func.isRequired,
+  onSignUpClick: PropTypes.func,
+  onForgottenPasswordClick: PropTypes.func,
+  onComplete: PropTypes.func,
+};
+
+SignIn.defaultProps = {
+  onComplete: () => {}
 };
 
 export default SignIn;

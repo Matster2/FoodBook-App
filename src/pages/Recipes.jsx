@@ -1,3 +1,4 @@
+import { Masonry } from '@mui/lab';
 import { Box, CircularProgress, Container, Dialog, Grid, InputAdornment, Slide, TextField, Typography } from '@mui/material';
 import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
 import FilterButton from 'components/FilterButton';
@@ -128,7 +129,7 @@ export default () => {
               onBlur={handleApplySearch}
             />
           </Grid>
-          <Grid xs="auto">
+          <Grid item xs="auto">
             <FilterButton onClick={handleAdvancedFiltersClick} />
           </Grid>
         </Grid>
@@ -136,7 +137,7 @@ export default () => {
 
       <PullToRefresh onRefresh={handleRefresh}>
         {!loadingRecipes && recipes.length === 0 && (
-          <Box textAlign="center" sx={{ marginTop: '20%' }}>
+          <Box textAlign="center" sx={{ mt: 20, mb: 1 }}>
             <Typography>{t('pages.recipes.noRecipes')}</Typography>
           </Box>
         )}
@@ -147,26 +148,11 @@ export default () => {
           </Box>
         )}
 
-        <Grid container spacing={1}>
-          <Grid item xs={6}>
-            {recipes
-              .filter((_, index) => !(index % 2))
-              .map((recipe) => (
-                <Box sx={{ mb: 1 }}>
-                  <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-                </Box>
-              ))}
-          </Grid>
-          <Grid item xs={6}>
-            {recipes
-              .filter((_, index) => index % 2)
-              .map((recipe) => (
-                <Box sx={{ mb: 1 }}>
-                  <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-                </Box>
-              ))}
-          </Grid>
-        </Grid>
+        <Masonry columns={{ xs: 2, sm: 4, md: 6 }} spacing={1}>
+          {recipes.map((recipe, index) => (
+            <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+          ))}
+        </Masonry>
       </PullToRefresh>
     </Container>
   );

@@ -509,6 +509,7 @@ export default () => {
 
       <BottomSheet
         open
+        skipInitialTransition
         scrollLocking={recipe.images.length === 0}
         enabledGestureInteraction={recipe.images.length === 0}
         blocking={false}
