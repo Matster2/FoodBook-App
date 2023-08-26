@@ -10,14 +10,14 @@ import 'swiper/swiper.min.css';
 import { getFormattedTimeString } from 'utils/utils';
 import styles from './RecipeTile.module.css';
 
-const RecipeTile = ({ recipe, onClick }) => {
+const RecipeTile = ({ recipe, onClick, ...props }) => {
   const { t } = useTranslation();
   const handleClick = () => {
     onClick(recipe.id);
   };
 
   return (
-    <Card sx={{ p: 1 }} className={styles.card} onClick={handleClick}>
+    <Card sx={{ p: 1 }} className={styles.card} onClick={handleClick} {...props}>
       <Stack direction="row" gap={0.5} className={styles.attachments}>
         {recipe?.personal && (
           <RecipeTileAttachment type="personal" />

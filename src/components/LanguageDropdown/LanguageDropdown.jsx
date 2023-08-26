@@ -1,13 +1,12 @@
 import {
-    MenuItem,
-    Select,
-    Stack,
-    Typography
+  MenuItem,
+  Select,
+  Stack,
+  Typography
 } from '@mui/material';
-import ISO6391 from 'iso-639-1';
-import React from 'react';
 import styles from './LanguageDropdown.module.css';
 
+import { ReactComponent as BelarusFlag } from 'assets/icons/flags/circular/belarus.svg';
 import { ReactComponent as DefaultFlag } from 'assets/icons/flags/circular/default.svg';
 import { ReactComponent as EnglishFlag } from 'assets/icons/flags/circular/england.svg';
 import { ReactComponent as FrenchFlag } from 'assets/icons/flags/circular/france.svg';
@@ -17,6 +16,7 @@ import { ReactComponent as RussianFlag } from 'assets/icons/flags/circular/russi
 import { ReactComponent as SpanishFlag } from 'assets/icons/flags/circular/spain.svg';
 import { ReactComponent as TurkishFlag } from 'assets/icons/flags/circular/turkey.svg';
 import { ReactComponent as UkrainianFlag } from 'assets/icons/flags/circular/ukraine.svg';
+import { ReactComponent as USAFlag } from 'assets/icons/flags/circular/usa.svg';
 
 const flagMappings = {
   "en": EnglishFlag,
@@ -27,6 +27,8 @@ const flagMappings = {
   "es": SpanishFlag,
   "tr": TurkishFlag,
   "uk": UkrainianFlag,
+  "be": BelarusFlag,
+  "en-us": USAFlag
 }
 
 const LanguageDropdown = ({ languages, value, onChange, ...props }) => {
@@ -38,19 +40,18 @@ const LanguageDropdown = ({ languages, value, onChange, ...props }) => {
     return DefaultFlag;
   }
 
-
   const handleChange = (e) => {
     onChange(e.target.value)
   }
 
-  const renderOption = (code) => {
-    var Flag = getFlag(code);
+  const renderOption = (language) => {
+    var Flag = getFlag(language.iso639);
 
     return (
-      <MenuItem value={code}>
+      <MenuItem value={language.iso639}>
         <Stack direction="row" display="flex" alignItems="center" justifyContent="center">
           <Flag className={styles.flag} />
-          <Typography>{ISO6391.getNativeName(code)}</Typography>
+          <Typography>{language.nativeName}</Typography>
         </Stack>
       </MenuItem>
     )
@@ -62,7 +63,9 @@ const LanguageDropdown = ({ languages, value, onChange, ...props }) => {
       value={value}
       onChange={handleChange}
     >
-      {languages.map((code) => renderOption(code))}
+      {languages
+        .sort((a,b) => (a.iso639 > b.iso639) ? 1 : ((b.iso639 > a.iso639) ? -1 : 0))
+        .map((language) => renderOption(language))}
     </Select>
   );
 };

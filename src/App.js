@@ -1,3 +1,4 @@
+import NiceModal from '@ebay/nice-modal-react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import axios from 'axios';
@@ -94,7 +95,7 @@ const App = () => {
   const fetchSupportedLanguages = async () => {
     try {
       const { data } = await api.getSupportedLanguages();
-      setSupportedLanguages(data.results.map(x => x.code));
+      setSupportedLanguages(data.results);
     } catch {
       console.log('error fetching supported languages');
     }
@@ -222,15 +223,17 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+     <NiceModal.Provider>
+        <CssBaseline />
 
-      {!isOnline && (
-        <OfflinePage />
-      )}
-        
-      {(isOnline && initialized) && (<RouterProvider router={router} />)}
+        {!isOnline && (
+          <OfflinePage />
+        )}
+          
+        {(isOnline && initialized) && (<RouterProvider router={router} />)}
 
-      <Toaster />
+        <Toaster />
+      </NiceModal.Provider>
     </ThemeProvider>
   );
 };

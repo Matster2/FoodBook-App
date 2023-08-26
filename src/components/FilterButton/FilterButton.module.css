@@ -1,5 +1,5 @@
 .button {
-    background: #fb6b1c !important;
+    background: var(--primary-colour) !important;
     border-radius: 12px !important;
     padding: 16px 16px !important;
 }

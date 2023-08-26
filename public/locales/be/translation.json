@@ -1,0 +1,778 @@
+{
+  "pages": {
+    "notFound": {
+      "404": "404",
+      "title": "Не найдено",
+      "links": {
+        "home": "Дом"
+      }
+    },
+    "offline": {
+      "title": "Ты не в сети",
+      "message": "Кажется, у вас проблемы с подключением. ",
+      "components": {
+        "buttons": {
+          "refresh": {
+            "label": "Обновить"
+          }
+        }
+      }
+    },
+    "cookbook": {
+      "title": "Кулинарная книга"
+    },
+    "register": {
+      "title": "регистр",
+      "alreadyHaveAccount": "У вас уже есть аккаунт?",
+      "links": {
+        "signIn": "Войти"
+      }
+    },
+    "signIn": {
+      "title": "Войти",
+      "noAccount": "У вас нет аккаунта?",
+      "links": {
+        "forgottenPassword": "Забытый пароль?",
+        "signUp": "Зарегистрироваться"
+      }
+    },
+    "forgotPassword": {
+      "title": "Забытый пароль",
+      "links": {
+        "signIn": "Войти"
+      }
+    },
+    "home": {
+      "title": "Дом",
+      "welcome": {
+        "greeting": "Добро пожаловать",
+        "message": "Что бы вы хотели приготовить сегодня?"
+      },
+      "sections": {
+        "categories": "Категории",
+        "recommended": "Рекомендации",
+        "recentlyAdded": "Недавно добавленный",
+        "favourites": "Любимые рецепты",
+        "personal": "Ваши рецепты"
+      },
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Поиск рецептов"
+          }
+        }
+      }
+    },
+    "contactUs": {
+      "title": "Связаться с нами",
+      "messageSent": "Спасибо за ваше сообщение",
+      "continueCooking": "Продолжайте готовить!"
+    },
+    "recipe": {
+      "title": "Рецепт",
+      "description": {
+        "showMore": "Показать больше",
+        "showLess": "Показывай меньше"
+      },
+      "rate": "Ставка",
+      "author": "Автор",
+      "prepTime": "Время подготовки",
+      "cookingTime": "Время готовить",
+      "sections": {
+        "equipment": "Оборудование",
+        "ingredients": "Ингредиенты",
+        "directions": "Направления",
+        "nutrition": "Питание",
+        "reference": "Ссылка",
+        "variants": "Варианты"
+      },
+      "seeFullRecipe": "Полный рецепт смотрите здесь"
+    },
+    "recipes": {
+      "title": "Рецепты",
+      "noRecipes": "Нет рецептов, соответствующих критериям",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Поиск рецептов"
+          }
+        }
+      }
+    },
+    "favourites": {
+      "title": "Избранное",
+      "authenticationRequired": "Вы должны войти в систему, чтобы увидеть избранное",
+      "noRecipes": "Нет избранных рецептов",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Поиск рецептов"
+          }
+        },
+        "buttons": {
+          "signIn": {
+            "label": "Войти"
+          }
+        }
+      }
+    },
+    "personal": {
+      "title": "Личный",
+      "authenticationRequired": "Вы должны войти в систему, чтобы увидеть ваши личные рецепты",
+      "noRecipes": "Никаких личных рецептов.",
+      "components": {
+        "inputs": {
+          "recipeSearch": {
+            "placeholder": "Поиск рецептов"
+          }
+        },
+        "buttons": {
+          "signIn": {
+            "label": "Войти"
+          }
+        }
+      }
+    },
+    "planner": {
+      "title": "Планировщик",
+      "authenticationRequired": "Вы должны войти в систему, чтобы увидеть свой планировщик",
+      "noRecipes": "Рецептов в этот день не запланировано.",
+      "components": {
+        "buttons": {
+          "signIn": {
+            "label": "Войти"
+          }
+        }
+      }
+    },
+    "ingredientList": {
+      "title": "Список ингредиентов",
+      "noPlannedRecipesDay": "У вас нет запланированных рецептов на этот день",
+      "noPlannedRecipesDays": "У вас нет запланированных рецептов на эти дни"
+    },
+    "author": {
+      "title": "",
+      "biography": {
+        "showMore": "Показать больше",
+        "showLess": "Показывай меньше"
+      },
+      "sections": {
+        "authorRecipes": "Мои рецепты"
+      }
+    },
+    "settings": {
+      "title": "Настройки",
+      "options": {
+        "signIn": "Войти",
+        "admin": "Админ",
+        "account": "Счет",
+        "contactUs": "Связаться с нами",
+        "privacyPolicy": "политика конфиденциальности",
+        "termsOfService": "Условия использования",
+        "logOut": "Выйти"
+      }
+    },
+    "accountSettings": {
+      "title": "Настройки учетной записи",
+      "options": {
+        "changePassword": "Изменить пароль",
+        "deleteAccount": "Удалить аккаунт"
+      }
+    },
+    "changePassword": {
+      "title": "Изменить пароль"
+    },
+    "resetPassword": {
+      "title": "Сбросить пароль"
+    }
+  },
+  "dialogs": {
+    "deleteRecipe": {
+      "title": "Удалить рецепт",
+      "description": "Вы уверены, что хотите удалить этот рецепт? "
+    },
+    "deleteRecipeImage": {
+      "title": "Удалить изображение",
+      "description": "Вы уверены, что хотите удалить это изображение?"
+    },
+    "publishRecipe": {
+      "title": "Опубликовать рецепт",
+      "description": "Вы уверены, что хотите опубликовать этот рецепт? "
+    }
+  },
+  "forms": {
+    "auth": {
+      "register": {
+        "title": "Завести аккаунт",
+        "inputs": {
+          "email": {
+            "label": "Адрес электронной почты",
+            "validationMessages": {
+              "empty": "Электронная почта обязательна",
+              "invalid": "Неверный адрес электронной почты"
+            }
+          },
+          "password": {
+            "label": "Пароль",
+            "validationMessages": {
+              "empty": "Необходим пароль"
+            }
+          },
+          "confirmPassword": {
+            "label": "Подтвердите пароль",
+            "validationMessages": {
+              "empty": "Пожалуйста, подтвердите свой пароль",
+              "notSame": "Пароли не совпадают"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Зарегистрироваться"
+          }
+        }
+      },
+      "signIn": {
+        "inputs": {
+          "email": {
+            "label": "Адрес электронной почты",
+            "validationMessages": {
+              "empty": "Электронная почта обязательна",
+              "invalid": "Неверный адрес электронной почты"
+            }
+          },
+          "password": {
+            "label": "Пароль",
+            "validationMessages": {
+              "empty": "Необходим пароль"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Войти"
+          }
+        }
+      },
+      "forgotPassword": {
+        "inputs": {
+          "email": {
+            "label": "Адрес электронной почты",
+            "validationMessages": {
+              "empty": "Электронная почта обязательна"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Сброс пароля"
+          }
+        }
+      },
+      "changePassword": {
+        "title": "Изменить пароль",
+        "inputs": {
+          "currentPassword": {
+            "label": "Текущий пароль",
+            "validationMessages": {
+              "empty": "Требуется текущий пароль"
+            }
+          },
+          "newPassword": {
+            "label": "Новый пароль",
+            "validationMessages": {
+              "empty": "Требуется новый пароль",
+              "sameAsCurrent": "Новый пароль должен отличаться от текущего пароля."
+            }
+          },
+          "confirmPassword": {
+            "label": "Подтвердите пароль",
+            "validationMessages": {
+              "empty": "Пожалуйста, подтвердите свой пароль",
+              "notSame": "Пароли не совпадают"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Изменить пароль"
+          }
+        }
+      },
+      "resetPassword": {
+        "title": "Создать новый пароль",
+        "inputs": {
+          "newPassword": {
+            "label": "Новый пароль",
+            "validationMessages": {
+              "empty": "Требуется новый пароль"
+            }
+          },
+          "confirmPassword": {
+            "label": "Подтвердите пароль",
+            "validationMessages": {
+              "empty": "Пожалуйста, подтвердите свой пароль",
+              "notSame": "Пароли не совпадают"
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Сброс пароля"
+          }
+        }
+      }
+    },
+    "accounts": {
+      "delete": {
+        "title": "Вы уверены, что хотите удалить свой аккаунт?",
+        "description": "Это действие необратимо. ",
+        "buttons": {
+          "submit": {
+            "label": "Подтверждать"
+          },
+          "cancel": {
+            "label": "Нет"
+          }
+        }
+      }
+    },
+    "contactUs": {
+      "inputs": {
+        "email": {
+          "label": "Адрес электронной почты",
+          "validationMessages": {
+            "empty": "Электронная почта обязательна",
+            "invalid": "Неверный адрес электронной почты"
+          }
+        },
+        "message": {
+          "label": "Сообщение",
+          "validationMessages": {
+            "empty": "Требуется сообщение"
+          }
+        }
+      },
+      "buttons": {
+        "submit": {
+          "label": "Отправлять"
+        }
+      }
+    },
+    "recipe": {
+      "copiedFrom": "Скопировано из",
+      "inputs": {
+        "isVariant": {
+          "label": "Является вариантом"
+        }
+      }
+    }
+  },
+  "components": {
+    "bottomNavBar": {
+      "discover": "Обнаружить"
+    },
+    "section": {
+      "seeAll": "Увидеть все"
+    },
+    "planRecipeDialog": {
+      "title": "Планировщик",
+      "selectDaysMessage": "Выберите дни, в которые вы хотите добавить этот рецепт.",
+      "addToPlanner": "Добавить в планировщик"
+    },
+    "ingredientListDateDialog": {
+      "title": "Выберите дни",
+      "update": "Обновлять"
+    },
+    "plannedRecipeDialog": {
+      "update": "Обновлять",
+      "removeTitle": "Удалить рецепт из запланированного",
+      "removeWarning": "Вы уверены, что хотите удалить этот рецепт из своего планировщика?"
+    },
+    "recipeFilters": {
+      "title": "Филлеры",
+      "filters": {
+        "type": "Типы",
+        "difficulty": "Сложность",
+        "time": "раз",
+        "tag": "Теги",
+        "ingredient": "Ингредиенты",
+        "rating": "Рейтинги"
+      },
+      "inputs": {
+        "addIngredient": {
+          "label": "Добавить ингредиент"
+        }
+      },
+      "buttons": {
+        "submit": {
+          "label": "Применить фильтры"
+        }
+      }
+    },
+    "recipeAttributeWidget": {
+      "alcohol": {
+        "text": "Содержит алкоголь"
+      }
+    }
+  },
+  "requests": {
+    "auth": {
+      "register": {
+        "success": "Аккаунт создан.",
+        "emailAlreadyUsed": "Электронная почта уже используется",
+        "error": "Невозможно зарегистрировать аккаунт. "
+      },
+      "signIn": {
+        "success": "Выполнен вход успешно.",
+        "invalid": "Неверный логин. ",
+        "error": "Не удалось войти. Повторите попытку позже."
+      },
+      "forgottenPassword": {
+        "success": "Ссылка для сброса отправлена ​​на ваш адрес электронной почты.",
+        "error": "Не удалось отправить электронное письмо для восстановления. "
+      },
+      "changePassword": {
+        "success": "Ваш пароль был изменен.",
+        "invalid": "Пожалуйста, проверьте свои учетные данные.",
+        "error": "Невозможно изменить пароль. "
+      },
+      "resetPassword": {
+        "success": "Ваш пароль был изменен.",
+        "error": "Невозможно изменить пароль. "
+      },
+      "logout": {
+        "success": "Вы вышли из системы",
+        "error": ""
+      }
+    },
+    "accounts": {
+      "delete": {
+        "success": "Ваш аккаунт удален.",
+        "error": ""
+      }
+    },
+    "support": {
+      "contactUs": {
+        "success": "Сообщение отправлено",
+        "error": "Не удалось отправить сообщение. "
+      },
+      "resolve": {
+        "success": "Тикет поддержки был решен",
+        "error": "Не удалось разрешить заявку в службу поддержки"
+      }
+    },
+    "favourites": {
+      "favourite": {
+        "success": "Рецепт понравился.",
+        "error": "Не удалось добавить рецепт в избранное. "
+      },
+      "unfavourite": {
+        "success": "Рецепт не понравился.",
+        "error": "Не удалось удалить рецепт из избранного. "
+      }
+    },
+    "rating": {
+      "rate": {
+        "success": "Рецепт оценен.",
+        "error": "Не удалось оценить рецепт. "
+      }
+    },
+    "planner": {
+      "planRecipe": {
+        "success": "Рецепт добавлен в планировщик.",
+        "error": "Невозможно добавить рецепт в планировщик. "
+      },
+      "updatePlannedRecipe": {
+        "success": "Планировщик обновлен.",
+        "error": "Планируется невозможное обновление. "
+      },
+      "removePlannedRecipe": {
+        "success": "Рецепт удален из планировщика.",
+        "error": "Не удалось удалить рецепт из планировщика. "
+      }
+    },
+    "recipes": {
+      "create": {
+        "success": "Рецепт создан.",
+        "error": "Не удалось создать рецепт. "
+      },
+      "update": {
+        "success": "Рецепт обновлен.",
+        "error": "Не удалось обновить рецепт. "
+      },
+      "delete": {
+        "success": "Рецепт удален.",
+        "error": "Не удалось удалить рецепт. "
+      },
+      "publish": {
+        "success": "Рецепт опубликован.",
+        "error": "Не удалось опубликовать рецепт. "
+      }
+    }
+  },
+  "types": {
+    "log": {
+      "fields": {
+        "message": {
+          "name": "Сообщение"
+        }
+      }
+    },
+    "supportTicket": {
+      "fields": {
+        "from": {
+          "name": "От"
+        },
+        "message": {
+          "name": "Сообщение"
+        }
+      },
+      "actions": {
+        "resolve": "Решать"
+      }
+    },
+    "tag": {
+      "name": "Ярлык",
+      "pluralName": "Теги"
+    },
+    "author": {
+      "name": "Автор",
+      "pluralName": "Авторы"
+    },
+    "ingredient": {
+      "name": "Ингредиент",
+      "pluralName": "Ингредиенты"
+    },
+    "equipment": {
+      "name": "Часть оборудования",
+      "pluralName": "Оборудование"
+    },
+    "recipe": {
+      "name": "Рецепт",
+      "pluralName": "Рецепты",
+      "actions": {
+        "create": "Создавать",
+        "update": "Обновлять",
+        "delete": "Удалить",
+        "publish": "Публиковать"
+      },
+      "times": {
+        "slow": "Медленный",
+        "medium": "Середина",
+        "fast": "Быстрый"
+      },
+      "types": {
+        "breakfast": {
+          "name": "Завтрак",
+          "displayName": "Завтрак"
+        },
+        "lunch": {
+          "name": "Обед",
+          "displayName": "Обед"
+        },
+        "dinner": {
+          "name": "Ужин",
+          "displayName": "Ужин"
+        },
+        "dessert": {
+          "name": "Десерт",
+          "displayName": "Десерты"
+        },
+        "snack": {
+          "name": "Закуска",
+          "displayName": "Закуски"
+        },
+        "drink": {
+          "name": "Напиток",
+          "displayName": "Напитки"
+        }
+      },
+      "difficulty": {
+        "veryEasy": "Очень просто",
+        "easy": "Легкий",
+        "average": "Средний",
+        "hard": "Жесткий",
+        "veryHard": "Очень сложно"
+      },
+      "fields": {
+        "name": {
+          "name": "Имя",
+          "validation": {
+            "required": "Укажите название этого рецепта."
+          }
+        },
+        "description": {
+          "name": "Описание",
+          "validation": {
+            "required": "Пожалуйста, дайте описание."
+          }
+        },
+        "type": {
+          "name": "Тип",
+          "validation": {
+            "required": "Пожалуйста, выберите тип"
+          }
+        },
+        "difficulty": {
+          "name": "Сложность",
+          "validation": {
+            "required": "Пожалуйста, выберите сложность"
+          }
+        },
+        "prepTime": {
+          "name": "Время подготовки",
+          "validation": {
+            "required": "Пожалуйста, установите время приготовления этого рецепта"
+          }
+        },
+        "cookTime": {
+          "name": "Время готовить",
+          "validation": {
+            "required": "Пожалуйста, установите время приготовления по этому рецепту"
+          }
+        },
+        "totalTime": {
+          "name": "Общее время",
+          "validation": {
+            "required": "Укажите общее время, которое занимает этот рецепт."
+          }
+        },
+        "servings": {
+          "name": "Порции",
+          "validation": {
+            "required": "Необходимо указать количество порций."
+          }
+        },
+        "steps": {
+          "name": "Шаги",
+          "singularName": "Шаг",
+          "fields": {
+            "name": {
+              "name": "Имя"
+            }
+          },
+          "instructions": {
+            "name": "инструкции",
+            "singularName": "Инструкция",
+            "fields": {
+              "instruction": {
+                "name": "Инструкция"
+              }
+            }
+          }
+        },
+        "ingredients": {
+          "fields": {
+            "amount": {
+              "name": "Количество"
+            },
+            "name": {
+              "name": "Имя"
+            },
+            "unitOfMeasurement": {
+              "name": "Тип"
+            },
+            "optional": {
+              "name": "Необязательный"
+            }
+          }
+        },
+        "equipment": {
+          "fields": {
+            "amount": {
+              "name": "Количество"
+            },
+            "name": {
+              "name": "Имя"
+            },
+            "dependsOnServing": {
+              "name": "Зависит от подачи"
+            }
+          }
+        },
+        "nutrition": {
+          "name": "Питание",
+          "calories": {
+            "name": "Калории"
+          },
+          "sugar": {
+            "name": "Сахар"
+          },
+          "fat": {
+            "name": "Толстый"
+          },
+          "saturatedFat": {
+            "name": "Насыщенный жир"
+          },
+          "sodium": {
+            "name": "натрий"
+          },
+          "protein": {
+            "name": "Углеводы"
+          },
+          "carbohydrates": {
+            "name": "белок"
+          },
+          "fiber": {
+            "name": "Волокно"
+          }
+        },
+        "containsAlcohol": {
+          "name": "Содержит алкоголь"
+        },
+        "referenceUrl": {
+          "name": "URL ссылки"
+        }
+      }
+    }
+  },
+  "common": {
+    "words": {
+      "actions": {
+        "add": "Добавлять",
+        "create": "Создавать",
+        "update": "Обновлять",
+        "delete": "Удалить"
+      },
+      "no": "Нет",
+      "yes": "Да",
+      "day": "День",
+      "days": "Дни",
+      "excluded": "Исключенный",
+      "you": "Ты",
+      "image": "Изображение",
+      "images": "Изображений"
+    },
+    "version": "Версия",
+    "time": {
+      "min": "мин",
+      "mins": "минут"
+    },
+    "date": {
+      "days": {
+        "monday": "Понедельник",
+        "tuesday": "Вторник",
+        "wednesday": "Среда",
+        "thursday": "Четверг",
+        "friday": "Пятница",
+        "saturday": "Суббота",
+        "sunday": "Воскресенье"
+      },
+      "months": {
+        "january": "январь",
+        "february": "февраль",
+        "march": "Маршировать",
+        "april": "апрель",
+        "may": "Может",
+        "june": "Июнь",
+        "july": "Июль",
+        "august": "Август",
+        "september": "Сентябрь",
+        "october": "Октябрь",
+        "november": "ноябрь",
+        "december": "Декабрь"
+      }
+    }
+  }
+}

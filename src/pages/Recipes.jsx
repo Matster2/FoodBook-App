@@ -150,7 +150,7 @@ export default () => {
 
         <Masonry columns={{ xs: 2, sm: 4, md: 6 }} spacing={1}>
           {recipes.map((recipe, index) => (
-            <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+            <RecipeTile key={index} recipe={recipe} onClick={handleRecipeClick} />
           ))}
         </Masonry>
       </PullToRefresh>

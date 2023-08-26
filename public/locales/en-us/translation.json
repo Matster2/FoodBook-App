@@ -509,32 +509,6 @@
         "success": "Recipe has been published.",
         "error": "Unable to publish recipe. Please try again later."
       }
-    },
-    "ingredients": {      
-      "create": {
-        "validation": {
-          "nameExistsAlready": "An ingredient already exists with this name"
-        },
-        "success": "Ingredient has been created.",
-        "error": "Unable to create ingredient. Please try again later."
-      },   
-      "update": {
-        "success": "Ingredient has been updated.",
-        "error": "Unable to update ingredient. Please try again later."
-      }
-    },    
-    "equipment": {      
-      "create": {
-        "validation": {
-          "nameExistsAlready": "A piece of equipment already exists with this name"
-        },
-        "success": "Piece of equipment has been created.",
-        "error": "Unable to create piece of equipment. Please try again later."
-      },   
-      "update": {
-        "success": "Piece of equipment has been updated.",
-        "error": "Unable to update piece of equipment. Please try again later."
-      }
     }
   },
   "types": {
@@ -568,47 +542,11 @@
     },
     "ingredient": {
       "name": "Ingredient",
-      "pluralName": "Ingredients",
-      
-      "fields": {
-        "name": {
-          "name": "Name",
-          "validation": {
-            "required": "Please provide a name for this ingredient."
-          }
-        },
-        "pluralName": {
-          "name": "Name",
-          "validation": {
-            "required": "Please provide a the plural name for this ingredient."
-          }
-        },
-        "defaultUnitOfMeasurementId": {
-          "name": "Name",
-          "validation": {
-            "required": "Please provide a default unit of measurement for this ingredient."
-          }
-        }
-      }
+      "pluralName": "Ingredients"
     },
     "equipment": {
       "name": "Piece Of Equipment",
-      "pluralName": "Equipment",
-      
-      "fields": {
-        "name": {
-          "name": "Name",
-          "validation": {
-            "required": "Please provide a name for this piece of equipment."
-          }
-        },
-        "pluralName": {
-          "name": "Name",
-          "validation": {
-            "required": "Please provide a the plural name for this piece of equipment."
-          }
-        }
-      }
+      "pluralName": "Equipment"
     },
     "recipe": {
       "name": "Recipe",

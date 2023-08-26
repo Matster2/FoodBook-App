@@ -1,3 +1,4 @@
+import { useModal } from '@ebay/nice-modal-react';
 import { Clear as ClearIcon } from '@mui/icons-material';
 import {
   Autocomplete,
@@ -27,6 +28,8 @@ import RecipePieceOfEquipment from 'Admin/components/RecipePieceOfEquipment';
 import RecipeStep from 'Admin/components/RecipeStep';
 import FilterOption from 'components/FilterOption';
 import RecipeImageControl from 'components/RecipeImageControl';
+import NewPersonalEquipmentDialog from 'dialogs/NewPersonalEquipmentDialog';
+import NewPersonalIngredientDialog from 'dialogs/NewPersonalIngredientDialog';
 import RecipeImageViewerDialog from 'dialogs/RecipeImageViewerDialog';
 import { useFormik } from 'formik';
 import useAPI from 'hooks/useAPI';
@@ -45,7 +48,7 @@ import { RecipeDifficulty, RecipeStates, RecipeTypes } from 'types';
 import { getRecipeScheme } from 'types/schemas';
 import FormModes from 'utils/formModes';
 import { lowercaseFirstLetter } from 'utils/stringUtils';
-import { isNullOrUndefined, isUndefined, reorder } from 'utils/utils';
+import { isNullOrEmpty, isNullOrUndefined, isUndefined, reorder } from 'utils/utils';
 import styles from './RecipeForm.module.css';
 
 const initialRecipeValue = {
@@ -95,6 +98,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
   const mode = !initialValues?.id ? FormModes.Create : FormModes.Update;
 
+  const [showAddIngredientButton, setShowAddIngredientButton] = useState(false);
+  const [showAddEquipmentButton, setShowAddEquipmentButton] = useState(false);
+
   const typeOptions = Object.entries(RecipeTypes).map(( [k, v] ) => ({
     label: t(`types.recipe.types.${lowercaseFirstLetter(k)}.name`),
     value: v
@@ -106,12 +112,22 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   }));
   
   const [ingredientSearch, setIngredientSearch, ingredientSearchResults, searchingIngredients] = useSearch(async () => {
-    const { data: { results } } = await api.getIngredients({ search: ingredientSearch, pageSize: 50, sortBy: 'name' });
+    const { data: { results, totalResults } } = await api.getIngredients({ search: ingredientSearch, pageSize: 50, sortBy: 'name' });
+    
+    if (!isNullOrEmpty(ingredientSearch) && totalResults === 0) {
+      setShowAddIngredientButton(true);
+    }
+    
     return results;
   }, { delay: 2000 })
 
   const [equipmentSearch, setEquipmentSearch, equipmentSearchResults, searchingEquipment] = useSearch(async () => {
-    const { data: { results } } = await api.getEquipment({ search: equipmentSearch, pageSize: 50, sortBy: 'name' });
+    const { data: { results, totalResults } } = await api.getEquipment({ search: equipmentSearch, pageSize: 50, sortBy: 'name' });
+
+    if (!isNullOrEmpty(equipmentSearch) && totalResults === 0) {
+      setShowAddEquipmentButton(true);
+    }
+
     return results;
   }, { delay: 2000 })
 
@@ -130,6 +146,8 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   const [showDeleteRecipeImageDialog, setShowDeleteRecipeImageDialog] = useState(false);
   const [showPublishDialog, setShowPublishDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const newPersonalIngredientDialog = useModal(NewPersonalIngredientDialog);
+  const newPersonalEquipmentDialog = useModal(NewPersonalEquipmentDialog);
 
   const [selectedRecipeImage, setSelectedRecipeImage] = useState();
 
@@ -195,7 +213,6 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }
   }
 
-  
   const handleUpdateRecipe = async (newRecipe) => {
     try {
       await api.updateRecipe(newRecipe.id, {
@@ -520,6 +537,44 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       console.log(e)
       toast.error(t("requests.recipes.delete.error"));
     }
+  }
+
+  const handleAddingNewIngredient = (name) => {
+    newPersonalIngredientDialog.show({ 
+        open: true,
+        ingredient: {
+          name,
+          pluralName: name
+        },
+        onClose: () => newPersonalIngredientDialog.remove(),
+        onComplete: (newIngredient) => {
+          newPersonalIngredientDialog.remove();
+          onNewIngredientAdded(newIngredient);
+        }
+      });
+  }
+
+  const onNewIngredientAdded = (ingredient) => {
+    handleAddIngredient(ingredient);
+  }
+  
+  const handleAddingNewPieceOfEquipment = (name) => {
+    newPersonalEquipmentDialog.show({ 
+        open: true,
+        pieceOfEquipment: {
+          name,
+          pluralName: name
+        },
+        onClose: () => newPersonalEquipmentDialog.remove(),
+        onComplete: (newPieceOfEquipment) => {
+          newPersonalEquipmentDialog.remove();
+          onNewPieceOfEquipmentAdded(newPieceOfEquipment);
+        }
+      });
+  }
+
+  const onNewPieceOfEquipmentAdded = (pieceOfEquipment) => {
+    handleAddPieceOfEquipment(pieceOfEquipment);
   }
 
   /* Effects */
@@ -937,31 +992,47 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                 ))}
               </Box>
 
-              <Autocomplete
-                loading={searchingIngredients}
-                sx={{ mt: 3 }}
-                options={ingredientSearchResults
-                  .filter(
-                    (ingredient) =>
-                      recipe.ingredients.filter(
-                        (recipeIngredient) => recipeIngredient.id === ingredient.id
-                      ).length < 2
-                  )
-                  .map((ingredient) => ({ label: ingredient.name, ingredient }))}
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                renderInput={(params) => <TextField {...params} label={`${t("common.words.actions.add")} ${t("types.ingredient.name")}`} />}
-                value={ingredientSearch}
-                inputValue={ingredientSearch}
-                onInputChange={(event, newValue) => {
-                  setIngredientSearch(newValue);
-                }}
-                onChange={(event, value) => {
-                  setIngredientSearch('');
-                  if (value) {
-                    handleAddIngredient(value.ingredient);
-                  }
-                }}
-              />
+              <Stack sx={{ mt: 3 }} direction="row" gap={1}>
+                <Autocomplete
+                  fullWidth
+                  loading={searchingIngredients}
+                  options={ingredientSearchResults}
+                  filterOptions={(options, params) => {
+                    const newOptions = options
+                      .filter(
+                        (ingredient) =>
+                          recipe.ingredients.filter(
+                            (recipeIngredient) => recipeIngredient.id === ingredient.id
+                          ).length < 2
+                      )
+                      .map((ingredient) => ({ label: ingredient.name, ingredient }))
+
+                    if (showAddIngredientButton) {
+                      newOptions.push({ label: `${t("common.words.actions.add")} ${t("types.ingredient.name")} "${ingredientSearch}"`, ingredient: undefined, name: ingredientSearch })
+                    }
+
+                    return newOptions;
+                  }}
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  renderInput={(params) => <TextField {...params} label={`${t("common.words.actions.add")} ${t("types.ingredient.name")}`} />}
+                  value={ingredientSearch}
+                  inputValue={ingredientSearch}
+                  onInputChange={(event, newValue) => {
+                    setIngredientSearch(newValue);
+                    setShowAddIngredientButton(false);
+                  }}
+                  onChange={(event, value) => {
+                    setIngredientSearch('');
+                    if (value) {
+                      if (!isUndefined(value.ingredient)) {
+                        handleAddIngredient(value.ingredient);
+                      } else {
+                        handleAddingNewIngredient(value.name)
+                      }
+                    }
+                  }}
+                />
+              </Stack>
             </Box>
 
             
@@ -978,32 +1049,48 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                   />
                 ))}
               </Box>
-
-              <Autocomplete
-                loading={searchingEquipment}
-                sx={{ mt: 3 }}
-                options={equipmentSearchResults
-                  .filter(
-                    (pieceOfEquipment) =>
-                      !recipe.equipment.some(
-                        (recipePieceOfEquipment) => recipePieceOfEquipment.id === pieceOfEquipment.id
+              
+              <Stack sx={{ mt: 3 }} direction="row" gap={1}>
+                <Autocomplete
+                  fullWidth
+                  loading={searchingEquipment}
+                  options={equipmentSearchResults}
+                  filterOptions={(options, params) => {
+                    const newOptions = options
+                      .filter(
+                        (pieceOfEquipment) =>
+                          !recipe.equipment.some(
+                            (recipePieceOfEquipment) => recipePieceOfEquipment.id === pieceOfEquipment.id
+                          )
                       )
-                  )
-                  .map((pieceOfEquipment) => ({ label: pieceOfEquipment.name, pieceOfEquipment }))}
-                // eslint-disable-next-line react/jsx-props-no-spreading
-                renderInput={(params) => <TextField {...params} label={`${t("common.words.actions.add")} ${t("types.equipment.name")}`}  />}
-                value={equipmentSearch}
-                inputValue={equipmentSearch}
-                onInputChange={(event, newValue) => {
-                  setEquipmentSearch(newValue);
-                }}
-                onChange={(event, value) => {
-                  setIngredientSearch('');
-                  if (value) {
-                    handleAddPieceOfEquipment(value.pieceOfEquipment);
-                  }
-                }}
-              />
+                      .map((pieceOfEquipment) => ({ label: pieceOfEquipment.name, pieceOfEquipment }))
+
+                    if (showAddEquipmentButton) {
+                      newOptions.push({ label: `${t("common.words.actions.add")} ${t("types.equipment.name")} "${equipmentSearch}"`, pieceOfEquipment: undefined, name: equipmentSearch })
+                    }
+
+                    return newOptions;
+                  }}
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  renderInput={(params) => <TextField {...params} label={`${t("common.words.actions.add")} ${t("types.equipment.name")}`}  />}
+                  value={equipmentSearch}
+                  inputValue={equipmentSearch}
+                  onInputChange={(event, newValue) => {
+                    setEquipmentSearch(newValue);
+                    setShowAddEquipmentButton(false);
+                  }}
+                  onChange={(event, value) => {
+                    setEquipmentSearch('');
+                    if (value) {
+                      if (!isUndefined(value.pieceOfEquipment)) {
+                        handleAddPieceOfEquipment(value.pieceOfEquipment);
+                      } else {
+                        handleAddingNewPieceOfEquipment(value.name)
+                      }
+                    }
+                  }}
+                />
+              </Stack>
             </Box>
 
             <Box sx={{ mt: 5 }}>
@@ -1190,7 +1277,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               }}
             >
               <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                {mode === FormModes.Create ? t("types.recipe.actions.create") : t("types.recipe.actions.update")}
+                {mode === FormModes.Create ? t("common.words.actions.create") : t("common.words.actions.update")}
               </Button>
             </Box>
           </Box>

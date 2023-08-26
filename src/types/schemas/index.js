@@ -30,3 +30,20 @@ export const getRecipeScheme = () => {
     })),
   });
 }
+
+export const getIngredientScheme = () => {
+  return yup.object({
+    name: yup.string().required(t('types.ingredient.fields.name.validation.required')),
+    pluralName: yup.string().required(t('types.ingredient.fields.pluralName.validation.required')),
+    defaultUnitOfMeasurement: yup.object({
+      id: yup.string().required(t('types.ingredient.fields.defaultUnitOfMeasurementId.validation.required')),
+    })
+  });
+}
+
+export const getEquipmentScheme = () => {
+  return yup.object({
+    name: yup.string().required(t('types.equipment.fields.name.validation.required')),
+    pluralName: yup.string().required(t('types.equipment.fields.pluralName.validation.required'))
+  });
+}

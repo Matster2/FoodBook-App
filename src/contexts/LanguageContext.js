@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { createContext, createElement, useEffect, useMemo, useReducer } from 'react';
+import { createContext, createElement, useEffect, useMemo, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { actions, reducer } from 'reducers/languageReducer';
@@ -9,7 +9,10 @@ import localStorageKeys from 'config/localStorageKeys';
 export const LanguageContext = createContext();
 
 const initialState = {
-  supportedLanguages: [ 'en' ],
+  supportedLanguages: [ {
+    iso639: 'en',
+    nativeName: 'English'
+  } ],
   currentLanguage: 'en',
 };
 
@@ -36,12 +39,12 @@ export const LanguageProvider = ({ children }) => {
     localStorage.setItem(localStorageKeys.language.supportedLanguages, JSON.stringify(state.supportedLanguages));
   }, [state.supportedLanguages]);
 
-  const setCurrentLanguage = (language) => {
-    i18n.changeLanguage(language);
+  const setCurrentLanguage = (iso639) => {
+    i18n.changeLanguage(iso639);
     dispatch({
       type: actions.SET_CURRENT_LANGUAGE,
       payload: {
-        language
+        language: iso639
       },
     });
   };
