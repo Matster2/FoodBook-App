@@ -123,9 +123,9 @@ export default createBrowserRouter([
       {
         path: '/ingredient-list',
         element: (
-          <AdminRoute>
+          <AuthRoute>
             <IngredientList />
-          </AdminRoute>
+          </AuthRoute>
         ),
       },
       {

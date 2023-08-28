@@ -11,7 +11,7 @@ import { Field, Form, Formik } from 'formik';
 import useAPI from 'hooks/useAPI';
 import usePrevious from 'hooks/usePrevious';
 import useUnitOfMeasurements from 'hooks/useUnitOfMeasurements';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { getIngredientScheme } from 'types/schemas';
@@ -32,6 +32,8 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
 
   const formRef = useRef();
 
+  const [updating, setUpdating] = useState(false);
+
   const { unitOfMeasurements, fetch: fetchUnitOfMeasurements } = useUnitOfMeasurements();
 
   const mode = !initialValues?.id ? FormModes.Create : FormModes.Update;
@@ -43,6 +45,8 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
   };
 
   const handleCreateIngredient = async (newIngredient) => {
+    setUpdating(true);
+
     try {
       const {
         data: { results },
@@ -71,9 +75,13 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
       console.log(e)
       toast.error(t("requests.ingredients.create.error"));
     }
+
+    setUpdating(false);
   }
   
   const handleUpdateIngredient = async (newIngredient) => {
+    setUpdating(true);
+
     try {
       await api.updateIngredient(id, {
         name: newIngredient.name,
@@ -90,6 +98,8 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
       console.log(e)
       toast.error(t("requests.ingredients.update.error"));
     }
+
+    setUpdating(false);
   }
 
   /* Effects */
@@ -181,7 +191,13 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
                 justifyContent: 'flex-end',
               }}
             >
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                disabled={updating}
+              >
                 {mode === FormModes.Create ? t("common.words.actions.create") : t("common.words.actions.update")}
               </Button>
             </Box>

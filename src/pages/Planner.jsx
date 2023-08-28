@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { RecipeType } from 'types';
+import { lowercaseFirstLetter } from 'utils/stringUtils';
 import { getDayName, getMonthName } from 'utils/translations';
 import { areDatesTheSameDay, isUndefined, toISOLocal } from 'utils/utils';
 
@@ -199,7 +200,7 @@ export default () => {
 
             return (
               <Box sx={{ mb: 2 }}>
-                <Typography variant='h6'>{t(`types.recipe.types.${recipeType}.displayName`)}</Typography>
+                <Typography variant='h6'>{t(`types.recipe.types.${lowercaseFirstLetter(recipeType)}.displayName`)}</Typography>
 
                 <Stack direction="column" gap={1}>
                   {plannedRecipes.map((plannedRecipe) => (

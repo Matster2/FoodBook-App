@@ -114,7 +114,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   const [ingredientSearch, setIngredientSearch, ingredientSearchResults, searchingIngredients] = useSearch(async () => {
     const { data: { results, totalResults } } = await api.getIngredients({ search: ingredientSearch, pageSize: 50, sortBy: 'name' });
     
-    if (!isNullOrEmpty(ingredientSearch) && totalResults === 0) {
+    if (!isNullOrEmpty(ingredientSearch) && (totalResults === 0 || !results.some(x => x.name.toLowerCase() === ingredientSearch.toLowerCase() || x.pluralName.toLowerCase() === ingredientSearch.toLowerCase()))) {
       setShowAddIngredientButton(true);
     }
     
@@ -124,7 +124,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   const [equipmentSearch, setEquipmentSearch, equipmentSearchResults, searchingEquipment] = useSearch(async () => {
     const { data: { results, totalResults } } = await api.getEquipment({ search: equipmentSearch, pageSize: 50, sortBy: 'name' });
 
-    if (!isNullOrEmpty(equipmentSearch) && totalResults === 0) {
+    if (!isNullOrEmpty(equipmentSearch) && (totalResults === 0 || !results.some(x => x.name.toLowerCase() === equipmentSearch.toLowerCase() || x.pluralName.toLowerCase() === equipmentSearch.toLowerCase()))) {
       setShowAddEquipmentButton(true);
     }
 
