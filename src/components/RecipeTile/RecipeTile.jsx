@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-import { getFormattedTimeString } from 'utils/utils';
+import { getFormattedTimeString } from 'utils/translations';
 import styles from './RecipeTile.module.css';
 
 const RecipeTile = ({ recipe, onClick, ...props }) => {

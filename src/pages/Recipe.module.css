@@ -134,3 +134,8 @@
 .slideImage {
   width: 100%;
 }
+
+.measurementSystem {
+  font-size: 12px !important;
+  color: #FB6B1C !important;
+}

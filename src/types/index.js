@@ -20,3 +20,8 @@ export const RecipeStates = {
     Published: 'Published',
     Archived: 'Archived'
 }
+
+export const MeasurementSystems = {
+    Metric: 'Metric',
+    Imperial: 'Imperial'
+}

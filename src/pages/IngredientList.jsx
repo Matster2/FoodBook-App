@@ -12,7 +12,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { lowercaseFirstLetter } from 'utils/stringUtils';
-import { areDatesTheSameDay, getDayName, getMonthName, isUndefined, toISOLocal } from 'utils/utils';
+import { getDayName, getMonthName } from 'utils/translations';
+import { areDatesTheSameDay, isUndefined, toISOLocal } from 'utils/utils';
 
 import { CalendarMonth as CalendarIcon, RestaurantMenu as RecipesIcon, Done as TickIcon } from '@mui/icons-material';
 import { ReactComponent as IngredientBreakdownIcon } from 'assets/icons/ingredient-breakdown.svg';

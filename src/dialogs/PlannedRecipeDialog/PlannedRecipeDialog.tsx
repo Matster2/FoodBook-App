@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-import { getDayName, getMonthName } from 'utils/utils';
+import { getDayName, getMonthName } from 'utils/translations';
 
 import styles from './PlannedRecipeDialog.module.css';
 

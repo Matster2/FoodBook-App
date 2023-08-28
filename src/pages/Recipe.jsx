@@ -2,6 +2,7 @@ import {
   AccessTime as AccessTimeIcon,
   ChevronLeft as ChevronLeftIcon,
   Edit as EditIcon,
+  Scale as MeasurementIcon,
   Star as StarIcon
 } from '@mui/icons-material';
 import {
@@ -46,14 +47,15 @@ import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
 import { ReactComponent as PlannerIcon } from 'assets/icons/planner.svg';
 import { ReactComponent as PrepIcon } from 'assets/icons/prep.svg';
 import { capitalizeFirstLetter, truncateText } from 'utils/stringUtils';
-import { getFormattedTimeString, isNull, isUndefined } from 'utils/utils';
+import { getFormattedTimeString, getMeasurementSystemTranslation } from 'utils/translations';
+import { isNull, isUndefined } from 'utils/utils';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
 import 'react-spring-bottom-sheet/dist/style.css';
-import { RecipeStates } from 'types';
+import { MeasurementSystems, RecipeStates } from 'types';
 import styles from './Recipe.module.css';
 
 const Transition = React.forwardRef((props, ref) => {
@@ -61,9 +63,12 @@ const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="left" ref={ref} {...props} />;
 });
 
-const CollapsibleSection = ({ title, collapse, children }) => (
-  <Box sx={{ mb: 3 }}>
-    <Typography variant='h6'>{title}</Typography>
+const CollapsibleSection = ({ title, sx, collapse, renderEnd, children }) => (
+  <Box sx={{ mb: 4, ...sx }}>
+    <Stack direction="row" display="flex" alignItems="center" gap={1}>
+      <Typography variant='h6'>{title}</Typography>
+      {renderEnd && renderEnd}
+    </Stack>
 
     {children}
   </Box>
@@ -121,6 +126,7 @@ export default () => {
 
   const [rating, setRating] = useState(undefined);
   const [servings, setServings] = useState(location?.state?.servings);
+  const [ingredients, setIngredients] = useState([]);
 
   const [showRecipeImageViewerDialog, setShowRecipeImageViewerDialog] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
@@ -131,6 +137,8 @@ export default () => {
   const swiperRef = useRef(null)
   const headerRef = useRef(null)
 
+  const [measurementSystem, setMeasurementSystem] = useState();
+
   const onServingsChange = (newServings) => {
     setServings(newServings);
   }
@@ -140,6 +148,8 @@ export default () => {
     try {
       const { data } = await api.getRecipe(id);
       setRecipe(data);
+      setMeasurementSystem(undefined);
+      setIngredients(data.ingredients);
     } catch (e) {
       console.log('error fetching recipe');
     }
@@ -289,6 +299,29 @@ export default () => {
     navigate(`/recipes/${id}`);
   };
 
+  const handleMeasurementSystemClick = async () => {
+    var newMeasurementSystem = measurementSystem;
+    
+    switch (measurementSystem) {
+      case MeasurementSystems.Metric:
+        newMeasurementSystem = MeasurementSystems.Imperial;
+        break;
+      case MeasurementSystems.Imperial:
+        newMeasurementSystem = undefined;
+        break;
+      default: 
+        newMeasurementSystem = MeasurementSystems.Metric;
+    }
+
+    try {
+      const { data } = await api.getRecipeIngredients(recipe.id, { measurementSystem: newMeasurementSystem });
+      setIngredients(data.ingredients);
+      setMeasurementSystem(newMeasurementSystem);      
+    } catch (e) {
+      toast.error(t('requests.recipes.ingredients.error'));
+    }
+  }
+
   /* Effects */
   useEffect(() => {
     if (authenticated) {
@@ -325,7 +358,7 @@ export default () => {
   }
 
   const getIngredients = () => {
-    return recipe.ingredients.map(ingredient => {
+    return ingredients.map(ingredient => {
       var amount = fixRounding(_.divide(ingredient.amount, recipe.servings) * servings, 6);
       return ({
         ...ingredient,
@@ -625,9 +658,9 @@ export default () => {
             )}
           </Stack>
 
-          {recipe.ingredients.length > 0 && (
-            <>          
-              <Box sx={{ mt: 2, mb: 1 }} display="flex" alignItems="center" justifyContent="center">
+          {ingredients.length > 0 && (
+            <>
+              <Box sx={{ mt: 2, mb: 2 }} display="flex" alignItems="center" justifyContent="center">
                 <ServingsIncrementor
                   recipeServings={recipe.servings}
                   defaultValue={servings}
@@ -640,7 +673,18 @@ export default () => {
             
               <CollapsibleSection
                 title={t('pages.recipe.sections.ingredients')}
+                renderEnd={
+                  <Stack sx={{ marginLeft: 'auto' }} direction="row" alignItems="center" gap={1}>
+                    {measurementSystem && <Typography className={styles.measurementSystem}>{getMeasurementSystemTranslation(measurementSystem)}</Typography>}
+                    
+                    <IconButton className={styles.optionButton} onClick={handleMeasurementSystemClick}>
+                      <MeasurementIcon className={styles.optionIcon} />
+                    </IconButton>
+                  </Stack>
+                }
               >
+
+
                 {!isUndefined(servings) && (
                   <IngredientList
                     ingredients={getIngredients()}

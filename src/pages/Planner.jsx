@@ -9,7 +9,8 @@ import useAuth from 'hooks/useAuth';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { areDatesTheSameDay, getDayName, getMonthName, isUndefined, toISOLocal } from 'utils/utils';
+import { getDayName, getMonthName } from 'utils/translations';
+import { areDatesTheSameDay, isUndefined, toISOLocal } from 'utils/utils';
 
 import { ReactComponent as IngredientsIcon } from 'assets/icons/ingredients.svg';
 import styles from './Planner.module.css';

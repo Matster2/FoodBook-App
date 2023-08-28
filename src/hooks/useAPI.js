@@ -109,6 +109,18 @@ const useAPI = () => {
     });
   };
 
+  const getRecipeIngredients = async (recipeId, parameters = {}) => {
+    const url = new URL(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}/ingredients`);
+    url.search = getSearchParams(parameters);
+
+    return axios.get(url.href, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
+      },
+    });
+  };
+
   const getIngredient = async (id) => {
     return axios.get(`${process.env.REACT_APP_API_URL}/ingredients/${id}`, {
       headers: {
@@ -642,6 +654,7 @@ const useAPI = () => {
     getRecipes,
     getRecipe,
     getRecipeInstructions,
+    getRecipeIngredients,
     getIngredient,
     getIngredients,
     createIngredient,

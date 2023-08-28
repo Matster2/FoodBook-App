@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import { capitalizeFirstLetter } from 'utils/stringUtils';
-import { getFormattedTimeString } from 'utils/utils';
+import { getFormattedTimeString } from 'utils/translations';
 import styles from './PlannedRecipe.module.css';
 
 const defaultOptions = {

@@ -508,6 +508,9 @@
       "publish": {
         "success": "Recipe has been published.",
         "error": "Unable to publish recipe. Please try again later."
+      },
+      "ingredients": {
+        "error": "Unable to retrieve recipe's ingredients."
       }
     },
     "ingredients": {      
@@ -538,6 +541,12 @@
     }
   },
   "types": {
+    "unitOfMeasurement": {      
+      "measurementSystems": {
+        "metric": "Metric",
+        "imperial": "Imperial"
+      }
+    },
     "log": {
       "fields": {
         "message": {

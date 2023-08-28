@@ -1,8 +1,9 @@
 import { Box, Stack, Typography } from '@mui/material';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { areDatesTheSameDay, getDayName } from 'utils/utils';
+import { useState } from 'react';
+import { getDayName } from 'utils/translations';
+import { areDatesTheSameDay } from 'utils/utils';
 
 import styles from './DatePickerOption.module.css';
 
