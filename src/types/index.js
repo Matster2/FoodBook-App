@@ -1,4 +1,4 @@
-export const RecipeTypes = {
+export const RecipeType = {
     Breakfast: 'Breakfast',
     Lunch: 'Lunch',
     Dinner: 'Dinner',
@@ -15,13 +15,25 @@ export const RecipeDifficulty = {
     VeryHard: 'VeryHard',
 }
 
-export const RecipeStates = {
+export const RecipeState = {
     Draft: 'Draft',
     Published: 'Published',
     Archived: 'Archived'
 }
 
-export const MeasurementSystems = {
+export const MeasurementSystem = {
     Metric: 'Metric',
     Imperial: 'Imperial'
+}
+
+export const MeasurementType = {
+    Weight: 'Weight',
+    Volume: 'Volumne',
+    Unit: 'Unit'
+}
+
+export const UnitOfMeasurementRepresentation = {
+    Integer: 'Integer',
+    Decimal: 'Decimal',
+    Fraction: 'Fraction'
 }

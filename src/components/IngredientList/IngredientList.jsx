@@ -1,74 +1,77 @@
 import { Box, Checkbox, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
+import { MeasurementType, UnitOfMeasurementRepresentation } from 'types';
 import Fraction from 'utils/fraction';
 import styles from './IngredientList.module.css';
-
-const unitOfMeasurementsThatMustBeAWholeNumber = ['milligram', 'milliliter'];
 
 const IngredientList = ({ ingredients, enableCheckboxes }) => {
   const { t } = useTranslation();
   
   const getUnitName = (unitOfMeasurement, amount) => {
-    if (unitOfMeasurement.code === 'unit') {
+    if (unitOfMeasurement.type === MeasurementType.Unit) {
       return '';
     }
 
     return amount > 1 ? `${unitOfMeasurement.pluralName} ` : `${unitOfMeasurement.name} `;
   };
 
-  function compare(ingredient1, ingredient2) {
-    if (ingredient1.unitOfMeasurement.code !== ingredient2.unitOfMeasurement.code) {
-      if (ingredient1.unitOfMeasurement.code === "unit") {
-        return -1;
-      }
+  // function compare(ingredient1, ingredient2) {
+  //   if (ingredient1.unitOfMeasurement.name !== ingredient2.unitOfMeasurement.name) {
+  //     if (ingredient1.unitOfMeasurement.type === MeasurementType.Unit) {
+  //       return -1;
+  //     }
 
-      if (ingredient2.unitOfMeasurement.code === "unit") {
-        return 1;
-      }
+  //     if (ingredient2.unitOfMeasurement.type === MeasurementType.Unit) {
+  //       return 1;
+  //     }
 
-      if (ingredient1.unitOfMeasurement.code < ingredient2.unitOfMeasurement.code) {
-        return -1;
-      }
+  //     if (ingredient1.unitOfMeasurement.name < ingredient2.unitOfMeasurement.name) {
+  //       return -1;
+  //     }
 
-      if (ingredient1.unitOfMeasurement.code > ingredient2.unitOfMeasurement.code) {
-        return 1;
-      }
-    }
+  //     if (ingredient1.unitOfMeasurement.name > ingredient2.unitOfMeasurement.name) {
+  //       return 1;
+  //     }
+  //   }
 
-    if (ingredient1.amount > ingredient2.amount) {
-      return -1;
-    }
+  //   if (ingredient1.amount > ingredient2.amount) {
+  //     return -1;
+  //   }
 
-    return 0;
-  }
+  //   return 0;
+  // }
 
-  const getAmountString = (amount, unitOfMeasurement) => {
-    if (unitOfMeasurementsThatMustBeAWholeNumber.includes(unitOfMeasurement.name.toLowerCase())) {
-      return amount;
-    }
+  const getAmountString = (originalAmount, unitOfMeasurement) => {
+    const amount = originalAmount.toFixed(2)
 
     const isWholeNumber = amount % 1 === 0;
 
-    if (isWholeNumber) {
-      return amount;
+    if (isWholeNumber || unitOfMeasurement.representAs === UnitOfMeasurementRepresentation.Integer) {
+      return Math.trunc(amount);
     }
     
     const integer = Math.trunc(amount);
-    const decimal = Number(amount - integer).toFixed(5);
+    const decimal = Number(amount - integer).toFixed(2);
 
-    const fraction = Fraction(decimal);
 
-    if (Number(decimal).toFixed(2) === "0.33") {
-      fraction.numerator = 1;
-      fraction.denominator = 3;
+    if (unitOfMeasurement.representAs === UnitOfMeasurementRepresentation.Fraction) {
+      const fraction = Fraction(decimal);
+      console.log(fraction)
+
+      if (Number(decimal).toFixed(2) === "0.33") {
+        fraction.numerator = 1;
+        fraction.denominator = 3;
+      }
+  
+      if (integer === 0) {
+        return `${fraction.numerator}/${fraction.denominator}`;
+      }
+  
+      return `${integer} ${fraction.numerator}/${fraction.denominator}`;
     }
 
-    if (integer === 0) {
-      return `${fraction.numerator}/${fraction.denominator}`;
-    }
-
-    return `${integer} ${fraction.numerator}/${fraction.denominator}`;
+    return amount.toFixed(2);
   };
 
   const renderIngredient = (ingredient) => {
@@ -97,7 +100,7 @@ const IngredientList = ({ ingredients, enableCheckboxes }) => {
     <>
       {ingredients
         .filter(x => !x.optional)
-        .sort(compare)
+        // .sort(compare)
         .map((ingredient) => renderIngredient(ingredient))}
 
       {ingredients.some(x => x.optional) && (
@@ -105,7 +108,7 @@ const IngredientList = ({ ingredients, enableCheckboxes }) => {
           <Typography className={styles.optional} sx={{ mt: 1.5 }}>{t("types.recipe.fields.ingredients.fields.optional.name")}</Typography>
           {ingredients
             .filter(x => x.optional)
-            .sort(compare)
+            // .sort(compare)
             .map((ingredient) => renderIngredient(ingredient))}
         </Box>
       )}

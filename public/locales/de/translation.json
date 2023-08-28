@@ -33,7 +33,7 @@
       "noAccount": "Sie haben noch kein Konto?",
       "links": {
         "forgottenPassword": "Passwort vergessen?",
-        "signUp": "Anmeldung"
+        "signUp": "Melden Sie sich an"
       }
     },
     "forgotPassword": {
@@ -167,7 +167,7 @@
         "admin": "Administrator",
         "account": "Konto",
         "contactUs": "Kontaktiere uns",
-        "privacyPolicy": "Datenschutz-Bestimmungen",
+        "privacyPolicy": "Datenschutzrichtlinie",
         "termsOfService": "Nutzungsbedingungen",
         "logOut": "Ausloggen"
       }
@@ -206,7 +206,7 @@
         "title": "Ein Konto erstellen",
         "inputs": {
           "email": {
-            "label": "E-Mail-Addresse",
+            "label": "E-Mail-Adresse",
             "validationMessages": {
               "empty": "E-Mail ist erforderlich",
               "invalid": "Ungültige E-Mail"
@@ -228,14 +228,14 @@
         },
         "buttons": {
           "submit": {
-            "label": "Anmeldung"
+            "label": "Melden Sie sich an"
           }
         }
       },
       "signIn": {
         "inputs": {
           "email": {
-            "label": "E-Mail-Addresse",
+            "label": "E-Mail-Adresse",
             "validationMessages": {
               "empty": "E-Mail ist erforderlich",
               "invalid": "Ungültige E-Mail"
@@ -257,7 +257,7 @@
       "forgotPassword": {
         "inputs": {
           "email": {
-            "label": "E-Mail-Addresse",
+            "label": "E-Mail-Adresse",
             "validationMessages": {
               "empty": "E-Mail ist erforderlich"
             }
@@ -340,7 +340,7 @@
     "contactUs": {
       "inputs": {
         "email": {
-          "label": "E-Mail-Addresse",
+          "label": "E-Mail-Adresse",
           "validationMessages": {
             "empty": "E-Mail ist erforderlich",
             "invalid": "Ungültige E-Mail"
@@ -508,10 +508,45 @@
       "publish": {
         "success": "Rezept wurde veröffentlicht.",
         "error": "Rezept kann nicht veröffentlicht werden. "
+      },
+      "ingredients": {
+        "error": "Die Zutaten des Rezepts können nicht abgerufen werden."
+      }
+    },
+    "ingredients": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Es existiert bereits eine Zutat mit diesem Namen"
+        },
+        "success": "Zutat wurde erstellt.",
+        "error": "Zutat konnte nicht erstellt werden. "
+      },
+      "update": {
+        "success": "Zutat wurde aktualisiert.",
+        "error": "Die Zutat konnte nicht aktualisiert werden. "
+      }
+    },
+    "equipment": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Es existiert bereits ein Gerät mit diesem Namen"
+        },
+        "success": "Das Gerät wurde erstellt.",
+        "error": "Das Gerät konnte nicht erstellt werden. "
+      },
+      "update": {
+        "success": "Das Gerät wurde aktualisiert.",
+        "error": "Das Gerät konnte nicht aktualisiert werden. "
       }
     }
   },
   "types": {
+    "unitOfMeasurement": {
+      "measurementSystems": {
+        "metric": "Metrisch",
+        "imperial": "Kaiserliche"
+      }
+    },
     "log": {
       "fields": {
         "message": {
@@ -529,11 +564,11 @@
         }
       },
       "actions": {
-        "resolve": "Beschließen"
+        "resolve": "Lösen"
       }
     },
     "tag": {
-      "name": "Schild",
+      "name": "Etikett",
       "pluralName": "Stichworte"
     },
     "author": {
@@ -542,11 +577,45 @@
     },
     "ingredient": {
       "name": "Zutat",
-      "pluralName": "Zutaten"
+      "pluralName": "Zutaten",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "validation": {
+            "required": "Bitte geben Sie einen Namen für diese Zutat an."
+          }
+        },
+        "pluralName": {
+          "name": "Name",
+          "validation": {
+            "required": "Bitte geben Sie einen Pluralnamen für diese Zutat an."
+          }
+        },
+        "defaultUnitOfMeasurementId": {
+          "name": "Name",
+          "validation": {
+            "required": "Bitte geben Sie eine Standardmaßeinheit für diese Zutat an."
+          }
+        }
+      }
     },
     "equipment": {
       "name": "Gerät",
-      "pluralName": "Ausrüstung"
+      "pluralName": "Ausrüstung",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "validation": {
+            "required": "Bitte geben Sie einen Namen für dieses Gerät ein."
+          }
+        },
+        "pluralName": {
+          "name": "Name",
+          "validation": {
+            "required": "Bitte geben Sie für dieses Gerät einen Pluralnamen an."
+          }
+        }
+      }
     },
     "recipe": {
       "name": "Rezept",
@@ -764,7 +833,7 @@
         "february": "Februar",
         "march": "Marsch",
         "april": "April",
-        "may": "Dürfen",
+        "may": "Mai",
         "june": "Juni",
         "july": "Juli",
         "august": "August",

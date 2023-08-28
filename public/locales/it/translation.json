@@ -46,7 +46,7 @@
       "title": "Casa",
       "welcome": {
         "greeting": "Benvenuto",
-        "message": "Cosa vorresti cucinare oggi?"
+        "message": "Cosa ti piacerebbe cucinare oggi?"
       },
       "sections": {
         "categories": "Categorie",
@@ -135,7 +135,7 @@
     },
     "planner": {
       "title": "Pianificatore",
-      "authenticationRequired": "Devi essere registrato per vedere il tuo pianificatore",
+      "authenticationRequired": "Devi essere registrato per vedere la tua agenda",
       "noRecipes": "Nessuna ricetta in programma per questo giorno.",
       "components": {
         "buttons": {
@@ -146,7 +146,7 @@
       }
     },
     "ingredientList": {
-      "title": "Lista degli ingredienti",
+      "title": "Elenco degli ingredienti",
       "noPlannedRecipesDay": "Non hai ricette pianificate per questo giorno",
       "noPlannedRecipesDays": "Non hai ricette in programma in questi giorni"
     },
@@ -164,7 +164,7 @@
       "title": "Impostazioni",
       "options": {
         "signIn": "Registrazione",
-        "admin": "Amministratore",
+        "admin": "Ammin",
         "account": "Account",
         "contactUs": "Contattaci",
         "privacyPolicy": "politica sulla riservatezza",
@@ -221,7 +221,7 @@
           "confirmPassword": {
             "label": "Conferma password",
             "validationMessages": {
-              "empty": "Si prega di confermare la password",
+              "empty": "Per favore conferma la tua password",
               "notSame": "le passwords non corrispondono"
             }
           }
@@ -275,7 +275,7 @@
           "currentPassword": {
             "label": "password attuale",
             "validationMessages": {
-              "empty": "È richiesta la password corrente"
+              "empty": "È richiesta la password attuale"
             }
           },
           "newPassword": {
@@ -288,7 +288,7 @@
           "confirmPassword": {
             "label": "Conferma password",
             "validationMessages": {
-              "empty": "Si prega di confermare la password",
+              "empty": "Per favore conferma la tua password",
               "notSame": "le passwords non corrispondono"
             }
           }
@@ -311,7 +311,7 @@
           "confirmPassword": {
             "label": "Conferma password",
             "validationMessages": {
-              "empty": "Si prega di confermare la password",
+              "empty": "Per favore conferma la tua password",
               "notSame": "le passwords non corrispondono"
             }
           }
@@ -377,8 +377,8 @@
     },
     "planRecipeDialog": {
       "title": "Pianificatore",
-      "selectDaysMessage": "Seleziona i giorni in cui desideri aggiungere questa ricetta",
-      "addToPlanner": "Aggiungi al pianificatore"
+      "selectDaysMessage": "Seleziona i giorni a cui desideri aggiungere questa ricetta",
+      "addToPlanner": "Aggiungi all'agenda"
     },
     "ingredientListDateDialog": {
       "title": "Seleziona Giorni",
@@ -386,8 +386,8 @@
     },
     "plannedRecipeDialog": {
       "update": "Aggiornamento",
-      "removeTitle": "Rimuovi la ricetta dal programmato",
-      "removeWarning": "Sei sicuro di voler rimuovere questa ricetta dal tuo pianificatore?"
+      "removeTitle": "Rimuovi la ricetta dalla pianificazione",
+      "removeWarning": "Sei sicuro di voler rimuovere questa ricetta dalla tua agenda?"
     },
     "recipeFilters": {
       "title": "Fitler",
@@ -429,8 +429,8 @@
         "error": "Impossibile accedere. Riprova più tardi."
       },
       "forgottenPassword": {
-        "success": "Un link di ripristino è stato inviato al tuo indirizzo email.",
-        "error": "Impossibile inviare l'e-mail di recupero. "
+        "success": "Un collegamento per il ripristino è stato inviato al tuo indirizzo email.",
+        "error": "Impossibile inviare e-mail di recupero. "
       },
       "changePassword": {
         "success": "La tua password è stata modificata.",
@@ -465,7 +465,7 @@
     "favourites": {
       "favourite": {
         "success": "Ricetta preferita.",
-        "error": "Impossibile aggiungere la ricetta ai preferiti. "
+        "error": "Impossibile trovare la ricetta preferita. "
       },
       "unfavourite": {
         "success": "Ricetta non preferita.",
@@ -484,8 +484,8 @@
         "error": "Impossibile aggiungere la ricetta al pianificatore. "
       },
       "updatePlannedRecipe": {
-        "success": "Agenda aggiornata.",
-        "error": "Impossibile aggiornamento pianificato. "
+        "success": "Pianificatore aggiornato.",
+        "error": "Impossibile aggiornare pianificato. "
       },
       "removePlannedRecipe": {
         "success": "Ricetta rimossa dal pianificatore.",
@@ -508,10 +508,45 @@
       "publish": {
         "success": "La ricetta è stata pubblicata.",
         "error": "Impossibile pubblicare la ricetta. "
+      },
+      "ingredients": {
+        "error": "Impossibile recuperare gli ingredienti della ricetta."
+      }
+    },
+    "ingredients": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Esiste già un ingrediente con questo nome"
+        },
+        "success": "L'ingrediente è stato creato.",
+        "error": "Impossibile creare l'ingrediente. "
+      },
+      "update": {
+        "success": "L'ingrediente è stato aggiornato.",
+        "error": "Impossibile aggiornare l'ingrediente. "
+      }
+    },
+    "equipment": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Esiste già un equipaggiamento con questo nome"
+        },
+        "success": "L'attrezzatura è stata creata.",
+        "error": "Impossibile creare un pezzo di equipaggiamento. "
+      },
+      "update": {
+        "success": "L'attrezzatura è stata aggiornata.",
+        "error": "Impossibile aggiornare l'attrezzatura. "
       }
     }
   },
   "types": {
+    "unitOfMeasurement": {
+      "measurementSystems": {
+        "metric": "Metrico",
+        "imperial": "Imperiale"
+      }
+    },
     "log": {
       "fields": {
         "message": {
@@ -542,11 +577,45 @@
     },
     "ingredient": {
       "name": "Ingrediente",
-      "pluralName": "ingredienti"
+      "pluralName": "ingredienti",
+      "fields": {
+        "name": {
+          "name": "Nome",
+          "validation": {
+            "required": "Si prega di fornire un nome per questo ingrediente."
+          }
+        },
+        "pluralName": {
+          "name": "Nome",
+          "validation": {
+            "required": "Si prega di fornire un nome al plurale per questo ingrediente."
+          }
+        },
+        "defaultUnitOfMeasurementId": {
+          "name": "Nome",
+          "validation": {
+            "required": "Fornisci un'unità di misura predefinita per questo ingrediente."
+          }
+        }
+      }
     },
     "equipment": {
       "name": "Pezzo di equipaggiamento",
-      "pluralName": "Attrezzatura"
+      "pluralName": "Attrezzatura",
+      "fields": {
+        "name": {
+          "name": "Nome",
+          "validation": {
+            "required": "Si prega di fornire un nome per questo pezzo di attrezzatura."
+          }
+        },
+        "pluralName": {
+          "name": "Nome",
+          "validation": {
+            "required": "Si prega di fornire un nome al plurale per questo pezzo di attrezzatura."
+          }
+        }
+      }
     },
     "recipe": {
       "name": "Ricetta",
@@ -611,7 +680,7 @@
         "type": {
           "name": "Tipo",
           "validation": {
-            "required": "Si prega di selezionare un tipo"
+            "required": "Seleziona un tipo"
           }
         },
         "difficulty": {
@@ -623,25 +692,25 @@
         "prepTime": {
           "name": "Tempo di preparazione",
           "validation": {
-            "required": "Si prega di impostare il tempo di preparazione di questa ricetta"
+            "required": "Imposta il tempo di preparazione richiesto da questa ricetta"
           }
         },
         "cookTime": {
           "name": "Tempo di cottura",
           "validation": {
-            "required": "Si prega di impostare il tempo di cottura necessario per questa ricetta"
+            "required": "Imposta il tempo di cottura richiesto da questa ricetta"
           }
         },
         "totalTime": {
           "name": "Tempo totale",
           "validation": {
-            "required": "Imposta il tempo totale impiegato da questa ricetta"
+            "required": "Imposta il tempo totale richiesto per questa ricetta"
           }
         },
         "servings": {
           "name": "Porzioni",
           "validation": {
-            "required": "Il numero di porzioni deve essere fornito"
+            "required": "È necessario fornire il numero di porzioni"
           }
         },
         "steps": {
@@ -654,10 +723,10 @@
           },
           "instructions": {
             "name": "Istruzioni",
-            "singularName": "Istruzione",
+            "singularName": "Istruzioni",
             "fields": {
               "instruction": {
-                "name": "Istruzione"
+                "name": "Istruzioni"
               }
             }
           }

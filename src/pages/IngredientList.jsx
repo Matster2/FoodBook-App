@@ -19,14 +19,14 @@ import { CalendarMonth as CalendarIcon, RestaurantMenu as RecipesIcon, Done as T
 import { ReactComponent as IngredientBreakdownIcon } from 'assets/icons/ingredient-breakdown.svg';
 import { ReactComponent as IngredientOverviewIcon } from 'assets/icons/ingredient-overview.svg';
 import IngredientListDateDialog from 'dialogs/IngredientListDateDialog';
-import { RecipeTypes } from 'types';
+import { RecipeType } from 'types';
 import styles from './IngredientList.module.css';
 
 const formatDate = (date) => {
   return `${getDayName(date)}, ${date.getDate()} ${getMonthName(date)}`
 }
 
-const recipeTypes = Object.entries(RecipeTypes).map(( [k, v] ) => (v));
+const recipeTypes = Object.entries(RecipeType).map(( [k, v] ) => (v));
 
 function compare(plannedRecipe1, plannedRecipe2) {
   const recipe1Date = dayjs(plannedRecipe1.date);

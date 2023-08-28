@@ -8,11 +8,11 @@ export default (decimal) => {
   const len = decimal.toString().length - 2;
 
   let d = 10 ** len;
-  let n = decimal * d;
+  let n = Number(decimal * d).toFixed(2);
 
   const divisor = gcd(n, d);
 
-  n /= divisor; // Should be 687
+  n /= divisor;
   d /= divisor;
 
   return {

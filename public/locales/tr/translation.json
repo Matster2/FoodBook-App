@@ -9,7 +9,7 @@
     },
     "offline": {
       "title": "Çevrimdışısınız",
-      "message": "Bağlantınızla ilgili bir sorun var gibi görünüyor. ",
+      "message": "Bağlantınızda bir sorun var gibi görünüyor. ",
       "components": {
         "buttons": {
           "refresh": {
@@ -50,7 +50,7 @@
       },
       "sections": {
         "categories": "Kategoriler",
-        "recommended": "öneriler",
+        "recommended": "Öneriler",
         "recentlyAdded": "Son Eklenenler",
         "favourites": "Favori Tarifler",
         "personal": "Tarifleriniz"
@@ -86,10 +86,10 @@
         "reference": "Referans",
         "variants": "Varyantlar"
       },
-      "seeFullRecipe": "Tam Tarife Buradan Bakın"
+      "seeFullRecipe": "Tarifin Tamamını Burada Görebilirsiniz"
     },
     "recipes": {
-      "title": "tarifler",
+      "title": "Tarifler",
       "noRecipes": "Kriterlerle eşleşen tarif yok",
       "components": {
         "inputs": {
@@ -101,7 +101,7 @@
     },
     "favourites": {
       "title": "Favoriler",
-      "authenticationRequired": "Favorilerinizi görmek için giriş yapmalısınız",
+      "authenticationRequired": "Favorilerinizi görmek için oturum açmalısınız",
       "noRecipes": "Favori tarif yok",
       "components": {
         "inputs": {
@@ -118,7 +118,7 @@
     },
     "personal": {
       "title": "Kişisel",
-      "authenticationRequired": "Kişisel tariflerinizi görmek için giriş yapmalısınız.",
+      "authenticationRequired": "Kişisel tariflerinizi görmek için oturum açmalısınız",
       "noRecipes": "Kişisel tarif yok",
       "components": {
         "inputs": {
@@ -134,8 +134,8 @@
       }
     },
     "planner": {
-      "title": "planlayıcı",
-      "authenticationRequired": "Planlayıcınızı görmek için oturum açmış olmanız gerekir",
+      "title": "Planlayıcı",
+      "authenticationRequired": "Planlayıcınızı görmek için oturum açmalısınız",
       "noRecipes": "Bu gün için planlanmış bir tarif yok.",
       "components": {
         "buttons": {
@@ -148,7 +148,7 @@
     "ingredientList": {
       "title": "Malzeme listesi",
       "noPlannedRecipesDay": "Bu gün için planlanmış tarifiniz yok",
-      "noPlannedRecipesDays": "Bu günlerde planlanmış bir tarifiniz yok"
+      "noPlannedRecipesDays": "Bu günlerde planlanmış tarifiniz yok"
     },
     "author": {
       "title": "",
@@ -164,7 +164,7 @@
       "title": "Ayarlar",
       "options": {
         "signIn": "Kayıt olmak",
-        "admin": "yönetici",
+        "admin": "Yönetici",
         "account": "Hesap",
         "contactUs": "Bize Ulaşın",
         "privacyPolicy": "Gizlilik Politikası",
@@ -183,7 +183,7 @@
       "title": "Şifre değiştir"
     },
     "resetPassword": {
-      "title": "Parolanızı Sıfırlayın"
+      "title": "Şifrenizi Sıfırlayın"
     }
   },
   "dialogs": {
@@ -282,7 +282,7 @@
             "label": "Yeni Şifre",
             "validationMessages": {
               "empty": "Yeni Şifre gerekli",
-              "sameAsCurrent": "Yeni Parola mevcut paroladan farklı olmalıdır."
+              "sameAsCurrent": "Yeni Şifre mevcut şifreden farklı olmalıdır."
             }
           },
           "confirmPassword": {
@@ -326,7 +326,7 @@
     "accounts": {
       "delete": {
         "title": "Hesabınızı silmek istediğinizden emin misiniz?",
-        "description": "Bu işlem geri alınamaz. ",
+        "description": "Bu eylem geri alınamaz. ",
         "buttons": {
           "submit": {
             "label": "Onaylamak"
@@ -360,10 +360,10 @@
       }
     },
     "recipe": {
-      "copiedFrom": "Şuradan kopyalandı:",
+      "copiedFrom": "Kopyalandığı Yer",
       "inputs": {
         "isVariant": {
-          "label": "bir çeşididir"
+          "label": "Şunun bir çeşididir:"
         }
       }
     }
@@ -376,7 +376,7 @@
       "seeAll": "Hepsini gör"
     },
     "planRecipeDialog": {
-      "title": "planlayıcı",
+      "title": "Planlayıcı",
       "selectDaysMessage": "Bu tarifi eklemek istediğiniz günleri seçin",
       "addToPlanner": "Planlayıcıya Ekle"
     },
@@ -387,10 +387,10 @@
     "plannedRecipeDialog": {
       "update": "Güncelleme",
       "removeTitle": "Tarifi planlanandan kaldır",
-      "removeWarning": "Bu tarifi planlayıcınızdan çıkarmak istediğinizden emin misiniz?"
+      "removeWarning": "Bu tarifi planlayıcınızdan kaldırmak istediğinizden emin misiniz?"
     },
     "recipeFilters": {
-      "title": "filtreler",
+      "title": "Filtreciler",
       "filters": {
         "type": "Türler",
         "difficulty": "Zorluk",
@@ -401,7 +401,7 @@
       },
       "inputs": {
         "addIngredient": {
-          "label": "Malzeme Ekle"
+          "label": "İçerik Ekle"
         }
       },
       "buttons": {
@@ -429,7 +429,7 @@
         "error": "Oturum açılamıyor. Lütfen daha sonra tekrar deneyin."
       },
       "forgottenPassword": {
-        "success": "E-posta adresinize bir sıfırlama bağlantısı gönderildi.",
+        "success": "E-posta adresinize sıfırlama bağlantısı gönderildi.",
         "error": "Kurtarma e-postası gönderilemiyor. "
       },
       "changePassword": {
@@ -458,34 +458,34 @@
         "error": "Mesaj gönderilemiyor. "
       },
       "resolve": {
-        "success": "Destek kaydı çözüldü",
+        "success": "Destek bileti çözüldü",
         "error": "Destek bileti çözülemiyor"
       }
     },
     "favourites": {
       "favourite": {
         "success": "Tarif favorilere eklendi.",
-        "error": "Favori tarif yapılamıyor. "
+        "error": "Tarif favorilere eklenemiyor. "
       },
       "unfavourite": {
-        "success": "Tarif favorilere eklenmemiş.",
-        "error": "Tarif favorilerden çıkarılamıyor. "
+        "success": "Tarif favorilerden kaldırıldı.",
+        "error": "Tarif favorilerden kaldırılamıyor. "
       }
     },
     "rating": {
       "rate": {
-        "success": "Tarif puanlandı.",
+        "success": "Tarif derecelendirildi.",
         "error": "Tarif değerlendirilemiyor. "
       }
     },
     "planner": {
       "planRecipe": {
         "success": "Tarif planlayıcıya eklendi.",
-        "error": "Planlayıcıya tarif eklenemiyor. "
+        "error": "Tarif planlayıcıya eklenemiyor. "
       },
       "updatePlannedRecipe": {
         "success": "Planlayıcı güncellendi.",
-        "error": "Güncelleme planlanamıyor. "
+        "error": "Planlanan güncelleme yapılamıyor. "
       },
       "removePlannedRecipe": {
         "success": "Tarif planlayıcıdan kaldırıldı.",
@@ -508,10 +508,45 @@
       "publish": {
         "success": "Tarif yayınlandı.",
         "error": "Tarif yayınlanamıyor. "
+      },
+      "ingredients": {
+        "error": "Tarifin malzemeleri alınamıyor."
+      }
+    },
+    "ingredients": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Bu adda bir içerik zaten mevcut"
+        },
+        "success": "İçerik oluşturuldu.",
+        "error": "İçerik oluşturulamıyor. "
+      },
+      "update": {
+        "success": "İçerik güncellendi.",
+        "error": "İçerik güncellenemiyor. "
+      }
+    },
+    "equipment": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Bu adda bir ekipman zaten mevcut"
+        },
+        "success": "Ekipman parçası oluşturuldu.",
+        "error": "Ekipman parçası oluşturulamıyor. "
+      },
+      "update": {
+        "success": "Ekipman parçası güncellendi.",
+        "error": "Ekipman parçası güncellenemiyor. "
       }
     }
   },
   "types": {
+    "unitOfMeasurement": {
+      "measurementSystems": {
+        "metric": "Metrik",
+        "imperial": "İmparatorluk"
+      }
+    },
     "log": {
       "fields": {
         "message": {
@@ -542,15 +577,49 @@
     },
     "ingredient": {
       "name": "Bileşen",
-      "pluralName": "İçindekiler"
+      "pluralName": "İçindekiler",
+      "fields": {
+        "name": {
+          "name": "İsim",
+          "validation": {
+            "required": "Lütfen bu içerik için bir ad girin."
+          }
+        },
+        "pluralName": {
+          "name": "İsim",
+          "validation": {
+            "required": "Lütfen bu içerik için çoğul bir ad belirtin."
+          }
+        },
+        "defaultUnitOfMeasurementId": {
+          "name": "İsim",
+          "validation": {
+            "required": "Lütfen bu içerik için varsayılan bir ölçü birimi belirtin."
+          }
+        }
+      }
     },
     "equipment": {
       "name": "Ekipman Parçası",
-      "pluralName": "Teçhizat"
+      "pluralName": "Teçhizat",
+      "fields": {
+        "name": {
+          "name": "İsim",
+          "validation": {
+            "required": "Lütfen bu ekipman parçası için bir ad girin."
+          }
+        },
+        "pluralName": {
+          "name": "İsim",
+          "validation": {
+            "required": "Lütfen bu ekipman parçası için çoğul bir ad belirtin."
+          }
+        }
+      }
     },
     "recipe": {
       "name": "Yemek tarifi",
-      "pluralName": "tarifler",
+      "pluralName": "Tarifler",
       "actions": {
         "create": "Yaratmak",
         "update": "Güncelleme",
@@ -577,11 +646,11 @@
         },
         "dessert": {
           "name": "Tatlı",
-          "displayName": "tatlılar"
+          "displayName": "Tatlılar"
         },
         "snack": {
           "name": "Atıştırmalık",
-          "displayName": "atıştırmalıklar"
+          "displayName": "Atıştırmalıklar"
         },
         "drink": {
           "name": "İçmek",
@@ -599,7 +668,7 @@
         "name": {
           "name": "İsim",
           "validation": {
-            "required": "Lütfen bu tarif için bir isim verin."
+            "required": "Lütfen bu tarife bir isim verin."
           }
         },
         "description": {
@@ -635,13 +704,13 @@
         "totalTime": {
           "name": "Toplam zaman",
           "validation": {
-            "required": "Lütfen bu tarifin aldığı toplam süreyi ayarlayın"
+            "required": "Lütfen bu tarifin alacağı toplam süreyi ayarlayın"
           }
         },
         "servings": {
           "name": "Porsiyon",
           "validation": {
-            "required": "Porsiyon sayısı sağlanmalıdır"
+            "required": "Porsiyon sayısı belirtilmelidir"
           }
         },
         "steps": {
@@ -687,14 +756,14 @@
               "name": "İsim"
             },
             "dependsOnServing": {
-              "name": "Hizmete bağlıdır"
+              "name": "Hizmete Bağlıdır"
             }
           }
         },
         "nutrition": {
           "name": "Beslenme",
           "calories": {
-            "name": "kalori"
+            "name": "Kalori"
           },
           "sugar": {
             "name": "Şeker"
@@ -709,7 +778,7 @@
             "name": "Sodyum"
           },
           "protein": {
-            "name": "karbonhidratlar"
+            "name": "Karbonhidratlar"
           },
           "carbohydrates": {
             "name": "Protein"
@@ -738,15 +807,15 @@
       "no": "HAYIR",
       "yes": "Evet",
       "day": "Gün",
-      "days": "gün",
-      "excluded": "hariç",
+      "days": "Günler",
+      "excluded": "Hariç tutuldu",
       "you": "Sen",
-      "image": "resim",
+      "image": "Resim",
       "images": "Görüntüler"
     },
     "version": "Sürüm",
     "time": {
-      "min": "dakika",
+      "min": "dk.",
       "mins": "dakika"
     },
     "date": {

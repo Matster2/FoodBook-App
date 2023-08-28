@@ -508,10 +508,45 @@
       "publish": {
         "success": "Recipe has been published.",
         "error": "Unable to publish recipe. Please try again later."
+      },
+      "ingredients": {
+        "error": "Unable to retrieve recipe's ingredients."
+      }
+    },
+    "ingredients": {      
+      "create": {
+        "validation": {
+          "nameExistsAlready": "An ingredient already exists with this name"
+        },
+        "success": "Ingredient has been created.",
+        "error": "Unable to create ingredient. Please try again later."
+      },   
+      "update": {
+        "success": "Ingredient has been updated.",
+        "error": "Unable to update ingredient. Please try again later."
+      }
+    },    
+    "equipment": {      
+      "create": {
+        "validation": {
+          "nameExistsAlready": "A piece of equipment already exists with this name"
+        },
+        "success": "Piece of equipment has been created.",
+        "error": "Unable to create piece of equipment. Please try again later."
+      },   
+      "update": {
+        "success": "Piece of equipment has been updated.",
+        "error": "Unable to update piece of equipment. Please try again later."
       }
     }
   },
   "types": {
+    "unitOfMeasurement": {      
+      "measurementSystems": {
+        "metric": "Metric",
+        "imperial": "Imperial"
+      }
+    },
     "log": {
       "fields": {
         "message": {
@@ -542,11 +577,47 @@
     },
     "ingredient": {
       "name": "Ingredient",
-      "pluralName": "Ingredients"
+      "pluralName": "Ingredients",
+      
+      "fields": {
+        "name": {
+          "name": "Name",
+          "validation": {
+            "required": "Please provide a name for this ingredient."
+          }
+        },
+        "pluralName": {
+          "name": "Name",
+          "validation": {
+            "required": "Please provide a the plural name for this ingredient."
+          }
+        },
+        "defaultUnitOfMeasurementId": {
+          "name": "Name",
+          "validation": {
+            "required": "Please provide a default unit of measurement for this ingredient."
+          }
+        }
+      }
     },
     "equipment": {
       "name": "Piece Of Equipment",
-      "pluralName": "Equipment"
+      "pluralName": "Equipment",
+      
+      "fields": {
+        "name": {
+          "name": "Name",
+          "validation": {
+            "required": "Please provide a name for this piece of equipment."
+          }
+        },
+        "pluralName": {
+          "name": "Name",
+          "validation": {
+            "required": "Please provide a the plural name for this piece of equipment."
+          }
+        }
+      }
     },
     "recipe": {
       "name": "Recipe",

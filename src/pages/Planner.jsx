@@ -9,6 +9,7 @@ import useAuth from 'hooks/useAuth';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { RecipeType } from 'types';
 import { getDayName, getMonthName } from 'utils/translations';
 import { areDatesTheSameDay, isUndefined, toISOLocal } from 'utils/utils';
 
@@ -20,7 +21,7 @@ const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="left" ref={ref} {...props} />;
 });
 
-const recipeTypes = ['breakfast', 'lunch', 'dinner', 'dessert', 'snack', 'drink'];
+const recipeTypes = Object.entries(RecipeType).map(( [k, v] ) => (v));
 
 export default () => {
   const { t } = useTranslation();

@@ -44,7 +44,7 @@ import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
 import uuid from 'react-uuid';
-import { RecipeDifficulty, RecipeStates, RecipeTypes } from 'types';
+import { RecipeDifficulty, RecipeState, RecipeType } from 'types';
 import { getRecipeScheme } from 'types/schemas';
 import FormModes from 'utils/formModes';
 import { lowercaseFirstLetter } from 'utils/stringUtils';
@@ -52,10 +52,10 @@ import { isNullOrEmpty, isNullOrUndefined, isUndefined, reorder } from 'utils/ut
 import styles from './RecipeForm.module.css';
 
 const initialRecipeValue = {
-  state: RecipeStates.Draft,
+  state: RecipeState.Draft,
   name: '',
   description: '',
-  type: RecipeTypes.Breakfast,
+  type: RecipeType.Breakfast,
   difficulty: RecipeDifficulty.Average,
   prepTime: 0,
   cookTime: 0,
@@ -101,7 +101,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   const [showAddIngredientButton, setShowAddIngredientButton] = useState(false);
   const [showAddEquipmentButton, setShowAddEquipmentButton] = useState(false);
 
-  const typeOptions = Object.entries(RecipeTypes).map(( [k, v] ) => ({
+  const typeOptions = Object.entries(RecipeType).map(( [k, v] ) => ({
     label: t(`types.recipe.types.${lowercaseFirstLetter(k)}.name`),
     value: v
   }));
@@ -517,7 +517,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       await api.publishRecipe(recipe.id);
       setRecipe({
         ...recipe,
-        state: RecipeStates.Published
+        state: RecipeState.Published
       })
       toast.success(t("requests.recipes.publish.success"));
     } catch (e) {
@@ -754,7 +754,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       )}
 
       <Stack display="flex" direction="row" justifyContent="end" gap={1} sx={{ mb: 2}}>
-        {(mode === FormModes.Update && !recipe.personal && recipe.state === RecipeStates.Draft) && (
+        {(mode === FormModes.Update && !recipe.personal && recipe.state === RecipeState.Draft) && (
           <Button
             type="button"
             variant="contained"
@@ -763,7 +763,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
           {t("types.recipe.actions.publish")}
           </Button>
         )}
-        {(mode === FormModes.Update && (recipe.personal || recipe.state === RecipeStates.Draft)) && (
+        {(mode === FormModes.Update && (recipe.personal || recipe.state === RecipeState.Draft)) && (
           <Button
             type="button"
             variant="contained"

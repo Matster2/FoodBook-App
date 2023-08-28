@@ -18,7 +18,7 @@ import useTags from 'hooks/useTags';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { RecipeDifficulty, RecipeTypes } from 'types';
+import { RecipeDifficulty, RecipeType } from 'types';
 import { lowercaseFirstLetter } from 'utils/stringUtils';
 import { isUndefined } from 'utils/utils';
 
@@ -43,7 +43,7 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
   const [ingredientSearch, setIngredientSearch] = useState('');
   const [selectedTime, setSelectedTime] = useState();
   
-  const typeOptions = Object.entries(RecipeTypes).map(( [k, v] ) => ({
+  const typeOptions = Object.entries(RecipeType).map(( [k, v] ) => ({
     label: t(`types.recipe.types.${lowercaseFirstLetter(k)}.name`),
     value: v
   }));

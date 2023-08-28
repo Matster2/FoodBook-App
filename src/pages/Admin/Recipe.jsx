@@ -9,7 +9,7 @@ import useAPI from 'hooks/useAPI';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { RecipeStates } from 'types';
+import { RecipeState } from 'types';
 
 export default () => {
   const { t } = useTranslation();
@@ -43,7 +43,7 @@ export default () => {
       setRecipe({
         ...location?.state,
         ...data,
-        state: RecipeStates.Draft,
+        state: RecipeState.Draft,
         images: [],
         id: undefined,
         descendantOfRecipeId: location?.state?.descendantOfRecipeId

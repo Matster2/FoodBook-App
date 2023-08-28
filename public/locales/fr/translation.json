@@ -22,15 +22,15 @@
       "title": "Livre de recettes"
     },
     "register": {
-      "title": "Enregistrer",
+      "title": "Registre",
       "alreadyHaveAccount": "Vous avez déjà un compte?",
       "links": {
-        "signIn": "S'identifier"
+        "signIn": "Se connecter"
       }
     },
     "signIn": {
-      "title": "S'identifier",
-      "noAccount": "Vous n'avez pas de compte ?",
+      "title": "Se connecter",
+      "noAccount": "Vous n'avez pas de compte ?",
       "links": {
         "forgottenPassword": "Mot de passe oublié?",
         "signUp": "S'inscrire"
@@ -39,14 +39,14 @@
     "forgotPassword": {
       "title": "mot de passe oublié",
       "links": {
-        "signIn": "S'identifier"
+        "signIn": "Se connecter"
       }
     },
     "home": {
       "title": "Maison",
       "welcome": {
         "greeting": "Accueillir",
-        "message": "Qu'aimeriez-vous cuisiner aujourd'hui ?"
+        "message": "Qu’aimeriez-vous cuisiner aujourd’hui ?"
       },
       "sections": {
         "categories": "Catégories",
@@ -102,7 +102,7 @@
     "favourites": {
       "title": "Favoris",
       "authenticationRequired": "Vous devez être connecté pour voir vos favoris",
-      "noRecipes": "Aucune recette favorite",
+      "noRecipes": "Aucune recette préférée",
       "components": {
         "inputs": {
           "recipeSearch": {
@@ -111,7 +111,7 @@
         },
         "buttons": {
           "signIn": {
-            "label": "S'identifier"
+            "label": "Se connecter"
           }
         }
       }
@@ -128,7 +128,7 @@
         },
         "buttons": {
           "signIn": {
-            "label": "S'identifier"
+            "label": "Se connecter"
           }
         }
       }
@@ -136,19 +136,19 @@
     "planner": {
       "title": "Planificateur",
       "authenticationRequired": "Vous devez être connecté pour voir votre agenda",
-      "noRecipes": "Aucune recette prévue ce jour.",
+      "noRecipes": "Aucune recette prévue ce jour-là.",
       "components": {
         "buttons": {
           "signIn": {
-            "label": "S'identifier"
+            "label": "Se connecter"
           }
         }
       }
     },
     "ingredientList": {
       "title": "Liste d'ingrédients",
-      "noPlannedRecipesDay": "Vous n'avez pas de recette prévue ce jour",
-      "noPlannedRecipesDays": "Vous n'avez pas de recettes prévues ces jours-ci"
+      "noPlannedRecipesDay": "Vous n'avez aucune recette prévue ce jour",
+      "noPlannedRecipesDays": "Vous n'avez aucune recette prévue ces jours-là"
     },
     "author": {
       "title": "",
@@ -163,7 +163,7 @@
     "settings": {
       "title": "Paramètres",
       "options": {
-        "signIn": "S'identifier",
+        "signIn": "Se connecter",
         "admin": "Administrateur",
         "account": "Compte",
         "contactUs": "Contactez-nous",
@@ -189,15 +189,15 @@
   "dialogs": {
     "deleteRecipe": {
       "title": "Supprimer la recette",
-      "description": "Voulez-vous vraiment supprimer cette recette ? "
+      "description": "Êtes-vous sûr de vouloir supprimer cette recette ? "
     },
     "deleteRecipeImage": {
       "title": "Supprimer l'image",
-      "description": "Voulez-vous vraiment supprimer cette image ?"
+      "description": "Êtes-vous sûr de vouloir supprimer cette image ?"
     },
     "publishRecipe": {
       "title": "Publier la recette",
-      "description": "Êtes-vous sûr de vouloir publier cette recette ? "
+      "description": "Etes-vous sûr de vouloir publier cette recette ? "
     }
   },
   "forms": {
@@ -250,7 +250,7 @@
         },
         "buttons": {
           "submit": {
-            "label": "S'identifier"
+            "label": "Se connecter"
           }
         }
       },
@@ -349,7 +349,7 @@
         "message": {
           "label": "Message",
           "validationMessages": {
-            "empty": "Un message est requis"
+            "empty": "Le message est requis"
           }
         }
       },
@@ -360,10 +360,10 @@
       }
     },
     "recipe": {
-      "copiedFrom": "Copié de",
+      "copiedFrom": "Copié depuis",
       "inputs": {
         "isVariant": {
-          "label": "est une variante de"
+          "label": "Est une variante de"
         }
       }
     }
@@ -377,7 +377,7 @@
     },
     "planRecipeDialog": {
       "title": "Planificateur",
-      "selectDaysMessage": "Sélectionnez les jours où vous souhaitez ajouter cette recette",
+      "selectDaysMessage": "Sélectionnez les jours auxquels vous souhaitez ajouter cette recette",
       "addToPlanner": "Ajouter au planificateur"
     },
     "ingredientListDateDialog": {
@@ -387,10 +387,10 @@
     "plannedRecipeDialog": {
       "update": "Mise à jour",
       "removeTitle": "Supprimer la recette du plan",
-      "removeWarning": "Voulez-vous vraiment supprimer cette recette de votre agenda ?"
+      "removeWarning": "Êtes-vous sûr de vouloir supprimer cette recette de votre agenda ?"
     },
     "recipeFilters": {
-      "title": "Ajusteurs",
+      "title": "Fitlers",
       "filters": {
         "type": "Les types",
         "difficulty": "Difficulté",
@@ -421,7 +421,7 @@
       "register": {
         "success": "Compte créé.",
         "emailAlreadyUsed": "cet adresse mail est déjà utilisée",
-        "error": "Impossible d'enregistrer le compte. "
+        "error": "Impossible d'enregistrer un compte. "
       },
       "signIn": {
         "success": "Connexion réussie.",
@@ -465,11 +465,11 @@
     "favourites": {
       "favourite": {
         "success": "Recette préférée.",
-        "error": "Impossible de mettre la recette favorite. "
+        "error": "Impossible de mettre la recette en favori. "
       },
       "unfavourite": {
-        "success": "Recette mal aimée.",
-        "error": "Impossible de supprimer la recette des favoris. "
+        "success": "Recette défavorisée.",
+        "error": "Impossible de supprimer une recette préférée. "
       }
     },
     "rating": {
@@ -481,7 +481,7 @@
     "planner": {
       "planRecipe": {
         "success": "Recette ajoutée au planificateur.",
-        "error": "Impossible d'ajouter la recette au planificateur. "
+        "error": "Impossible d'ajouter une recette au planificateur. "
       },
       "updatePlannedRecipe": {
         "success": "Planificateur mis à jour.",
@@ -508,10 +508,45 @@
       "publish": {
         "success": "La recette a été publiée.",
         "error": "Impossible de publier la recette. "
+      },
+      "ingredients": {
+        "error": "Impossible de récupérer les ingrédients de la recette."
+      }
+    },
+    "ingredients": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Un ingrédient existe déjà avec ce nom"
+        },
+        "success": "L'ingrédient a été créé.",
+        "error": "Impossible de créer l'ingrédient. "
+      },
+      "update": {
+        "success": "L'ingrédient a été mis à jour.",
+        "error": "Impossible de mettre à jour l'ingrédient. "
+      }
+    },
+    "equipment": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Un équipement existe déjà avec ce nom"
+        },
+        "success": "Un équipement a été créé.",
+        "error": "Impossible de créer une pièce d'équipement. "
+      },
+      "update": {
+        "success": "L'équipement a été mis à jour.",
+        "error": "Impossible de mettre à jour l'équipement. "
       }
     }
   },
   "types": {
+    "unitOfMeasurement": {
+      "measurementSystems": {
+        "metric": "Métrique",
+        "imperial": "Impérial"
+      }
+    },
     "log": {
       "fields": {
         "message": {
@@ -542,11 +577,45 @@
     },
     "ingredient": {
       "name": "Ingrédient",
-      "pluralName": "Ingrédients"
+      "pluralName": "Ingrédients",
+      "fields": {
+        "name": {
+          "name": "Nom",
+          "validation": {
+            "required": "Veuillez fournir un nom pour cet ingrédient."
+          }
+        },
+        "pluralName": {
+          "name": "Nom",
+          "validation": {
+            "required": "Veuillez fournir le nom au pluriel pour cet ingrédient."
+          }
+        },
+        "defaultUnitOfMeasurementId": {
+          "name": "Nom",
+          "validation": {
+            "required": "Veuillez fournir une unité de mesure par défaut pour cet ingrédient."
+          }
+        }
+      }
     },
     "equipment": {
       "name": "Pièce d'équipement",
-      "pluralName": "Équipement"
+      "pluralName": "Équipement",
+      "fields": {
+        "name": {
+          "name": "Nom",
+          "validation": {
+            "required": "Veuillez fournir un nom pour cet équipement."
+          }
+        },
+        "pluralName": {
+          "name": "Nom",
+          "validation": {
+            "required": "Veuillez fournir un nom au pluriel pour cet équipement."
+          }
+        }
+      }
     },
     "recipe": {
       "name": "Recette",
@@ -629,7 +698,7 @@
         "cookTime": {
           "name": "Temps de cuisson",
           "validation": {
-            "required": "Veuillez régler le temps de cuisson de cette recette"
+            "required": "Veuillez régler le temps de cuisson que prend cette recette"
           }
         },
         "totalTime": {
@@ -646,7 +715,7 @@
         },
         "steps": {
           "name": "Pas",
-          "singularName": "Marcher",
+          "singularName": "Étape",
           "fields": {
             "name": {
               "name": "Nom"
@@ -687,7 +756,7 @@
               "name": "Nom"
             },
             "dependsOnServing": {
-              "name": "Dépend du service"
+              "name": "Cela dépend du service"
             }
           }
         },

@@ -55,7 +55,7 @@ import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
 import 'react-spring-bottom-sheet/dist/style.css';
-import { MeasurementSystems, RecipeStates } from 'types';
+import { MeasurementSystem, RecipeState } from 'types';
 import styles from './Recipe.module.css';
 
 const Transition = React.forwardRef((props, ref) => {
@@ -303,14 +303,14 @@ export default () => {
     var newMeasurementSystem = measurementSystem;
     
     switch (measurementSystem) {
-      case MeasurementSystems.Metric:
-        newMeasurementSystem = MeasurementSystems.Imperial;
+      case MeasurementSystem.Metric:
+        newMeasurementSystem = MeasurementSystem.Imperial;
         break;
-      case MeasurementSystems.Imperial:
+      case MeasurementSystem.Imperial:
         newMeasurementSystem = undefined;
         break;
       default: 
-        newMeasurementSystem = MeasurementSystems.Metric;
+        newMeasurementSystem = MeasurementSystem.Metric;
     }
 
     try {
@@ -603,7 +603,7 @@ export default () => {
             )}
 
             <Stack direction="row" display="flex" sx={{ marginLeft: 'auto' }} alignItems="center" gap={1}>
-              {authenticated && (recipe.personal || recipe.State !== RecipeStates.Draft) && (
+              {authenticated && (recipe.personal || recipe.State !== RecipeState.Draft) && (
                 <IconButton sx={{ marginLeft: 'auto' }} className={classnames(styles.optionButton, styles.personalOptionButton)} onClick={handleCopyClick}>
                   <CopyIcon className={styles.optionIcon} />
                 </IconButton>
@@ -683,8 +683,6 @@ export default () => {
                   </Stack>
                 }
               >
-
-
                 {!isUndefined(servings) && (
                   <IngredientList
                     ingredients={getIngredients()}

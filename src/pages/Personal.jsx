@@ -172,7 +172,7 @@ export default () => {
 
       <PullToRefresh onRefresh={handleRefresh}>
         {!loadingRecipes && recipes.length === 0 && (
-          <Box textAlign="center" sx={{ marginTop: '20%' }}>
+          <Box textAlign="center" sx={{ marginTop: '20%', mb: 1 }}>
             <Typography>{t('pages.personal.noRecipes')}</Typography>
           </Box>
         )}
