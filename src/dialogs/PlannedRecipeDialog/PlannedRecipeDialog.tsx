@@ -22,6 +22,7 @@ import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import { getDayName, getMonthName } from 'utils/translations';
 
+import { LoadingButton } from '@mui/lab';
 import styles from './PlannedRecipeDialog.module.css';
 
 interface PlannedRecipeDialogProps {
@@ -56,6 +57,8 @@ const PlannedRecipeDialog = ({ open, onClose, onComplete, transitionComponent, p
 
   const [servings, setServings] = useState<number>(plannedRecipe.servings);
 
+  const [updating, setUpdating] = useState(false);
+
   const handleIncrementServings = () => {
     setServings(state => state + 1);
   };
@@ -65,6 +68,8 @@ const PlannedRecipeDialog = ({ open, onClose, onComplete, transitionComponent, p
   };
 
   const handleUpdateClick = async () => {
+    setUpdating(true);
+    
     try {
       await api.updatePlannedRecipe(plannedRecipe.id, servings);
       toast.success(t('requests.planner.updatePlannedRecipe.success'));
@@ -75,6 +80,8 @@ const PlannedRecipeDialog = ({ open, onClose, onComplete, transitionComponent, p
     } catch {
       toast.error(t('requests.planner.updatePlannedRecipe.failed'));
     }
+
+    setUpdating(false);
   }
 
   const handleRemoveClick = () => {
@@ -189,16 +196,17 @@ const PlannedRecipeDialog = ({ open, onClose, onComplete, transitionComponent, p
             </Stack>
           </Box>
 
-          <Button
+          <LoadingButton
             disabled={plannedRecipe.servings === servings}
             type="button"
             onClick={handleUpdateClick}
             fullWidth
             variant="contained"
             sx={{ mb: 2 }}
+            loading={updating}
           >
             {t('components.plannedRecipeDialog.update')}
-          </Button>
+          </LoadingButton>
 
           <Typography sx={{ mt: 2, textAlign: 'center' }} className={styles.remove} onClick={handleRemoveClick}>Remove</Typography>
         </Box>

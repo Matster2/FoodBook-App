@@ -223,7 +223,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-     <NiceModal.Provider>
+      <NiceModal.Provider>
         <CssBaseline />
 
         {!isOnline && (

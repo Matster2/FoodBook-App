@@ -223,6 +223,8 @@ export default () => {
           </Section>
         )}
 
+        <img src="https://yrphe77a65.execute-api.eu-west-2.amazonaws.com/production/resize?key=/authors/profile-pictures/00530ff4-b8a7-4366-83df-44c1e2eb5270.png&width=400" />
+
         {recentlyAddedRecipes.length > 0 && (
           <Section
             title={t('pages.home.sections.recentlyAdded')}

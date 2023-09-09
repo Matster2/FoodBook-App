@@ -1,9 +1,10 @@
-import { Box, Button, Container, TextField } from '@mui/material';
+import { LoadingButton } from "@mui/lab";
+import { Box, Container, TextField } from '@mui/material';
 import Header from 'components/Header';
 import useAPI from 'hooks/useAPI';
 import useAuth from 'hooks/useAuth';
 import useInput from 'hooks/useInput';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
@@ -163,8 +164,8 @@ export default () => {
           error={!isUndefined(inputErrors.confirmPassword)}
           helperText={inputErrors.confirmPassword}
         />
-        <Button
-          disable={changingPassword || changePasswordComplete}
+        <LoadingButton
+          loading={changingPassword || changePasswordComplete}
           type="button"
           onClick={handleChangePasswordClick}
           fullWidth
@@ -172,7 +173,7 @@ export default () => {
           sx={{ mt: 3, mb: 2 }}
         >
           {t('forms.auth.changePassword.buttons.submit.label')}
-        </Button>
+        </LoadingButton>
       </Box>
     </Container>
   );

@@ -44,6 +44,10 @@ a:visited {
   font-weight: bold;
 }
 
+.link:hover {
+  cursor: pointer;
+}
+
 .MuiInputBase-root {
   background-color: white !important;
 }

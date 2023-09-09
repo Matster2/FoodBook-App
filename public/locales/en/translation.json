@@ -360,6 +360,7 @@
       }
     },
     "recipe": {
+      "invalidRecipeImage": "File is not supported. File type must be an image.",
       "copiedFrom": "Copied From",
       "inputs": {
         "isVariant": {

@@ -1,6 +1,6 @@
+import { LoadingButton } from "@mui/lab";
 import {
   Box,
-  Button,
   TextField
 } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
@@ -155,15 +155,15 @@ export default ({ pieceOfEquipment: initialValues, onSubmit, admin }) => {
                 justifyContent: 'flex-end',
               }}
             >
-              <Button
+              <LoadingButton
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                disabled={updating}
+                loading={updating}
               >
                 {mode === FormModes.Create ? t("common.words.actions.create") : t("common.words.actions.update")}
-              </Button>
+              </LoadingButton>
             </Box>
           </Form>
         );

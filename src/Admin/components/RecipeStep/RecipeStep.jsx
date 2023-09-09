@@ -58,7 +58,7 @@ const RecipeStep = ({ step, onChange, onDelete }) => {
 
   return (
     <Box sx={{ border: 1, borderColor: 'grey.500', p: 2 }}>
-      <Grid container spacing={1} justifyContent="space-between">
+      <Grid container spacing={1} justifyContent="space-between" alignItems="center">
         <Grid item xs={9} sx={{ mb: 1 }}>
           <TextField
             fullWidth
@@ -82,7 +82,6 @@ const RecipeStep = ({ step, onChange, onDelete }) => {
             margin="normal"
             fullWidth
             multiline
-            rows={2}
             required
             value={instruction.instruction}
             onChange={(e) => handleInstructionChange(instruction.id, e.target.value)}

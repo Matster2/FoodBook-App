@@ -1,6 +1,6 @@
+import { LoadingButton } from "@mui/lab";
 import {
   Box,
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
@@ -83,7 +83,7 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
     setUpdating(true);
 
     try {
-      await api.updateIngredient(id, {
+      await api.updateIngredient(newIngredient.id, {
         name: newIngredient.name,
         pluralName: newIngredient.pluralName,
         defaultUnitOfMeasurementId: newIngredient.defaultUnitOfMeasurement.id
@@ -191,15 +191,15 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
                 justifyContent: 'flex-end',
               }}
             >
-              <Button
+              <LoadingButton
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                disabled={updating}
+                loading={updating}
               >
                 {mode === FormModes.Create ? t("common.words.actions.create") : t("common.words.actions.update")}
-              </Button>
+              </LoadingButton>
             </Box>
           </Form>
         );

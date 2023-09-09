@@ -1,5 +1,6 @@
 import NiceModal from '@ebay/nice-modal-react';
-import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import { LoadingButton } from "@mui/lab";
+import { Box, Container, TextField, Typography } from '@mui/material';
 import logo from 'assets/logo.svg';
 import useAuth from 'hooks/useAuth';
 import useInput from 'hooks/useInput';
@@ -174,8 +175,8 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           </Typography>
         </Box>
 
-        <Button
-          disabled={signedIn || signingIn}
+        <LoadingButton
+          loading={signedIn || signingIn}
           type="button"
           onClick={handleSignInClick}
           fullWidth
@@ -183,7 +184,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           sx={{ mt: 3, mb: 2 }}
         >
           {t('forms.auth.signIn.buttons.submit.label')}
-        </Button>
+        </LoadingButton>
 
         <Box
           sx={{

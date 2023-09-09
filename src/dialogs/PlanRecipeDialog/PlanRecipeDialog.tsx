@@ -1,3 +1,4 @@
+import { LoadingButton } from "@mui/lab";
 import { Box, Button, ButtonGroup, Dialog, Stack, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { TransitionProps } from "@mui/material/transitions";
@@ -72,6 +73,8 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
   const [selectedDays, setSelectedDays] = useState<Dayjs[]>([]);
   const [servings, setServings] = useState<number>(recipe.servings);
 
+  const [addingToPlanner, setAddingToPlanner] = useState(false);
+
   const handleDateCalanderChange = (targetDay: Dayjs | null) => {
     if (targetDay === null) {
       return;
@@ -95,6 +98,8 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
   };
 
   const handleAddToPlannerClick = async () => {
+    setAddingToPlanner(true);
+
     try {
       var dates = selectedDays.map((x) => (x.format('YYYY-MM-DD')))
       await api.planRecipe(userId, recipe.id, servings, dates);
@@ -105,6 +110,8 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
     } catch {
       toast.error(t('requests.planner.planRecipe.failed'));
     }
+
+    setAddingToPlanner(false);
   }
 
   return (
@@ -166,8 +173,9 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
           </Box>
         )}
 
-        <Button
+        <LoadingButton
           disabled={selectedDays.length < 1}
+          loading={addingToPlanner}
           type="button"
           onClick={handleAddToPlannerClick}
           fullWidth
@@ -175,7 +183,7 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
           sx={{ mb: 2 }}
         >
           {t('components.planRecipeDialog.addToPlanner')}
-        </Button>
+        </LoadingButton>
       </Box>
     </Dialog>
   );

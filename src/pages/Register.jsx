@@ -1,5 +1,6 @@
 import NiceModal from '@ebay/nice-modal-react';
-import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import { LoadingButton } from "@mui/lab";
+import { Box, Container, TextField, Typography } from '@mui/material';
 import logo from 'assets/logo.svg';
 import useAPI from 'hooks/useAPI';
 import useInput from 'hooks/useInput';
@@ -105,11 +106,12 @@ const Register = ({ onSignInClick, onComplete }) => {
         return;
       }
 
-      await api.register(email, password);
+      throw new Error("jeja")
+      // await api.register(email, password);
 
-      setRegistrationComplete(true);
-      toast.success(t('requests.auth.register.success'));
-      onComplete();
+      // setRegistrationComplete(true);
+      // toast.success(t('requests.auth.register.success'));
+      // onComplete();
     } catch {
       toast.error(t('requests.auth.register.error'));
     }
@@ -212,8 +214,8 @@ const Register = ({ onSignInClick, onComplete }) => {
           error={!isUndefined(inputErrors.confirmPassword)}
           helperText={inputErrors.confirmPassword}
         />
-        <Button
-          disable={registering || registrationComplete}
+        <LoadingButton
+          loading={registering || registrationComplete}
           type="button"
           onClick={handleRegisterClick}
           fullWidth
@@ -221,7 +223,7 @@ const Register = ({ onSignInClick, onComplete }) => {
           sx={{ mt: 3, mb: 2 }}
         >
           {t('forms.auth.register.buttons.submit.label')}
-        </Button>
+        </LoadingButton>
       </Box>
 
       <Box

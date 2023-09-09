@@ -1,5 +1,6 @@
 import { useModal } from '@ebay/nice-modal-react';
 import { Clear as ClearIcon } from '@mui/icons-material';
+import { LoadingButton } from "@mui/lab";
 import {
   Autocomplete,
   Box,
@@ -93,6 +94,8 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   const navigate = useNavigate();
   const api = useAPI();
 
+  const [updating, setUpdating] = useState(false);
+
   const { fetch: fetchUnitOfMeasurements } = useUnitOfMeasurements();
   const { tags, fetch: fetchTags } = useTags();
 
@@ -172,6 +175,8 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   }
 
   const handleCreateRecipe = async (newRecipe, filesToUpload) => {
+    setUpdating(true);
+
     try {
       const {
         data: { id },
@@ -211,9 +216,13 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       console.log(e)
       toast.error(t("requests.recipes.create.error"));
     }
+
+    setUpdating(false);
   }
 
   const handleUpdateRecipe = async (newRecipe) => {
+    setUpdating(true);
+
     try {
       await api.updateRecipe(newRecipe.id, {
         ...newRecipe,
@@ -278,6 +287,8 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       console.log(e)
       toast.error(t("requests.recipes.update.error"));
     }
+
+    setUpdating(false);
   }
 
   const formik = useFormik({
@@ -454,6 +465,16 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   /* Image Handlers */
   const handleUploadImage = (e) => {
     const file = e.target.files[0];
+
+    const fileExtension = "." + file.name.split(".").at(-1).toLowerCase();
+    console.log(fileExtension)
+    const allowedFileTypes = [".jpg", ".jpeg", ".jfif", ".png", ".tiff", ".avif", ".webp"];
+    if (!allowedFileTypes.includes(fileExtension)) {
+      toast.error(`${t("forms.recipe.invalidRecipeImage")}`);
+      return false;
+    }
+
+
     const url = URL.createObjectURL(file);
     const newImage = {
       id: uuid(),
@@ -777,7 +798,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       <Box>
         <Typography variant="body2">{recipe.images.length} {recipe.images.length === 1 ? t("common.words.image") : t("common.words.images")}</Typography>
         {ImageList}
-        <input type="file" onChange={handleUploadImage} />
+        <input type="file" onChange={handleUploadImage} accept="image/jpg,image/jpeg,image/jfif,image/png,image/tiff,image/webp" />
       </Box>
 
       <Box sx={{ mb: 2 }}>
@@ -1276,9 +1297,15 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                 justifyContent: 'flex-end',
               }}
             >
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+              <LoadingButton
+                type="submit"
+                fullWidth
+                variant="contained" 
+                sx={{ mt: 3, mb: 2 }}
+                loading={updating}  
+              >
                 {mode === FormModes.Create ? t("common.words.actions.create") : t("common.words.actions.update")}
-              </Button>
+              </LoadingButton>
             </Box>
           </Box>
         </form>

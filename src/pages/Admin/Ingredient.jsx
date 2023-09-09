@@ -1,4 +1,4 @@
-import { Box, Container } from '@mui/material';
+import { Box, CircularProgress, Container } from '@mui/material';
 import Header from 'components/Header';
 import IngredientForm from 'forms/IngredientForm';
 import useAPI from 'hooks/useAPI';
@@ -30,11 +30,7 @@ export default () => {
     }
     setLoadingIngredient(false);
   };
-
-  /* Handlers */
-  const handleSubmit = (newIngredient) => {
-  }
-
+  
   /* Effects */
   useEffect(() => {
     if (id) {
@@ -57,7 +53,7 @@ export default () => {
         {!loadingIngredient && (
           <IngredientForm
             ingredient={ingredient}
-            onSubmit={handleSubmit}
+            onSubmit={() => {}}
             admin={true}
           />
         )}
