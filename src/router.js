@@ -5,6 +5,7 @@ import AuthRoute from 'routings/AuthRoute';
 import UnAuthRoute from 'routings/UnAuthRoute';
 
 import AccountSettings from 'pages/Account/AccountSettings';
+import ChangeEmail from 'pages/Account/ChangeEmail';
 import ChangePassword from 'pages/Account/ChangePassword';
 import AdminAddAuthor from 'pages/Admin/AddAuthor';
 import AdminAuthors from 'pages/Admin/Authors';
@@ -85,6 +86,14 @@ export default createBrowserRouter([
         element: (
           <AuthRoute>
             <AccountSettings />
+          </AuthRoute>
+        ),
+      },
+      {
+        path: '/change-email',
+        element: (
+          <AuthRoute>
+            <ChangeEmail />
           </AuthRoute>
         ),
       },

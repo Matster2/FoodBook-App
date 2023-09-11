@@ -175,12 +175,16 @@
     "accountSettings": {
       "title": "Impostazioni dell'account",
       "options": {
+        "changeEmail": "Cambia email",
         "changePassword": "Cambiare la password",
         "deleteAccount": "Eliminare l'account"
       }
     },
     "changePassword": {
       "title": "Cambiare la password"
+    },
+    "changeEmail": {
+      "title": "Cambia email"
     },
     "resetPassword": {
       "title": "Reimposta la tua password"
@@ -299,6 +303,30 @@
           }
         }
       },
+      "changeEmail": {
+        "title": "Cambia email",
+        "inputs": {
+          "newEmail": {
+            "label": "nuova email",
+            "validationMessages": {
+              "empty": "È richiesta una nuova e-mail",
+              "invalid": "E-mail non valido",
+              "sameAsCurrent": "La nuova password deve essere diversa dalla password corrente."
+            }
+          },
+          "password": {
+            "label": "Parola d'ordine",
+            "validationMessages": {
+              "empty": "Per favore inserisci LA TUA password."
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Cambia email"
+          }
+        }
+      },
       "resetPassword": {
         "title": "Crea nuova password",
         "inputs": {
@@ -360,6 +388,7 @@
       }
     },
     "recipe": {
+      "invalidRecipeImage": "Il file non è supportato. ",
       "copiedFrom": "Copiato da",
       "inputs": {
         "isVariant": {
@@ -431,6 +460,12 @@
       "forgottenPassword": {
         "success": "Un collegamento per il ripristino è stato inviato al tuo indirizzo email.",
         "error": "Impossibile inviare e-mail di recupero. "
+      },
+      "changeEmail": {
+        "success": "La tua email è stata modificata.",
+        "emailAlreadyTaken": "Questo indirizzo email è già registrato su un altro account.",
+        "invalid": "Controlla le tue credenziali.",
+        "error": "Impossibile modificare l'e-mail. "
       },
       "changePassword": {
         "success": "La tua password è stata modificata.",

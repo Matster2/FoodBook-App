@@ -27,6 +27,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
+import { includeResizeQueryParameters } from 'utils/imageUtils';
 import { isUndefined } from 'utils/utils';
 import Filters from './Filters';
 import styles from './Personal.module.css';
@@ -185,7 +186,17 @@ export default () => {
 
         <Masonry columns={{ xs: 2, sm: 4, md: 6 }} spacing={1}>
           {recipes.map((recipe, index) => (
-            <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+            <RecipeTile
+              key={recipe.id}  
+              recipe={{
+                ...recipe,
+                images: recipe.images.map((image) => ({
+                  ...image,
+                  url: includeResizeQueryParameters(image.url, 300, 0)
+                }))
+              }}
+              onClick={handleRecipeClick}
+            />
           ))}
         </Masonry>
       </PullToRefresh>

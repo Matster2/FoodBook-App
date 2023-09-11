@@ -93,7 +93,7 @@ export default () => {
     }
 
     try {
-      await api.changePassword(userId, currentPassword, newPassword);
+      await api.changeEmail(userId, currentPassword, newPassword);
       setChangePasswordComplete(true);
       toast.success(t('requests.auth.changePassword.success'));
       navigate('/account')

@@ -1,25 +1,29 @@
 
+import {
+  CalendarMonth as CalendarIcon,
+  Scale as MeasurementIcon,
+  RestaurantMenu as RecipesIcon, Done as TickIcon
+} from '@mui/icons-material';
 import { Box, CircularProgress, Container, IconButton, Stack, Typography } from '@mui/material';
+import { ReactComponent as IngredientBreakdownIcon } from 'assets/icons/ingredient-breakdown.svg';
+import { ReactComponent as IngredientOverviewIcon } from 'assets/icons/ingredient-overview.svg';
 import classnames from 'classnames';
 import Header from 'components/Header';
 import IngredientList from 'components/IngredientList';
 import TogglablePlannedRecipe from 'components/TogglablePlannedRecipe';
 import dayjs from 'dayjs';
+import IngredientListDateDialog from 'dialogs/IngredientListDateDialog';
 import useAPI from 'hooks/useAPI';
 import useAuth from 'hooks/useAuth';
 import useFilters from 'hooks/useFilters';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { MeasurementSystem, RecipeType } from 'types';
+import { includeResizeQueryParameters } from 'utils/imageUtils';
 import { lowercaseFirstLetter } from 'utils/stringUtils';
-import { getDayName, getMonthName } from 'utils/translations';
+import { getDayName, getMeasurementSystemTranslation, getMonthName } from 'utils/translations';
 import { areDatesTheSameDay, isUndefined, toISOLocal } from 'utils/utils';
-
-import { CalendarMonth as CalendarIcon, RestaurantMenu as RecipesIcon, Done as TickIcon } from '@mui/icons-material';
-import { ReactComponent as IngredientBreakdownIcon } from 'assets/icons/ingredient-breakdown.svg';
-import { ReactComponent as IngredientOverviewIcon } from 'assets/icons/ingredient-overview.svg';
-import IngredientListDateDialog from 'dialogs/IngredientListDateDialog';
-import { RecipeType } from 'types';
 import styles from './IngredientList.module.css';
 
 const formatDate = (date) => {
@@ -88,7 +92,16 @@ const PlannedRecipesView = ({ plannedRecipes, excludedPlannedRecipeIds, handlePl
                 <Stack direction="column" gap={1}>
                   {recipes.map((plannedRecipe) => (
                     <TogglablePlannedRecipe
-                      plannedRecipe={plannedRecipe}
+                      plannedRecipe={{
+                        ...plannedRecipe,
+                        recipe: {
+                          ...plannedRecipe.recipe,
+                          images: plannedRecipe.recipe.images.map((image) => ({
+                            ...image,
+                            url: includeResizeQueryParameters(image.url, 300, 0)
+                          }))
+                        }
+                      }}
                       enabled={!excludedPlannedRecipeIds.includes(plannedRecipe.id)}
                       onChange={(value) => handlePlannedRecipeToggle(plannedRecipe.id, value)}
                     />
@@ -171,7 +184,7 @@ export default () => {
     try {
       const { data: originalData } = await api.getPlannerIngredientList(userId, {
         ...filters,
-        excludedPlannedRecipeIds: []
+        excludedPlannedRecipeIds: [], // Needed no to hide from recipe exclusions
       });
       setOriginalPlannerIngredientList(originalData);
 
@@ -184,7 +197,6 @@ export default () => {
   };
 
   useEffect(() => {
-    setPlannerIngredientList();
     fetchPlannerIngredientList();
   }, [filters]);
 
@@ -221,6 +233,22 @@ export default () => {
     }
 
     setExcludedPlannedRecipeIds(newExcludedPlannedRecipeIds);
+  }
+
+  const handleMeasurementSystemClick = async () => {
+    var measurementSystem = filters.measurementSystem;
+    
+    switch (measurementSystem) {
+      case MeasurementSystem.Metric:
+        measurementSystem = MeasurementSystem.Imperial;
+        break;
+      case MeasurementSystem.Imperial:
+        measurementSystem = undefined;
+        break;
+      default: 
+        measurementSystem = MeasurementSystem.Metric;
+    }
+    setFilter("measurementSystem", measurementSystem)
   }
 
   /* Rendering */
@@ -298,12 +326,6 @@ export default () => {
             </Box>
           )}
 
-          {loadingPlannerIngredientList && (
-            <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
-              <CircularProgress />
-            </Box>
-          )}
-
           {(plannerIngredientList && plannerIngredientList.breakdown.plannedRecipes.length > 0) && (
             <>
               <Stack sx={{ mb: 2 }} direction="row" display="flex" justifyContent="space-between">             
@@ -313,6 +335,14 @@ export default () => {
 
                 {!showPlannedRecipesView && (
                   <Stack direction="row" gap={1}>
+                    <Stack sx={{ marginLeft: 'auto' }} direction="row" alignItems="center" gap={1}>
+                      {filters.measurementSystem && <Typography className={styles.measurementSystem}>{getMeasurementSystemTranslation(filters.measurementSystem)}</Typography>}
+                      
+                      <IconButton className={styles.optionButton} onClick={handleMeasurementSystemClick}>
+                        <MeasurementIcon className={styles.optionIcon} />
+                      </IconButton>
+                    </Stack>
+
                     {currentView === views.ingredients && (
                       <IconButton className={classnames(styles.optionButton, !checkboxesEnabled && styles.optionButtonDisabled)} onClick={handleToggleCheckboxesClick}>
                         <TickIcon className={styles.optionIcon} />
@@ -327,6 +357,12 @@ export default () => {
                 )}
               </Stack>
 
+              {loadingPlannerIngredientList && (
+                <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
+                  <CircularProgress />
+                </Box>
+              )}
+              
               {showPlannedRecipesView && (
                 <PlannedRecipesView
                   plannedRecipes={originalPlannerIngredientList.breakdown.plannedRecipes}

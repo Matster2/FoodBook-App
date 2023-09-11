@@ -67,7 +67,10 @@ const initialRecipeValue = {
     {
       id: uuid(),
       name: "",
-      instructions: []
+      instructions: [{
+        id: uuid(),
+        instruction: ""
+      }]
     }
   ],
   ingredients: [],
@@ -461,6 +464,24 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       steps: newSteps,
     }));
   };
+
+  const handleStepDragEnd = (result) => { 
+    // dropped outside the list
+    if (!result.destination) {
+      return;
+    }
+
+    const newSteps = reorder(
+      recipe.steps,
+      result.source.index,
+      result.destination.index
+    );
+
+    setRecipe((state) => ({
+      ...state,
+      steps: newSteps,
+    }));
+  }
   
   /* Image Handlers */
   const handleUploadImage = (e) => {
@@ -629,7 +650,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   const ImageList = useMemo(() => (
     <List sx={{ overflow: "auto" }}>
       <DragDropContext onDragEnd={handleImageDragEnd}>
-        <Droppable droppableId="droppable" direction="horizontal">
+        <Droppable droppableId="droppable-images" direction="horizontal">
           {(provided, snapshot) => (
             <Stack direction="row" gap={2} alignItems="center"
               ref={provided.innerRef}
@@ -1117,14 +1138,34 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
             <Box sx={{ mt: 5 }}>
               <Typography sx={{ mb: 2 }} variant="h6">{t("types.recipe.fields.steps.instructions.name")}</Typography>
 
-              {recipe.steps.map((step) => (
-                <RecipeStep
-                  key={step.id}
-                  step={step}
-                  onChange={handleStepChange}
-                  onDelete={handleDeleteStep}
-                />
-              ))}
+              <DragDropContext onDragEnd={handleStepDragEnd}>
+                <Droppable droppableId="droppable-steps" direction="vertical">
+                  {(provided, snapshot) => (
+                    <Stack sx={{ mt: 2 }} direction="column" gap={2}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      {recipe.steps.map((step, index) => (
+                        <Draggable key={step.id} draggableId={step.id} index={index}>
+                          {(provided, snapshot) => (
+                            <RecipeStep
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              dragHandleProps={provided.dragHandleProps}
+                              key={step.id}
+                              step={step}
+                              onChange={handleStepChange}
+                              onDelete={handleDeleteStep}
+                            />
+                            )}
+                          </Draggable>
+                        ))}
+        
+                        {provided.placeholder}
+                      </Stack>
+                  )}
+                </Droppable>
+              </DragDropContext> 
 
               <Button sx={{ mt: 2 }} type="button" onClick={handleAddStepClick} variant="contained">
                 {`${t("common.words.actions.add")} ${t("types.recipe.fields.steps.singularName")}`}

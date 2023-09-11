@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { RecipeType } from 'types';
+import { includeResizeQueryParameters } from 'utils/imageUtils';
 import { lowercaseFirstLetter } from 'utils/stringUtils';
 import { getDayName, getMonthName } from 'utils/translations';
 import { areDatesTheSameDay, isUndefined, toISOLocal } from 'utils/utils';
@@ -205,7 +206,16 @@ export default () => {
                 <Stack direction="column" gap={1}>
                   {plannedRecipes.map((plannedRecipe) => (
                     <PlannedRecipe
-                      plannedRecipe={plannedRecipe}
+                      plannedRecipe={{
+                        ...plannedRecipe,
+                        recipe: {
+                          ...plannedRecipe.recipe,
+                          images: plannedRecipe.recipe.images.map((image) => ({
+                            ...image,
+                            url: includeResizeQueryParameters(image.url, 300, 0)
+                          }))
+                        }
+                      }}
                       onClick={() => handlePlannedRecipeClick(plannedRecipe)}
                       onEditClick={() => handlePlannedRecipeEditClick(plannedRecipe)}
                     />

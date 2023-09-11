@@ -175,12 +175,16 @@
     "accountSettings": {
       "title": "Account Einstellungen",
       "options": {
+        "changeEmail": "Ändern Sie die E-Mail",
         "changePassword": "Kennwort ändern",
         "deleteAccount": "Konto löschen"
       }
     },
     "changePassword": {
       "title": "Kennwort ändern"
+    },
+    "changeEmail": {
+      "title": "Ändern Sie die E-Mail"
     },
     "resetPassword": {
       "title": "Setze dein Passwort zurück"
@@ -299,6 +303,30 @@
           }
         }
       },
+      "changeEmail": {
+        "title": "Ändern Sie die E-Mail",
+        "inputs": {
+          "newEmail": {
+            "label": "Neue e-mail",
+            "validationMessages": {
+              "empty": "Neue E-Mail ist erforderlich",
+              "invalid": "Ungültige E-Mail",
+              "sameAsCurrent": "Das neue Passwort muss sich vom aktuellen Passwort unterscheiden."
+            }
+          },
+          "password": {
+            "label": "Passwort",
+            "validationMessages": {
+              "empty": "Bitte geben Sie Ihr Passwort ein."
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Ändern Sie die E-Mail"
+          }
+        }
+      },
       "resetPassword": {
         "title": "Neues Passwort erstellen",
         "inputs": {
@@ -360,6 +388,7 @@
       }
     },
     "recipe": {
+      "invalidRecipeImage": "Datei wird nicht unterstützt. ",
       "copiedFrom": "Kopiert von",
       "inputs": {
         "isVariant": {
@@ -431,6 +460,12 @@
       "forgottenPassword": {
         "success": "Ein Link zum Zurücksetzen wurde an Ihre E-Mail-Adresse gesendet.",
         "error": "Wiederherstellungs-E-Mail kann nicht gesendet werden. "
+      },
+      "changeEmail": {
+        "success": "Ihre E-Mail-Adresse wurde geändert.",
+        "emailAlreadyTaken": "Diese E-Mail-Adresse ist bereits für ein anderes Konto registriert.",
+        "invalid": "Bitte überprüfen Sie Ihre Anmeldedaten.",
+        "error": "E-Mail kann nicht geändert werden. "
       },
       "changePassword": {
         "success": "Ihr Passwort wurde geändert.",

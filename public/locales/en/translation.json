@@ -175,12 +175,16 @@
     "accountSettings": {
       "title": "Account Settings",
       "options": {
+        "changeEmail": "Change Email",
         "changePassword": "Change Password",
         "deleteAccount": "Delete Account"
       }
     },
     "changePassword": {
       "title": "Change Password"
+    },
+    "changeEmail": {
+      "title": "Change Email"
     },
     "resetPassword": {
       "title": "Reset Your Password"
@@ -296,6 +300,30 @@
         "buttons": {
           "submit": {
             "label": "Change Password"
+          }
+        }
+      },
+      "changeEmail": {
+        "title": "Change Email",
+        "inputs": {
+          "newEmail": {
+            "label": "New Email",
+            "validationMessages": {
+              "empty": "New Email is required",
+              "invalid": "Invalid email",
+              "sameAsCurrent": "New Password must be different from current password."
+            }
+          },
+          "password": {
+            "label": "Password",
+            "validationMessages": {
+              "empty": "Please enter your password."
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Change Email"
           }
         }
       },
@@ -432,6 +460,12 @@
       "forgottenPassword": {
         "success": "A reset link has been sent to your email address.",
         "error": "Unable to send recovery email. Please try again later."
+      },
+      "changeEmail": {
+        "success": "Your email has been changed.",
+        "emailAlreadyTaken": "This email address is already registered to another account.",
+        "invalid": "Please check your credentials.",
+        "error": "Unable to change email. Please try again later."
       },
       "changePassword": {
         "success": "Your password has been changed.",

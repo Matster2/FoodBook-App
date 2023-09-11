@@ -175,12 +175,16 @@
     "accountSettings": {
       "title": "Paramètres du compte",
       "options": {
+        "changeEmail": "Changer l'e-mail",
         "changePassword": "Changer le mot de passe",
         "deleteAccount": "Supprimer le compte"
       }
     },
     "changePassword": {
       "title": "Changer le mot de passe"
+    },
+    "changeEmail": {
+      "title": "Changer l'e-mail"
     },
     "resetPassword": {
       "title": "Réinitialisez votre mot de passe"
@@ -299,6 +303,30 @@
           }
         }
       },
+      "changeEmail": {
+        "title": "Changer l'e-mail",
+        "inputs": {
+          "newEmail": {
+            "label": "nouveau courriel",
+            "validationMessages": {
+              "empty": "Un nouvel e-mail est requis",
+              "invalid": "Email invalide",
+              "sameAsCurrent": "Le nouveau mot de passe doit être différent du mot de passe actuel."
+            }
+          },
+          "password": {
+            "label": "Mot de passe",
+            "validationMessages": {
+              "empty": "S'il vous plait entrez votre mot de passe."
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Changer l'e-mail"
+          }
+        }
+      },
       "resetPassword": {
         "title": "Créer un nouveau mot de passe",
         "inputs": {
@@ -360,6 +388,7 @@
       }
     },
     "recipe": {
+      "invalidRecipeImage": "Le fichier n'est pas pris en charge. ",
       "copiedFrom": "Copié depuis",
       "inputs": {
         "isVariant": {
@@ -431,6 +460,12 @@
       "forgottenPassword": {
         "success": "Un lien de réinitialisation a été envoyé à votre adresse e-mail.",
         "error": "Impossible d'envoyer l'e-mail de récupération. "
+      },
+      "changeEmail": {
+        "success": "Votre email a été modifié.",
+        "emailAlreadyTaken": "Cette adresse e-mail est déjà enregistrée sur un autre compte.",
+        "invalid": "Veuillez vérifier vos informations d'identification.",
+        "error": "Impossible de changer d'e-mail. "
       },
       "changePassword": {
         "success": "Votre mot de passe a été changé.",

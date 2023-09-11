@@ -54,6 +54,13 @@ const useAPI = () => {
     return axios.post(`${process.env.REACT_APP_API_URL}/forgot-password`, { email });
   };
 
+  const changeEmail = async (userId, newEmail, password) => {
+    return axios.post(`${process.env.REACT_APP_API_URL}/users/${userId}/change-email`, { 
+      newEmail,
+      password  
+    });
+  };
+
   const changePassword = async (userId, currentPassword, newPassword) => {
     return axios.post(`${process.env.REACT_APP_API_URL}/users/${userId}/change-password`, { 
       userId: userId,
@@ -628,7 +635,6 @@ const useAPI = () => {
     });
   };
 
-  
   const addRecipeVariantRelationship = async (recipeId, variantRecipeId) => {
     return axios.post(
       `${process.env.REACT_APP_API_URL}/recipes/${recipeId}/variants`,
@@ -647,6 +653,7 @@ const useAPI = () => {
     getSupportedLanguages,
     queryEmail,
     forgotPassword,
+    changeEmail,
     changePassword,
     resetPassword,
     register,

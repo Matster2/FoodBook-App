@@ -175,12 +175,16 @@
     "accountSettings": {
       "title": "Hesap ayarları",
       "options": {
+        "changeEmail": "Değişim e-posta",
         "changePassword": "Şifre değiştir",
         "deleteAccount": "Hesabı sil"
       }
     },
     "changePassword": {
       "title": "Şifre değiştir"
+    },
+    "changeEmail": {
+      "title": "Değişim e-posta"
     },
     "resetPassword": {
       "title": "Şifrenizi Sıfırlayın"
@@ -299,6 +303,30 @@
           }
         }
       },
+      "changeEmail": {
+        "title": "Değişim e-posta",
+        "inputs": {
+          "newEmail": {
+            "label": "Yeni E-posta",
+            "validationMessages": {
+              "empty": "Yeni E-posta gerekli",
+              "invalid": "Geçersiz e-posta",
+              "sameAsCurrent": "Yeni Şifre mevcut şifreden farklı olmalıdır."
+            }
+          },
+          "password": {
+            "label": "Şifre",
+            "validationMessages": {
+              "empty": "Şifrenizi giriniz Lütfen."
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Değişim e-posta"
+          }
+        }
+      },
       "resetPassword": {
         "title": "Yeni Şifre Oluştur",
         "inputs": {
@@ -360,6 +388,7 @@
       }
     },
     "recipe": {
+      "invalidRecipeImage": "Dosya desteklenmiyor. ",
       "copiedFrom": "Kopyalandığı Yer",
       "inputs": {
         "isVariant": {
@@ -431,6 +460,12 @@
       "forgottenPassword": {
         "success": "E-posta adresinize sıfırlama bağlantısı gönderildi.",
         "error": "Kurtarma e-postası gönderilemiyor. "
+      },
+      "changeEmail": {
+        "success": "E-postanız değiştirildi.",
+        "emailAlreadyTaken": "Bu e-posta adresi zaten başka bir hesaba kayıtlı.",
+        "invalid": "Lütfen kimlik bilgilerinizi kontrol edin.",
+        "error": "E-posta değiştirilemiyor. "
       },
       "changePassword": {
         "success": "Şifreniz değiştirildi.",

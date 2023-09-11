@@ -10,23 +10,23 @@ import {
   TextField,
   Typography
 } from '@mui/material';
+import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
 import CategoryChip from 'components/CategoryChip';
 import FilterButton from 'components/FilterButton';
 import RecipeTile from 'components/RecipeTile';
 import Section from 'components/Section';
 import { UserContext } from 'contexts/UserContext';
+import useAuth from 'hooks/useAuth';
 import useInput from 'hooks/useInput';
 import usePagedFetch from 'hooks/usePagedFetch';
 import React, { useContext, useMemo, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
-import Filters from './Filters';
-
-import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
-import useAuth from 'hooks/useAuth';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
+import { includeResizeQueryParameters } from 'utils/imageUtils';
+import Filters from './Filters';
 import styles from './Homepage.module.css';
 
 const Transition = React.forwardRef((props, ref) => {
@@ -66,7 +66,7 @@ export default () => {
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&favourited=true`
   );
   const { results: personalRecipes, totalResults: totalPersonalRecipes, loading: loadingPersonalRecipes, refetch: refetchPersonalRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&favourited=true&personal=true`
+    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&personal=true`
   );
 
   /* Handlers */
@@ -135,15 +135,25 @@ export default () => {
   const renderRecipeTile = (recipe) => (
     <Box
       sx={{
-        maxWidth: 150,
+        maxWidth: 140,
       }}
     >
-      <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
+      <RecipeTile
+        key={recipe.id}  
+        recipe={{
+          ...recipe,
+          images: recipe.images.map((image) => ({
+            ...image,
+            url: includeResizeQueryParameters(image.url, 300, 0)
+          }))
+        }}
+        onClick={handleRecipeClick} 
+      />
     </Box>
   );
 
   return (
-    <Container sx={{ pb: 7 }}>
+    <>
       <Dialog
         fullScreen
         open={showAdvancedFilters}
@@ -159,115 +169,115 @@ export default () => {
       </Dialog>
 
       <PullToRefresh onRefresh={handleRefresh}>
-        <Box sx={{ mb: 3, mt: 5 }}>
-          <Grid item xs={12} container justifyContent="space-between" alignItems="center">
-            <Grid item xs>
-              <Typography variant="subtitle2">{getWelcomeMessage()}</Typography>
-              <Typography variant="h3">{t('pages.home.welcome.message')}</Typography>
+        <Container sx={{ mb: 7 }}>
+          <Box sx={{ mb: 3, mt: 5 }}>
+            <Grid item xs={12} container justifyContent="space-between" alignItems="center">
+              <Grid item xs>
+                <Typography variant="subtitle2">{getWelcomeMessage()}</Typography>
+                <Typography variant="h3">{t('pages.home.welcome.message')}</Typography>
+              </Grid>
+              <Grid item xs="auto">
+                <Avatar sx={{ bgcolor: authenticated ? '#fb6b1c' : 'grey' }} onClick={handleAvatarClick} />
+              </Grid>
             </Grid>
-            <Grid item xs="auto">
-              <Avatar sx={{ bgcolor: authenticated ? '#fb6b1c' : 'grey' }} onClick={handleAvatarClick} />
-            </Grid>
-          </Grid>
-        </Box>
+          </Box>
 
-        <Box sx={{ mb: 3 }}>
-          <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
-            <Grid item xs>
-              <TextField
-                fullWidth
-                id="input-with-icon-adornment"
-                placeholder={t('pages.home.components.inputs.recipeSearch.placeholder')}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon className={styles.searchIcon} />
-                    </InputAdornment>
-                  ),
-                }}
-                value={search}
-                onChange={onSearchChange}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter') {
-                    handleApplySearch();
+          <Box sx={{ mb: 3 }}>
+            <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
+              <Grid item xs>
+                <TextField
+                  fullWidth
+                  id="input-with-icon-adornment"
+                  placeholder={t('pages.home.components.inputs.recipeSearch.placeholder')}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon className={styles.searchIcon} />
+                      </InputAdornment>
+                    ),
+                  }}
+                  value={search}
+                  onChange={onSearchChange}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      handleApplySearch();
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs="auto">
+                <FilterButton onClick={handleAdvancedFiltersClick} />
+              </Grid>
+            </Grid>
+          </Box>
+
+          {categories.length > 0 && (
+            <Section
+              sx={{ mb: 0.5 }}
+              title={t('pages.home.sections.categories')}
+              //showSeeAllLink={categories.length < totalCategories}
+              loading={loadingCategories}
+            >
+              {categories.map((category) => (
+                <CategoryChip key={category.id} sx={{ mb: 1.5 }} category={category} onClick={handleCategoryClick} />
+              ))}
+            </Section>
+          )}
+
+          {recommendedRecipes.length > 0 && (
+            <Section
+              title={t('pages.home.sections.recommended')}
+              //showSeeAllLink={recommendedRecipes.length < totalRecommendedRecipes}
+              loading={loadingRecommendedRecipes}
+            >
+              {recommendedRecipes.map((recipe) => renderRecipeTile(recipe))}
+            </Section>
+          )}
+
+          {recentlyAddedRecipes.length > 0 && (
+            <Section
+              title={t('pages.home.sections.recentlyAdded')}
+              showSeeAllLink={recentlyAddedRecipes.length < totalRecentlyAddedRecipes}
+              onSeeAllClick={(e) => {
+                navigate('/recipes', {
+                  state: {
+                    filters: {
+                      publishedAfter: `${sevenDaysAgo.toISOString()}`,
+                      sortBy: 'datepublished',
+                      sortDesc: true
+                    }
                   }
-                }}
-              />
-            </Grid>
-            <Grid item xs="auto">
-              <FilterButton onClick={handleAdvancedFiltersClick} />
-            </Grid>
-          </Grid>
-        </Box>
+                })
+              }}
+              loading={loadingRecentlyAddedRecipes}
+            >
+              {recentlyAddedRecipes.map((recipe) => renderRecipeTile(recipe))}
+            </Section>
+          )}
 
-        {categories.length > 0 && (
-          <Section
-            sx={{ mb: 0.5 }}
-            title={t('pages.home.sections.categories')}
-            //showSeeAllLink={categories.length < totalCategories}
-            loading={loadingCategories}
-          >
-            {categories.map((category) => (
-              <CategoryChip key={category.id} sx={{ mb: 1.5 }} category={category} onClick={handleCategoryClick} />
-            ))}
-          </Section>
-        )}
+          {favouriteRecipes.length > 0 && (
+            <Section
+              title={t('pages.home.sections.favourites')}
+              showSeeAllLink={favouriteRecipes.length < totalFavouriteRecipes}
+              loading={loadingFavouriteRecipes}
+              onSeeAllClick={() => navigate('/favourites')}
+            >
+              {favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}
+            </Section>
+          )}
 
-        {recommendedRecipes.length > 0 && (
-          <Section
-            title={t('pages.home.sections.recommended')}
-            //showSeeAllLink={recommendedRecipes.length < totalRecommendedRecipes}
-            loading={loadingRecommendedRecipes}
-          >
-            {recommendedRecipes.map((recipe) => renderRecipeTile(recipe))}
-          </Section>
-        )}
-
-        <img src="https://yrphe77a65.execute-api.eu-west-2.amazonaws.com/production/resize?key=/authors/profile-pictures/00530ff4-b8a7-4366-83df-44c1e2eb5270.png&width=400" />
-
-        {recentlyAddedRecipes.length > 0 && (
-          <Section
-            title={t('pages.home.sections.recentlyAdded')}
-            showSeeAllLink={recentlyAddedRecipes.length < totalRecentlyAddedRecipes}
-            onSeeAllClick={(e) => {
-              navigate('/recipes', {
-                state: {
-                  filters: {
-                    publishedAfter: `${sevenDaysAgo.toISOString()}`,
-                    sortBy: 'datepublished',
-                    sortDesc: true
-                  }
-                }
-              })
-            }}
-            loading={loadingRecentlyAddedRecipes}
-          >
-            {recentlyAddedRecipes.map((recipe) => renderRecipeTile(recipe))}
-          </Section>
-        )}
-
-        {favouriteRecipes.length > 0 && (
-          <Section
-            title={t('pages.home.sections.favourites')}
-            showSeeAllLink={favouriteRecipes.length < totalFavouriteRecipes}
-            loading={loadingFavouriteRecipes}
-            onSeeAllClick={() => navigate('/favourites')}
-          >
-            {favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}
-          </Section>
-        )}
-
-        {personalRecipes.length > 0 && (
-          <Section
-            title={t('pages.home.sections.personal')}
-            // showSeeAllLink={favouriteRecipes.length < totalFavouriteRecipes}
-            loading={loadingPersonalRecipes}
-            // onSeeAllClick={() => navigate('/favourites')}
-          >
-            {personalRecipes.map((recipe) => renderRecipeTile(recipe))}
-          </Section>
-        )}
+          {personalRecipes.length > 0 && (
+            <Section
+              title={t('pages.home.sections.personal')}
+              // showSeeAllLink={favouriteRecipes.length < totalFavouriteRecipes}
+              loading={loadingPersonalRecipes}
+              // onSeeAllClick={() => navigate('/favourites')}
+            >
+              {personalRecipes.map((recipe) => renderRecipeTile(recipe))}
+            </Section>
+          )}
+        </Container>
       </PullToRefresh>
-    </Container>
+    </>
   );
 };

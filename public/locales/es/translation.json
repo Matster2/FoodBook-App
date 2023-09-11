@@ -175,12 +175,16 @@
     "accountSettings": {
       "title": "Configuraciones de la cuenta",
       "options": {
+        "changeEmail": "Cambiar e-mail",
         "changePassword": "Cambiar la contraseña",
         "deleteAccount": "Borrar cuenta"
       }
     },
     "changePassword": {
       "title": "Cambiar la contraseña"
+    },
+    "changeEmail": {
+      "title": "Cambiar e-mail"
     },
     "resetPassword": {
       "title": "Restablecer su contraseña"
@@ -299,6 +303,30 @@
           }
         }
       },
+      "changeEmail": {
+        "title": "Cambiar e-mail",
+        "inputs": {
+          "newEmail": {
+            "label": "Nuevo Email",
+            "validationMessages": {
+              "empty": "Se requiere un nuevo correo electrónico",
+              "invalid": "Email inválido",
+              "sameAsCurrent": "La nueva contraseña debe ser diferente de la contraseña actual."
+            }
+          },
+          "password": {
+            "label": "Contraseña",
+            "validationMessages": {
+              "empty": "Por favor, introduzca su contraseña."
+            }
+          }
+        },
+        "buttons": {
+          "submit": {
+            "label": "Cambiar e-mail"
+          }
+        }
+      },
       "resetPassword": {
         "title": "Crear nueva contraseña",
         "inputs": {
@@ -360,6 +388,7 @@
       }
     },
     "recipe": {
+      "invalidRecipeImage": "El archivo no es compatible. ",
       "copiedFrom": "Copiado de",
       "inputs": {
         "isVariant": {
@@ -431,6 +460,12 @@
       "forgottenPassword": {
         "success": "Se ha enviado un enlace de reinicio a su dirección de correo electrónico.",
         "error": "No se puede enviar el correo electrónico de recuperación. "
+      },
+      "changeEmail": {
+        "success": "Su correo electrónico ha sido cambiado.",
+        "emailAlreadyTaken": "Esta dirección de correo electrónico ya está registrada en otra cuenta.",
+        "invalid": "Por favor verifique sus credenciales.",
+        "error": "No se puede cambiar el correo electrónico. "
       },
       "changePassword": {
         "success": "Tu contraseña ha sido cambiada.",

@@ -1,3 +1,14 @@
 .seeAll {
     color: var(--primary-colour) !important;
 }
+
+.listContainer {
+    overflow: visible !important;
+}
+
+.listContent {
+    overflow-y: scroll !important;
+    padding-bottom: 1px !important;
+    margin-right: -100px !important;
+    padding-right: 100px !important;
+}
