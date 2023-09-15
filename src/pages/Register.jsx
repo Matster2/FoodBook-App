@@ -99,6 +99,7 @@ const Register = ({ onSignInClick, onComplete }) => {
         if (isUsed) {
           const newInputErrors = inputErrors;
           newInputErrors.email = t('requests.auth.register.emailAlreadyUsed');
+          setRegistering(false);
           setInputErrors(newInputErrors);
           return;
         }
@@ -106,13 +107,12 @@ const Register = ({ onSignInClick, onComplete }) => {
         return;
       }
 
-      throw new Error("jeja")
-      // await api.register(email, password);
+      await api.register(email, password);
 
-      // setRegistrationComplete(true);
-      // toast.success(t('requests.auth.register.success'));
-      // onComplete();
-    } catch {
+      setRegistrationComplete(true);
+      toast.success(t('requests.auth.register.success'));
+      onComplete();
+    } catch (e) {
       toast.error(t('requests.auth.register.error'));
     }
 

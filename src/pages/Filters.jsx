@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { RecipeDifficulty, RecipeType } from 'types';
 import { lowercaseFirstLetter } from 'utils/stringUtils';
-import { isUndefined } from 'utils/utils';
+import { isNullOrEmpty, isUndefined } from 'utils/utils';
 
 const Filters = ({ filters: originalFilters, onApply, onClose }) => {
   const { t } = useTranslation();
@@ -232,12 +232,14 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
             setIngredientSearch(newValue);
           }}
           onChange={(event, value) => {
-            setIngredientSearch('');
-            handleAddIngredient(value.ingredient);
+            if (!isNullOrEmpty(value)) {
+              setIngredientSearch('');
+              handleAddIngredient(value.ingredient);
+            }
           }}
         />
 
-        <Stack direction="row" alignItems="center" gap={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
+        <Stack direction="row" alignItems="center" gap={2} sx={{ mt: 1, flexWrap: 'wrap', gap: 1 }}>
           {filters.ingredientIds.map((ingredientId) => {
             const ingredient = ingredients.find((x) => x.id === ingredientId);
 

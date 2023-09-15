@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { RecipeState } from 'types';
+import { includeResizeQueryParameters } from 'utils/imageUtils';
 
 export default () => {
   const { t } = useTranslation();
@@ -30,7 +31,11 @@ export default () => {
       setRecipe({
         ...location?.state,
         ...data,
-        personal: true
+        personal: true,
+        images: data.images.map((image) => ({
+          ...image,
+          url: includeResizeQueryParameters(image.url, 300, 0)
+        }))
       });
     } catch (e) {
       console.log('error fetching recipe');
@@ -51,15 +56,6 @@ export default () => {
         id: undefined,
         descendantOfRecipeId: location?.state?.descendantOfRecipeId
       });
-      console.log({
-        ...location?.state,
-        ...data,
-        personal: true,
-        state: RecipeState.Draft,
-        images: [],
-        id: undefined,
-        descendantOfRecipeId: location?.state?.descendantOfRecipeId
-      })
     } catch (e) {
       console.log(e)
       console.log('error fetching recipe');

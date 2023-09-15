@@ -170,7 +170,7 @@ export default () => {
 
       <PullToRefresh onRefresh={handleRefresh}>
         <Container sx={{ mb: 7 }}>
-          <Box sx={{ mb: 3, mt: 5 }}>
+          <Box sx={{ mb: 3, mt: 3 }}>
             <Grid item xs={12} container justifyContent="space-between" alignItems="center">
               <Grid item xs>
                 <Typography variant="subtitle2">{getWelcomeMessage()}</Typography>

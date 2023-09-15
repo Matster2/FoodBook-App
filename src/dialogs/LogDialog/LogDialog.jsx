@@ -35,7 +35,7 @@ const LogDialog = ({ open, onClose, log, transitionComponent }) => {
   return (
     <Dialog
       fullWidth
-      maxWidth="sm"
+      maxWidth="lg"
       open={open}
       onClose={onClose}
       TransitionComponent={transitionComponent}

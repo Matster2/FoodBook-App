@@ -34,7 +34,6 @@ export const areDatesTheSameDay = (first, second) =>
   first.getMonth() === second.getMonth() &&
   first.getDate() === second.getDate();
 
-
 export function toISOLocal(d) {
   var z  = n =>  ('0' + n).slice(-2);
   var zz = n => ('00' + n).slice(-3);

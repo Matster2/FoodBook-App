@@ -1,7 +1,8 @@
-import { Cancel as DeleteIcon } from '@mui/icons-material';
-import { Paper } from '@mui/material';
+import { Cancel as DeleteIcon, RestaurantMenu as RecipeIcon } from '@mui/icons-material';
+import { Box, Paper } from '@mui/material';
 import useLongPress from 'hooks/useLongPress';
 import PropTypes from 'prop-types';
+import { useMemo, useState } from 'react';
 import styles from './RecipeImageControl.module.css';
 
 const RecipeImageControl = ({ src, onClick, onLongClick, onDeleteClick, alwaysShowDelete, ...props }) => {
@@ -10,6 +11,12 @@ const RecipeImageControl = ({ src, onClick, onLongClick, onDeleteClick, alwaysSh
     delay: 500,
   };
   
+  const [errored, setErrored] = useState(false);
+  
+  const onError = () => {
+    setErrored(true);
+  }
+
   const handleLongClick = (e) => {
     onLongClick();
   };
@@ -25,6 +32,26 @@ const RecipeImageControl = ({ src, onClick, onLongClick, onDeleteClick, alwaysSh
 
   const longPressEvent = useLongPress(handleLongClick, handleClick, defaultOptions);
 
+  const image = useMemo(() => {
+    if (!src || errored) {
+      return (
+        <Box className={styles.noImages} display="flex" justifyContent="center" alignItems="center" {...props}>
+          <RecipeIcon className={styles.noImagesIcon} />
+        </Box>
+      )
+    }
+  
+    return (
+      <img
+        className={styles.image}
+        src={src}
+        alt="recipe" 
+        onError={onError}
+        {...longPressEvent}
+      />
+    )
+  }, [src, errored]);
+
   return (
     <Paper {...props} sx={{ p: 0.5 }} className={styles.container}>
       <div
@@ -36,7 +63,7 @@ const RecipeImageControl = ({ src, onClick, onLongClick, onDeleteClick, alwaysSh
         />
       </div>
 
-      <img alt="recipe" className={styles.image} src={src} {...longPressEvent} />
+      {image}
     </Paper>
   );
 };

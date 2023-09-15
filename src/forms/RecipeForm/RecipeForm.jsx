@@ -28,6 +28,7 @@ import RecipeIngredient from 'Admin/components/RecipeIngredient';
 import RecipePieceOfEquipment from 'Admin/components/RecipePieceOfEquipment';
 import RecipeStep from 'Admin/components/RecipeStep';
 import FilterOption from 'components/FilterOption';
+import RecipeImage from 'components/RecipeImage';
 import RecipeImageControl from 'components/RecipeImageControl';
 import NewPersonalEquipmentDialog from 'dialogs/NewPersonalEquipmentDialog';
 import NewPersonalIngredientDialog from 'dialogs/NewPersonalIngredientDialog';
@@ -48,49 +49,52 @@ import uuid from 'react-uuid';
 import { RecipeDifficulty, RecipeState, RecipeType } from 'types';
 import { getRecipeScheme } from 'types/schemas';
 import FormModes from 'utils/formModes';
+import { includeResizeQueryParameters } from 'utils/imageUtils';
 import { lowercaseFirstLetter } from 'utils/stringUtils';
 import { isNullOrEmpty, isNullOrUndefined, isUndefined, reorder } from 'utils/utils';
 import styles from './RecipeForm.module.css';
 
-const initialRecipeValue = {
-  state: RecipeState.Draft,
-  name: '',
-  description: '',
-  type: RecipeType.Breakfast,
-  difficulty: RecipeDifficulty.Average,
-  prepTime: 0,
-  cookTime: 0,
-  totalTime: 1,
-  servings: 1,
-  containsAlcohol: false,
-  steps: [
-    {
-      id: uuid(),
-      name: "",
-      instructions: [{
+const getDefaultRecipe = () => {
+  return {
+    state: RecipeState.Draft,
+    name: '',
+    description: '',
+    type: RecipeType.Breakfast,
+    difficulty: RecipeDifficulty.Average,
+    prepTime: 0,
+    cookTime: 0,
+    totalTime: 1,
+    servings: 1,
+    containsAlcohol: false,
+    steps: [
+      {
         id: uuid(),
-        instruction: ""
-      }]
-    }
-  ],
-  ingredients: [],
-  equipment: [],
-  referenceUrl: '',
-  nutrition: {
-    calories: undefined,
-    sugar: undefined,
-    fat: undefined,
-    saturatedFat: undefined,
-    sodium: undefined,
-    protein: undefined,
-    carbohydrates: undefined,
-    fiber: undefined,
-  },
-  personal: false,
-  tags: [],
-  images: [],
-  isVariant: false
-};
+        name: "",
+        instructions: [{
+          id: uuid(),
+          instruction: ""
+        }]
+      }
+    ],
+    ingredients: [],
+    equipment: [],
+    referenceUrl: '',
+    nutrition: {
+      calories: undefined,
+      sugar: undefined,
+      fat: undefined,
+      saturatedFat: undefined,
+      sodium: undefined,
+      protein: undefined,
+      carbohydrates: undefined,
+      fiber: undefined,
+    },
+    personal: false,
+    tags: [],
+    images: [],
+    isVariant: false
+  }
+}
 
 export default ({ recipe: initialValues, onSubmit, admin }) => {
   const { t, i18n } = useTranslation();
@@ -160,17 +164,23 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   const [loadingDescendantRecipe, setLoadingDescendantRecipe] = useState();
   const [descendantRecipe, setDescendantRecipe] = useState();
 
-  const originalRecipe = {
-    ...initialRecipeValue,
+  const [originalRecipe] = useState({
+    ...getDefaultRecipe(),
     ...initialValues,
     languageCode: i18n.resolvedLanguage
-  };
-
+  });
+  
   const fetchDescendantRecipe = async () => {
     setLoadingDescendantRecipe(true);
     try {
       const { data } = await api.getRecipe(recipe?.descendantOfRecipeId);
-      setDescendantRecipe(data);
+      setDescendantRecipe({
+        ...data,
+        images: data.images.map((image) => ({
+          ...image,
+          url: includeResizeQueryParameters(image.url, 300, 0)
+        }))
+      });
     } catch (e) {
       console.log(e);
     }
@@ -772,7 +782,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
           <Stack display="flex" direction="row" alignItems="center" gap={2}>
             <Box className={styles.imageContainer}>
-              <img className={styles.image} src={descendantRecipe?.images && descendantRecipe.images.length > 0 ? descendantRecipe.images[0].url : undefined} />
+              <RecipeImage
+                src={descendantRecipe?.images && descendantRecipe.images.length > 0 ? descendantRecipe.images[0].url : undefined}
+              />
             </Box>
 
             <Typography sx={{ fontWeight: 'bold' }}>{descendantRecipe.name}</Typography>
@@ -822,7 +834,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         <input type="file" onChange={handleUploadImage} accept="image/jpg,image/jpeg,image/jfif,image/png,image/tiff,image/webp" />
       </Box>
 
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mt: 1, mb: 2 }}>
         <form onSubmit={handleSubmit}>          
           <Box>
             <TextField
