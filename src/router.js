@@ -2,6 +2,7 @@ import { createBrowserRouter, useParams } from 'react-router-dom';
 
 import AdminRoute from 'routings/AdminRoute';
 import AuthRoute from 'routings/AuthRoute';
+import MaintenanceRoute from 'routings/MaintenaceRoute';
 import UnAuthRoute from 'routings/UnAuthRoute';
 
 import AccountSettings from 'pages/Account/AccountSettings';
@@ -26,6 +27,7 @@ import Favourites from 'pages/Favourites';
 import ForgottenPassword from 'pages/ForgottenPassword';
 import Homepage from 'pages/Homepage';
 import IngredientList from 'pages/IngredientList';
+import Maintenance from 'pages/Maintenance';
 import NotFound from 'pages/NotFound';
 import Personal from 'pages/Personal';
 import PersonalRecipe from 'pages/PersonalRecipe';
@@ -54,7 +56,11 @@ const Recipe = () => {
 
 export default createBrowserRouter([
   {
-    element: <MainLayout />,
+    element: (
+      <MaintenanceRoute>
+        <MainLayout />
+      </MaintenanceRoute>
+    ),
     errorElement: <ErrorBoundary />,
     children: [
       {
@@ -280,7 +286,11 @@ export default createBrowserRouter([
     ]
   },
   {
-    element: <MainLayout />, // Change when hidable
+    element: (
+      <MaintenanceRoute>
+        <MainLayout />
+      </MaintenanceRoute>
+    ), // Change when hidable
     errorElement: <ErrorBoundary />,
     children: [
       {
@@ -332,6 +342,10 @@ export default createBrowserRouter([
         path: '*',
         element: <NotFound />,
       },
+      {
+        path: '/maintenace',
+        element: <Maintenance />
+      }
     ]
   }
 ]);

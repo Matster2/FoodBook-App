@@ -1,16 +1,14 @@
 import {
-  Button,
+  Box,
   Container,
   Stack,
   Typography
 } from '@mui/material';
+import { ReactComponent as MaintenanceLogo } from 'assets/icons/maintenance.svg';
 import { useTranslation } from "react-i18next";
-import { useNavigate } from 'react-router-dom';
 
 export default () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-
 
   return (
     <Container>
@@ -18,21 +16,30 @@ export default () => {
         direction="column"
         gap={2}
         sx={{
+          pb: 20,
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: '100vh',
         }}
       >
+        <Box
+          sx={{
+            mb: 4,
+            width: 100,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <MaintenanceLogo style={{ maxWidth: 100, fill: '#dcdcdc' }} alt="foodbook" />
+        </Box>
         <Typography variant="h3" style={{ color: 'var(--primary-colour)' }}>
-          {t('pages.notFound.title')}
+          {t('pages.maintenance.title')}
         </Typography>
-        <Typography variant="h1" style={{ color: 'var(--primary-colour)' }}>
-          {t('pages.notFound.404')}
+        <Typography textAlign="center">
+          {t('pages.maintenance.message')}
         </Typography>
-        <Button sx={{ mt: 2 }} variant='contained' onClick={() => navigate('/')}>
-          {t('pages.notFound.links.home')}
-        </Button>
       </Stack>
     </Container>
   );

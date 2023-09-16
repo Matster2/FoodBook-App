@@ -12,15 +12,14 @@ import { useContext, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { RouterProvider } from 'react-router-dom';
 
-import OfflinePage from 'pages/Offline';
-
 import router from 'router';
 
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 
 
 const App = () => {
-  const { authenticated, refreshTokens } = useAuth();
+  const [maintenance] = useState(true);
+  const { authenticated, refreshTokens, logout } = useAuth();
   const api = useAPI();
 
   const { setSupportedLanguages } = useContext(LanguageContext);
@@ -48,6 +47,11 @@ const App = () => {
     async (error) => {
       const originalRequest = error.config;
 
+      if (isNull(token)) {
+        logout();
+        return;
+      }
+
       if (error.response.status === 401 && !originalRequest._retry) {
         if (isRefreshing) {
           return new Promise((resolve, reject) => {
@@ -73,6 +77,8 @@ const App = () => {
           } catch (e) {
             processQueue(e, null);
             reject(e);
+
+            logout();
           }
 
           isRefreshing = false;
