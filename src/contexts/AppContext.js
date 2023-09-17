@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { createContext, createElement, useMemo, useReducer } from 'react';
+import { createContext, createElement, useMemo, useReducer } from 'react';
 
 import { actions, initialState, reducer } from 'reducers/appReducer';
 
@@ -17,10 +17,20 @@ export const AppProvider = ({ children }) => {
     });
   };
 
+  const setMaintenance = (maintenance) => {
+    dispatch({
+      type: actions.SET_MAINTENANCE,
+      payload: {
+        maintenance: maintenance,
+      },
+    });
+  };
+
   const value = useMemo(
     () => ({
       ...state,
       setInitialized,
+      setMaintenance,
     }),
     [state]
   );

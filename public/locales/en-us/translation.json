@@ -18,6 +18,17 @@
         }
       }
     },
+    "maintenance": {
+      "title": "We will be back soon!",
+      "message": "Sorry for the inconvenience. We are currently performing maintenance.",
+      "components": {
+        "buttons": {
+          "refresh": {
+            "label": "Refresh"
+          }
+        }
+      }
+    },
     "cookbook": {
       "title": "Cookbook"
     },

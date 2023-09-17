@@ -18,6 +18,17 @@
         }
       }
     },
+    "maintenance": {
+      "title": "Nous serons de retour bientôt!",
+      "message": "Désolé pour le dérangement. ",
+      "components": {
+        "buttons": {
+          "refresh": {
+            "label": "Rafraîchir"
+          }
+        }
+      }
+    },
     "cookbook": {
       "title": "Livre de recettes"
     },

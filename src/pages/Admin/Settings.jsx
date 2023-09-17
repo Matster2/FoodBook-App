@@ -1,6 +1,5 @@
 import { Container, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
 import Header from 'components/Header';
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default () => {
@@ -12,11 +11,6 @@ export default () => {
 
       <List>
         <ListItem disablePadding>
-          <ListItemButton component={Link} to="/admin/tags">
-            <ListItemText primary="Tags" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
           <ListItemButton component={Link} to="/admin/ingredients">
             <ListItemText primary="Ingredients" />
           </ListItemButton>
@@ -27,13 +21,18 @@ export default () => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
+          <ListItemButton component={Link} to="/admin/recipes">
+            <ListItemText primary="Recipes" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
           <ListItemButton component={Link} to="/admin/authors">
             <ListItemText primary="Authors" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component={Link} to="/admin/recipes">
-            <ListItemText primary="Recipes" />
+          <ListItemButton component={Link} to="/admin/tags">
+            <ListItemText primary="Tags" />
           </ListItemButton>
         </ListItem>
 

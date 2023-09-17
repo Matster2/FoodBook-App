@@ -8,6 +8,7 @@ import { UserContext } from 'contexts/UserContext';
 import useAPI from 'hooks/useAPI';
 import useAuth from 'hooks/useAuth';
 import useTags from 'hooks/useTags';
+import Maintenance from 'pages/Maintenance';
 import { useContext, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { RouterProvider } from 'react-router-dom';
@@ -18,12 +19,11 @@ import '@fancyapps/ui/dist/fancybox/fancybox.css';
 
 
 const App = () => {
-  const [maintenance] = useState(true);
   const { authenticated, refreshTokens, logout } = useAuth();
   const api = useAPI();
 
   const { setSupportedLanguages } = useContext(LanguageContext);
-  const { initialized, setInitialized } = useContext(AppContext);
+  const { initialized, setInitialized, maintenance, setMaintenance } = useContext(AppContext);
   const { setUser } = useContext(UserContext);
   const { fetch: fetchTags  } = useTags();
 
@@ -47,13 +47,8 @@ const App = () => {
     async (error) => {
       const originalRequest = error.config;
 
-      if (isNull(token)) {
-        logout();
-        return;
-      }
-
       if (error.response.status === 401 && !originalRequest._retry) {
-        if (isRefreshing) {
+        if (isRefreshing && authenticated) {
           return new Promise((resolve, reject) => {
             failedQueue.push({ resolve, reject });
           })
@@ -77,8 +72,6 @@ const App = () => {
           } catch (e) {
             processQueue(e, null);
             reject(e);
-
-            logout();
           }
 
           isRefreshing = false;
@@ -98,6 +91,15 @@ const App = () => {
     }
   };
 
+  const fetchSystem = async () => {
+    try {
+      const { data } = await api.getSystem();
+      setMaintenance(data.maintenance);
+    } catch {
+      console.log('error fetching system');
+    }
+  }
+
   const fetchSupportedLanguages = async () => {
     try {
       const { data } = await api.getSupportedLanguages();
@@ -108,6 +110,15 @@ const App = () => {
   }
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      fetchSystem()
+    }, 60000);
+  
+    return () => clearInterval(interval);
+  }, [])
+
+  useEffect(() => {
+    fetchSystem()
     fetchSupportedLanguages();
     fetchTags();
     setInitialized(true);
@@ -236,7 +247,9 @@ const App = () => {
           <OfflinePage />
         )}
           
-        {(isOnline && initialized) && (<RouterProvider router={router} />)}
+        {maintenance && <Maintenance />}
+        
+        {(isOnline && initialized && !maintenance) && (<RouterProvider router={router} />)}
 
         <Toaster />
       </NiceModal.Provider>

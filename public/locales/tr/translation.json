@@ -18,6 +18,17 @@
         }
       }
     },
+    "maintenance": {
+      "title": "Yakında geri döneceğiz!",
+      "message": "Rahatsızlıktan dolayı özür dileriz. ",
+      "components": {
+        "buttons": {
+          "refresh": {
+            "label": "Yenile"
+          }
+        }
+      }
+    },
     "cookbook": {
       "title": "Yemek kitabı"
     },
@@ -136,7 +147,7 @@
     "planner": {
       "title": "Planlayıcı",
       "authenticationRequired": "Planlayıcınızı görmek için oturum açmalısınız",
-      "noRecipes": "Bu gün için planlanmış bir tarif yok.",
+      "noRecipes": "Bu gün için planlanmış tarif yok.",
       "components": {
         "buttons": {
           "signIn": {

@@ -1,9 +1,11 @@
 export const actions = {
   SET_INITIALIZED: 'SET_INITIALIZED',
+  SET_MAINTENANCE: 'SET_MAINTENANCE'
 };
 
 export const initialState = {
   initialized: false,
+  maintenance: false,
 };
 
 export const reducer = (state, action) => {
@@ -14,6 +16,11 @@ export const reducer = (state, action) => {
       return {
         ...state,
         initialized: payload.initialized,
+      };
+    case actions.SET_MAINTENANCE:
+      return {
+        ...state,
+        maintenance: payload.maintenance,
       };
 
     default:

@@ -18,6 +18,17 @@
         }
       }
     },
+    "maintenance": {
+      "title": "Volveremos pronto!",
+      "message": "Lo siento por los inconvenientes ocasionados. ",
+      "components": {
+        "buttons": {
+          "refresh": {
+            "label": "Actualizar"
+          }
+        }
+      }
+    },
     "cookbook": {
       "title": "libro de cocina"
     },

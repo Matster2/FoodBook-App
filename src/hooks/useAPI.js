@@ -33,6 +33,10 @@ const useAPI = () => {
   const { currentLanguage } = useContext(LanguageContext);
   const { tokens } = useAuth();
 
+  const getSystem = async () => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/system`);
+  };
+
   const getSupportedLanguages = async () => {
     return axios.get(`${process.env.REACT_APP_API_URL}/languages`);
   };
@@ -650,6 +654,7 @@ const useAPI = () => {
   };
 
   return {
+    getSystem,
     getSupportedLanguages,
     queryEmail,
     forgotPassword,

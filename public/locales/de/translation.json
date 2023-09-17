@@ -18,6 +18,17 @@
         }
       }
     },
+    "maintenance": {
+      "title": "Wir werden bald zurück sein!",
+      "message": "Entschuldigen Sie die Unannehmlichkeiten. ",
+      "components": {
+        "buttons": {
+          "refresh": {
+            "label": "Aktualisierung"
+          }
+        }
+      }
+    },
     "cookbook": {
       "title": "Kochbuch"
     },
