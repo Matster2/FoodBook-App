@@ -8,7 +8,6 @@ import { UserContext } from 'contexts/UserContext';
 import useAPI from 'hooks/useAPI';
 import useAuth from 'hooks/useAuth';
 import useTags from 'hooks/useTags';
-import Maintenance from 'pages/Maintenance';
 import { useContext, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { RouterProvider } from 'react-router-dom';
@@ -251,10 +250,8 @@ const App = () => {
         {!isOnline && (
           <OfflinePage />
         )}
-          
-        {maintenance && <Maintenance />}
         
-        {(isOnline && initialized && !maintenance) && (<RouterProvider router={router} />)}
+        {(isOnline && initialized) && (<RouterProvider router={router} />)}
 
         <Toaster />
       </NiceModal.Provider>

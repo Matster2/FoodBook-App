@@ -2,6 +2,7 @@ import { createBrowserRouter, useParams } from 'react-router-dom';
 
 import AdminRoute from 'routings/AdminRoute';
 import AuthRoute from 'routings/AuthRoute';
+import MaintenanceRoute from 'routings/MaintenanceRoute';
 import UnAuthRoute from 'routings/UnAuthRoute';
 
 import AccountSettings from 'pages/Account/AccountSettings';
@@ -38,6 +39,7 @@ import ResetPassword from 'pages/ResetPassword';
 import Settings from 'pages/Settings';
 import SignIn from 'pages/SignIn';
 import TermsOfService from 'pages/TermsOfService';
+import Version from 'pages/Version';
 
 import MainLayout from 'layouts/MainLayout';
 
@@ -55,7 +57,9 @@ const Recipe = () => {
 export default createBrowserRouter([
   {
     element: (
-      <MainLayout />
+      <MaintenanceRoute>
+        <MainLayout />  
+      </MaintenanceRoute>
     ),
     errorElement: <ErrorBoundary />,
     children: [
@@ -281,9 +285,11 @@ export default createBrowserRouter([
       },
     ]
   },
-  {
+  {    
     element: (
-      <MainLayout />
+      <MaintenanceRoute>
+        <MainLayout />  
+      </MaintenanceRoute>
     ), // Change when hidable
     errorElement: <ErrorBoundary />,
     children: [
@@ -333,9 +339,17 @@ export default createBrowserRouter([
     errorElement: <ErrorBoundary />,
     children: [
       {
+        path: 'version',
+        element: <Version />
+      },
+      {
         path: '*',
-        element: <NotFound />,
-      }
+        element: (
+          <MaintenanceRoute>          
+            <NotFound />
+          </MaintenanceRoute>
+        ),
+      },
     ]
   }
 ]);
