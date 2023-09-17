@@ -117,11 +117,16 @@ const App = () => {
     return () => clearInterval(interval);
   }, [])
 
-  useEffect(() => {
-    fetchSystem()
+  const initializeApp = async () => {
     fetchSupportedLanguages();
     fetchTags();
+    await fetchSystem()
     setInitialized(true);
+  }
+
+  useEffect(() => {
+    initializeApp();
+    fetchTags();
   }, []);
 
   useEffect(() => {
