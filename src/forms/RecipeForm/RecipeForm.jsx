@@ -792,7 +792,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
           <FormControlLabel
             control={<Checkbox
-              value={recipe.isVariant}
+              checked={recipe.isVariant}
               onChange={handleChange}  
             />}            
             name="isVariant"
@@ -985,7 +985,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
             <Box sx={{ mt: 2 }}>              
               <FormControlLabel
                 control={<Checkbox
-                  value={recipe.containsAlcohol}
+                  checked={recipe.containsAlcohol}
                   onChange={handleChange}  
                 />}   
                 name="containsAlcohol"

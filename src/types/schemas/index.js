@@ -47,3 +47,10 @@ export const getEquipmentScheme = () => {
     pluralName: yup.string().required(t('types.equipment.fields.pluralName.validation.required'))
   });
 }
+
+export const getTagScheme = () => {
+  return yup.object({
+    name: yup.string().required(),
+    icon: yup.string()
+  });
+}

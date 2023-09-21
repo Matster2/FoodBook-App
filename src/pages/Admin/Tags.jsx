@@ -150,7 +150,7 @@ export default () => {
                           }}
                         >
                           <Icon sx={{ mr: 1 }}>
-                            <img style={{ height: '100%' }} alt={tag.name} src={!isUndefined(categoryIcons[tag.icon.toLowerCase()]) ? categoryIcons[tag.icon.toLowerCase()] : categoryIcons.default} />
+                            <img style={{ height: '100%' }} alt={tag.name} src={!isUndefined(categoryIcons[tag?.icon?.toLowerCase()]) ? categoryIcons[tag.icon.toLowerCase()] : categoryIcons.default} />
                           </Icon>
                           {tag.name}
                         </Typography>

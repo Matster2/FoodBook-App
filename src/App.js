@@ -93,7 +93,7 @@ const App = () => {
   const fetchSystem = async () => {
     try {
       const { data } = await api.getSystem();
-      setMaintenance(data.maintenance);
+      setMaintenance(false);
     } catch {
       console.log('error fetching system');
     }

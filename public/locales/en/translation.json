@@ -571,7 +571,7 @@
         "success": "Ingredient has been updated.",
         "error": "Unable to update ingredient. Please try again later."
       }
-    },    
+    }, 
     "equipment": {      
       "create": {
         "validation": {
@@ -583,6 +583,19 @@
       "update": {
         "success": "Piece of equipment has been updated.",
         "error": "Unable to update piece of equipment. Please try again later."
+      }
+    },
+    "tags": {      
+      "create": {
+        "validation": {
+          "nameExistsAlready": "An tag already exists with this name"
+        },
+        "success": "Tag has been created.",
+        "error": "Unable to create tag. Please try again later."
+      },   
+      "update": {
+        "success": "Tag has been updated.",
+        "error": "Unable to update tag. Please try again later."
       }
     }
   },
@@ -615,7 +628,26 @@
     },
     "tag": {
       "name": "Tag",
-      "pluralName": "Tags"
+      "pluralName": "Tags",
+      
+      "fields": {
+        "name": {
+          "name": "Name",
+          "validation": {
+            "required": "Please provide a name for this tag."
+          }
+        },
+        "icon": {
+          "name": "Icon",
+          "validation": {
+          }
+        },
+        "active": {
+          "name": "Active",
+          "validation": {
+          }
+        }
+      }
     },
     "author": {
       "name": "Author",
