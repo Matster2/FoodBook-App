@@ -8,8 +8,10 @@ import UnAuthRoute from 'routings/UnAuthRoute';
 import AccountSettings from 'pages/Account/AccountSettings';
 import ChangeEmail from 'pages/Account/ChangeEmail';
 import ChangePassword from 'pages/Account/ChangePassword';
-import AdminAddAuthor from 'pages/Admin/AddAuthor';
+import AdminAuthor from 'pages/Admin/Author';
 import AdminAuthors from 'pages/Admin/Authors';
+import AdminCollection from 'pages/Admin/Collection';
+import AdminCollections from 'pages/Admin/Collections';
 import AdminEquipment from 'pages/Admin/Equipment';
 import AdminEquipments from 'pages/Admin/Equipments';
 import AdminIngredient from 'pages/Admin/Ingredient';
@@ -239,7 +241,15 @@ export default createBrowserRouter([
         path: '/admin/authors/add',
         element: (
           <AdminRoute>
-            <AdminAddAuthor />
+            <AdminAuthor />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: '/admin/authors/:id',
+        element: (
+          <AdminRoute>
+            <AdminAuthor />
           </AdminRoute>
         ),
       },
@@ -264,6 +274,30 @@ export default createBrowserRouter([
         element: (
           <AdminRoute>
             <AdminRecipe />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: '/admin/collections',
+        element: (
+          <AdminRoute>
+            <AdminCollections />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: '/admin/collections/add',
+        element: (
+          <AdminRoute>
+            <AdminCollection />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: '/admin/collections/:id',
+        element: (
+          <AdminRoute>
+            <AdminCollection />
           </AdminRoute>
         ),
       },

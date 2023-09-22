@@ -653,6 +653,55 @@ const useAPI = () => {
     );
   };
 
+
+  const getCollection = async (id) => {
+    return axios.get(`${process.env.REACT_APP_API_URL}/collections/${id}`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
+      },
+    });
+  };
+
+  const getCollections = async (parameters = {}) => {
+    const url = new URL(`${process.env.REACT_APP_API_URL}/collections`);
+    url.search = getSearchParams(parameters);
+    return axios.get(url.href, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+        Language: currentLanguage
+      },
+    });
+  };
+
+  const createCollection = async (collection) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/collections`,
+      {
+        ...collection,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
+  const updateCollection = async (id, data) => {
+    return axios.put(
+      `${process.env.REACT_APP_API_URL}/collections/${id}`,
+      {
+        ...data,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
   return {
     getSystem,
     getSupportedLanguages,
@@ -710,7 +759,11 @@ const useAPI = () => {
     removeTagFromRecipe,
     publishRecipe,
     deleteRecipe,
-    addRecipeVariantRelationship
+    addRecipeVariantRelationship,
+    getCollection,
+    getCollections,
+    createCollection,
+    updateCollection
   };
 };
 

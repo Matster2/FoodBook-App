@@ -28,49 +28,49 @@ export default () => {
 
   const { filters, setFilter } = useFilters({
     search: '',
-    sortBy: 'name',
+    sortBy: 'title',
     sortDesc: false,
     page: 1,
     pageSize: 50
   });
 
   const { value: search, onChange: onSearchChange } = useInput('');
-  const [loadingAuthors, setLoadingAuthors] = useState(false);
-  const [authorResponse, setAuthorResponse] = useState();
+  const [loadingCollections, setLoadingCollections] = useState(false);
+  const [collectionResponse, setCollectionResponse] = useState();
 
-  const fetchAuthors = async () => {
-    setLoadingAuthors(true);
+  const fetchCollections = async () => {
+    setLoadingCollections(true);
 
     try {
-      const { data } = await api.getAuthors(filters);
-      setAuthorResponse(data);
+      const { data } = await api.getCollections(filters);
+      setCollectionResponse(data);
     } catch (e) {
       console.log(e);
     }
 
-    setLoadingAuthors(false);
+    setLoadingCollections(false);
   };
 
   /* Handlers */
   const handleRefresh = async () => {
-    fetchAuthors();
+    fetchCollections();
+  }
+
+  const handleAddClick = () => {
+    navigate("/admin/collections/add");
+  }
+
+  const handleCollectionClick = (id) => {
+    navigate(`/admin/collections/${id}`);
   }
 
   const handlePageChange = (event, value) => {
     setFilter("page", value);
   };
 
-  const handleAddClick = () => {
-    navigate("/admin/authors/add")
-  }
-
-  const handleAuthorClick = (id) => {
-    navigate(`/admin/authors/${id}`);
-  }
-
   /* Effects */
   useEffect(() => {
-    fetchAuthors();
+    fetchCollections();
   }, [filters]);
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export default () => {
   /* Rendering */
   return (
     <Container sx={{ pb: 7 }}>
-      <Header title="Authors" onBackClick={() => navigate(-1)} />
+      <Header title="Collections" onBackClick={() => navigate(-1)} />
 
       <Box
         sx={{ display: "flex", justifyContent: "right" }}
@@ -110,25 +110,25 @@ export default () => {
         onChange={onSearchChange}
       />
 
-      {loadingAuthors && (
+      {loadingCollections && (
         <Box sx={{ mt: 2, mb: 4 }} display="flex" justifyContent="center">
           <CircularProgress />
         </Box>
       )}
 
-      {authorResponse && (
+      {collectionResponse && (
         <PullToRefresh onRefresh={handleRefresh}>
           <Box sx={{ mb: 1 }} display="flex" justifyContent="end">
-            <Typography sx={{ fontSize: 12 }}>Total authors: {authorResponse.totalResults}</Typography>
+            <Typography sx={{ fontSize: 12 }}>Total collections: {collectionResponse.totalResults}</Typography>
           </Box>
 
-          {authorResponse.results.length === 0 && !loadingAuthors && (
+          {collectionResponse.results.length === 0 && !loadingCollections && (
             <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
-              <Typography>No Authors Found</Typography>
+              <Typography>No Collections Found</Typography>
             </Box>
           )}
 
-          {authorResponse.results.length > 0 && (
+          {collectionResponse.results.length > 0 && (
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }}>
                 <TableHead>
@@ -137,10 +137,16 @@ export default () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {authorResponse.results.map((author) => (
-                    <TableRow key={author.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleAuthorClick(author.id)}>
+                  {collectionResponse.results.map((collection) => (
+                    <TableRow key={collection.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} onClick={() => handleCollectionClick(collection.id)}>
                       <TableCell component="th" scope="row">
-                        {`${author.name}`}
+                        <Typography
+                          sx={{
+                            display: 'flex',
+                          }}
+                        >
+                          {collection.title}
+                        </Typography>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -149,9 +155,9 @@ export default () => {
             </TableContainer>
           )}
 
-          {authorResponse.results.totalPages > 1 && (
+          {collectionResponse.totalPages > 1 && (
             <Box sx={{ mt: 3 }} display="flex" justifyContent="center">
-              <Pagination count={authorResponse.totalPages} page={authorResponse.currentPage} onChange={handlePageChange} shape="rounded" />
+              <Pagination count={collectionResponse.totalPages} page={collectionResponse.currentPage} onChange={handlePageChange} shape="rounded" />
             </Box>
           )}
         </PullToRefresh>

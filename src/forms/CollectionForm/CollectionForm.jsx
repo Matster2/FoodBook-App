@@ -10,15 +10,14 @@ import useAPI from 'hooks/useAPI';
 import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
-import { getTagScheme } from 'types/schemas';
+import { getCollectionScheme } from "types/schemas";
 import FormModes from 'utils/formModes';
 
-const initialTagValue = {
-  name: '',
-  icon: ''
+const initialCollectionValue = {
+  title: ''
 };
 
-export default ({ tag: initialValues, onSubmit, admin }) => {
+export default ({ collection: initialValues, onSubmit, admin }) => {
   const { t, i18n } = useTranslation();
   const api = useAPI();
 
@@ -28,63 +27,60 @@ export default ({ tag: initialValues, onSubmit, admin }) => {
 
   const mode = !initialValues?.id ? FormModes.Create : FormModes.Update;
   
-  const originalTag = {
-    ...initialTagValue,
+  const originalCollection = {
+    ...initialCollectionValue,
     ...initialValues,
     languageCode: i18n.resolvedLanguage
   };
 
-  const handleCreateTag = async (newTag) => {
+  const handleCreateCollection = async (newCollection) => {
     setUpdating(true);
 
     try {
       const {
         data: { results },
-      } = await api.getTags({ search: newTag.name, sortBy: 'name' });
+      } = await api.getCollections({ search: newCollection.title, sortBy: 'title' });
 
-      if (results.filter((x) => x.name.toLowerCase() === newTag.name.toLowerCase()).length > 0) {
-        toast.error(t("requests.tags.create.validation.nameAlreadyExists"));
+      if (results.filter((x) => x.title.toLowerCase() === newCollection.title.toLowerCase()).length > 0) {
+        toast.error(t("requests.collections.create.validation.titleAlreadyExists"));
         return;
       }
 
-      const { data: { id } } = await api.createTag({
+      const { data: { id } } = await api.createCollection({
         languageCode: "en",
-        name: newTag.name,
-        icon: newTag.icon
+        title: newCollection.title
       });
 
-      toast.success(t("requests.tags.create.success"));
+      toast.success(t("requests.collections.create.success"));
       formRef.current.resetForm();
       onSubmit({
-        ...newTag,
+        ...newCollection,
         id,
       });
     } catch (e) {
       console.log(e)
-      toast.error(t("requests.tags.create.error"));
+      toast.error(t("requests.collections.create.error"));
     }
 
     setUpdating(false);
   }
   
-  const handleUpdateTag = async (newTag) => {
+  const handleUpdateCollection = async (newCollection) => {
     setUpdating(true);
 
     try {
-      await api.updateTag(newTag.id, {
-        name: newTag.name,
-        icon: newTag.icon,
-        hidden: newTag.hidden
+      await api.updateCollection(newCollection.id, {
+        ...newCollection,
       });
 
-      toast.success(t("requests.tags.update.success"));
+      toast.success(t("requests.collections.update.success"));
       formRef.current.resetForm();
       onSubmit({
-        ...newTag,
+        ...newCollection,
       });
     } catch (e) {
       console.log(e)
-      toast.error(t("requests.tags.update.error"));
+      toast.error(t("requests.collections.update.error"));
     }
 
     setUpdating(false);
@@ -95,15 +91,15 @@ export default ({ tag: initialValues, onSubmit, admin }) => {
     <Formik
       innerRef={formRef}
       initialValues={{
-        ...originalTag
+        ...originalCollection
       }}
       enableReinitialize
-      validationSchema={getTagScheme()}
+      validationSchema={getCollectionScheme()}
       onSubmit={(values) => {
         if (!values.id) {
-          handleCreateTag(values);
+          handleCreateCollection(values);
         } else {
-          handleUpdateTag(values);
+          handleUpdateCollection(values);
         }
       }}
     >
@@ -117,24 +113,14 @@ export default ({ tag: initialValues, onSubmit, admin }) => {
               required
               fullWidth
               margin="normal"
-              id="name"
-              name="name"
-              label={t("types.tag.fields.name.name")}
+              id="title"
+              name="title"
+              label={t("types.collection.fields.title.name")}
               autoFocus
-              error={errors.name && touched.name}
-              helperText={touched.name && errors.name}
+              error={errors.title && touched.title}
+              helperText={touched.title && errors.title}
             />
-            <Field
-              as={TextField}
-              fullWidth
-              margin="normal"
-              id="icon"
-              name="icon"
-              label={t("types.tag.fields.icon.name")}
-              error={errors.icon && touched.icon}
-              helperText={touched.icon && errors.icon}
-            />
-            
+
             {mode === FormModes.Update && (    
               <FormControlLabel
                 control={
@@ -143,7 +129,7 @@ export default ({ tag: initialValues, onSubmit, admin }) => {
                   onChange={(e) => setFieldValue("hidden", e.target.checked)}  
                 />}            
                 name="hidden"
-                label={t("types.tag.fields.hidden.name")}
+                label={t("types.collection.fields.hidden.name")}
               />
             )}
 

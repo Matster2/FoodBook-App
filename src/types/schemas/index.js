@@ -54,3 +54,16 @@ export const getTagScheme = () => {
     icon: yup.string()
   });
 }
+
+export const getAuthorScheme = () => {
+  return yup.object({
+    name: yup.string().required(),
+    biography: yup.string(),
+  });
+}
+
+export const getCollectionScheme = () => {
+  return yup.object({
+    title: yup.string().required(),
+  });
+}

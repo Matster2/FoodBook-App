@@ -597,6 +597,19 @@
         "success": "Tag has been updated.",
         "error": "Unable to update tag. Please try again later."
       }
+    },
+    "collections": {      
+      "create": {
+        "validation": {
+          "titleExistsAlready": "An collection already exists with this title"
+        },
+        "success": "Collection has been created.",
+        "error": "Unable to create collection. Please try again later."
+      },   
+      "update": {
+        "success": "Collection has been updated.",
+        "error": "Unable to update collection. Please try again later."
+      }
     }
   },
   "types": {
@@ -642,8 +655,26 @@
           "validation": {
           }
         },
-        "active": {
-          "name": "Active",
+        "hidden": {
+          "name": "Hidden",
+          "validation": {
+          }
+        }
+      }
+    },
+    "collection": {
+      "name": "Collection",
+      "pluralName": "Collection",
+      
+      "fields": {
+        "title": {
+          "name": "Title",
+          "validation": {
+            "required": "Please provide a title for this collection."
+          }
+        },
+        "hidden": {
+          "name": "Hidden",
           "validation": {
           }
         }
@@ -651,7 +682,45 @@
     },
     "author": {
       "name": "Author",
-      "pluralName": "Authors"
+      "pluralName": "Authors",
+      
+      "fields": {
+        "name": {
+          "name": "Name",
+          "validation": {
+            "required": "Please provide a name of this author."
+          }
+        },
+        "biography": {
+          "name": "Biography",
+          "validation": {
+          }
+        },
+        "links": {
+          "name": "Links",
+          "singularName": "Link",
+
+          "fields": {
+            "name": {
+              "name": "Name",
+              "validation": {
+              }
+            },
+            "description": {
+              "name": "Name",
+              "validation": {
+              }
+            },
+            "url": {
+              "name": "URL",
+              "validation": {
+                "required": "Please provide the url of this link."
+              }
+            }
+
+          }
+        }
+      }
     },
     "ingredient": {
       "name": "Ingredient",
