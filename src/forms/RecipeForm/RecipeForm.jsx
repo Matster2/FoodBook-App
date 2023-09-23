@@ -743,7 +743,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowDeleteDialog(false)}>
+          <Button onClick={() => setShowPublishDialog(false)}>
             {t('common.words.no')}
           </Button>
           <Button onClick={handlePublishRecipe} autoFocus>

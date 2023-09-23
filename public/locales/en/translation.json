@@ -610,6 +610,14 @@
       "update": {
         "success": "Collection has been updated.",
         "error": "Unable to update collection. Please try again later."
+      },
+      "addRecipeToCollection": {
+        "success": "Recipe has been added to the collection.",
+        "error": "Unable to add recipe to the collection. Please try again later."
+      },
+      "removeRecipeFromCollection": {
+        "success": "Recipe has been remove from the collection.",
+        "error": "Unable to remove recipe from the collection. Please try again later."
       }
     },
     "authors": {      

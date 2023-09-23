@@ -716,6 +716,26 @@ const useAPI = () => {
     );
   };
 
+  const addRecipeToCollection = async (collectionId, recipeId) => {
+    return axios.post(
+      `${process.env.REACT_APP_API_URL}/collections/${collectionId}/recipes/${recipeId}`, {},
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
+
+  const removeRecipeFromCollection = async (collectionId, recipeId) => {
+    return axios.delete(`${process.env.REACT_APP_API_URL}/collections/${collectionId}/recipes/${recipeId}`, {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+  };
+
+
   return {
     getSystem,
     getSupportedLanguages,
@@ -778,7 +798,9 @@ const useAPI = () => {
     getCollection,
     getCollections,
     createCollection,
-    updateCollection
+    updateCollection,
+    addRecipeToCollection,
+    removeRecipeFromCollection
   };
 };
 

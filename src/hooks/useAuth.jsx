@@ -38,7 +38,6 @@ const useAuth = () => {
 
     try {
       console.log("Refreshing tokens");
-      console.log(state.tokens)
 
       const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/auth/tokens/refresh`, {
         accessToken: state.tokens.accessToken,
