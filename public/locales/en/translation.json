@@ -97,7 +97,8 @@
         "reference": "Reference",
         "variants": "Variants"
       },
-      "seeFullRecipe": "See Full Recipe Here"
+      "seeFullRecipe": "See Full Recipe Here",
+      "nutritionDisclaimer": "Nutrition values are estimated."
     },
     "recipes": {
       "title": "Recipes",
@@ -571,7 +572,7 @@
         "success": "Ingredient has been updated.",
         "error": "Unable to update ingredient. Please try again later."
       }
-    }, 
+    },
     "equipment": {      
       "create": {
         "validation": {
@@ -609,6 +610,16 @@
       "update": {
         "success": "Collection has been updated.",
         "error": "Unable to update collection. Please try again later."
+      }
+    },
+    "authors": {      
+      "create": {
+        "success": "Author has been created.",
+        "error": "Unable to create author. Please try again later."
+      },   
+      "update": {
+        "success": "Author has been updated.",
+        "error": "Unable to update author. Please try again later."
       }
     }
   },
@@ -659,6 +670,11 @@
           "name": "Hidden",
           "validation": {
           }
+        },
+        "promoted": {
+          "name": "Promoted",
+          "validation": {
+          }
         }
       }
     },
@@ -675,6 +691,11 @@
         },
         "hidden": {
           "name": "Hidden",
+          "validation": {
+          }
+        },
+        "promoted": {
+          "name": "Promoted",
           "validation": {
           }
         }
@@ -707,7 +728,7 @@
               }
             },
             "description": {
-              "name": "Name",
+              "name": "Description",
               "validation": {
               }
             },

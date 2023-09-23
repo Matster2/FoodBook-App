@@ -132,11 +132,7 @@ export default () => {
   };
 
   const renderRecipeTile = (recipe) => (
-    <Box
-      sx={{
-        maxWidth: 150,
-      }}
-    >
+    <Box sx={{  mb: 1 }}>
       <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
     </Box>
   );
@@ -194,20 +190,12 @@ export default () => {
               <Grid item xs={6}>
                 {recipes
                   .filter((_, index) => !(index % 2))
-                  .map((recipe) => (
-                    <Box sx={{ mb: 1 }}>
-                      <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-                    </Box>
-                  ))}
+                  .map((recipe) => renderRecipeTile(recipe))}
               </Grid>
               <Grid item xs={6}>
                 {recipes
                   .filter((_, index) => index % 2)
-                  .map((recipe) => (
-                    <Box sx={{ mb: 1 }}>
-                      <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
-                    </Box>
-                  ))}
+                  .map((recipe) => renderRecipeTile(recipe))}
               </Grid>
             </Grid>
           </Section>

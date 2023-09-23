@@ -72,13 +72,10 @@ export default ({ tag: initialValues, onSubmit, admin }) => {
 
     try {
       await api.updateTag(newTag.id, {
-        name: newTag.name,
-        icon: newTag.icon,
-        hidden: newTag.hidden
+        ...newTag
       });
 
       toast.success(t("requests.tags.update.success"));
-      formRef.current.resetForm();
       onSubmit({
         ...newTag,
       });
@@ -135,16 +132,31 @@ export default ({ tag: initialValues, onSubmit, admin }) => {
               helperText={touched.icon && errors.icon}
             />
             
-            {mode === FormModes.Update && (    
-              <FormControlLabel
-                control={
-                <Checkbox
-                  checked={values.hidden}
-                  onChange={(e) => setFieldValue("hidden", e.target.checked)}  
-                />}            
-                name="hidden"
-                label={t("types.tag.fields.hidden.name")}
-              />
+            {mode === FormModes.Update && (
+              <>
+                <Box>
+                  <FormControlLabel
+                    control={
+                    <Checkbox
+                      checked={values.hidden}
+                      onChange={(e) => setFieldValue("hidden", e.target.checked)}  
+                    />}            
+                    name="hidden"
+                    label={t("types.tag.fields.hidden.name")}
+                  />
+                </Box>
+                <Box>
+                  <FormControlLabel
+                    control={
+                    <Checkbox
+                      checked={values.promoted}
+                      onChange={(e) => setFieldValue("promoted", e.target.checked)}  
+                    />}            
+                    name="promoted"
+                    label={t("types.tag.fields.promoted.name")}
+                  />    
+                </Box>      
+              </> 
             )}
 
             <Box

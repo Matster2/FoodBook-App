@@ -14,7 +14,7 @@ const RecipeAttributeWidget = ({ type, value }) => {
 
   const variants = [
     { type: "default", text: '', icon: <CaloriesIcon />, backgroundColor: '#FFC4B8', iconColor: '#F54343' },
-    { type: "calories", text: `${value} Cals`, icon: <CaloriesIcon />, backgroundColor: '#FFC4B8', iconColor: '#F54343' },
+    { type: "calories", text: `~ ${value} Cals`, icon: <CaloriesIcon />, backgroundColor: '#FFC4B8', iconColor: '#F54343' },
     { type: "alcohol", text: t('components.recipeAttributeWidget.alcohol.text'), icon: <AlcoholIcon />, backgroundColor: '#ec9fd2', iconColor: '#b51b8e' },
 
     // blue #9fddec #1b5fb5 

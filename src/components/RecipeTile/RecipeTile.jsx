@@ -2,16 +2,19 @@ import { AccessTime as AccessTimeIcon, Star as StarIcon } from '@mui/icons-mater
 import { Box, Card, Grid, Stack, Typography } from '@mui/material';
 import RecipeImage from 'components/RecipeImage';
 import RecipeTileAttachment from 'components/RecipeTileAttachment';
+import useAuth from 'hooks/useAuth';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.min.css';
-import 'swiper/swiper.min.css';
 import { getFormattedTimeString } from 'utils/translations';
 import styles from './RecipeTile.module.css';
 
 const RecipeTile = ({ recipe, onClick, ...props }) => {
   const { t } = useTranslation();
+  const {
+    claims: { userId },
+  } = useAuth();
+
   const handleClick = () => {
     onClick(recipe.id);
   };
@@ -19,11 +22,11 @@ const RecipeTile = ({ recipe, onClick, ...props }) => {
   return (
     <Card sx={{ p: 1 }} className={styles.card} onClick={handleClick} {...props}>
       <Stack direction="row" gap={0.5} className={styles.attachments}>
-        {recipe?.personal && (
+        {(recipe.createdBy.id === userId && recipe?.personal) && (
           <RecipeTileAttachment type="personal" />
         )}
         {recipe?.favourited && (
-          <RecipeTileAttachment type="favourite" />
+          <RecipeTile Attachment type="favourite" />
         )}
       </Stack>
 

@@ -151,6 +151,7 @@ export default () => {
       setMeasurementSystem(undefined);
       setIngredients(data.ingredients);
     } catch (e) {
+      setIsError(true)
       console.log('error fetching recipe');
     }
     setLoadingRecipe(false);
@@ -163,7 +164,7 @@ export default () => {
       .then((reponse) => {
         setInstructions(reponse.data);
       })
-      .catch((error) => {
+      .catch(() => {
         setIsError(true)
       });
 
@@ -586,14 +587,14 @@ export default () => {
           </Box>
 
           <Stack direction="row" display="flex" justifyContent="space-between" alignItems="center">
-            {(author || recipe.personal) && (
+            {(author || recipe.createdBy.id === userId) && (
               <Stack direction="row" display="flex" alignItems="center" onClick={handleAuthorClick}>
                 <Typography className={styles.author} sx={{ mr: 1 }} style={{ fontWeight: 'bold' }}>{t('pages.recipe.author')}:</Typography>
                 <Avatar sx={{ height: 21, width: 21, mr: 1, bgcolor: 'var(--primary-colour)' }} src={author?.profilePictureUrl} />
                 
                 <Typography className={styles.author}>
                   {recipe?.author?.name ?? ""}
-                  {recipe.personal && (
+                  {(recipe.createdBy.id === userId) && (
                     <Typography className={styles.author} sx={{ fontWeight: 'bold'}}>
                       {`(${t('common.words.you')})`}
                     </Typography>
@@ -603,13 +604,13 @@ export default () => {
             )}
 
             <Stack direction="row" display="flex" sx={{ marginLeft: 'auto' }} alignItems="center" gap={1}>
-              {authenticated && (recipe.personal || recipe.State !== RecipeState.Draft) && (
+              {authenticated && (recipe.createdBy.id === userId || recipe.State !== RecipeState.Draft) && (
                 <IconButton sx={{ marginLeft: 'auto' }} className={classnames(styles.optionButton, styles.personalOptionButton)} onClick={handleCopyClick}>
                   <CopyIcon className={styles.optionIcon} />
                 </IconButton>
               )}
 
-              {authenticated && (recipe.personal || role === 'Administrator') && (
+              {authenticated && (recipe.createdBy.id === userId || role === 'Administrator') && (
                 <IconButton sx={{ marginLeft: 'auto' }} className={classnames(styles.optionButton, recipe.personal && styles.personalOptionButton)} onClick={handleEditClick}>
                   <EditIcon className={styles.optionIcon} />
                 </IconButton>
@@ -731,6 +732,7 @@ export default () => {
             <CollapsibleSection
               title={t('pages.recipe.sections.nutrition')}
             >
+              <Typography align="center" sx={{ mt: -0.5, mb: 0.1 }} className={styles.nutritionDisclaimer}>{t("pages.recipe.nutritionDisclaimer")}</Typography>
               <NutritionList
                 nutrition={recipe.nutrition}
               />

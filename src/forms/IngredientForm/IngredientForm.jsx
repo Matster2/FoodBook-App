@@ -16,6 +16,7 @@ import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { getIngredientScheme } from 'types/schemas';
 import FormModes from 'utils/formModes';
+import { capitaliseEachWord } from "utils/stringUtils";
 import { isUndefined } from 'utils/utils';
 
 const initialIngredientValue = {
@@ -89,8 +90,7 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
         defaultUnitOfMeasurementId: newIngredient.defaultUnitOfMeasurement.id
       });
 
-      toast.success(t("requests.ingredients.update.success"));
-      formRef.current.resetForm();
+      toast.success(t("requests.ingredients.update.success"))
       onSubmit({
         ...newIngredient,
       });
@@ -149,6 +149,8 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
               name="name"
               label="Name"
               autoFocus
+              value={values.name}
+              onChange={(e) => setFieldValue("name", capitaliseEachWord(e.target.value))}
               error={errors.name && touched.name}
               helperText={touched.name && errors.name}
             />
@@ -160,7 +162,8 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
               id="pluralName"
               name="pluralName"
               label="Plural Name"
-              autoFocus
+              value={values.pluralName}
+              onChange={(e) => setFieldValue("pluralName", capitaliseEachWord(e.target.value))}
               error={errors.pluralName && touched.pluralName}
               helperText={touched.pluralName && errors.pluralName}
             />

@@ -10,12 +10,13 @@ import {
 import AuthorLink from "Admin/components/AuthorLink";
 import { useFormik } from 'formik';
 import useAPI from 'hooks/useAPI';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import uuid from 'react-uuid';
 import { getAuthorScheme } from "types/schemas";
 import FormModes from 'utils/formModes';
+import { isUndefined } from "utils/utils";
 
 const getDefaultAuthor = () => {
   return {
@@ -29,7 +30,7 @@ export default ({ author: initialValues, onSubmit, admin }) => {
   const { t, i18n } = useTranslation();
   const api = useAPI();
 
-  const formRef = useRef();
+  const [profilePictureFile, setProfilePictureFile] = useState();
 
   const [updating, setUpdating] = useState(false);
 
@@ -41,6 +42,24 @@ export default ({ author: initialValues, onSubmit, admin }) => {
     languageCode: i18n.resolvedLanguage
   });
   
+
+  const formik = useFormik({
+    initialValues: {
+      ...originalAuthor
+    },
+    enableReinitialize: true,
+    validationSchema: getAuthorScheme(),
+    onSubmit: async (values) => {
+      if (!author.id) {
+        await handleCreateAuthor(values);
+      } else {
+        await handleUpdateAuthor(values);
+      }
+    }
+  });
+
+  const { handleSubmit, values: author, setValues: setAuthor, handleChange, errors, touched, resetForm } = formik;
+  
   const handleCreateAuthor = async (newAuthor) => {
     setUpdating(true);
 
@@ -48,7 +67,7 @@ export default ({ author: initialValues, onSubmit, admin }) => {
       const {
         data: { id },
       } = await api.createAuthor({
-        ...data,
+        ...newAuthor,
         languageCode: "en",
       });
 
@@ -57,7 +76,7 @@ export default ({ author: initialValues, onSubmit, admin }) => {
       }
 
       toast.success(t("requests.authors.create.success"));
-      formRef.current.resetForm();
+      resetForm();
       onSubmit({
         ...newAuthor,
         id,
@@ -75,13 +94,14 @@ export default ({ author: initialValues, onSubmit, admin }) => {
 
     try {
       await api.updateAuthor(newAuthor.id, {
-        name: newTag.name,
-        icon: newTag.icon,
-        active: newTag.active
+        ...newAuthor
       });
 
+      if (!isUndefined(profilePictureFile)) {
+        await api.uploadAuthorProfilePicture(newAuthor.id, profilePictureFile);
+      }
+      
       toast.success(t("requests.authors.update.success"));
-      formRef.current.resetForm();
       onSubmit({
         ...newAuthor,
       });
@@ -92,23 +112,6 @@ export default ({ author: initialValues, onSubmit, admin }) => {
 
     setUpdating(false);
   }
-
-  const formik = useFormik({
-    initialValues: {
-      ...originalAuthor
-    },
-    enableReinitialize: true,
-    validationSchema: getAuthorScheme(),
-    onSubmit: async (values) => {
-      if (!author.id) {
-        await handleCreateAuthor(values);
-      } else {
-        await handleUpdateAuthor(values);
-      }
-    },
-  });
-  
-  const { handleSubmit, values: author, setValues: setAuthor, handleChange, errors, touched } = formik;
 
   const handleAuthorLinkChange = (newAuthorLink) => {
     const newAuthorLinks = [...author.links];
@@ -163,8 +166,8 @@ export default ({ author: initialValues, onSubmit, admin }) => {
   };
 
   /* Rendering */
-  return (
-    <>
+  return (    
+    <form onSubmit={handleSubmit}> 
       <Stack sx={{ mb: 2 }} direction="column" display="flex" alignItems="center" justifyContent="center">
         <Avatar sx={{ mb: 2, height: 80, width: 80 }} src={author.profilePictureUrl} />
         <input type="file" onChange={handleUploadProfilePicture} />
@@ -202,7 +205,7 @@ export default ({ author: initialValues, onSubmit, admin }) => {
         <Typography variant="h6">{t("types.author.fields.links.name")}</Typography>
 
         <Box sx={{ mt: 2 }}>
-          {author.links.map((authorLink) => (
+          {author.links.map((authorLink, index) => (
             <AuthorLink
               authorLink={authorLink}
               onChange={handleAuthorLinkChange}
@@ -211,7 +214,7 @@ export default ({ author: initialValues, onSubmit, admin }) => {
           ))}
         </Box>
 
-        <Box sx={{ mt: 1 }}>
+        <Box sx={{ mt: 2 }}>
           <Button type="button" onClick={handleAddLink} variant="contained">
             {`${t("common.words.actions.add")} ${t("types.author.fields.links.singularName")}`}
           </Button>
@@ -235,6 +238,6 @@ export default ({ author: initialValues, onSubmit, admin }) => {
           {mode === FormModes.Create ? t("common.words.actions.create") : t("common.words.actions.update")}
         </LoadingButton>
       </Box>
-    </>
+    </form>
   );
 };

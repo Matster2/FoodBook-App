@@ -1,6 +1,5 @@
-import { Icon } from '@mui/material';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import socialIcons from 'config/socialIcons';
@@ -52,9 +51,7 @@ const AuthorLink = ({ link }) => {
 
   return (
     <Link to={link.url} target="_blank" rel="noopener noreferrer" >
-      <Icon>
-        <img className={styles.icon} alt={link.name} src={icon} />
-      </Icon>
+      <img className={styles.icon} alt={link.name} src={icon} />
     </Link>
   )
 }

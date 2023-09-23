@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { getEquipmentScheme } from 'types/schemas';
 import FormModes from 'utils/formModes';
+import { capitaliseEachWord } from 'utils/stringUtils';
 import { isUndefined } from 'utils/utils';
 
 const initialPieceOfEquipmentValue = {
@@ -49,8 +50,7 @@ export default ({ pieceOfEquipment: initialValues, onSubmit, admin }) => {
 
       const { data: { id } } = await api.createPieceOfEquipment({
         languageCode: "en",
-        name: newPieceOfEquipment.name,
-        pluralName: newPieceOfEquipment.pluralName,
+        ...newPieceOfEquipment,
         personal: newPieceOfEquipment.personal
       });
 
@@ -58,7 +58,6 @@ export default ({ pieceOfEquipment: initialValues, onSubmit, admin }) => {
       formRef.current.resetForm();
       onSubmit({
         ...newPieceOfEquipment,
-        id,
       });
     } catch (e) {
       console.log(e)
@@ -72,13 +71,11 @@ export default ({ pieceOfEquipment: initialValues, onSubmit, admin }) => {
     setUpdating(true);
 
     try {
-      await api.updatePieceOfEquipment(id, {
-        name: newPieceOfEquipment.name,
-        pluralName: newPieceOfEquipment.pluralName,
+      await api.updatePieceOfEquipment(newPieceOfEquipment.id, {
+        ...newPieceOfEquipment
       });
 
       toast.success(t("requests.equipment.update.success"));
-      formRef.current.resetForm();
       onSubmit({
         ...newPieceOfEquipment,
       });
@@ -132,6 +129,8 @@ export default ({ pieceOfEquipment: initialValues, onSubmit, admin }) => {
               name="name"
               label="Name"
               autoFocus
+              value={values.name}
+              onChange={(e) => setFieldValue("name", capitaliseEachWord(e.target.value))}
               error={errors.name && touched.name}
               helperText={touched.name && errors.name}
             />
@@ -143,7 +142,8 @@ export default ({ pieceOfEquipment: initialValues, onSubmit, admin }) => {
               id="pluralName"
               name="pluralName"
               label="Plural Name"
-              autoFocus
+              value={values.pluralName}
+              onChange={(e) => setFieldValue("pluralName", capitaliseEachWord(e.target.value))}
               error={errors.pluralName && touched.pluralName}
               helperText={touched.pluralName && errors.pluralName}
             />

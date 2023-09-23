@@ -10,7 +10,9 @@ export default () => {
   const fetch = async () => {
     setLoading(true);
     try {      
-      const { data } = await api.getCollections();
+      const { data } = await api.getTags({
+        hidden: false,
+      });
       setTags(data.results);
     } catch {
       console.log('error fetching tags');

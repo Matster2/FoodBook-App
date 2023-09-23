@@ -451,6 +451,20 @@ const useAPI = () => {
       }
     );
   };
+
+  const updateAuthor = async (id, data) => {
+    return axios.put(
+      `${process.env.REACT_APP_API_URL}/authors/${id}`,
+      {
+        ...data,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+  };
   
   const uploadAuthorProfilePicture = async (authorId, file) => {
     const formData = new FormData();
@@ -742,6 +756,7 @@ const useAPI = () => {
     createTag,
     updateTag,
     createAuthor,
+    updateAuthor,
     uploadAuthorProfilePicture,
     getUserPlanner,
     planRecipe,

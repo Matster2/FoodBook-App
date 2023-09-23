@@ -74,7 +74,6 @@ export default ({ collection: initialValues, onSubmit, admin }) => {
       });
 
       toast.success(t("requests.collections.update.success"));
-      formRef.current.resetForm();
       onSubmit({
         ...newCollection,
       });
@@ -121,16 +120,31 @@ export default ({ collection: initialValues, onSubmit, admin }) => {
               helperText={touched.title && errors.title}
             />
 
-            {mode === FormModes.Update && (    
-              <FormControlLabel
-                control={
-                <Checkbox
-                  checked={values.hidden}
-                  onChange={(e) => setFieldValue("hidden", e.target.checked)}  
-                />}            
-                name="hidden"
-                label={t("types.collection.fields.hidden.name")}
-              />
+            {mode === FormModes.Update && (
+              <>
+                <Box>
+                  <FormControlLabel
+                    control={
+                    <Checkbox
+                      checked={values.hidden}
+                      onChange={(e) => setFieldValue("hidden", e.target.checked)}  
+                    />}            
+                    name="hidden"
+                    label={t("types.collection.fields.hidden.name")}
+                  />
+                </Box>
+                <Box>
+                  <FormControlLabel
+                    control={
+                    <Checkbox
+                      checked={values.promoted}
+                      onChange={(e) => setFieldValue("promoted", e.target.checked)}  
+                    />}            
+                    name="promoted"
+                    label={t("types.collection.fields.promoted.name")}
+                  />    
+                </Box>      
+              </> 
             )}
 
             <Box
