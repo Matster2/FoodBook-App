@@ -54,6 +54,113 @@ import { lowercaseFirstLetter } from 'utils/stringUtils';
 import { isNullOrEmpty, isNullOrUndefined, isUndefined, reorder } from 'utils/utils';
 import styles from './RecipeForm.module.css';
 
+const IngredientSection = ({ section, newPersonalIngredientDialog, onDelete }) => {
+  const { t } = useTranslation();
+  
+  const [ingredientSearch, setIngredientSearch, ingredientSearchResults, searchingIngredients] = useSearch(async () => {
+    const { data: { results, totalResults } } = await api.getIngredients({ search: ingredientSearch, pageSize: 50, sortBy: 'name' });
+    
+    if (!isNullOrEmpty(ingredientSearch) && (totalResults === 0 || !results.some(x => x.name.toLowerCase() === ingredientSearch.toLowerCase() || x.pluralName.toLowerCase() === ingredientSearch.toLowerCase()))) {
+      setShowAddIngredientButton(true);
+    }
+    
+    return results;
+  }, { delay: 2000 });
+  
+  const [showAddIngredientButton, setShowAddIngredientButton] = useState(false);
+
+  const handleChange = (e) => {
+    onChange({
+      ...step,
+      [e.target.name]: e.target.value,
+    });
+  };
+  
+  const handleAddingNewIngredient = (name) => {
+    newPersonalIngredientDialog.show({ 
+        open: true,
+        ingredient: {
+          name,
+          pluralName: name
+        },
+        onClose: () => newPersonalIngredientDialog.remove(),
+        onComplete: (newIngredient) => {
+          newPersonalIngredientDialog.remove();
+          handleAddIngredient(newIngredient);
+        }
+      });
+  }
+
+  return (
+    <Box>
+      <Stack direction="row" alignItems="center" gap={1}>
+        <Box
+          display="flex"
+          alignItems="center"
+          {...dragHandleProps}
+        >
+          <DragIcon className={styles.dragIcon} />
+        </Box>
+
+        <Stack direction="row" gap={10} display="flex" justifyContent="space-between" alignItems="center">        
+          <TextField
+            fullWidth
+            id="name"
+            label="name"
+            name="name"
+            value={section.name}
+            onChange={handleChange}
+          />
+          
+          <IconButton onClick={() => onDelete(section)}>
+            <ClearIcon />
+          </IconButton>
+        </Stack>
+      </Stack>
+
+      <Autocomplete
+        fullWidth
+        loading={searchingIngredients}
+        options={ingredientSearchResults}
+        filterOptions={(options, params) => {
+          const newOptions = options
+            .filter(
+              (ingredient) =>
+              section.ingredients.filter(
+                  (recipeIngredient) => recipeIngredient.id === ingredient.id
+                ).length < 2
+            )
+            .map((ingredient) => ({ label: ingredient.name, ingredient }))
+
+          if (showAddIngredientButton) {
+            newOptions.push({ label: `${t("common.words.actions.add")} ${t("types.ingredient.name")} "${ingredientSearch}"`, ingredient: undefined, name: ingredientSearch })
+          }
+
+          return newOptions;
+        }}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        renderInput={(params) => <TextField {...params} label={`${t("common.words.actions.add")} ${t("types.ingredient.name")}`} />}
+        value={ingredientSearch}
+        inputValue={ingredientSearch}
+        onInputChange={(event, newValue) => {
+          setIngredientSearch(newValue);
+          setShowAddIngredientButton(false);
+        }}
+        onChange={(event, value) => {
+          setIngredientSearch('');
+          if (value) {
+            if (!isUndefined(value.ingredient)) {
+              handleAddIngredient(value.ingredient);
+            } else {
+              handleAddingNewIngredient(value.name)
+            }
+          }
+        }}
+      />
+    </Box>
+  )
+}
+
 const getDefaultRecipe = () => {
   return {
     state: RecipeState.Draft,
@@ -492,6 +599,47 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       steps: newSteps,
     }));
   }
+
+
+  
+  const handleAddSectionClick = () => {
+    const newSections = [...recipe.sections];
+
+    newSections.push({
+      id: uuid(),
+      name: "",
+      ingredients: []
+    })
+
+    setRecipe((state) => ({
+      ...state,
+      sections: newSection,
+    }));
+  }
+
+  // const handleStepChange = (newStep) => {
+  //   const newSteps = recipe.steps;
+
+  //   const index = newSteps.findIndex((x) => x.id === newStep.id);
+
+  //   newSteps[index] = newStep;
+
+  //   setRecipe((state) => ({
+  //     ...state,
+  //     steps: newSteps,
+  //   }));
+  // };
+
+  // const handleDeleteStep = (newStep) => {
+  //   const newSteps = recipe.steps.filter(
+  //     (x) => x.id !== newStep.id
+  //   );
+
+  //   setRecipe((state) => ({
+  //     ...state,
+  //     steps: newSteps,
+  //   }));
+  // };
   
   /* Image Handlers */
   const handleUploadImage = (e) => {
@@ -601,15 +749,11 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         onClose: () => newPersonalIngredientDialog.remove(),
         onComplete: (newIngredient) => {
           newPersonalIngredientDialog.remove();
-          onNewIngredientAdded(newIngredient);
+          handleAddIngredient(newIngredient);
         }
       });
   }
 
-  const onNewIngredientAdded = (ingredient) => {
-    handleAddIngredient(ingredient);
-  }
-  
   const handleAddingNewPieceOfEquipment = (name) => {
     newPersonalEquipmentDialog.show({ 
         open: true,
@@ -1086,7 +1230,11 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     }
                   }}
                 />
-              </Stack>
+              </Stack>              
+
+              <Button sx={{ mt: 2 }} type="button" variant="contained">
+                {`${t("common.words.actions.add")} Section`}
+              </Button>
             </Box>
 
             
@@ -1177,7 +1325,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                       </Stack>
                   )}
                 </Droppable>
-              </DragDropContext> 
+              </DragDropContext>
 
               <Button sx={{ mt: 2 }} type="button" onClick={handleAddStepClick} variant="contained">
                 {`${t("common.words.actions.add")} ${t("types.recipe.fields.steps.singularName")}`}

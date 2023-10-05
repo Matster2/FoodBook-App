@@ -34,6 +34,58 @@ const Transition = React.forwardRef((props, ref) => {
   return <Slide direction="left" ref={ref} {...props} />;
 });
 
+const CollectionSection = ({ collection }) => {
+  const { results: recipes, totalResults: totalRecipes, loading: loadingRecipes } = usePagedFetch(
+    `${process.env.REACT_APP_API_URL
+    }/recipes?random=true&pageSize=25&collectionIds=${collection.id}`
+  );
+
+  /* Handlers */
+  const handleRecipeClick = (id) => {
+    navigate(`/recipes/${id}`);
+  };
+
+  /* Rendering */
+  const renderRecipeTile = (recipe) => (
+    <Box
+      sx={{
+        maxWidth: 140,
+      }}
+    >
+      <RecipeTile
+        key={recipe.id}  
+        recipe={{
+          ...recipe,
+          images: recipe.images.map((image) => ({
+            ...image,
+            url: includeResizeQueryParameters(image.url, 300, 0)
+          }))
+        }}
+        onClick={handleRecipeClick} 
+      />
+    </Box>
+  );
+
+  return (
+    <Section
+      title={collection.title}
+      showSeeAllLink={recipes.length < totalRecipes}
+      loading={loadingRecipes}
+      onSeeAllClick={(e) => {
+        navigate(`/recipes`, {
+          state: {
+            filters: {
+              collectionIds: [collectionId],
+            },
+          },
+        })
+      }}
+    >
+      {recipes.map((recipe) => renderRecipeTile(recipe))}
+    </Section>
+  )
+}
+
 export default () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -69,6 +121,16 @@ export default () => {
     `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&personal=true`
   );
 
+  const { results: promotedCollections, refetch: refetchPromotedCollections } = usePagedFetch(
+    `${process.env.REACT_APP_API_URL
+    }/collections?random=true&pageSize=5&promoted=true`
+  );
+  
+  const { results: collections, refetch: refetchCollections } = usePagedFetch(
+    `${process.env.REACT_APP_API_URL
+    }/collections?random=true&pageSize=10&promoted=false`
+  );
+
   /* Handlers */
   const handleRefresh = async () => {
     refetchRecentlyAddedRecipes();
@@ -76,6 +138,8 @@ export default () => {
     refetchFavouriteRecipes();
     refetchPersonalRecipes();
     fetchTags();
+    refetchPromotedCollections();
+    refetchCollections();
   }
 
   const handleAvatarClick = () => {
@@ -224,6 +288,13 @@ export default () => {
             </Section>
           )}
 
+
+          {promotedCollections.map(collection => (
+            <CollectionSection
+              collection={collection}
+            />
+          ))}
+
           {recommendedRecipes.length > 0 && (
             <Section
               title={t('pages.home.sections.recommended')}
@@ -233,6 +304,12 @@ export default () => {
               {recommendedRecipes.map((recipe) => renderRecipeTile(recipe))}
             </Section>
           )}
+
+          {collections.map(collection => (
+            <CollectionSection
+              collection={collection}
+            />
+          ))}
 
           {recentlyAddedRecipes.length > 0 && (
             <Section

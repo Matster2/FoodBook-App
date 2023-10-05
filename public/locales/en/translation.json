@@ -18,6 +18,10 @@
         }
       }
     },
+    "serverOffline": {
+      "title": "Cannot reach server.",
+      "message": "We were unable to connect to the FoodBook server!"
+    },
     "maintenance": {
       "title": "We will be back soon!",
       "message": "Sorry for the inconvenience. We are currently performing maintenance.",

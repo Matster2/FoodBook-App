@@ -15,10 +15,10 @@ const Section = ({ title, loading, showSeeAllLink, onSeeAllClick, children, ...p
   const { t } = useTranslation();
 
   return (
-    <Box className={styles.section} sx={{ mb: 1 }} {...props} >
+    <Box className={styles.section} sx={{ mb: 2 }} {...props} >
       <Grid item xs={12} container justifyContent="space-between" alignItems="center">
         <Grid item xs>
-          <Typography variant="h5">{title}</Typography>
+          <Typography variant="h6">{title}</Typography>
         </Grid>
         {showSeeAllLink && (
           <Grid item xs="auto">
@@ -27,7 +27,7 @@ const Section = ({ title, loading, showSeeAllLink, onSeeAllClick, children, ...p
         )}
       </Grid>
 
-      <List className={styles.listContainer}>
+      <List disablePadding className={styles.listContainer}>
         <Stack direction="row" alignItems="start" gap={1.5} className={styles.listContent}>
           {loading && (
             <Box>
