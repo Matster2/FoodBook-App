@@ -23,6 +23,7 @@ import React, { useContext, useMemo, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
+import uuid from 'react-uuid';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 import { includeResizeQueryParameters } from 'utils/imageUtils';
@@ -35,6 +36,8 @@ const Transition = React.forwardRef((props, ref) => {
 });
 
 const CollectionSection = ({ collection }) => {
+  const navigate = useNavigate();
+
   const { results: recipes, totalResults: totalRecipes, loading: loadingRecipes } = usePagedFetch(
     `${process.env.REACT_APP_API_URL
     }/recipes?random=true&pageSize=25&collectionIds=${collection.id}`
@@ -48,12 +51,13 @@ const CollectionSection = ({ collection }) => {
   /* Rendering */
   const renderRecipeTile = (recipe) => (
     <Box
+      key={uuid()}
       sx={{
         maxWidth: 140,
       }}
     >
       <RecipeTile
-        key={recipe.id}  
+        key={recipe.id} 
         recipe={{
           ...recipe,
           images: recipe.images.map((image) => ({
@@ -198,6 +202,7 @@ export default () => {
 
   const renderRecipeTile = (recipe) => (
     <Box
+      key={uuid()}
       sx={{
         maxWidth: 140,
       }}
@@ -291,6 +296,7 @@ export default () => {
 
           {promotedCollections.map(collection => (
             <CollectionSection
+              key={collection.id}
               collection={collection}
             />
           ))}

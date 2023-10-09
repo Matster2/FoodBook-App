@@ -1,6 +1,6 @@
 import NiceModal from '@ebay/nice-modal-react';
 import { LoadingButton } from "@mui/lab";
-import { Box, Container, TextField, Typography } from '@mui/material';
+import { Box, Container, Stack, TextField, Typography } from '@mui/material';
 import logo from 'assets/logo.svg';
 import useAPI from 'hooks/useAPI';
 import useInput from 'hooks/useInput';
@@ -178,7 +178,7 @@ const Register = ({ onSignInClick, onComplete }) => {
           name="email"
           autoComplete="email"
           autoFocus
-          disable={registering || registrationComplete}
+          disabled={registering || registrationComplete}
           value={email}
           onChange={onEmailChange}
           error={!isUndefined(inputErrors.email)}
@@ -193,7 +193,7 @@ const Register = ({ onSignInClick, onComplete }) => {
           type="password"
           id="password"
           autoComplete="current-password"
-          disable={registering || registrationComplete}
+          disabled={registering || registrationComplete}
           value={password}
           onChange={onPasswordChange}
           error={!isUndefined(inputErrors.password)}
@@ -208,7 +208,7 @@ const Register = ({ onSignInClick, onComplete }) => {
           type="password"
           id="confirm-password"
           autoComplete="current-password"
-          disable={registering || registrationComplete}
+          disabled={registering || registrationComplete}
           value={confirmPassword}
           onChange={onConfirmPasswordChange}
           error={!isUndefined(inputErrors.confirmPassword)}
@@ -226,19 +226,18 @@ const Register = ({ onSignInClick, onComplete }) => {
         </LoadingButton>
       </Box>
 
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-        }}
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
       >
         <Typography variant="body2">
           {t('pages.register.alreadyHaveAccount')}
-          <Typography sx={{ ml: 0.5 }} display="inline" className="link" onClick={onSignInClick}>
-            {t('pages.register.links.signIn')}
-          </Typography>
         </Typography>
-      </Box>
+        <Typography sx={{ ml: 0.5 }} className="link" onClick={onSignInClick}>
+          {t('pages.register.links.signIn')}
+        </Typography>
+      </Stack>
     </Container>
   );
 };

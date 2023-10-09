@@ -1,0 +1,13 @@
+.part {
+    border-bottom: 1px solid #d1d1d1 !important;
+}
+
+.dragIcon {
+    color: rgb(163, 163, 163) !important;
+}
+
+.number {
+    font-weight: bold !important;
+    font-size: 12px !important;
+    color: var(--primary-colour) !important;
+}

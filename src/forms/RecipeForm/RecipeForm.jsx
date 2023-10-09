@@ -25,6 +25,7 @@ import {
   Typography
 } from '@mui/material';
 import RecipeIngredient from 'Admin/components/RecipeIngredient';
+import RecipePart from 'Admin/components/RecipePart';
 import RecipePieceOfEquipment from 'Admin/components/RecipePieceOfEquipment';
 import RecipeStep from 'Admin/components/RecipeStep';
 import FilterOption from 'components/FilterOption';
@@ -51,115 +52,8 @@ import { getRecipeScheme } from 'types/schemas';
 import FormModes from 'utils/formModes';
 import { includeResizeQueryParameters } from 'utils/imageUtils';
 import { lowercaseFirstLetter } from 'utils/stringUtils';
-import { isNullOrEmpty, isNullOrUndefined, isUndefined, reorder } from 'utils/utils';
+import { isNull, isNullOrEmpty, isNullOrUndefined, isUndefined, reorder } from 'utils/utils';
 import styles from './RecipeForm.module.css';
-
-const IngredientSection = ({ section, newPersonalIngredientDialog, onDelete }) => {
-  const { t } = useTranslation();
-  
-  const [ingredientSearch, setIngredientSearch, ingredientSearchResults, searchingIngredients] = useSearch(async () => {
-    const { data: { results, totalResults } } = await api.getIngredients({ search: ingredientSearch, pageSize: 50, sortBy: 'name' });
-    
-    if (!isNullOrEmpty(ingredientSearch) && (totalResults === 0 || !results.some(x => x.name.toLowerCase() === ingredientSearch.toLowerCase() || x.pluralName.toLowerCase() === ingredientSearch.toLowerCase()))) {
-      setShowAddIngredientButton(true);
-    }
-    
-    return results;
-  }, { delay: 2000 });
-  
-  const [showAddIngredientButton, setShowAddIngredientButton] = useState(false);
-
-  const handleChange = (e) => {
-    onChange({
-      ...step,
-      [e.target.name]: e.target.value,
-    });
-  };
-  
-  const handleAddingNewIngredient = (name) => {
-    newPersonalIngredientDialog.show({ 
-        open: true,
-        ingredient: {
-          name,
-          pluralName: name
-        },
-        onClose: () => newPersonalIngredientDialog.remove(),
-        onComplete: (newIngredient) => {
-          newPersonalIngredientDialog.remove();
-          handleAddIngredient(newIngredient);
-        }
-      });
-  }
-
-  return (
-    <Box>
-      <Stack direction="row" alignItems="center" gap={1}>
-        <Box
-          display="flex"
-          alignItems="center"
-          {...dragHandleProps}
-        >
-          <DragIcon className={styles.dragIcon} />
-        </Box>
-
-        <Stack direction="row" gap={10} display="flex" justifyContent="space-between" alignItems="center">        
-          <TextField
-            fullWidth
-            id="name"
-            label="name"
-            name="name"
-            value={section.name}
-            onChange={handleChange}
-          />
-          
-          <IconButton onClick={() => onDelete(section)}>
-            <ClearIcon />
-          </IconButton>
-        </Stack>
-      </Stack>
-
-      <Autocomplete
-        fullWidth
-        loading={searchingIngredients}
-        options={ingredientSearchResults}
-        filterOptions={(options, params) => {
-          const newOptions = options
-            .filter(
-              (ingredient) =>
-              section.ingredients.filter(
-                  (recipeIngredient) => recipeIngredient.id === ingredient.id
-                ).length < 2
-            )
-            .map((ingredient) => ({ label: ingredient.name, ingredient }))
-
-          if (showAddIngredientButton) {
-            newOptions.push({ label: `${t("common.words.actions.add")} ${t("types.ingredient.name")} "${ingredientSearch}"`, ingredient: undefined, name: ingredientSearch })
-          }
-
-          return newOptions;
-        }}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        renderInput={(params) => <TextField {...params} label={`${t("common.words.actions.add")} ${t("types.ingredient.name")}`} />}
-        value={ingredientSearch}
-        inputValue={ingredientSearch}
-        onInputChange={(event, newValue) => {
-          setIngredientSearch(newValue);
-          setShowAddIngredientButton(false);
-        }}
-        onChange={(event, value) => {
-          setIngredientSearch('');
-          if (value) {
-            if (!isUndefined(value.ingredient)) {
-              handleAddIngredient(value.ingredient);
-            } else {
-              handleAddingNewIngredient(value.name)
-            }
-          }
-        }}
-      />
-    </Box>
-  )
-}
 
 const getDefaultRecipe = () => {
   return {
@@ -173,6 +67,7 @@ const getDefaultRecipe = () => {
     totalTime: 1,
     servings: 1,
     containsAlcohol: false,
+    parts: [],
     steps: [
       {
         id: uuid(),
@@ -271,9 +166,17 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   const [loadingDescendantRecipe, setLoadingDescendantRecipe] = useState();
   const [descendantRecipe, setDescendantRecipe] = useState();
 
+  const formatInitialValue = () => {
+    return initialValues
+      ? {
+        ...initialValues,
+        ingredients: initialValues.ingredients.filter(x => isNull(x.recipePart))
+      } : {};
+  }
+  
   const [originalRecipe] = useState({
     ...getDefaultRecipe(),
-    ...initialValues,
+    ...formatInitialValue(),
     languageCode: i18n.resolvedLanguage
   });
   
@@ -302,6 +205,15 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         data: { id },
       } = await api.createRecipe({
         ...newRecipe,
+        parts: newRecipe.parts.map((part) => ({
+          name: part.name,          
+          ingredients: part.ingredients.map(x => ({
+            ingredientId: x.id,
+            unitOfMeasurementId: x.unitOfMeasurement.id,
+            amount: x.amount,
+            optional: x.optional
+          })),
+        })),
         ingredients: newRecipe.ingredients.map(x => ({
           ingredientId: x.id,
           unitOfMeasurementId: x.unitOfMeasurement.id,
@@ -346,6 +258,15 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     try {
       await api.updateRecipe(newRecipe.id, {
         ...newRecipe,
+        parts: newRecipe.parts.map((part) => ({
+          name: part.name,          
+          ingredients: part.ingredients.map(x => ({
+            ingredientId: x.id,
+            unitOfMeasurementId: x.unitOfMeasurement.id,
+            amount: x.amount,
+            optional: x.optional
+          })),
+        })),
         ingredients: newRecipe.ingredients.map(x => ({
           ingredientId: x.id,
           unitOfMeasurementId: x.unitOfMeasurement.id,
@@ -519,6 +440,30 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }));
   };
 
+  const handleRecipePartChange = (newRecipePart) => {
+    const newRecipeParts = [...recipe.parts];
+
+    const index = newRecipeParts.findIndex((x) => x.id === newRecipePart.id);
+
+    newRecipeParts[index] = newRecipePart;
+
+    setRecipe((state) => ({
+      ...state,
+      parts: newRecipeParts,
+    }));
+  };
+
+  const handleDeleteRecipePart = (newRecipePart) => {
+    const newRecipeParts = recipe.parts.filter(
+      (x) => x.id !== newRecipePart.id
+    );
+
+    setRecipe((state) => ({
+      ...state,
+      parts: newRecipeParts,
+    }));
+  };
+
   const handleRecipePieceOfEquipmentChange = (newRecipePieceOfEquipment) => {
     const newRecipeEquipment = [...recipe.equipment];
 
@@ -542,6 +487,21 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       equipment: newRecipeEquipment,
     }));
   };
+
+  const handleAddPartClick = () => {
+    const newParts = [...recipe.parts];
+
+    newParts.push({
+      id: uuid(),
+      name: "",
+      ingredients: []
+    })
+
+    setRecipe((state) => ({
+      ...state,
+      parts: newParts,
+    }));
+  }
 
   const handleAddStepClick = () => {
     const newSteps = [...recipe.steps];
@@ -1230,12 +1190,29 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     }
                   }}
                 />
-              </Stack>              
+              </Stack>
 
-              <Button sx={{ mt: 2 }} type="button" variant="contained">
-                {`${t("common.words.actions.add")} Section`}
+              {recipe.parts.length > 0 && (
+                <Box sx={{ mt: 2 }} style={{ borderTop: '1px solid #d1d1d1'}}>
+                  {recipe.parts.map((recipePart, index) => (
+                    <RecipePart                    
+                      key={recipePart.id}
+                      recipePart={{
+                        ...recipePart,
+                        number: index + 1
+                      }}
+                      onChange={handleRecipePartChange}
+                      onDelete={handleDeleteRecipePart}
+                    />
+                  ))}
+                </Box>
+              )}     
+
+              <Button sx={{ mt: 2 }} type="button" variant="contained" onClick={handleAddPartClick}>
+                {`${t("common.words.actions.add")} ${t("types.recipe.fields.parts.singularName")}`}
               </Button>
             </Box>
+
 
             
             <Box sx={{ mt: 5 }}>

@@ -19,6 +19,10 @@ const RecipeTile = ({ recipe, onClick, ...props }) => {
     onClick(recipe.id);
   };
 
+  if (!recipe) {
+    return (<></>)
+  }
+
   return (
     <Card sx={{ p: 1 }} className={styles.card} onClick={handleClick} {...props}>
       <Stack direction="row" gap={0.5} className={styles.attachments}>

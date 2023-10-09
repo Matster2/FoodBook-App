@@ -144,8 +144,8 @@ export default () => {
       </Tabs>
 
       <Stack sx={{ mb: 3 }} alignItems="end">
-        <IconButton className={styles.optionButton}>
-          <AddIcon className={styles.optionIcon} onClick={() => navigate('/recipes/create')} />
+        <IconButton className={styles.optionButton} onClick={() => navigate('/recipes/create')}>
+          <AddIcon className={styles.optionIcon} />
         </IconButton>
       </Stack>
 

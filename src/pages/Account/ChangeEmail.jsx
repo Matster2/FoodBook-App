@@ -112,7 +112,7 @@ export default () => {
           label={t('forms.auth.changeEmail.inputs.newEmail.label')}
           name="newEmail"
           autoFocus
-          disable={changingEmail || changeEmailComplete}
+          disabled={changingEmail || changeEmailComplete}
           value={newEmail}
           onChange={onNewEmailChange}
           error={!isUndefined(inputErrors.newEmail)}
@@ -126,7 +126,7 @@ export default () => {
           label={t('forms.auth.changeEmail.inputs.password.label')}
           type="password"
           id="password"
-          disable={changingEmail || changeEmailComplete}
+          disabled={changingEmail || changeEmailComplete}
           value={password}
           onChange={onPasswordChange}
           error={!isUndefined(inputErrors.password)}

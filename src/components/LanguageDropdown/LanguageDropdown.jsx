@@ -48,7 +48,7 @@ const LanguageDropdown = ({ languages, value, onChange, ...props }) => {
     var Flag = getFlag(language.iso639);
 
     return (
-      <MenuItem value={language.iso639}>
+      <MenuItem key={language.iso639} value={language.iso639}>
         <Stack direction="row" display="flex" alignItems="center" justifyContent="center">
           <Flag className={styles.flag} />
           <Typography>{language.nativeName}</Typography>

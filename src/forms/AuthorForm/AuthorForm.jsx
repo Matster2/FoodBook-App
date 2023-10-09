@@ -207,6 +207,7 @@ export default ({ author: initialValues, onSubmit, admin }) => {
         <Box sx={{ mt: 2 }}>
           {author.links.map((authorLink, index) => (
             <AuthorLink
+              key={authorLink.id}
               authorLink={authorLink}
               onChange={handleAuthorLinkChange}
               onDelete={handleDeleteAuthorLink}

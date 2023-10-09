@@ -179,19 +179,21 @@ export default () => {
         )}
 
         <Masonry columns={{ xs: 2, sm: 4, md: 6 }} spacing={1}>
-          {recipes.map((recipe, index) => (
-            <RecipeTile
-              key={recipe.id}  
-              recipe={{
-                ...recipe,
-                images: recipe.images.map((image) => ({
-                  ...image,
-                  url: includeResizeQueryParameters(image.url, 300, 0)
-                }))
-              }}
-              onClick={handleRecipeClick}
-            />
-          ))}
+          {recipes.map((recipe) => {
+            return (
+              <RecipeTile
+                key={recipe.id}
+                recipe={{
+                  ...recipe,
+                  images: recipe.images.map((image) => ({
+                    ...image,
+                    url: includeResizeQueryParameters(image.url, 300, 0)
+                  }))
+                }}
+                onClick={handleRecipeClick}
+              />
+            )
+          })}
         </Masonry>
       </PullToRefresh>
     </Container>

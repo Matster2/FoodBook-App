@@ -1,7 +1,7 @@
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
 import { Close as CloseIcon } from '@mui/icons-material';
 import { Dialog, DialogTitle, IconButton } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import ForgottenPassword from 'pages/ForgottenPassword';
 import Register from 'pages/Register';
@@ -54,7 +54,7 @@ export default NiceModal.create(() => {
         },
       }}
     >
-      <DialogTitle disableTypography className={styles.dialogTitle}>
+      <DialogTitle className={styles.dialogTitle}>
         <IconButton onClick={handleModalClose}>
           <CloseIcon />
         </IconButton>

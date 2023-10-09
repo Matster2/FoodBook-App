@@ -134,10 +134,8 @@ const ForgottenPassword = ({ onSignInClick, onComplete }) => {
           justifyContent: 'center',
         }}
       >
-        <Typography variant="body2">
-          <Typography sx={{ ml: 0.5 }} display="inline" className="link" onClick={onSignInClick}>
-            {t('pages.forgotPassword.links.signIn')}
-          </Typography>
+        <Typography sx={{ ml: 0.5 }} className="link" onClick={onSignInClick}>
+          {t('pages.forgotPassword.links.signIn')}
         </Typography>
       </Box>
     </Container>

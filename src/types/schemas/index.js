@@ -36,7 +36,7 @@ export const getIngredientScheme = () => {
     name: yup.string().required(t('types.ingredient.fields.name.validation.required')),
     pluralName: yup.string().required(t('types.ingredient.fields.pluralName.validation.required')),
     defaultUnitOfMeasurement: yup.object({
-      id: yup.string().required(t('types.ingredient.fields.defaultUnitOfMeasurementId.validation.required')),
+      id: yup.string().required(t('types.ingredient.fields.defaultUnitOfMeasurement.validation.required')),
     })
   });
 }

@@ -47,7 +47,6 @@ export default () => {
   const [selectedPlannedRecipe, setSelectedPlannedRecipe] = useState();
 
   useEffect(() => {
-    const dateToday = new Date();
     const startDate = new Date();
 
     const dates = [];
@@ -163,7 +162,7 @@ export default () => {
       <List sx={{ mb: 2 }} style={{ overflow: 'auto' }}>
         <Stack direction="row" alignItems="center" gap={1}>
           {availableDates.map((date) => (
-            <DatePickerOption date={date} active={areDatesTheSameDay(date, selectedDate)} onClick={handleDateClick} />
+            <DatePickerOption key={date} date={date} active={areDatesTheSameDay(date, selectedDate)} onClick={handleDateClick} />
           ))}
         </Stack>
       </List>
@@ -200,12 +199,13 @@ export default () => {
             }
 
             return (
-              <Box sx={{ mb: 2 }}>
+              <Box key={recipeType} sx={{ mb: 2 }}>
                 <Typography variant='h6'>{t(`types.recipe.types.${lowercaseFirstLetter(recipeType)}.displayName`)}</Typography>
 
                 <Stack direction="column" gap={1}>
                   {plannedRecipes.map((plannedRecipe) => (
                     <PlannedRecipe
+                     key={plannedRecipe.id}
                       plannedRecipe={{
                         ...plannedRecipe,
                         recipe: {

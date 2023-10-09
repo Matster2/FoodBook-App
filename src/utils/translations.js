@@ -50,7 +50,7 @@ export const getFormattedTimeString = (totalMinutes) => {
     parts.push(`${hours} h`)
   }
 
-  if (mins > 0) {
+  if (mins > 0 || hours === 0) {
     parts.push(mins > 1 ? `${mins} ${t('common.time.mins')}` : `${mins} ${t('common.time.min')}`)
   }
 

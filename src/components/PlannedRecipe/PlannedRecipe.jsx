@@ -48,7 +48,7 @@ const PlannedRecipe = ({ plannedRecipe, onClick, onEditClick }) => {
           {plannedRecipe.recipe.images.length > 0 && (
             <Swiper spaceBetween={10} slidesPerView={1} centeredSlides className={styles.swiper} onClick={handleClick}>
               {plannedRecipe.recipe.images.map((image) => (
-                <SwiperSlide className={styles.imageContainer}>
+                <SwiperSlide key={image.url} className={styles.imageContainer}>
                   <RecipeImage src={image.url} alt="recipe" />
                 </SwiperSlide>
               ))}
@@ -87,15 +87,7 @@ const PlannedRecipe = ({ plannedRecipe, onClick, onEditClick }) => {
 };
 
 PlannedRecipe.propTypes = {
-  recipe: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    rating: PropTypes.number.isRequired,
-    totalTime: PropTypes.number.isRequired,
-    images: PropTypes.arrayOf(PropTypes.string),
-    servings: PropTypes.number.isRequired,
-    favourited: PropTypes.bool,
-  }).isRequired,
+  plannedRecipe: PropTypes.object.isRequired,
   onClick: PropTypes.func,
   onLongClick: PropTypes.func,
 };

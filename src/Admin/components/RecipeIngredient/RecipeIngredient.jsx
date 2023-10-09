@@ -52,7 +52,7 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete, optionalDisabl
           id="name"
           label={t("types.recipe.fields.ingredients.fields.name.name")}
           name="name"
-          value={recipeIngredient.name}
+          value={recipeIngredient.ingredient.name}
           disabled
         />
         
@@ -114,7 +114,9 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete, optionalDisabl
 
 RecipeIngredient.propTypes = {
   recipeIngredient: PropTypes.shape({
-    name: PropTypes.string,
+    ingredient: PropTypes.shape({
+      name: PropTypes.string,
+    }),
     amount: PropTypes.number,
     unitOfMeasurement: PropTypes.shape({
       id: PropTypes.string,

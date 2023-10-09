@@ -147,7 +147,7 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
               margin="normal"
               id="name"
               name="name"
-              label="Name"
+              label={t("types.ingredient.fields.name.name")}
               autoFocus
               value={values.name}
               onChange={(e) => setFieldValue("name", capitaliseEachWord(e.target.value))}
@@ -161,7 +161,7 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
               margin="normal"
               id="pluralName"
               name="pluralName"
-              label="Plural Name"
+              label={t("types.ingredient.fields.pluralName.name")}
               value={values.pluralName}
               onChange={(e) => setFieldValue("pluralName", capitaliseEachWord(e.target.value))}
               error={errors.pluralName && touched.pluralName}
@@ -169,20 +169,17 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
             />
 
             <FormControl fullWidth sx={{ mt: 2, mb: 1 }}>
-              <InputLabel id="defaultUnitOfMeasurementId-label">Default Unit Of Measurement</InputLabel>
+              <InputLabel id="defaultUnitOfMeasurementId-label">{t("types.ingredient.fields.defaultUnitOfMeasurement.name")}</InputLabel>
               <Field
                 as={Select}
-                margin="normal"
                 id="defaultUnitOfMeasurement.id"
                 name="defaultUnitOfMeasurement.id"
                 value={`${values.defaultUnitOfMeasurement.id}`}
                 labelId="defaultUnitOfMeasurementId-label"
-                label="Default Unit Of Measurement"
-                error={errors.defaultUnitOfMeasurement?.id && touched.defaultUnitOfMeasurement?.id}
-                helperText={touched.defaultUnitOfMeasurement?.id && errors.defaultUnitOfMeasurement?.id}
+                label={t("types.ingredient.fields.defaultUnitOfMeasurement.name")}
               >
                 {unitOfMeasurements.map((unitOfMeasurement) => (
-                  <MenuItem value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
+                  <MenuItem key={unitOfMeasurement.id} value={unitOfMeasurement.id}>{unitOfMeasurement.name}</MenuItem>
                 ))}
               </Field>
             </FormControl>

@@ -169,7 +169,7 @@ export default () => {
           label={t('forms.auth.resetPassword.inputs.newPassword.label')}
           type="password"
           id="newPassword"
-          disable={resettingPassword || resetPasswordComplete}
+          disabled={resettingPassword || resetPasswordComplete}
           value={newPassword}
           onChange={onNewPasswordChange}
           error={!isUndefined(inputErrors.newPassword)}
@@ -183,14 +183,14 @@ export default () => {
           label={t('forms.auth.resetPassword.inputs.confirmPassword.label')}
           type="password"
           id="confirm-password"
-          disable={resettingPassword || resetPasswordComplete}
+          disabled={resettingPassword || resetPasswordComplete}
           value={confirmPassword}
           onChange={onConfirmPasswordChange}
           error={!isUndefined(inputErrors.confirmPassword)}
           helperText={inputErrors.confirmPassword}
         />
         <Button
-          disable={resettingPassword || resetPasswordComplete}
+          disabled={resettingPassword || resetPasswordComplete}
           type="button"
           onClick={handleResetPasswordClick}
           fullWidth

@@ -127,7 +127,7 @@ export default ({ pieceOfEquipment: initialValues, onSubmit, admin }) => {
               margin="normal"
               id="name"
               name="name"
-              label="Name"
+              label={t("types.equipment.fields.name.name")}
               autoFocus
               value={values.name}
               onChange={(e) => setFieldValue("name", capitaliseEachWord(e.target.value))}
@@ -141,7 +141,7 @@ export default ({ pieceOfEquipment: initialValues, onSubmit, admin }) => {
               margin="normal"
               id="pluralName"
               name="pluralName"
-              label="Plural Name"
+              label={t("types.equipment.fields.pluralName.name")}
               value={values.pluralName}
               onChange={(e) => setFieldValue("pluralName", capitaliseEachWord(e.target.value))}
               error={errors.pluralName && touched.pluralName}

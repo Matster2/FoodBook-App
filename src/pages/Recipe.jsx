@@ -146,10 +146,12 @@ export default () => {
   const fetchRecipe = async () => {
     setLoadingRecipe(true);
     try {
-      const { data } = await api.getRecipe(id);
-      setRecipe(data);
+      const { data: _recipeData } = await api.getRecipe(id);
+      setRecipe(_recipeData);
       setMeasurementSystem(undefined);
-      setIngredients(data.ingredients);
+
+      const { data } = await api.getRecipeIngredients(id);
+      setIngredients(data.ingredients);   
     } catch (e) {
       setIsError(true)
       console.log('error fetching recipe');
@@ -358,11 +360,11 @@ export default () => {
     return Math.round(value * power) / power;
   }
 
-  const getIngredients = () => {
-    return ingredients.map(ingredient => {
-      var amount = fixRounding(_.divide(ingredient.amount, recipe.servings) * servings, 6);
+  const convertRecipeIngredients = (recipeIngredients) => {
+    return recipeIngredients.map(recipeIngredients => {
+      var amount = fixRounding(_.divide(recipeIngredients.amount, recipe.servings) * servings, 6);
       return ({
-        ...ingredient,
+        ...recipeIngredients,
         amount,
       })
     })
@@ -455,7 +457,7 @@ export default () => {
               {Array.from(Array(5).keys()).map((value) => {
                 const ratingValue = value + 1;
                 return (
-                  <Grid item xs={2}>
+                  <Grid key={ratingValue} item xs={2}>
                     <RatingFilter
                       style={{ background: 'none' }}
                       rating={ratingValue}
@@ -545,7 +547,6 @@ export default () => {
         open
         skipInitialTransition
         scrollLocking={recipe.images.length === 0}
-        enabledGestureInteraction={recipe.images.length === 0}
         blocking={false}
         defaultSnap={({ snapPoints, lastSnap }) => Math.max(...snapPoints)}
         snapPoints={({ maxHeight }) => recipe.images.length > 0 ? [maxHeight - (maxHeight / 10),  maxHeight - swiperRef.current.clientHeight] : [maxHeight - (maxHeight / 10)]}
@@ -592,14 +593,16 @@ export default () => {
                 <Typography className={styles.author} sx={{ mr: 1 }} style={{ fontWeight: 'bold' }}>{t('pages.recipe.author')}:</Typography>
                 <Avatar sx={{ height: 21, width: 21, mr: 1, bgcolor: 'var(--primary-colour)' }} src={author?.profilePictureUrl} />
                 
-                <Typography className={styles.author}>
-                  {recipe?.author?.name ?? ""}
+                <Stack direction="row" alignItems="center">
+                  <Typography className={styles.author}>
+                    {recipe?.author?.name ?? ""}
+                  </Typography>
                   {(recipe.createdBy.id === userId) && (
                     <Typography className={styles.author} sx={{ fontWeight: 'bold'}}>
                       {`(${t('common.words.you')})`}
                     </Typography>
                   )}
-                </Typography>
+                </Stack>
               </Stack>
             )}
 
@@ -685,9 +688,21 @@ export default () => {
                 }
               >
                 {!isUndefined(servings) && (
-                  <IngredientList
-                    ingredients={getIngredients()}
-                  />
+                  <>                  
+                    <IngredientList
+                      ingredients={convertRecipeIngredients(ingredients.filter(x => isNull(x.recipePart)))}
+                    />
+
+                    {recipe.parts.map((part) => (
+                      <Box sx={{ mt: 1 }}>  
+                        <Typography>{part.name}</Typography>
+                                                               
+                        <IngredientList
+                          ingredients={convertRecipeIngredients(ingredients.filter(x => x.recipePart?.id === part.id))}
+                        />
+                      </Box>
+                    ))}
+                  </>
                 )}
               </CollapsibleSection>
             </>

@@ -767,13 +767,13 @@
           }
         },
         "pluralName": {
-          "name": "Name",
+          "name": "Plural Name",
           "validation": {
             "required": "Please provide a the plural name for this ingredient."
           }
         },
-        "defaultUnitOfMeasurementId": {
-          "name": "Name",
+        "defaultUnitOfMeasurement": {
+          "name": "Default Unit Of Measurement",
           "validation": {
             "required": "Please provide a default unit of measurement for this ingredient."
           }
@@ -792,7 +792,7 @@
           }
         },
         "pluralName": {
-          "name": "Name",
+          "name": "Plural Name",
           "validation": {
             "required": "Please provide a the plural name for this piece of equipment."
           }
@@ -895,6 +895,16 @@
           "name": "Servings",
           "validation": {
             "required": "The number of servings must be provided"
+          }
+        },
+        "parts": {
+          "name": "Parts",
+          "singularName": "Part",
+
+          "fields": {
+            "name": {
+              "name": "Name"
+            }
           }
         },
         "steps": {

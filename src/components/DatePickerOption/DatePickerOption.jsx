@@ -40,7 +40,7 @@ const DatePickerOption = ({ date, active, onClick }) => {
 };
 
 DatePickerOption.propTypes = {
-  date: PropTypes.string.isRequired,
+  date: PropTypes.instanceOf(Date).isRequired,
   active: PropTypes.bool,
   onClick: PropTypes.func,
 };

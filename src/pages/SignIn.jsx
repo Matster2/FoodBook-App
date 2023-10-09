@@ -1,6 +1,6 @@
 import NiceModal from '@ebay/nice-modal-react';
 import { LoadingButton } from "@mui/lab";
-import { Box, Container, TextField, Typography } from '@mui/material';
+import { Box, Container, Stack, TextField, Typography } from '@mui/material';
 import logo from 'assets/logo.svg';
 import useAuth from 'hooks/useAuth';
 import useInput from 'hooks/useInput';
@@ -170,7 +170,7 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
             justifyContent: 'flex-end',
           }}
         >
-          <Typography inline className="link" onClick={onForgottenPasswordClick}>
+          <Typography className="link" onClick={onForgottenPasswordClick}>
             {t('pages.signIn.links.forgottenPassword')}
           </Typography>
         </Box>
@@ -186,19 +186,18 @@ const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {
           {t('forms.auth.signIn.buttons.submit.label')}
         </LoadingButton>
 
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-          }}
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
         >
           <Typography variant="body2">
             {t('pages.signIn.noAccount')}
-            <Typography sx={{ ml: 0.5 }} display="inline" className="link" onClick={onSignUpClick}>
-              {t('pages.signIn.links.signUp')}
-            </Typography>
           </Typography>
-        </Box>
+          <Typography sx={{ ml: 0.5 }} className="link" onClick={onSignUpClick}>
+            {t('pages.signIn.links.signUp')}
+          </Typography>
+        </Stack>
       </Box>
     </Container>
   );
