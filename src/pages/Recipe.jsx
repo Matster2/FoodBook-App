@@ -593,7 +593,7 @@ export default () => {
                 <Typography className={styles.author} sx={{ mr: 1 }} style={{ fontWeight: 'bold' }}>{t('pages.recipe.author')}:</Typography>
                 <Avatar sx={{ height: 21, width: 21, mr: 1, bgcolor: 'var(--primary-colour)' }} src={author?.profilePictureUrl} />
                 
-                <Stack direction="row" alignItems="center">
+                <Stack direction="row" alignItems="center" gap={0.5}>
                   <Typography className={styles.author}>
                     {recipe?.author?.name ?? ""}
                   </Typography>
@@ -694,8 +694,8 @@ export default () => {
                     />
 
                     {recipe.parts.map((part) => (
-                      <Box sx={{ mt: 1 }}>  
-                        <Typography>{part.name}</Typography>
+                      <Box sx={{ mt: 2 }}>  
+                        <Typography className={styles.partName}>{part.name}</Typography>
                                                                
                         <IngredientList
                           ingredients={convertRecipeIngredients(ingredients.filter(x => x.recipePart?.id === part.id))}

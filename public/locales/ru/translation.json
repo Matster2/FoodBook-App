@@ -18,6 +18,10 @@
         }
       }
     },
+    "serverOffline": {
+      "title": "Невозможно получить доступ к серверу.",
+      "message": "Нам не удалось подключиться к серверу FoodBook!"
+    },
     "maintenance": {
       "title": "Мы вернемся в ближайшее время!",
       "message": "Приносим извинения за неудобства. ",
@@ -97,7 +101,8 @@
         "reference": "Ссылка",
         "variants": "Варианты"
       },
-      "seeFullRecipe": "Полный рецепт смотрите здесь."
+      "seeFullRecipe": "Полный рецепт смотрите здесь.",
+      "nutritionDisclaimer": "Пищевая ценность оценена."
     },
     "recipes": {
       "title": "Рецепты",
@@ -584,6 +589,50 @@
         "success": "Часть оборудования была обновлена.",
         "error": "Невозможно обновить часть оборудования. "
       }
+    },
+    "tags": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Тег с таким именем уже существует"
+        },
+        "success": "Тег создан.",
+        "error": "Не удалось создать тег. "
+      },
+      "update": {
+        "success": "Тег обновлен.",
+        "error": "Не удалось обновить тег. "
+      }
+    },
+    "collections": {
+      "create": {
+        "validation": {
+          "titleExistsAlready": "Коллекция с таким названием уже существует"
+        },
+        "success": "Коллекция создана.",
+        "error": "Не удалось создать коллекцию. "
+      },
+      "update": {
+        "success": "Коллекция обновлена.",
+        "error": "Не удалось обновить коллекцию. "
+      },
+      "addRecipeToCollection": {
+        "success": "Рецепт добавлен в коллекцию.",
+        "error": "Не удалось добавить рецепт в коллекцию. "
+      },
+      "removeRecipeFromCollection": {
+        "success": "Рецепт удален из коллекции.",
+        "error": "Невозможно удалить рецепт из коллекции. "
+      }
+    },
+    "authors": {
+      "create": {
+        "success": "Автор создан.",
+        "error": "Не удалось создать автора. "
+      },
+      "update": {
+        "success": "Автор обновлен.",
+        "error": "Невозможно обновить автора. "
+      }
     }
   },
   "types": {
@@ -615,11 +664,83 @@
     },
     "tag": {
       "name": "Ярлык",
-      "pluralName": "Теги"
+      "pluralName": "Теги",
+      "fields": {
+        "name": {
+          "name": "Имя",
+          "validation": {
+            "required": "Укажите имя для этого тега."
+          }
+        },
+        "icon": {
+          "name": "Икона",
+          "validation": {}
+        },
+        "hidden": {
+          "name": "Скрытый",
+          "validation": {}
+        },
+        "promoted": {
+          "name": "Продвинутый",
+          "validation": {}
+        }
+      }
+    },
+    "collection": {
+      "name": "Коллекция",
+      "pluralName": "Коллекция",
+      "fields": {
+        "title": {
+          "name": "Заголовок",
+          "validation": {
+            "required": "Пожалуйста, укажите название этой коллекции."
+          }
+        },
+        "hidden": {
+          "name": "Скрытый",
+          "validation": {}
+        },
+        "promoted": {
+          "name": "Продвинутый",
+          "validation": {}
+        }
+      }
     },
     "author": {
       "name": "Автор",
-      "pluralName": "Авторы"
+      "pluralName": "Авторы",
+      "fields": {
+        "name": {
+          "name": "Имя",
+          "validation": {
+            "required": "Пожалуйста, укажите имя этого автора."
+          }
+        },
+        "biography": {
+          "name": "биография",
+          "validation": {}
+        },
+        "links": {
+          "name": "Ссылки",
+          "singularName": "Связь",
+          "fields": {
+            "name": {
+              "name": "Имя",
+              "validation": {}
+            },
+            "description": {
+              "name": "Описание",
+              "validation": {}
+            },
+            "url": {
+              "name": "URL-адрес",
+              "validation": {
+                "required": "Пожалуйста, укажите URL этой ссылки."
+              }
+            }
+          }
+        }
+      }
     },
     "ingredient": {
       "name": "Ингредиент",
@@ -632,13 +753,13 @@
           }
         },
         "pluralName": {
-          "name": "Имя",
+          "name": "Имя во множественном числе",
           "validation": {
             "required": "Укажите название этого ингредиента во множественном числе."
           }
         },
-        "defaultUnitOfMeasurementId": {
-          "name": "Имя",
+        "defaultUnitOfMeasurement": {
+          "name": "Единица измерения по умолчанию",
           "validation": {
             "required": "Укажите единицу измерения по умолчанию для этого ингредиента."
           }
@@ -656,7 +777,7 @@
           }
         },
         "pluralName": {
-          "name": "Имя",
+          "name": "Имя во множественном числе",
           "validation": {
             "required": "Укажите название этого оборудования во множественном числе."
           }
@@ -757,6 +878,15 @@
           "name": "Порции",
           "validation": {
             "required": "Необходимо указать количество порций."
+          }
+        },
+        "parts": {
+          "name": "Части",
+          "singularName": "Часть",
+          "fields": {
+            "name": {
+              "name": "Имя"
+            }
           }
         },
         "steps": {

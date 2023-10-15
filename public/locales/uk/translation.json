@@ -9,7 +9,7 @@
     },
     "offline": {
       "title": "Ви офлайн",
-      "message": "Здається, у вас проблема з підключенням. ",
+      "message": "Здається, виникла проблема з вашим з’єднанням. ",
       "components": {
         "buttons": {
           "refresh": {
@@ -17,6 +17,10 @@
           }
         }
       }
+    },
+    "serverOffline": {
+      "title": "Неможливо отримати доступ до сервера.",
+      "message": "Нам не вдалося підключитися до сервера FoodBook!"
     },
     "maintenance": {
       "title": "Ми скоро повернемося!",
@@ -97,7 +101,8 @@
         "reference": "довідка",
         "variants": "Варіанти"
       },
-      "seeFullRecipe": "Дивіться повний рецепт тут"
+      "seeFullRecipe": "Дивіться повний рецепт тут",
+      "nutritionDisclaimer": "Харчова цінність оцінюється."
     },
     "recipes": {
       "title": "рецепти",
@@ -584,6 +589,50 @@
         "success": "Обладнання оновлено.",
         "error": "Не вдалося оновити частину обладнання. "
       }
+    },
+    "tags": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Тег із такою назвою вже існує"
+        },
+        "success": "Тег створено.",
+        "error": "Не вдалося створити тег. "
+      },
+      "update": {
+        "success": "Тег оновлено.",
+        "error": "Не вдалося оновити тег. "
+      }
+    },
+    "collections": {
+      "create": {
+        "validation": {
+          "titleExistsAlready": "Колекція з такою назвою вже існує"
+        },
+        "success": "Колекція створена.",
+        "error": "Не вдалося створити колекцію. "
+      },
+      "update": {
+        "success": "Колекція оновлена.",
+        "error": "Не вдалося оновити колекцію. "
+      },
+      "addRecipeToCollection": {
+        "success": "Рецепт додано в колекцію.",
+        "error": "Не вдалося додати рецепт до колекції. "
+      },
+      "removeRecipeFromCollection": {
+        "success": "Рецепт видалено з колекції.",
+        "error": "Не вдалося видалити рецепт із колекції. "
+      }
+    },
+    "authors": {
+      "create": {
+        "success": "Автора створено.",
+        "error": "Не вдалося створити автора. "
+      },
+      "update": {
+        "success": "Автора оновлено.",
+        "error": "Не вдалося оновити автора. "
+      }
     }
   },
   "types": {
@@ -615,11 +664,83 @@
     },
     "tag": {
       "name": "Тег",
-      "pluralName": "Теги"
+      "pluralName": "Теги",
+      "fields": {
+        "name": {
+          "name": "Ім'я",
+          "validation": {
+            "required": "Укажіть назву для цього тегу."
+          }
+        },
+        "icon": {
+          "name": "значок",
+          "validation": {}
+        },
+        "hidden": {
+          "name": "Прихований",
+          "validation": {}
+        },
+        "promoted": {
+          "name": "Підвищений",
+          "validation": {}
+        }
+      }
+    },
+    "collection": {
+      "name": "Колекція",
+      "pluralName": "Колекція",
+      "fields": {
+        "title": {
+          "name": "Назва",
+          "validation": {
+            "required": "Укажіть, будь ласка, назву цієї колекції."
+          }
+        },
+        "hidden": {
+          "name": "Прихований",
+          "validation": {}
+        },
+        "promoted": {
+          "name": "Підвищений",
+          "validation": {}
+        }
+      }
     },
     "author": {
       "name": "Автор",
-      "pluralName": "Автори"
+      "pluralName": "Автори",
+      "fields": {
+        "name": {
+          "name": "Ім'я",
+          "validation": {
+            "required": "Будь ласка, вкажіть ім'я цього автора."
+          }
+        },
+        "biography": {
+          "name": "біографія",
+          "validation": {}
+        },
+        "links": {
+          "name": "Посилання",
+          "singularName": "Посилання",
+          "fields": {
+            "name": {
+              "name": "Ім'я",
+              "validation": {}
+            },
+            "description": {
+              "name": "опис",
+              "validation": {}
+            },
+            "url": {
+              "name": "URL",
+              "validation": {
+                "required": "Укажіть URL-адресу цього посилання."
+              }
+            }
+          }
+        }
+      }
     },
     "ingredient": {
       "name": "Інгредієнт",
@@ -632,13 +753,13 @@
           }
         },
         "pluralName": {
-          "name": "Ім'я",
+          "name": "Назва у множині",
           "validation": {
             "required": "Будь ласка, введіть назву у множині для цього інгредієнта."
           }
         },
-        "defaultUnitOfMeasurementId": {
-          "name": "Ім'я",
+        "defaultUnitOfMeasurement": {
+          "name": "Одиниця вимірювання за замовчуванням",
           "validation": {
             "required": "Укажіть одиницю вимірювання за замовчуванням для цього інгредієнта."
           }
@@ -656,7 +777,7 @@
           }
         },
         "pluralName": {
-          "name": "Ім'я",
+          "name": "Назва у множині",
           "validation": {
             "required": "Будь ласка, введіть назву у множині для цього обладнання."
           }
@@ -757,6 +878,15 @@
           "name": "Порції",
           "validation": {
             "required": "Необхідно вказати кількість порцій"
+          }
+        },
+        "parts": {
+          "name": "Запчастини",
+          "singularName": "частина",
+          "fields": {
+            "name": {
+              "name": "Ім'я"
+            }
           }
         },
         "steps": {

@@ -18,6 +18,10 @@
         }
       }
     },
+    "serverOffline": {
+      "title": "Немагчыма падключыцца да сервера.",
+      "message": "Мы не змаглі падключыцца да сервера FoodBook!"
+    },
     "maintenance": {
       "title": "Мы хутка вернемся!",
       "message": "Прабачце за нязручнасці. ",
@@ -97,7 +101,8 @@
         "reference": "Даведка",
         "variants": "Варыянты"
       },
-      "seeFullRecipe": "Глядзіце поўны рэцэпт тут"
+      "seeFullRecipe": "Глядзіце поўны рэцэпт тут",
+      "nutritionDisclaimer": "Харчовыя каштоўнасці прыблізныя."
     },
     "recipes": {
       "title": "Рэцэпты",
@@ -584,6 +589,50 @@
         "success": "Абсталяванне было абноўлена.",
         "error": "Немагчыма абнавіць абсталяванне. "
       }
+    },
+    "tags": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Тэг з такой назвай ужо існуе"
+        },
+        "success": "Тэг быў створаны.",
+        "error": "Немагчыма стварыць тэг. "
+      },
+      "update": {
+        "success": "Тэг быў абноўлены.",
+        "error": "Немагчыма абнавіць тэг. "
+      }
+    },
+    "collections": {
+      "create": {
+        "validation": {
+          "titleExistsAlready": "Калекцыя з такой назвай ужо існуе"
+        },
+        "success": "Калекцыя створана.",
+        "error": "Немагчыма стварыць калекцыю. "
+      },
+      "update": {
+        "success": "Калекцыя абноўлена.",
+        "error": "Немагчыма абнавіць калекцыю. "
+      },
+      "addRecipeToCollection": {
+        "success": "Рэцэпт дададзены ў калекцыю.",
+        "error": "Немагчыма дадаць рэцэпт у калекцыю. "
+      },
+      "removeRecipeFromCollection": {
+        "success": "Рэцэпт быў выдалены з калекцыі.",
+        "error": "Немагчыма выдаліць рэцэпт з калекцыі. "
+      }
+    },
+    "authors": {
+      "create": {
+        "success": "Аўтар быў створаны.",
+        "error": "Немагчыма стварыць аўтара. "
+      },
+      "update": {
+        "success": "Аўтар абноўлены.",
+        "error": "Немагчыма абнавіць аўтара. "
+      }
     }
   },
   "types": {
@@ -615,11 +664,83 @@
     },
     "tag": {
       "name": "Тэг",
-      "pluralName": "Тэгі"
+      "pluralName": "Тэгі",
+      "fields": {
+        "name": {
+          "name": "Імя",
+          "validation": {
+            "required": "Дайце назву для гэтага тэга."
+          }
+        },
+        "icon": {
+          "name": "Значок",
+          "validation": {}
+        },
+        "hidden": {
+          "name": "Схаваны",
+          "validation": {}
+        },
+        "promoted": {
+          "name": "Павышаны",
+          "validation": {}
+        }
+      }
+    },
+    "collection": {
+      "name": "Калекцыя",
+      "pluralName": "Калекцыя",
+      "fields": {
+        "title": {
+          "name": "Назва",
+          "validation": {
+            "required": "Калі ласка, дайце назву гэтай калекцыі."
+          }
+        },
+        "hidden": {
+          "name": "Схаваны",
+          "validation": {}
+        },
+        "promoted": {
+          "name": "Павышаны",
+          "validation": {}
+        }
+      }
     },
     "author": {
       "name": "Аўтар",
-      "pluralName": "Аўтары"
+      "pluralName": "Аўтары",
+      "fields": {
+        "name": {
+          "name": "Імя",
+          "validation": {
+            "required": "Укажыце, калі ласка, імя гэтага аўтара."
+          }
+        },
+        "biography": {
+          "name": "Біяграфія",
+          "validation": {}
+        },
+        "links": {
+          "name": "Спасылкі",
+          "singularName": "Спасылка",
+          "fields": {
+            "name": {
+              "name": "Імя",
+              "validation": {}
+            },
+            "description": {
+              "name": "Апісанне",
+              "validation": {}
+            },
+            "url": {
+              "name": "URL",
+              "validation": {
+                "required": "Укажыце, калі ласка, URL гэтай спасылкі."
+              }
+            }
+          }
+        }
+      }
     },
     "ingredient": {
       "name": "Інгрэдыент",
@@ -632,13 +753,13 @@
           }
         },
         "pluralName": {
-          "name": "Імя",
+          "name": "Імя ў множным ліку",
           "validation": {
             "required": "Калі ласка, увядзіце назву гэтага інгрэдыента ў множным ліку."
           }
         },
-        "defaultUnitOfMeasurementId": {
-          "name": "Імя",
+        "defaultUnitOfMeasurement": {
+          "name": "Адзінка вымярэння па змаўчанні",
           "validation": {
             "required": "Увядзіце адзінку вымярэння па змаўчанні для гэтага інгрэдыента."
           }
@@ -656,7 +777,7 @@
           }
         },
         "pluralName": {
-          "name": "Імя",
+          "name": "Імя ў множным ліку",
           "validation": {
             "required": "Калі ласка, увядзіце назву ў множным ліку для гэтага абсталявання."
           }
@@ -757,6 +878,15 @@
           "name": "Порцыі",
           "validation": {
             "required": "Колькасць порцый неабходна ўказаць"
+          }
+        },
+        "parts": {
+          "name": "часткі",
+          "singularName": "частка",
+          "fields": {
+            "name": {
+              "name": "Імя"
+            }
           }
         },
         "steps": {

@@ -18,6 +18,10 @@
         }
       }
     },
+    "serverOffline": {
+      "title": "Server ist nicht erreichbar.",
+      "message": "Wir konnten keine Verbindung zum FoodBook-Server herstellen!"
+    },
     "maintenance": {
       "title": "Wir werden bald zurück sein!",
       "message": "Entschuldigen Sie die Unannehmlichkeiten. ",
@@ -97,7 +101,8 @@
         "reference": "Referenz",
         "variants": "Varianten"
       },
-      "seeFullRecipe": "Das vollständige Rezept finden Sie hier"
+      "seeFullRecipe": "Das vollständige Rezept finden Sie hier",
+      "nutritionDisclaimer": "Nährwerte werden geschätzt."
     },
     "recipes": {
       "title": "Rezepte",
@@ -584,6 +589,50 @@
         "success": "Das Gerät wurde aktualisiert.",
         "error": "Das Gerät konnte nicht aktualisiert werden. "
       }
+    },
+    "tags": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Es existiert bereits ein Tag mit diesem Namen"
+        },
+        "success": "Tag wurde erstellt.",
+        "error": "Tag kann nicht erstellt werden. "
+      },
+      "update": {
+        "success": "Tag wurde aktualisiert.",
+        "error": "Tag kann nicht aktualisiert werden. "
+      }
+    },
+    "collections": {
+      "create": {
+        "validation": {
+          "titleExistsAlready": "Es existiert bereits eine Sammlung mit diesem Titel"
+        },
+        "success": "Sammlung wurde erstellt.",
+        "error": "Sammlung kann nicht erstellt werden. "
+      },
+      "update": {
+        "success": "Die Sammlung wurde aktualisiert.",
+        "error": "Sammlung kann nicht aktualisiert werden. "
+      },
+      "addRecipeToCollection": {
+        "success": "Rezept wurde zur Sammlung hinzugefügt.",
+        "error": "Das Rezept konnte der Sammlung nicht hinzugefügt werden. "
+      },
+      "removeRecipeFromCollection": {
+        "success": "Das Rezept wurde aus der Sammlung entfernt.",
+        "error": "Das Rezept konnte nicht aus der Sammlung entfernt werden. "
+      }
+    },
+    "authors": {
+      "create": {
+        "success": "Autor wurde erstellt.",
+        "error": "Der Autor konnte nicht erstellt werden. "
+      },
+      "update": {
+        "success": "Der Autor wurde aktualisiert.",
+        "error": "Autor kann nicht aktualisiert werden. "
+      }
     }
   },
   "types": {
@@ -615,11 +664,83 @@
     },
     "tag": {
       "name": "Etikett",
-      "pluralName": "Stichworte"
+      "pluralName": "Stichworte",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "validation": {
+            "required": "Bitte geben Sie einen Namen für dieses Tag ein."
+          }
+        },
+        "icon": {
+          "name": "Symbol",
+          "validation": {}
+        },
+        "hidden": {
+          "name": "Versteckt",
+          "validation": {}
+        },
+        "promoted": {
+          "name": "Gefördert",
+          "validation": {}
+        }
+      }
+    },
+    "collection": {
+      "name": "Sammlung",
+      "pluralName": "Sammlung",
+      "fields": {
+        "title": {
+          "name": "Titel",
+          "validation": {
+            "required": "Bitte geben Sie einen Titel für diese Sammlung an."
+          }
+        },
+        "hidden": {
+          "name": "Versteckt",
+          "validation": {}
+        },
+        "promoted": {
+          "name": "Gefördert",
+          "validation": {}
+        }
+      }
     },
     "author": {
       "name": "Autor",
-      "pluralName": "Autoren"
+      "pluralName": "Autoren",
+      "fields": {
+        "name": {
+          "name": "Name",
+          "validation": {
+            "required": "Bitte geben Sie einen Namen dieses Autors an."
+          }
+        },
+        "biography": {
+          "name": "Biografie",
+          "validation": {}
+        },
+        "links": {
+          "name": "Links",
+          "singularName": "Verknüpfung",
+          "fields": {
+            "name": {
+              "name": "Name",
+              "validation": {}
+            },
+            "description": {
+              "name": "Beschreibung",
+              "validation": {}
+            },
+            "url": {
+              "name": "URL",
+              "validation": {
+                "required": "Bitte geben Sie die URL dieses Links an."
+              }
+            }
+          }
+        }
+      }
     },
     "ingredient": {
       "name": "Zutat",
@@ -632,13 +753,13 @@
           }
         },
         "pluralName": {
-          "name": "Name",
+          "name": "Pluralname",
           "validation": {
             "required": "Bitte geben Sie einen Pluralnamen für diese Zutat an."
           }
         },
-        "defaultUnitOfMeasurementId": {
-          "name": "Name",
+        "defaultUnitOfMeasurement": {
+          "name": "Standardmaßeinheit",
           "validation": {
             "required": "Bitte geben Sie eine Standardmaßeinheit für diese Zutat an."
           }
@@ -656,7 +777,7 @@
           }
         },
         "pluralName": {
-          "name": "Name",
+          "name": "Pluralname",
           "validation": {
             "required": "Bitte geben Sie für dieses Gerät einen Pluralnamen an."
           }
@@ -750,13 +871,22 @@
         "totalTime": {
           "name": "Gesamtzeit",
           "validation": {
-            "required": "Bitte stellen Sie die Gesamtzeit ein, die dieses Rezept benötigt"
+            "required": "Bitte legen Sie die Gesamtzeit fest, die dieses Rezept benötigt"
           }
         },
         "servings": {
           "name": "Portionen",
           "validation": {
             "required": "Die Anzahl der Portionen muss angegeben werden"
+          }
+        },
+        "parts": {
+          "name": "Teile",
+          "singularName": "Teil",
+          "fields": {
+            "name": {
+              "name": "Name"
+            }
           }
         },
         "steps": {

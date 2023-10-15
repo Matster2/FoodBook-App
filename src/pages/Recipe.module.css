@@ -144,3 +144,8 @@
   font-size: 12px !important;
   color: #FB6B1C !important;
 }
+
+.partName {
+  font-size: 12px !important;
+  font-weight: bold !important;
+}

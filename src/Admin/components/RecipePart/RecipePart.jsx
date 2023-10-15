@@ -18,6 +18,7 @@ import useSearch from 'hooks/useSearch';
 import PropTypes from 'prop-types';
 import { forwardRef, useState } from 'react';
 import { useTranslation } from "react-i18next";
+import uuid from 'react-uuid';
 import { isNullOrEmpty, isUndefined } from 'utils/utils';
 import styles from './RecipePart.module.css';
 
@@ -47,10 +48,11 @@ const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps
   };
   
   const handleAddIngredient = (ingredient) => {
-    var existingIngredient = recipePart.ingredients.find(x => x.id === ingredient.id)
+    var existingIngredient = recipePart.ingredients.find(x => x.ingredient.id === ingredient.id)
 
     const recipeIngredient = {
-      ...ingredient,
+      id: uuid(),
+      ingredient: ingredient,
       amount: undefined,
       optional: existingIngredient ? !existingIngredient.optional: false,
       unitOfMeasurement: {
@@ -105,8 +107,6 @@ const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps
         }
       });
   }
-  
-  console.log(recipePart.ingredients)
 
   return (
     <Box sx={{ py: 2 }} className={styles.part} ref={ref} {...props}>

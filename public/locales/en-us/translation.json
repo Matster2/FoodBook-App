@@ -18,6 +18,10 @@
         }
       }
     },
+    "serverOffline": {
+      "title": "Cannot reach server.",
+      "message": "We were unable to connect to the FoodBook server!"
+    },
     "maintenance": {
       "title": "We will be back soon!",
       "message": "Sorry for the inconvenience. We are currently performing maintenance.",
@@ -97,7 +101,8 @@
         "reference": "Reference",
         "variants": "Variants"
       },
-      "seeFullRecipe": "See Full Recipe Here"
+      "seeFullRecipe": "See Full Recipe Here",
+      "nutritionDisclaimer": "Nutrition values are estimated."
     },
     "recipes": {
       "title": "Recipes",
@@ -571,7 +576,7 @@
         "success": "Ingredient has been updated.",
         "error": "Unable to update ingredient. Please try again later."
       }
-    },    
+    },
     "equipment": {      
       "create": {
         "validation": {
@@ -583,6 +588,50 @@
       "update": {
         "success": "Piece of equipment has been updated.",
         "error": "Unable to update piece of equipment. Please try again later."
+      }
+    },
+    "tags": {      
+      "create": {
+        "validation": {
+          "nameExistsAlready": "An tag already exists with this name"
+        },
+        "success": "Tag has been created.",
+        "error": "Unable to create tag. Please try again later."
+      },   
+      "update": {
+        "success": "Tag has been updated.",
+        "error": "Unable to update tag. Please try again later."
+      }
+    },
+    "collections": {      
+      "create": {
+        "validation": {
+          "titleExistsAlready": "An collection already exists with this title"
+        },
+        "success": "Collection has been created.",
+        "error": "Unable to create collection. Please try again later."
+      },   
+      "update": {
+        "success": "Collection has been updated.",
+        "error": "Unable to update collection. Please try again later."
+      },
+      "addRecipeToCollection": {
+        "success": "Recipe has been added to the collection.",
+        "error": "Unable to add recipe to the collection. Please try again later."
+      },
+      "removeRecipeFromCollection": {
+        "success": "Recipe has been remove from the collection.",
+        "error": "Unable to remove recipe from the collection. Please try again later."
+      }
+    },
+    "authors": {      
+      "create": {
+        "success": "Author has been created.",
+        "error": "Unable to create author. Please try again later."
+      },   
+      "update": {
+        "success": "Author has been updated.",
+        "error": "Unable to update author. Please try again later."
       }
     }
   },
@@ -615,11 +664,96 @@
     },
     "tag": {
       "name": "Tag",
-      "pluralName": "Tags"
+      "pluralName": "Tags",
+      
+      "fields": {
+        "name": {
+          "name": "Name",
+          "validation": {
+            "required": "Please provide a name for this tag."
+          }
+        },
+        "icon": {
+          "name": "Icon",
+          "validation": {
+          }
+        },
+        "hidden": {
+          "name": "Hidden",
+          "validation": {
+          }
+        },
+        "promoted": {
+          "name": "Promoted",
+          "validation": {
+          }
+        }
+      }
+    },
+    "collection": {
+      "name": "Collection",
+      "pluralName": "Collection",
+      
+      "fields": {
+        "title": {
+          "name": "Title",
+          "validation": {
+            "required": "Please provide a title for this collection."
+          }
+        },
+        "hidden": {
+          "name": "Hidden",
+          "validation": {
+          }
+        },
+        "promoted": {
+          "name": "Promoted",
+          "validation": {
+          }
+        }
+      }
     },
     "author": {
       "name": "Author",
-      "pluralName": "Authors"
+      "pluralName": "Authors",
+      
+      "fields": {
+        "name": {
+          "name": "Name",
+          "validation": {
+            "required": "Please provide a name of this author."
+          }
+        },
+        "biography": {
+          "name": "Biography",
+          "validation": {
+          }
+        },
+        "links": {
+          "name": "Links",
+          "singularName": "Link",
+
+          "fields": {
+            "name": {
+              "name": "Name",
+              "validation": {
+              }
+            },
+            "description": {
+              "name": "Description",
+              "validation": {
+              }
+            },
+            "url": {
+              "name": "URL",
+              "validation": {
+                "required": "Please provide the url of this link."
+              }
+            }
+
+          }
+        }
+      }
     },
     "ingredient": {
       "name": "Ingredient",
@@ -633,13 +767,13 @@
           }
         },
         "pluralName": {
-          "name": "Name",
+          "name": "Plural Name",
           "validation": {
             "required": "Please provide a the plural name for this ingredient."
           }
         },
-        "defaultUnitOfMeasurementId": {
-          "name": "Name",
+        "defaultUnitOfMeasurement": {
+          "name": "Default Unit Of Measurement",
           "validation": {
             "required": "Please provide a default unit of measurement for this ingredient."
           }
@@ -658,7 +792,7 @@
           }
         },
         "pluralName": {
-          "name": "Name",
+          "name": "Plural Name",
           "validation": {
             "required": "Please provide a the plural name for this piece of equipment."
           }
@@ -761,6 +895,16 @@
           "name": "Servings",
           "validation": {
             "required": "The number of servings must be provided"
+          }
+        },
+        "parts": {
+          "name": "Parts",
+          "singularName": "Part",
+
+          "fields": {
+            "name": {
+              "name": "Name"
+            }
           }
         },
         "steps": {

@@ -18,6 +18,10 @@
         }
       }
     },
+    "serverOffline": {
+      "title": "Sunucuya ulaşamıyor.",
+      "message": "FoodBook sunucusuna bağlanamadık!"
+    },
     "maintenance": {
       "title": "Yakında geri döneceğiz!",
       "message": "Rahatsızlıktan dolayı özür dileriz. ",
@@ -97,7 +101,8 @@
         "reference": "Referans",
         "variants": "Varyantlar"
       },
-      "seeFullRecipe": "Tarifin Tamamını Burada Görebilirsiniz"
+      "seeFullRecipe": "Tarifin Tamamını Burada Görebilirsiniz",
+      "nutritionDisclaimer": "Besin değerleri tahminidir."
     },
     "recipes": {
       "title": "Tarifler",
@@ -147,7 +152,7 @@
     "planner": {
       "title": "Planlayıcı",
       "authenticationRequired": "Planlayıcınızı görmek için oturum açmalısınız",
-      "noRecipes": "Bu gün için planlanmış tarif yok.",
+      "noRecipes": "Bu gün için planlanmış bir tarif yok.",
       "components": {
         "buttons": {
           "signIn": {
@@ -584,6 +589,50 @@
         "success": "Ekipman parçası güncellendi.",
         "error": "Ekipman parçası güncellenemiyor. "
       }
+    },
+    "tags": {
+      "create": {
+        "validation": {
+          "nameExistsAlready": "Bu adda bir etiket zaten mevcut"
+        },
+        "success": "Etiket oluşturuldu.",
+        "error": "Etiket oluşturulamıyor. "
+      },
+      "update": {
+        "success": "Etiket güncellendi.",
+        "error": "Etiket güncellenemiyor. "
+      }
+    },
+    "collections": {
+      "create": {
+        "validation": {
+          "titleExistsAlready": "Bu başlığa sahip bir koleksiyon zaten mevcut"
+        },
+        "success": "Koleksiyon oluşturuldu.",
+        "error": "Koleksiyon oluşturulamıyor. "
+      },
+      "update": {
+        "success": "Koleksiyon güncellendi.",
+        "error": "Koleksiyon güncellenemiyor. "
+      },
+      "addRecipeToCollection": {
+        "success": "Tarif koleksiyona eklendi.",
+        "error": "Tarif koleksiyona eklenemiyor. "
+      },
+      "removeRecipeFromCollection": {
+        "success": "Tarif koleksiyondan kaldırıldı.",
+        "error": "Tarif koleksiyondan kaldırılamıyor. "
+      }
+    },
+    "authors": {
+      "create": {
+        "success": "Yazar oluşturuldu.",
+        "error": "Yazar oluşturulamıyor. "
+      },
+      "update": {
+        "success": "Yazar güncellendi.",
+        "error": "Yazar güncellenemiyor. "
+      }
     }
   },
   "types": {
@@ -615,11 +664,83 @@
     },
     "tag": {
       "name": "Etiket",
-      "pluralName": "Etiketler"
+      "pluralName": "Etiketler",
+      "fields": {
+        "name": {
+          "name": "İsim",
+          "validation": {
+            "required": "Lütfen bu etiket için bir ad girin."
+          }
+        },
+        "icon": {
+          "name": "Simge",
+          "validation": {}
+        },
+        "hidden": {
+          "name": "Gizlenmiş",
+          "validation": {}
+        },
+        "promoted": {
+          "name": "Tanıtıldı",
+          "validation": {}
+        }
+      }
+    },
+    "collection": {
+      "name": "Toplamak",
+      "pluralName": "Toplamak",
+      "fields": {
+        "title": {
+          "name": "Başlık",
+          "validation": {
+            "required": "Lütfen bu koleksiyon için bir başlık girin."
+          }
+        },
+        "hidden": {
+          "name": "Gizlenmiş",
+          "validation": {}
+        },
+        "promoted": {
+          "name": "Tanıtıldı",
+          "validation": {}
+        }
+      }
     },
     "author": {
       "name": "Yazar",
-      "pluralName": "Yazarlar"
+      "pluralName": "Yazarlar",
+      "fields": {
+        "name": {
+          "name": "İsim",
+          "validation": {
+            "required": "Lütfen bu yazarın adını belirtin."
+          }
+        },
+        "biography": {
+          "name": "Biyografi",
+          "validation": {}
+        },
+        "links": {
+          "name": "Bağlantılar",
+          "singularName": "Bağlantı",
+          "fields": {
+            "name": {
+              "name": "İsim",
+              "validation": {}
+            },
+            "description": {
+              "name": "Tanım",
+              "validation": {}
+            },
+            "url": {
+              "name": "URL'si",
+              "validation": {
+                "required": "Lütfen bu bağlantının URL'sini sağlayın."
+              }
+            }
+          }
+        }
+      }
     },
     "ingredient": {
       "name": "Bileşen",
@@ -632,13 +753,13 @@
           }
         },
         "pluralName": {
-          "name": "İsim",
+          "name": "Çoğul Ad",
           "validation": {
             "required": "Lütfen bu içerik için çoğul bir ad belirtin."
           }
         },
-        "defaultUnitOfMeasurementId": {
-          "name": "İsim",
+        "defaultUnitOfMeasurement": {
+          "name": "Varsayılan Ölçü Birimi",
           "validation": {
             "required": "Lütfen bu içerik için varsayılan bir ölçü birimi belirtin."
           }
@@ -656,7 +777,7 @@
           }
         },
         "pluralName": {
-          "name": "İsim",
+          "name": "Çoğul Ad",
           "validation": {
             "required": "Lütfen bu ekipman parçası için çoğul bir ad belirtin."
           }
@@ -757,6 +878,15 @@
           "name": "Porsiyon",
           "validation": {
             "required": "Porsiyon sayısı belirtilmelidir"
+          }
+        },
+        "parts": {
+          "name": "Parçalar",
+          "singularName": "Parça",
+          "fields": {
+            "name": {
+              "name": "İsim"
+            }
           }
         },
         "steps": {

@@ -167,11 +167,24 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   const [descendantRecipe, setDescendantRecipe] = useState();
 
   const formatInitialValue = () => {
-    return initialValues
-      ? {
-        ...initialValues,
-        ingredients: initialValues.ingredients.filter(x => isNull(x.recipePart))
-      } : {};
+    if (isUndefined(initialValues)) {
+      return {};
+    }
+
+    const initial = {
+      ingredients: [],
+      parts: [],
+      ...initialValues
+    };
+
+    return {
+      ...initial,
+      ingredients: initial.ingredients.filter(x => isNull(x.partId)),
+      parts: initial.parts.map(part => ({
+        ...part,
+        ingredients: initial.ingredients.filter(x => x.partId === part.id)
+      }))
+    }
   }
   
   const [originalRecipe] = useState({
@@ -208,14 +221,14 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         parts: newRecipe.parts.map((part) => ({
           name: part.name,          
           ingredients: part.ingredients.map(x => ({
-            ingredientId: x.id,
+            ingredientId: x.ingredient.id,
             unitOfMeasurementId: x.unitOfMeasurement.id,
             amount: x.amount,
             optional: x.optional
           })),
         })),
         ingredients: newRecipe.ingredients.map(x => ({
-          ingredientId: x.id,
+          ingredientId: x.ingredient.id,
           unitOfMeasurementId: x.unitOfMeasurement.id,
           amount: x.amount,
           optional: x.optional
@@ -225,6 +238,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
           amount: x.amount,
           dependsOnServings: x.dependsOnServings
         })),
+        authorId: newRecipe.author?.id
       });
 
       filesToUpload.forEach(async (imageFile, index) => {
@@ -261,14 +275,14 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         parts: newRecipe.parts.map((part) => ({
           name: part.name,          
           ingredients: part.ingredients.map(x => ({
-            ingredientId: x.id,
+            ingredientId: x.ingredient.id,
             unitOfMeasurementId: x.unitOfMeasurement.id,
             amount: x.amount,
             optional: x.optional
           })),
         })),
         ingredients: newRecipe.ingredients.map(x => ({
-          ingredientId: x.id,
+          ingredientId: x.ingredient.id,
           unitOfMeasurementId: x.unitOfMeasurement.id,
           amount: x.amount,
           optional: x.optional
@@ -278,6 +292,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
           amount: x.amount,
           dependsOnServings: x.dependsOnServings
         })),
+        authorId: newRecipe.author?.id
       });
 
       // handle images
@@ -365,10 +380,11 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   }
 
   const handleAddIngredient = (ingredient) => {
-    var existingIngredient = recipe.ingredients.find(x => x.id === ingredient.id)
+    var existingIngredient = recipe.ingredients.find(x => x.ingredient.id === ingredient.id)
 
     const recipeIngredient = {
-      ...ingredient,
+      id: uuid(),
+      ingredient: ingredient,
       amount: undefined,
       optional: existingIngredient ? !existingIngredient.optional: false,
       unitOfMeasurement: {
@@ -577,30 +593,6 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }));
   }
 
-  // const handleStepChange = (newStep) => {
-  //   const newSteps = recipe.steps;
-
-  //   const index = newSteps.findIndex((x) => x.id === newStep.id);
-
-  //   newSteps[index] = newStep;
-
-  //   setRecipe((state) => ({
-  //     ...state,
-  //     steps: newSteps,
-  //   }));
-  // };
-
-  // const handleDeleteStep = (newStep) => {
-  //   const newSteps = recipe.steps.filter(
-  //     (x) => x.id !== newStep.id
-  //   );
-
-  //   setRecipe((state) => ({
-  //     ...state,
-  //     steps: newSteps,
-  //   }));
-  // };
-  
   /* Image Handlers */
   const handleUploadImage = (e) => {
     const file = e.target.files[0];
@@ -1313,126 +1305,23 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               <Typography sx={{ mb: 2 }} variant="h6">{t("types.recipe.fields.nutrition.name")}</Typography>
 
               <Grid container spacing={2}>
-                <Grid item xs={6} md={3} lg={2}>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    id="calories"
-                    name="nutrition.calories"
-                    label={t("types.recipe.fields.nutrition.calories.name")}
-                    value={recipe.nutrition.calories}
-                    onChange={handleChange}
-                    error={errors.nutrition?.calories && touched.nutrition?.calories}
-                    helperText={touched.nutrition?.calories && errors.nutrition?.calories}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{ inputProps: { min: 0 } }}
-                  />
-                </Grid>
-                <Grid item xs={6} md={3} lg={2}>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    id="nutrition.sugar"
-                    name="nutrition.sugar"
-                    label={t("types.recipe.fields.nutrition.sugar.name")}
-                    value={recipe.nutrition.sugar}
-                    onChange={handleChange}
-                    error={errors.nutrition?.sugar && touched.nutrition?.sugar}
-                    helperText={touched.nutrition?.sugar && errors.nutrition?.sugar}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{ inputProps: { min: 0 } }}
-                  />
-                </Grid>
-                <Grid item xs={6} md={3} lg={2}>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    id="fat"
-                    name="nutrition.fat"
-                    label={t("types.recipe.fields.nutrition.fat.name")}
-                    value={recipe.nutrition.fat}
-                    onChange={handleChange}
-                    error={errors.nutrition?.fat && touched.nutrition?.fat}
-                    helperText={touched.nutrition?.fat && errors.nutrition?.fat}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{ inputProps: { min: 0 } }}
-                  />
-                </Grid>
-                <Grid item xs={6} md={3} lg={2}>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    id="saturatedFat"
-                    name="nutrition.saturatedFat"
-                    label={t("types.recipe.fields.nutrition.saturatedFat.name")}
-                    value={recipe.nutrition.saturatedFat}
-                    onChange={handleChange}
-                    error={errors.nutrition?.saturatedFat && touched.nutrition?.saturatedFat}
-                    helperText={touched.nutrition?.saturatedFat && errors.nutrition?.saturatedFat}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{ inputProps: { min: 0 } }}
-                  />
-                </Grid>
-                <Grid item xs={6} md={3} lg={2}>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    id="sodium"
-                    name="nutrition.sodium"
-                    label={t("types.recipe.fields.nutrition.sodium.name")}
-                    value={recipe.nutrition.sodium}
-                    onChange={handleChange}
-                    error={errors.nutrition?.sodium && touched.nutrition?.sodium}
-                    helperText={touched.nutrition?.sodium && errors.nutrition?.sodium}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{ inputProps: { min: 0 } }}
-                  />
-                </Grid>
-                <Grid item xs={6} md={3} lg={2}>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    id="protein"
-                    name="nutrition.protein"
-                    label={t("types.recipe.fields.nutrition.protein.name")}
-                    value={recipe.nutrition.protein}
-                    onChange={handleChange}
-                    error={errors.nutrition?.protein && touched.nutrition?.protein}
-                    helperText={touched.nutrition?.protein && errors.nutrition?.protein}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{ inputProps: { min: 0 } }}
-                  />
-                </Grid>
-                <Grid item xs={6} md={3} lg={2}>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    id="carbohydrates"
-                    name="nutrition.carbohydrates"
-                    label={t("types.recipe.fields.nutrition.carbohydrates.name")}
-                    value={recipe.nutrition.carbohydrates}
-                    onChange={handleChange}
-                    error={errors.nutrition?.carbohydrates && touched.nutrition?.carbohydrates}
-                    helperText={touched.nutrition?.carbohydrates && errors.nutrition?.carbohydrates}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{ inputProps: { min: 0 } }}
-                  />
-                </Grid>
-                <Grid item xs={6} md={3} lg={2}>
-                  <TextField
-                    fullWidth
-                    type="number"
-                    id="fiber"
-                    name="nutrition.fiber"
-                    label={t("types.recipe.fields.nutrition.fiber.name")}
-                    value={recipe.nutrition.fiber}
-                    onChange={handleChange}
-                    error={errors.nutrition?.fiber && touched.nutrition?.fiber}
-                    helperText={touched.nutrition?.fiber && errors.nutrition?.fiber}
-                    InputLabelProps={{ shrink: true }}
-                    InputProps={{ inputProps: { min: 0 } }}
-                  />
-                </Grid>
+                {Object.keys(recipe.nutrition).map(key => (
+                  <Grid item xs={6} md={3} lg={2}>
+                    <TextField
+                      fullWidth
+                      type="number"
+                      id={key}
+                      name={`nutrition.${key}`}
+                      label={t(`types.recipe.fields.nutrition.${key}.name`)}
+                      value={recipe.nutrition[key]}
+                      onChange={handleChange}
+                      error={errors.nutrition?.[key] && touched.nutrition?.[key]}
+                      helperText={touched.nutrition?.[key] && errors.nutrition?.[key]}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{ inputProps: { min: 0 } }}
+                    />
+                  </Grid>
+                ))}
               </Grid>
             </Box>
 
