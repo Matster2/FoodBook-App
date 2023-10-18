@@ -1,7 +1,7 @@
 import { Box, Checkbox, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
-import { MeasurementType, UnitOfMeasurementRepresentation } from 'types';
+import { UnitOfMeasurementRepresentation } from 'types';
 import Fraction from 'utils/fraction';
 import styles from './IngredientList.module.css';
 
@@ -9,8 +9,8 @@ const IngredientList = ({ ingredients, enableCheckboxes }) => {
   const { t } = useTranslation();
   
   const getUnitName = (unitOfMeasurement, amount) => {
-    if (unitOfMeasurement.type === MeasurementType.Unit) {
-      return '';
+    if (unitOfMeasurement.id === "d738d9d4-ac5a-45fc-92a6-fa2e0e1e5b03") {
+      return "";
     }
 
     return amount > 1 ? `${unitOfMeasurement.pluralName} ` : `${unitOfMeasurement.name} `;
@@ -57,7 +57,6 @@ const IngredientList = ({ ingredients, enableCheckboxes }) => {
 
     if (unitOfMeasurement.representAs === UnitOfMeasurementRepresentation.Fraction) {
       const fraction = Fraction(decimal);
-      console.log(fraction)
 
       if (Number(decimal).toFixed(2) === "0.33") {
         fraction.numerator = 1;
