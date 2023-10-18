@@ -1305,23 +1305,50 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               <Typography sx={{ mb: 2 }} variant="h6">{t("types.recipe.fields.nutrition.name")}</Typography>
 
               <Grid container spacing={2}>
-                {Object.keys(recipe.nutrition).map(key => (
-                  <Grid item xs={6} md={3} lg={2}>
-                    <TextField
-                      fullWidth
-                      type="number"
-                      id={key}
-                      name={`nutrition.${key}`}
-                      label={t(`types.recipe.fields.nutrition.${key}.name`)}
-                      value={recipe.nutrition[key]}
-                      onChange={handleChange}
-                      error={errors.nutrition?.[key] && touched.nutrition?.[key]}
-                      helperText={touched.nutrition?.[key] && errors.nutrition?.[key]}
-                      InputLabelProps={{ shrink: true }}
-                      InputProps={{ inputProps: { min: 0 } }}
-                    />
-                  </Grid>
-                ))}
+                <Grid item xs={6} md={3} lg={2}>
+                  <TextField
+                    fullWidth
+                    type="number"
+                    id="calories"
+                    name={`nutrition.calories`}
+                    label={t(`types.recipe.fields.nutrition.calories.name`)}
+                    value={recipe.nutrition.calories}
+                    onChange={handleChange}
+                    error={errors.nutrition?.calories && touched.nutrition?.calories}
+                    helperText={touched.nutrition?.calories && errors.nutrition?.calories}
+                    InputLabelProps={{ shrink: true }}
+                    InputProps={{
+                      inputProps: { 
+                        min: 0, 
+                        step: 1 
+                      }
+                    }}
+                  />
+                </Grid>
+                {Object.keys(recipe.nutrition)
+                  .filter(x => x !== "calories")
+                  .map(key => (
+                    <Grid item xs={6} md={3} lg={2}>
+                      <TextField
+                        fullWidth
+                        type="number"
+                        id={key}
+                        name={`nutrition.${key}`}
+                        label={t(`types.recipe.fields.nutrition.${key}.name`)}
+                        value={recipe.nutrition[key]}
+                        onChange={handleChange}
+                        error={errors.nutrition?.[key] && touched.nutrition?.[key]}
+                        helperText={touched.nutrition?.[key] && errors.nutrition?.[key]}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{ 
+                          inputProps: { 
+                            min: 0,
+                            step: 0.1
+                          } 
+                        }}
+                      />
+                    </Grid>
+                  ))}
               </Grid>
             </Box>
 

@@ -102,7 +102,7 @@ export default () => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   const { results: categories, loading: loadingCategories, refetch: fetchTags } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/tags?random=true&pageSize=10`
+    `${process.env.REACT_APP_API_URL}/tags?random=true&pageSize=10&hidden=false`
   );
 
   const sevenDaysAgo = useMemo(() => {
