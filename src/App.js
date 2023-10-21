@@ -11,13 +11,11 @@ import useTags from 'hooks/useTags';
 import { useContext, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { RouterProvider } from 'react-router-dom';
-
 import router from 'router';
 
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 
-
-const App = () => {
+const App = () => {  
   const { authenticated, refreshTokens, logout } = useAuth();
   const api = useAPI();
 

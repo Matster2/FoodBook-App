@@ -229,13 +229,24 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
           amount: x.amount,
           dependsOnServings: x.dependsOnServings
         })),
+        steps: newRecipe.steps.map((step, stepIndex) => ({
+          ...step,
+          number: stepIndex,
+          instructions: step.instructions.map((instruction, instructionIndex) => ({
+            ...instruction,
+            number: instructionIndex
+          }))
+        })),
         authorId: newRecipe.author?.id
       });
 
       filesToUpload.forEach(async (imageFile, index) => {
         try {
           await api.uploadRecipeImage(id, imageFile.file, index);
-        } catch {}
+        } catch (e) {          
+          toast.error(e);
+          console.log(e);
+        }
       });
 
       if (!isUndefined(descendantRecipe) && recipe.isVariant) {
@@ -283,7 +294,15 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
           amount: x.amount,
           dependsOnServings: x.dependsOnServings
         })),
-        authorId: newRecipe.author?.id
+        steps: newRecipe.steps.map((step, stepIndex) => ({
+          ...step,
+          number: stepIndex,
+          instructions: step.instructions.map((instruction, instructionIndex) => ({
+            ...instruction,
+            number: instructionIndex
+          }))
+        })),
+        authorId: newRecipe.author?.id,
       });
 
       // handle images
@@ -306,8 +325,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
             var imageFile = filesToUpload.find(x => x.id === image.id);            
             await api.uploadRecipeImage(recipe.id, imageFile.file, index);
           }
-        } catch (e) {
-          console.log(e)
+        } catch (e) {          
+          toast.error(e);
+          console.log(e);
         }
       });
 
