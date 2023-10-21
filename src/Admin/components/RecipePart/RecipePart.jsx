@@ -38,7 +38,7 @@ const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps
     }
     
     return results;
-  }, { delay: 2000 })
+  }, { delay: 1000 })
 
   const handleChange = (e) => {
     onChange({

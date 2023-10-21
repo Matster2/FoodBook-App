@@ -68,16 +68,7 @@ const getDefaultRecipe = () => {
     servings: 1,
     containsAlcohol: false,
     parts: [],
-    steps: [
-      {
-        id: uuid(),
-        name: "",
-        instructions: [{
-          id: uuid(),
-          instruction: ""
-        }]
-      }
-    ],
+    steps: [],
     ingredients: [],
     equipment: [],
     referenceUrl: '',
@@ -131,7 +122,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }
     
     return results;
-  }, { delay: 2000 })
+  }, { delay: 1000 })
 
   const [equipmentSearch, setEquipmentSearch, equipmentSearchResults, searchingEquipment] = useSearch(async () => {
     const { data: { results, totalResults } } = await api.getEquipment({ search: equipmentSearch, pageSize: 50, sortBy: 'name' });
@@ -141,7 +132,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }
 
     return results;
-  }, { delay: 2000 })
+  }, { delay: 1000 })
 
   const [authorSearch, setAuthorSearch, authorSearchResults, searchingAuthors] = useSearch(async () => {
     if (!admin) {
@@ -150,7 +141,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
     const { data: { results } } = await api.getAuthors({ search: authorSearch, pageSize: 50, sortBy: 'name' });
     return results;
-  }, { delay: 2000 })
+  }, { delay: 1000 })
 
   const [filesToUpload, setFilesToUpload] = useState([]);
   
@@ -525,7 +516,10 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     newSteps.push({
       id: uuid(),
       name: "",
-      instructions: []
+      instructions: [{
+        id: uuid(),
+        instruction: ""
+      }]
     })
 
     setRecipe((state) => ({
@@ -576,35 +570,16 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }));
   }
 
-
-  
-  const handleAddSectionClick = () => {
-    const newSections = [...recipe.sections];
-
-    newSections.push({
-      id: uuid(),
-      name: "",
-      ingredients: []
-    })
-
-    setRecipe((state) => ({
-      ...state,
-      sections: newSection,
-    }));
-  }
-
   /* Image Handlers */
   const handleUploadImage = (e) => {
     const file = e.target.files[0];
 
     const fileExtension = "." + file.name.split(".").at(-1).toLowerCase();
-    console.log(fileExtension)
     const allowedFileTypes = [".jpg", ".jpeg", ".jfif", ".png", ".tiff", ".avif", ".webp"];
     if (!allowedFileTypes.includes(fileExtension)) {
       toast.error(`${t("forms.recipe.invalidRecipeImage")}`);
       return false;
     }
-
 
     const url = URL.createObjectURL(file);
     const newImage = {

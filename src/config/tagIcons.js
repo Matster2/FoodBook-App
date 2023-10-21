@@ -1,3 +1,4 @@
+// food
 import BreakfastIcon from 'assets/icons/icon8/breakfast-96.png';
 import CakeIcon from 'assets/icons/icon8/cake-96.png';
 import ChampagneIcon from 'assets/icons/icon8/champagne-96.png';
@@ -19,6 +20,15 @@ import MealPrepIcon from 'assets/icons/icon8/plastic-food-container-96.png';
 import SoupIcon from 'assets/icons/icon8/soup-plate-96.png';
 import SpaghettiIcon from 'assets/icons/icon8/spaghetti-96.png';
 
+// holidays
+import ChristmasIcon from 'assets/icons/icon8/christmas-96.png';
+import EasterIcon from 'assets/icons/icon8/easter-96.png';
+import HalloweenIcon from 'assets/icons/icon8/halloween-96.png';
+import NewYearIcon from 'assets/icons/icon8/new-year-96.png';
+import SantaIcon from 'assets/icons/icon8/santa-96.png';
+import StPatricksDayIcon from 'assets/icons/icon8/st-patricks-day-96.png';
+import ThanksgivingIcon from 'assets/icons/icon8/thanksgiving-96.png';
+
 export default {
     default: DefaultIcon,
     champagne: ChampagneIcon,
@@ -39,5 +49,12 @@ export default {
     lasagna: LasagnaIcon,
     spaghetti: SpaghettiIcon,
     'meal-prep': MealPrepIcon,
-    'chicken': ChickenIcon
+    'chicken': ChickenIcon,
+    christmas: ChristmasIcon,
+    easter: EasterIcon,
+    halloween: HalloweenIcon,
+    'new-year': NewYearIcon,
+    santa: SantaIcon,
+    'st-patricks-day': StPatricksDayIcon,
+    thanksgiving: ThanksgivingIcon,
 };

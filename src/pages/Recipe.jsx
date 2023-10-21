@@ -548,8 +548,8 @@ export default () => {
         skipInitialTransition
         scrollLocking={recipe.images.length === 0}
         blocking={false}
-        defaultSnap={({ snapPoints, lastSnap }) => Math.max(...snapPoints)}
-        snapPoints={({ maxHeight }) => recipe.images.length > 0 ? [maxHeight - (maxHeight / 10),  maxHeight - swiperRef.current.clientHeight] : [maxHeight - (maxHeight / 10)]}
+        defaultSnap={({ snapPoints, lastSnap }) => recipe.images.length > 0 ? lastSnap / 2 : Math.max(...snapPoints) }
+        snapPoints={({ maxHeight }) => recipe.images.length > 0 ? [maxHeight - (maxHeight / 10), maxHeight - swiperRef.current.clientHeight] : [maxHeight - (maxHeight / 10)]}
       >
         <Container sx={{ mb: 12 }}>
           <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>

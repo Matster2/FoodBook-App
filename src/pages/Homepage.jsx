@@ -2,6 +2,7 @@ import NiceModal from '@ebay/nice-modal-react';
 import {
   Avatar,
   Box,
+  CircularProgress,
   Container,
   Dialog,
   Grid,
@@ -101,7 +102,7 @@ export default () => {
   const [filters] = useState({});
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  const { results: categories, loading: loadingCategories, refetch: fetchTags } = usePagedFetch(
+  const { results: tags, loading: loadingTags, refetch: fetchTags } = usePagedFetch(
     `${process.env.REACT_APP_API_URL}/tags?random=true&pageSize=10&hidden=false`
   );
 
@@ -221,6 +222,10 @@ export default () => {
     </Box>
   );
 
+  const isLoading = () => {
+    return loadingTags || loadingRecommendedRecipes || loadingRecentlyAddedRecipes || loadingFavouriteRecipes || loadingPersonalRecipes;
+  }
+  
   return (
     <>
       <Dialog
@@ -280,14 +285,14 @@ export default () => {
             </Grid>
           </Box>
 
-          {categories.length > 0 && (
+          {tags.length > 0 && (
             <Section
               sx={{ mb: 0.5 }}
               title={t('pages.home.sections.categories')}
               //showSeeAllLink={categories.length < totalCategories}
-              loading={loadingCategories}
+              loading={loadingTags}
             >
-              {categories.map((category) => (
+              {tags.map((category) => (
                 <CategoryChip key={category.id} sx={{ mb: 1.5 }} category={category} onClick={handleCategoryClick} />
               ))}
             </Section>
@@ -358,6 +363,12 @@ export default () => {
             >
               {personalRecipes.map((recipe) => renderRecipeTile(recipe))}
             </Section>
+          )}
+
+          {isLoading() && (
+            <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
+              <CircularProgress />
+            </Box>
           )}
         </Container>
       </PullToRefresh>

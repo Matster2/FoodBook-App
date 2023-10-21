@@ -61,3 +61,9 @@ export const getMeasurementSystemTranslation = (measurementSystem) => {
   const t = i18n.t;
   return t(`types.unitOfMeasurement.measurementSystems.${lowercaseFirstLetter(measurementSystem)}`);
 }
+
+export const getDaysTranslation = (days) => {
+  const t = i18n.t;
+
+  return days === 1 ? t("common.words.day") : t("common.words.days");
+}

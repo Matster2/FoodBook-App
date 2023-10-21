@@ -24,7 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import { isUndefined } from 'utils/utils';
 
-import categoryIcons from 'config/categoryIcons';
+import tagIcons from 'config/tagIcons';
 
 export default () => {
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ export default () => {
   useEffect(() => {
     const delayDebounce = setTimeout(async () => {
       setFilter('search', search);
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(delayDebounce);
   }, [search]);
@@ -150,7 +150,7 @@ export default () => {
                           }}
                         >
                           <Icon sx={{ mr: 1 }}>
-                            <img style={{ height: '100%' }} alt={tag.name} src={!isUndefined(categoryIcons[tag?.icon?.toLowerCase()]) ? categoryIcons[tag.icon.toLowerCase()] : categoryIcons.default} />
+                            <img style={{ height: '100%' }} alt={tag.name} src={!isUndefined(tagIcons[tag?.icon?.toLowerCase()]) ? tagIcons[tag.icon.toLowerCase()] : tagIcons.default} />
                           </Icon>
                           {tag.name}
                         </Typography>

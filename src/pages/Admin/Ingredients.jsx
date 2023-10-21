@@ -76,7 +76,7 @@ export default () => {
   useEffect(() => {
     const delayDebounce = setTimeout(async () => {
       setFilter('search', search);
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(delayDebounce);
   }, [search]);

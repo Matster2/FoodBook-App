@@ -1,20 +1,20 @@
 import { Chip, Icon } from '@mui/material';
-import categoryIcons from 'config/categoryIcons';
+import tagIcons from 'config/tagIcons';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { isNullOrEmpty } from 'utils/utils';
 import styles from './CategoryChip.module.css';
 
 const CategoryChip = ({ category, onClick, ...props }) => {
-  const [icon, setIcon] = useState(categoryIcons.default);
+  const [icon, setIcon] = useState(tagIcons.default);
 
   const handleClick = () => {
     onClick(category.id);
   };
 
   useEffect(() => {
-    if (categoryIcons[category.icon.toLowerCase()] !== undefined && !isNullOrEmpty(categoryIcons[category.icon.toLowerCase()])) {
-      setIcon(categoryIcons[category.icon.toLowerCase()]);
+    if (tagIcons[category.icon.toLowerCase()] !== undefined && !isNullOrEmpty(tagIcons[category.icon.toLowerCase()])) {
+      setIcon(tagIcons[category.icon.toLowerCase()]);
     }
   }, [category]);
 

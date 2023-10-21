@@ -12,6 +12,7 @@ import useAuth from 'hooks/useAuth';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
+import { getDaysTranslation } from 'utils/translations';
 
 import styles from './PlanRecipeDialog.module.css';
 
@@ -140,12 +141,13 @@ const PlanRecipeDialog = ({ open, onClose, transitionComponent, recipe }: PlanRe
                 selectedDays,
               } as any,
             }}
+            showDaysOutsideCurrentMonth
           />
         </LocalizationProvider>
 
-        {selectedDays.length > 1 && (
+        {selectedDays.length > 0 && (
           <Box sx={{ mb: 1 }}>
-            <Typography textAlign="right" className={styles.selectedText}>{selectedDays.length} days selected</Typography>
+            <Typography textAlign="right" className={styles.selectedText}>{`${selectedDays.length} ${getDaysTranslation(selectedDays.length)} ${t("common.words.selected")}`}</Typography>
           </Box>
         )}
 
