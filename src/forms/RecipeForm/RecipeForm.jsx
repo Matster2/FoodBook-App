@@ -244,8 +244,8 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         try {
           await api.uploadRecipeImage(id, imageFile.file, index);
         } catch (e) {          
-          toast.error(e);
-          console.log(e);
+          toast.error(e.message);
+          console.log(e.message);
         }
       });
 
@@ -326,8 +326,8 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
             await api.uploadRecipeImage(recipe.id, imageFile.file, index);
           }
         } catch (e) {          
-          toast.error(e);
-          console.log(e);
+          toast.error(e.message);
+          console.log(e.message);
         }
       });
 
