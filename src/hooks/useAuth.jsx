@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { useCallback, useContext } from 'react';
 
-import { AuthContext } from 'contexts/AuthContext';
-import { actions } from 'reducers/authReducer';
+import { AuthContext } from 'src/contexts/AuthContext';
+import { actions } from 'src/reducers/authReducer';
 
 const useAuth = () => {
   const { state, dispatch } = useContext(AuthContext);
@@ -11,7 +11,7 @@ const useAuth = () => {
     dispatch({ type: actions.LOGIN_REQUESTED });
 
     try {
-      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/auth/login`, {
+      const { data } = await axios.post(`${import.meta.env.VITE_APP_API_URL}/auth/login`, {
         email,
         password,
       });
@@ -39,7 +39,7 @@ const useAuth = () => {
     try {
       console.log("Refreshing tokens");
 
-      const { data } = await axios.post(`${process.env.REACT_APP_API_URL}/auth/tokens/refresh`, {
+      const { data } = await axios.post(`${import.meta.env.VITE_APP_API_URL}/auth/tokens/refresh`, {
         accessToken: state.tokens.accessToken,
         refreshToken: state.tokens.refreshToken,
       });

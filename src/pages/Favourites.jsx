@@ -1,32 +1,32 @@
 import NiceModal from '@ebay/nice-modal-react';
 import { Masonry } from '@mui/lab';
 import {
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  Dialog,
-  Grid,
-  InputAdornment,
-  Slide,
-  Tab,
-  Tabs,
-  TextField,
-  Typography
+    Box,
+    Button,
+    CircularProgress,
+    Container,
+    Dialog,
+    Grid,
+    InputAdornment,
+    Slide,
+    Tab,
+    Tabs,
+    TextField,
+    Typography
 } from '@mui/material';
-import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
-import FilterButton from 'components/FilterButton';
-import Header from 'components/Header';
-import RecipeTile from 'components/RecipeTile';
-import useAPI from 'hooks/useAPI';
-import useAuth from 'hooks/useAuth';
-import useTags from 'hooks/useTags';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
-import { includeResizeQueryParameters } from 'utils/imageUtils';
-import { isUndefined } from 'utils/utils';
+import SearchIcon from 'src/assets/icons/search.svg?react';
+import FilterButton from 'src/components/FilterButton';
+import Header from 'src/components/Header';
+import RecipeTile from 'src/components/RecipeTile';
+import useAPI from 'src/hooks/useAPI';
+import useAuth from 'src/hooks/useAuth';
+import useTags from 'src/hooks/useTags';
+import { includeResizeQueryParameters } from 'src/utils/imageUtils';
+import { isUndefined } from 'src/utils/utils';
 import styles from './Favourites.module.css';
 import Filters from './Filters';
 

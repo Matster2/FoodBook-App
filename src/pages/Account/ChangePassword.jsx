@@ -1,14 +1,14 @@
 import { LoadingButton } from "@mui/lab";
 import { Box, Container, TextField } from '@mui/material';
-import Header from 'components/Header';
-import useAPI from 'hooks/useAPI';
-import useAuth from 'hooks/useAuth';
-import useInput from 'hooks/useInput';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
-import { isEmptyOrWhiteSpace, isUndefined } from 'utils/utils';
+import Header from 'src/components/Header';
+import useAPI from 'src/hooks/useAPI';
+import useAuth from 'src/hooks/useAuth';
+import useInput from 'src/hooks/useInput';
+import { isEmptyOrWhiteSpace, isUndefined } from 'src/utils/utils';
 
 export default () => {
   const { t } = useTranslation();

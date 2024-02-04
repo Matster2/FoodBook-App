@@ -1,12 +1,12 @@
 import { AccessTime as AccessTimeIcon } from '@mui/icons-material';
 import { Box, Card, Checkbox, Grid, Stack, Typography } from '@mui/material';
-import RecipeImage from 'components/RecipeImage';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
+import RecipeImage from 'src/components/RecipeImage';
+import { capitalizeFirstLetter } from 'src/utils/stringUtils';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-import { capitalizeFirstLetter } from 'utils/stringUtils';
 import styles from './TogglablePlannedRecipe.module.css';
 
 const TogglablePlannedRecipe = ({ plannedRecipe, onChange, onClick, enabled }) => {

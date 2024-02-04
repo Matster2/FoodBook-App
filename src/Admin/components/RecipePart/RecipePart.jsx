@@ -1,25 +1,25 @@
 import { useModal } from '@ebay/nice-modal-react';
 import {
-  Clear as ClearIcon,
-  DragIndicator as DragIcon
+    Clear as ClearIcon,
+    DragIndicator as DragIcon
 } from '@mui/icons-material';
 import {
-  Autocomplete,
-  Box,
-  IconButton,
-  Stack,
-  TextField,
-  Typography
+    Autocomplete,
+    Box,
+    IconButton,
+    Stack,
+    TextField,
+    Typography
 } from '@mui/material';
-import RecipeIngredient from 'Admin/components/RecipeIngredient';
-import NewPersonalIngredientDialog from 'dialogs/NewPersonalIngredientDialog';
-import useAPI from 'hooks/useAPI';
-import useSearch from 'hooks/useSearch';
 import PropTypes from 'prop-types';
 import { forwardRef, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import uuid from 'react-uuid';
-import { isNullOrEmpty, isUndefined } from 'utils/utils';
+import RecipeIngredient from 'src/Admin/components/RecipeIngredient';
+import NewPersonalIngredientDialog from 'src/dialogs/NewPersonalIngredientDialog';
+import useAPI from 'src/hooks/useAPI';
+import useSearch from 'src/hooks/useSearch';
+import { isNullOrEmpty, isUndefined } from 'src/utils/utils';
 import styles from './RecipePart.module.css';
 
 const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps, ...props }, ref) => {

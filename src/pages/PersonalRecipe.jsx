@@ -1,16 +1,16 @@
 import {
-  Box,
-  CircularProgress,
-  Container
+    Box,
+    CircularProgress,
+    Container
 } from '@mui/material';
-import Header from 'components/Header';
-import RecipeForm from 'forms/RecipeForm';
-import useAPI from 'hooks/useAPI';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { RecipeState } from 'types';
-import { includeResizeQueryParameters } from 'utils/imageUtils';
+import Header from 'src/components/Header';
+import RecipeForm from 'src/forms/RecipeForm';
+import useAPI from 'src/hooks/useAPI';
+import { RecipeState } from 'src/types';
+import { includeResizeQueryParameters } from 'src/utils/imageUtils';
 
 export default () => {
   const { t } = useTranslation();

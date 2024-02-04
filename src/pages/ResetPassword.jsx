@@ -1,13 +1,13 @@
 import NiceModal from '@ebay/nice-modal-react';
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
-import logo from 'assets/logo.svg';
-import useAPI from 'hooks/useAPI';
-import useInput from 'hooks/useInput';
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { isEmptyOrWhiteSpace, isNull, isUndefined } from 'utils/utils';
+import logo from 'src/assets/logo.svg';
+import useAPI from 'src/hooks/useAPI';
+import useInput from 'src/hooks/useInput';
+import { isEmptyOrWhiteSpace, isNull, isUndefined } from 'src/utils/utils';
 import styles from './ResetPassword.module.css';
 
 export default () => {

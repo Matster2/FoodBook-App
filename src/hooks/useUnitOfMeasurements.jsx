@@ -1,6 +1,6 @@
-import { UnitOfMeasurementContext } from 'contexts/UnitOfMeasurementContext';
-import useAPI from 'hooks/useAPI';
 import { useContext } from 'react';
+import { UnitOfMeasurementContext } from 'src/contexts/UnitOfMeasurementContext';
+import useAPI from 'src/hooks/useAPI';
 
 export default () => {
   const { unitOfMeasurements, setUnitOfMeasurements } = useContext(UnitOfMeasurementContext);

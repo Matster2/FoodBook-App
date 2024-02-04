@@ -1,11 +1,11 @@
 import {
-  Box
+    Box
 } from '@mui/material';
-import { ReactComponent as HeartIcon } from 'assets/icons/heart.svg';
-import { ReactComponent as PersonalIcon } from 'assets/icons/personal.svg';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { isUndefined } from 'utils/utils';
+import HeartIcon from 'src/assets/icons/heart.svg?react';
+import PersonalIcon from 'src/assets/icons/personal.svg?react';
+import { isUndefined } from 'src/utils/utils';
 import styles from './RecipeTileAttachment.module.css';
 
 const RecipeTileAttachment = ({ type, ...props }) => {

@@ -4,19 +4,18 @@ import {
   Stack,
   Typography
 } from '@mui/material';
+import BelarusFlag from 'src/assets/icons/flags/circular/belarus.svg?react';
+import DefaultFlag from 'src/assets/icons/flags/circular/default.svg?react';
+import EnglishFlag from 'src/assets/icons/flags/circular/england.svg?react';
+import FrenchFlag from 'src/assets/icons/flags/circular/france.svg?react';
+import GermanFlag from 'src/assets/icons/flags/circular/germany.svg?react';
+import ItalianFlag from 'src/assets/icons/flags/circular/italy.svg?react';
+import RussianFlag from 'src/assets/icons/flags/circular/russian-federation.svg?react';
+import SpanishFlag from 'src/assets/icons/flags/circular/spain.svg?react';
+import TurkishFlag from 'src/assets/icons/flags/circular/turkey.svg?react';
+import UkrainianFlag from 'src/assets/icons/flags/circular/ukraine.svg?react';
+import USAFlag from 'src/assets/icons/flags/circular/usa.svg?react';
 import styles from './LanguageDropdown.module.css';
-
-import { ReactComponent as BelarusFlag } from 'assets/icons/flags/circular/belarus.svg';
-import { ReactComponent as DefaultFlag } from 'assets/icons/flags/circular/default.svg';
-import { ReactComponent as EnglishFlag } from 'assets/icons/flags/circular/england.svg';
-import { ReactComponent as FrenchFlag } from 'assets/icons/flags/circular/france.svg';
-import { ReactComponent as GermanFlag } from 'assets/icons/flags/circular/germany.svg';
-import { ReactComponent as ItalianFlag } from 'assets/icons/flags/circular/italy.svg';
-import { ReactComponent as RussianFlag } from 'assets/icons/flags/circular/russian-federation.svg';
-import { ReactComponent as SpanishFlag } from 'assets/icons/flags/circular/spain.svg';
-import { ReactComponent as TurkishFlag } from 'assets/icons/flags/circular/turkey.svg';
-import { ReactComponent as UkrainianFlag } from 'assets/icons/flags/circular/ukraine.svg';
-import { ReactComponent as USAFlag } from 'assets/icons/flags/circular/usa.svg';
 
 const flagMappings = {
   "en": EnglishFlag,

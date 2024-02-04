@@ -1,21 +1,20 @@
 import NiceModal from '@ebay/nice-modal-react';
 import { Box, Button, CircularProgress, Container, Grid, IconButton, List, Slide, Stack, Typography } from '@mui/material';
-import DatePickerOption from 'components/DatePickerOption/DatePickerOption';
-import Header from 'components/Header';
-import PlannedRecipe from 'components/PlannedRecipe';
-import PlannedRecipeDialog from 'dialogs/PlannedRecipeDialog';
-import useAPI from 'hooks/useAPI';
-import useAuth from 'hooks/useAuth';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { RecipeType } from 'types';
-import { includeResizeQueryParameters } from 'utils/imageUtils';
-import { lowercaseFirstLetter } from 'utils/stringUtils';
-import { getDayName, getMonthName } from 'utils/translations';
-import { areDatesTheSameDay, isUndefined, toISOLocal } from 'utils/utils';
-
-import { ReactComponent as IngredientsIcon } from 'assets/icons/ingredients.svg';
+import IngredientsIcon from 'src/assets/icons/ingredients.svg?react';
+import DatePickerOption from 'src/components/DatePickerOption/DatePickerOption';
+import Header from 'src/components/Header';
+import PlannedRecipe from 'src/components/PlannedRecipe';
+import PlannedRecipeDialog from 'src/dialogs/PlannedRecipeDialog';
+import useAPI from 'src/hooks/useAPI';
+import useAuth from 'src/hooks/useAuth';
+import { RecipeType } from 'src/types';
+import { includeResizeQueryParameters } from 'src/utils/imageUtils';
+import { lowercaseFirstLetter } from 'src/utils/stringUtils';
+import { getDayName, getMonthName } from 'src/utils/translations';
+import { areDatesTheSameDay, isUndefined, toISOLocal } from 'src/utils/utils';
 import styles from './Planner.module.css';
 
 const Transition = React.forwardRef((props, ref) => {

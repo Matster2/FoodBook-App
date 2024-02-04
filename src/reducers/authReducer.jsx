@@ -1,6 +1,6 @@
 import jwtDecode from 'jwt-decode';
 
-import claimTypes from 'config/jwtClaimTypes';
+import claimTypes from 'src/config/jwtClaimTypes';
 
 export const actions = {
   LOGIN_REQUESTED: 'LOGIN_REQUESTED',

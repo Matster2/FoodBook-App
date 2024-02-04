@@ -1,8 +1,8 @@
 import { Box, Checkbox, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
-import { UnitOfMeasurementRepresentation } from 'types';
-import Fraction from 'utils/fraction';
+import { UnitOfMeasurementRepresentation } from 'src/types';
+import Fraction from 'src/utils/fraction';
 import styles from './IngredientList.module.css';
 
 const IngredientList = ({ ingredients, enableCheckboxes }) => {

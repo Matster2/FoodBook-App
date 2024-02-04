@@ -1,20 +1,20 @@
 import {
-  Clear as ClearIcon,
-  DragIndicator as DragIcon
+    Clear as ClearIcon,
+    DragIndicator as DragIcon
 } from '@mui/icons-material';
 import {
-  Box,
-  Button,
-  IconButton,
-  Stack,
-  TextField
+    Box,
+    Button,
+    IconButton,
+    Stack,
+    TextField
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { forwardRef } from 'react';
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useTranslation } from "react-i18next";
 import uuid from 'react-uuid';
-import { reorder } from 'utils/utils';
+import { reorder } from 'src/utils/utils';
 import styles from './RecipeStep.module.css';
 
 const RecipeStep = forwardRef(({ step, onChange, onDelete, dragHandleProps, ...props }, ref) => {

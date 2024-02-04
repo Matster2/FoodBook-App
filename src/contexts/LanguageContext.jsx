@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import { createContext, createElement, useEffect, useMemo, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { actions, reducer } from 'reducers/languageReducer';
+import { actions, reducer } from 'src/reducers/languageReducer';
 
-import localStorageKeys from 'config/localStorageKeys';
+import localStorageKeys from 'src/config/localStorageKeys';
 
 export const LanguageContext = createContext();
 

@@ -3,11 +3,11 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { isUndefined } from 'utils/utils';
+import { isUndefined } from 'src/utils/utils';
 import styles from './RecipeAttributeWidget.module.css';
 
-import { ReactComponent as AlcoholIcon } from 'assets/icons/alcohol.svg';
-import { ReactComponent as CaloriesIcon } from 'assets/icons/calories.svg';
+import AlcoholIcon from 'src/assets/icons/alcohol.svg?react';
+import CaloriesIcon from 'src/assets/icons/calories.svg?react';
 
 const RecipeAttributeWidget = ({ type, value }) => {
   const { t } = useTranslation();

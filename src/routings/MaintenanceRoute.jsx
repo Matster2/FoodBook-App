@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
 
-import { AppContext } from 'contexts/AppContext';
-import Maintenance from 'pages/Maintenance';
+import { AppContext } from 'src/contexts/AppContext';
+import Maintenance from 'src/pages/Maintenance';
 
 const MaintenanceRoute = ({ children }) => {
   const { maintenance } = useContext(AppContext);

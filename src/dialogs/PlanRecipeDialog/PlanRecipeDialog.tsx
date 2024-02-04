@@ -7,12 +7,12 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 import dayjs, { Dayjs } from 'dayjs';
-import useAPI from 'hooks/useAPI';
-import useAuth from 'hooks/useAuth';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
-import { getDaysTranslation } from 'utils/translations';
+import useAPI from 'src/hooks/useAPI';
+import useAuth from 'src/hooks/useAuth';
+import { getDaysTranslation } from 'src/utils/translations';
 
 import styles from './PlanRecipeDialog.module.css';
 

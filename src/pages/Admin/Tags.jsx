@@ -1,30 +1,30 @@
 import {
-  Box,
-  Button,
-  CircularProgress,
-  Container,
-  Icon,
-  Pagination,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography
+    Box,
+    Button,
+    CircularProgress,
+    Container,
+    Icon,
+    Pagination,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField,
+    Typography
 } from '@mui/material';
-import Header from 'components/Header';
-import useAPI from 'hooks/useAPI';
-import useFilters from 'hooks/useFilters';
-import useInput from 'hooks/useInput';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
-import { isUndefined } from 'utils/utils';
+import Header from 'src/components/Header';
+import useAPI from 'src/hooks/useAPI';
+import useFilters from 'src/hooks/useFilters';
+import useInput from 'src/hooks/useInput';
+import { isUndefined } from 'src/utils/utils';
 
-import tagIcons from 'config/tagIcons';
+import tagIcons from 'src/config/tagIcons';
 
 export default () => {
   const navigate = useNavigate();

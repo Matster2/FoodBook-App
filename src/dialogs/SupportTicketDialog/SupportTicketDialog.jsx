@@ -3,8 +3,8 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 
-import useAPI from 'hooks/useAPI';
 import { useEffect } from 'react';
+import useAPI from 'src/hooks/useAPI';
 
 const SupportTicketDialog = ({ open, onClose, id, transitionComponent }) => {
   const { t } = useTranslation();

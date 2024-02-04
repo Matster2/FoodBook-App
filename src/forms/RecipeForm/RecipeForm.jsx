@@ -24,21 +24,7 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import RecipeIngredient from 'Admin/components/RecipeIngredient';
-import RecipePart from 'Admin/components/RecipePart';
-import RecipePieceOfEquipment from 'Admin/components/RecipePieceOfEquipment';
-import RecipeStep from 'Admin/components/RecipeStep';
-import FilterOption from 'components/FilterOption';
-import RecipeImage from 'components/RecipeImage';
-import RecipeImageControl from 'components/RecipeImageControl';
-import NewPersonalEquipmentDialog from 'dialogs/NewPersonalEquipmentDialog';
-import NewPersonalIngredientDialog from 'dialogs/NewPersonalIngredientDialog';
-import RecipeImageViewerDialog from 'dialogs/RecipeImageViewerDialog';
 import { useFormik } from 'formik';
-import useAPI from 'hooks/useAPI';
-import useSearch from 'hooks/useSearch';
-import useTags from 'hooks/useTags';
-import useUnitOfMeasurements from 'hooks/useUnitOfMeasurements';
 import isObject from "lodash/isObject";
 import { useEffect, useMemo, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -47,12 +33,26 @@ import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
 import uuid from 'react-uuid';
-import { RecipeDifficulty, RecipeState, RecipeType } from 'types';
-import { getRecipeScheme } from 'types/schemas';
-import FormModes from 'utils/formModes';
-import { includeResizeQueryParameters } from 'utils/imageUtils';
-import { lowercaseFirstLetter } from 'utils/stringUtils';
-import { isNull, isNullOrEmpty, isNullOrUndefined, isUndefined, reorder } from 'utils/utils';
+import RecipeIngredient from 'src/Admin/components/RecipeIngredient';
+import RecipePart from 'src/Admin/components/RecipePart';
+import RecipePieceOfEquipment from 'src/Admin/components/RecipePieceOfEquipment';
+import RecipeStep from 'src/Admin/components/RecipeStep';
+import FilterOption from 'src/components/FilterOption';
+import RecipeImage from 'src/components/RecipeImage';
+import RecipeImageControl from 'src/components/RecipeImageControl';
+import NewPersonalEquipmentDialog from 'src/dialogs/NewPersonalEquipmentDialog';
+import NewPersonalIngredientDialog from 'src/dialogs/NewPersonalIngredientDialog';
+import RecipeImageViewerDialog from 'src/dialogs/RecipeImageViewerDialog';
+import useAPI from 'src/hooks/useAPI';
+import useSearch from 'src/hooks/useSearch';
+import useTags from 'src/hooks/useTags';
+import useUnitOfMeasurements from 'src/hooks/useUnitOfMeasurements';
+import { RecipeDifficulty, RecipeState, RecipeType } from 'src/types';
+import { getRecipeScheme } from 'src/types/schemas';
+import FormModes from 'src/utils/formModes';
+import { includeResizeQueryParameters } from 'src/utils/imageUtils';
+import { lowercaseFirstLetter } from 'src/utils/stringUtils';
+import { isNull, isNullOrEmpty, isNullOrUndefined, isUndefined, reorder } from 'src/utils/utils';
 import styles from './RecipeForm.module.css';
 
 const getDefaultRecipe = () => {
@@ -730,7 +730,6 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }
   }, []);
 
-  
   const getFirstErrorKey = (object, keys = []) => {
     const firstErrorKey = Object.keys(object)[0];
     if (isObject(object[firstErrorKey])) {

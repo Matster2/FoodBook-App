@@ -1,10 +1,10 @@
 import { Box, CircularProgress, Container } from '@mui/material';
-import Header from 'components/Header';
-import IngredientForm from 'forms/IngredientForm';
-import useAPI from 'hooks/useAPI';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import Header from 'src/components/Header';
+import IngredientForm from 'src/forms/IngredientForm';
+import useAPI from 'src/hooks/useAPI';
 
 export default () => {
   const { t } = useTranslation();

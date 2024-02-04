@@ -1,29 +1,29 @@
 
 import {
-  CalendarMonth as CalendarIcon,
-  Scale as MeasurementIcon,
-  RestaurantMenu as RecipesIcon, Done as TickIcon
+    CalendarMonth as CalendarIcon,
+    Scale as MeasurementIcon,
+    RestaurantMenu as RecipesIcon, Done as TickIcon
 } from '@mui/icons-material';
 import { Box, CircularProgress, Container, IconButton, Stack, Typography } from '@mui/material';
-import { ReactComponent as IngredientBreakdownIcon } from 'assets/icons/ingredient-breakdown.svg';
-import { ReactComponent as IngredientOverviewIcon } from 'assets/icons/ingredient-overview.svg';
 import classnames from 'classnames';
-import Header from 'components/Header';
-import IngredientList from 'components/IngredientList';
-import TogglablePlannedRecipe from 'components/TogglablePlannedRecipe';
 import dayjs from 'dayjs';
-import IngredientListDateDialog from 'dialogs/IngredientListDateDialog';
-import useAPI from 'hooks/useAPI';
-import useAuth from 'hooks/useAuth';
-import useFilters from 'hooks/useFilters';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MeasurementSystem, RecipeType } from 'types';
-import { includeResizeQueryParameters } from 'utils/imageUtils';
-import { lowercaseFirstLetter } from 'utils/stringUtils';
-import { getDayName, getMeasurementSystemTranslation, getMonthName } from 'utils/translations';
-import { areDatesTheSameDay, isUndefined, toISOLocal } from 'utils/utils';
+import IngredientBreakdownIcon from 'src/assets/icons/ingredient-breakdown.svg?react';
+import IngredientOverviewIcon from 'src/assets/icons/ingredient-overview.svg?react';
+import Header from 'src/components/Header';
+import IngredientList from 'src/components/IngredientList';
+import TogglablePlannedRecipe from 'src/components/TogglablePlannedRecipe';
+import IngredientListDateDialog from 'src/dialogs/IngredientListDateDialog';
+import useAPI from 'src/hooks/useAPI';
+import useAuth from 'src/hooks/useAuth';
+import useFilters from 'src/hooks/useFilters';
+import { MeasurementSystem, RecipeType } from 'src/types';
+import { includeResizeQueryParameters } from 'src/utils/imageUtils';
+import { lowercaseFirstLetter } from 'src/utils/stringUtils';
+import { getDayName, getMeasurementSystemTranslation, getMonthName } from 'src/utils/translations';
+import { areDatesTheSameDay, isUndefined, toISOLocal } from 'src/utils/utils';
 import styles from './IngredientList.module.css';
 
 const formatDate = (date) => {

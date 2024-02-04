@@ -1,26 +1,26 @@
 import {
-  Autocomplete,
-  Box,
-  Button,
-  Chip,
-  Container,
-  Grid,
-  Stack,
-  TextField,
-  Typography
+    Autocomplete,
+    Box,
+    Button,
+    Chip,
+    Container,
+    Grid,
+    Stack,
+    TextField,
+    Typography
 } from '@mui/material';
-import FilterOption from 'components/FilterOption';
-import Header from 'components/Header';
-import RatingFilter from 'components/RatingFilter';
-import useAPI from 'hooks/useAPI';
-import useFilters from 'hooks/useFilters';
-import useTags from 'hooks/useTags';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { RecipeDifficulty, RecipeType } from 'types';
-import { lowercaseFirstLetter } from 'utils/stringUtils';
-import { isNullOrEmpty, isUndefined } from 'utils/utils';
+import FilterOption from 'src/components/FilterOption';
+import Header from 'src/components/Header';
+import RatingFilter from 'src/components/RatingFilter';
+import useAPI from 'src/hooks/useAPI';
+import useFilters from 'src/hooks/useFilters';
+import useTags from 'src/hooks/useTags';
+import { RecipeDifficulty, RecipeType } from 'src/types';
+import { lowercaseFirstLetter } from 'src/utils/stringUtils';
+import { isNullOrEmpty, isUndefined } from 'src/utils/utils';
 
 const Filters = ({ filters: originalFilters, onApply, onClose }) => {
   const { t } = useTranslation();

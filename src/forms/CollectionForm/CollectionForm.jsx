@@ -6,12 +6,12 @@ import {
   TextField
 } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
-import useAPI from 'hooks/useAPI';
 import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
-import { getCollectionScheme } from "types/schemas";
-import FormModes from 'utils/formModes';
+import useAPI from 'src/hooks/useAPI';
+import { getCollectionScheme } from "src/types/schemas";
+import FormModes from 'src/utils/formModes';
 
 const initialCollectionValue = {
   title: ''

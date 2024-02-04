@@ -7,16 +7,16 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import AuthorLink from "Admin/components/AuthorLink";
 import { useFormik } from 'formik';
-import useAPI from 'hooks/useAPI';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import uuid from 'react-uuid';
-import { getAuthorScheme } from "types/schemas";
-import FormModes from 'utils/formModes';
-import { isUndefined } from "utils/utils";
+import AuthorLink from "src/Admin/components/AuthorLink";
+import useAPI from 'src/hooks/useAPI';
+import { getAuthorScheme } from "src/types/schemas";
+import FormModes from 'src/utils/formModes';
+import { isUndefined } from "src/utils/utils";
 
 const getDefaultAuthor = () => {
   return {

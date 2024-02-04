@@ -1,3 +1,3 @@
 export default () => (
-  <div>{process.env.REACT_APP_VERSION}</div>
+  <div>{import.meta.env.VITE_APP_VERSION}</div>
 )

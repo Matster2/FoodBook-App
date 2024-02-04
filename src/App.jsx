@@ -2,16 +2,16 @@ import NiceModal from '@ebay/nice-modal-react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import axios from 'axios';
-import { AppContext } from 'contexts/AppContext';
-import { LanguageContext } from 'contexts/LanguageContext';
-import { UserContext } from 'contexts/UserContext';
-import useAPI from 'hooks/useAPI';
-import useAuth from 'hooks/useAuth';
-import useTags from 'hooks/useTags';
 import { useContext, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { RouterProvider } from 'react-router-dom';
-import router from 'router';
+import { AppContext } from 'src/contexts/AppContext';
+import { LanguageContext } from 'src/contexts/LanguageContext';
+import { UserContext } from 'src/contexts/UserContext';
+import useAPI from 'src/hooks/useAPI';
+import useAuth from 'src/hooks/useAuth';
+import useTags from 'src/hooks/useTags';
+import router from 'src/router';
 
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 

@@ -1,7 +1,7 @@
 import { Box, Dialog, Stack, Typography } from '@mui/material';
 import { useTranslation } from "react-i18next";
 
-import useAPI from 'hooks/useAPI';
+import useAPI from 'src/hooks/useAPI';
 
 const LogDialog = ({ open, onClose, log, transitionComponent }) => {
   const { t } = useTranslation();

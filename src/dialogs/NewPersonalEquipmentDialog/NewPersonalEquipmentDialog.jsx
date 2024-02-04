@@ -1,11 +1,11 @@
 import NiceModal from '@ebay/nice-modal-react';
 import {
-  Box,
-  Dialog,
-  DialogTitle
+    Box,
+    Dialog,
+    DialogTitle
 } from '@mui/material';
-import EquipmentForm from 'forms/EquipmentForm';
 import { useTranslation } from "react-i18next";
+import EquipmentForm from 'src/forms/EquipmentForm';
 
 export default NiceModal.create(({ open, pieceOfEquipment, onClose, onComplete, transitionComponent }) => {
   const { t } = useTranslation();

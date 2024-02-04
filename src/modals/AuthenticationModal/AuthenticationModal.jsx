@@ -3,9 +3,9 @@ import { Close as CloseIcon } from '@mui/icons-material';
 import { Dialog, DialogTitle, IconButton } from '@mui/material';
 import { useState } from 'react';
 
-import ForgottenPassword from 'pages/ForgottenPassword';
-import Register from 'pages/Register';
-import SignIn from 'pages/SignIn';
+import ForgottenPassword from 'src/pages/ForgottenPassword';
+import Register from 'src/pages/Register';
+import SignIn from 'src/pages/SignIn';
 
 import styles from './AuthenticationModal.module.css';
 

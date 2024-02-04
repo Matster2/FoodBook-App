@@ -1,20 +1,20 @@
 import { Clear as ClearIcon } from '@mui/icons-material';
 import {
-  Box,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField
+    Box,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    Stack,
+    TextField
 } from '@mui/material';
-import { UnitOfMeasurementContext } from 'contexts/UnitOfMeasurementContext';
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
 import { useTranslation } from "react-i18next";
+import { UnitOfMeasurementContext } from 'src/contexts/UnitOfMeasurementContext';
 
 const RecipeIngredient = ({ recipeIngredient, onChange, onDelete, optionalDisabled }) => {
   const { t } = useTranslation();

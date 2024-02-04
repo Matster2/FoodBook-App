@@ -1,21 +1,21 @@
 import {
-  Avatar,
-  Box,
-  CircularProgress,
-  Container,
-  Grid,
-  Stack,
-  Typography
+    Avatar,
+    Box,
+    CircularProgress,
+    Container,
+    Grid,
+    Stack,
+    Typography
 } from '@mui/material';
-import AuthorLink from 'components/AuthorLink';
-import Header from 'components/Header';
-import RecipeTile from 'components/RecipeTile';
-import Section from 'components/Section';
-import useAPI from 'hooks/useAPI';
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from 'react-router-dom';
-import { truncateText } from 'utils/stringUtils';
+import AuthorLink from 'src/components/AuthorLink';
+import Header from 'src/components/Header';
+import RecipeTile from 'src/components/RecipeTile';
+import Section from 'src/components/Section';
+import useAPI from 'src/hooks/useAPI';
+import { truncateText } from 'src/utils/stringUtils';
 
 import styles from './Author.module.css';
 /*

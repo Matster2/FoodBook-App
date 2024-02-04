@@ -1,11 +1,11 @@
 import {
-  Box,
-  Container,
-  Stack,
-  Typography
+    Box,
+    Container,
+    Stack,
+    Typography
 } from '@mui/material';
-import { ReactComponent as MaintenanceLogo } from 'assets/icons/maintenance.svg';
 import { useTranslation } from "react-i18next";
+import MaintenanceLogo from 'src/assets/icons/maintenance.svg?react';
 
 export default () => {
   const { t } = useTranslation();

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { createContext, createElement, useMemo, useReducer } from 'react';
 
-import { actions, initialState, reducer } from 'reducers/tagReducer';
+import { actions, initialState, reducer } from 'src/reducers/tagReducer';
 
 export const TagContext = createContext();
 

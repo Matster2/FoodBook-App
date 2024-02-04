@@ -1,18 +1,18 @@
 import { Masonry } from '@mui/lab';
 import { Box, CircularProgress, Container, Dialog, Grid, InputAdornment, Slide, TextField, Typography } from '@mui/material';
-import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
-import FilterButton from 'components/FilterButton';
-import Header from 'components/Header';
-import RecipeTile from 'components/RecipeTile';
-import useAPI from 'hooks/useAPI';
-import useInput from 'hooks/useInput';
-import useTags from 'hooks/useTags';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
-import { RecipeState } from 'types';
-import { includeResizeQueryParameters } from 'utils/imageUtils';
+import SearchIcon from 'src/assets/icons/search.svg?react';
+import FilterButton from 'src/components/FilterButton';
+import Header from 'src/components/Header';
+import RecipeTile from 'src/components/RecipeTile';
+import useAPI from 'src/hooks/useAPI';
+import useInput from 'src/hooks/useInput';
+import useTags from 'src/hooks/useTags';
+import { RecipeState } from 'src/types';
+import { includeResizeQueryParameters } from 'src/utils/imageUtils';
 import Filters from './Filters';
 import styles from './Recipes.module.css';
 

@@ -2,15 +2,12 @@ import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
 import classnames from 'classnames';
 import { useTranslation } from "react-i18next";
 import { Link, Outlet, matchPath, useLocation } from 'react-router-dom';
-
-import AuthenticationModal from 'modals/AuthenticationModal';
-
-import { ReactComponent as SettingsIcon } from 'assets/icons/cog.svg';
-import { ReactComponent as CookbookIcon } from 'assets/icons/cookbook.svg';
-import { ReactComponent as DiscoverIcon } from 'assets/icons/discover.svg';
-import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
-import { ReactComponent as PlannerIcon } from 'assets/icons/planner.svg';
-
+import SettingsIcon from 'src/assets/icons/cog.svg?react';
+import CookbookIcon from 'src/assets/icons/cookbook.svg?react';
+import DiscoverIcon from 'src/assets/icons/discover.svg?react';
+import HomeIcon from 'src/assets/icons/home.svg?react';
+import PlannerIcon from 'src/assets/icons/planner.svg?react';
+import AuthenticationModal from 'src/modals/AuthenticationModal';
 import styles from './MainLayout.module.css';
 
 export default () => {

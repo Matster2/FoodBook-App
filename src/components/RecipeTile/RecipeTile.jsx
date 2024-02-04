@@ -1,12 +1,12 @@
 import { AccessTime as AccessTimeIcon, Star as StarIcon } from '@mui/icons-material';
 import { Box, Card, Grid, Stack, Typography } from '@mui/material';
-import RecipeImage from 'components/RecipeImage';
-import RecipeTileAttachment from 'components/RecipeTileAttachment';
-import useAuth from 'hooks/useAuth';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
+import RecipeImage from 'src/components/RecipeImage';
+import RecipeTileAttachment from 'src/components/RecipeTileAttachment';
+import useAuth from 'src/hooks/useAuth';
+import { getFormattedTimeString } from 'src/utils/translations';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { getFormattedTimeString } from 'utils/translations';
 import styles from './RecipeTile.module.css';
 
 const RecipeTile = ({ recipe, onClick, ...props }) => {

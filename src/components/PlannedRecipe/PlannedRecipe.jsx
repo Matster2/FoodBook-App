@@ -1,14 +1,14 @@
 import { AccessTime as AccessTimeIcon, Edit as EditIcon } from '@mui/icons-material';
 import { Box, Card, Grid, Stack, Typography } from '@mui/material';
-import RecipeImage from 'components/RecipeImage';
-import useLongPress from 'hooks/useLongPress';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
+import RecipeImage from 'src/components/RecipeImage';
+import useLongPress from 'src/hooks/useLongPress';
+import { capitalizeFirstLetter } from 'src/utils/stringUtils';
+import { getFormattedTimeString } from 'src/utils/translations';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-import { capitalizeFirstLetter } from 'utils/stringUtils';
-import { getFormattedTimeString } from 'utils/translations';
 import styles from './PlannedRecipe.module.css';
 
 const defaultOptions = {

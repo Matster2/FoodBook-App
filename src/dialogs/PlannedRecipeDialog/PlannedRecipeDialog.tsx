@@ -12,15 +12,15 @@ import {
   Typography
 } from '@mui/material';
 import { TransitionProps } from "@mui/material/transitions";
-import RecipeImage from 'components/RecipeImage';
-import useAPI from 'hooks/useAPI';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
+import RecipeImage from 'src/components/RecipeImage';
+import useAPI from 'src/hooks/useAPI';
+import { getDayName, getMonthName } from 'src/utils/translations';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-import { getDayName, getMonthName } from 'utils/translations';
 
 import { LoadingButton } from '@mui/lab';
 import styles from './PlannedRecipeDialog.module.css';
@@ -69,7 +69,7 @@ const PlannedRecipeDialog = ({ open, onClose, onComplete, transitionComponent, p
 
   const handleUpdateClick = async () => {
     setUpdating(true);
-    
+
     try {
       await api.updatePlannedRecipe(plannedRecipe.id, servings);
       toast.success(t('requests.planner.updatePlannedRecipe.success'));
@@ -165,7 +165,7 @@ const PlannedRecipeDialog = ({ open, onClose, onComplete, transitionComponent, p
                     </SwiperSlide>
                   )}
                 </Swiper>
-              )}              
+              )}
 
               {plannedRecipe.recipe.images.length === 0 && (
                 <RecipeImage className="" src={undefined} />

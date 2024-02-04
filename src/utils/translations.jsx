@@ -1,5 +1,5 @@
-import i18n from 'i18n';
-import { lowercaseFirstLetter } from 'utils/stringUtils';
+import i18n from 'src/i18n';
+import { lowercaseFirstLetter } from 'src/utils/stringUtils';
 
 export const getDayName = (date) => {  
   const t = i18n.t;

@@ -1,8 +1,8 @@
 import { Cancel as DeleteIcon, RestaurantMenu as RecipeIcon } from '@mui/icons-material';
 import { Box, Paper } from '@mui/material';
-import useLongPress from 'hooks/useLongPress';
 import PropTypes from 'prop-types';
 import { useMemo, useState } from 'react';
+import useLongPress from 'src/hooks/useLongPress';
 import styles from './RecipeImageControl.module.css';
 
 const RecipeImageControl = ({ src, onClick, onLongClick, onDeleteClick, alwaysShowDelete, ...props }) => {

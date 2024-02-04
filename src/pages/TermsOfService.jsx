@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
-import Header from 'components/Header';
 import { useNavigate } from 'react-router-dom';
+import Header from 'src/components/Header';
 
 export default () => {
   const navigate = useNavigate();

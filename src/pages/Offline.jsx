@@ -5,8 +5,8 @@ import {
   Stack,
   Typography
 } from '@mui/material';
-import sleepLogo from 'assets/logo-sleep.svg';
 import { useTranslation } from "react-i18next";
+import sleepLogo from 'src/assets/logo-sleep.svg';
 
 export default () => {
   const { t } = useTranslation();

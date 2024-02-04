@@ -1,61 +1,61 @@
 import {
-  AccessTime as AccessTimeIcon,
-  ChevronLeft as ChevronLeftIcon,
-  Edit as EditIcon,
-  Scale as MeasurementIcon,
-  Star as StarIcon
+    AccessTime as AccessTimeIcon,
+    ChevronLeft as ChevronLeftIcon,
+    Edit as EditIcon,
+    Scale as MeasurementIcon,
+    Star as StarIcon
 } from '@mui/icons-material';
 import {
-  Avatar,
-  Box,
-  CircularProgress,
-  Container,
-  Dialog,
-  Grid,
-  IconButton,
-  Slide,
-  Stack,
-  Step,
-  StepLabel,
-  Stepper,
-  Typography,
+    Avatar,
+    Box,
+    CircularProgress,
+    Container,
+    Dialog,
+    Grid,
+    IconButton,
+    Slide,
+    Stack,
+    Step,
+    StepLabel,
+    Stepper,
+    Typography,
 } from '@mui/material';
 import classnames from 'classnames';
-import EquipmentList from 'components/EquipmentList';
-import FavouriteHeart from 'components/FavouriteHeart';
-import IngredientList from 'components/IngredientList';
-import NutritionList from 'components/NutritionList';
-import RatingFilter from 'components/RatingFilter';
-import RecipeAttributeWidget from 'components/RecipeAttributeWidget';
-import RecipeTile from 'components/RecipeTile';
-import Section from 'components/Section';
-import ServingsIncrementor from 'components/ServingsIncrementor';
-import PlanRecipeDialog from 'dialogs/PlanRecipeDialog';
-import RecipeImageViewerDialog from 'dialogs/RecipeImageViewerDialog';
-import useAPI from 'hooks/useAPI';
-import useAuth from 'hooks/useAuth';
-import usePagedFetch from 'hooks/usePagedFetch';
 import _ from "lodash";
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { BottomSheet } from 'react-spring-bottom-sheet';
+import EquipmentList from 'src/components/EquipmentList';
+import FavouriteHeart from 'src/components/FavouriteHeart';
+import IngredientList from 'src/components/IngredientList';
+import NutritionList from 'src/components/NutritionList';
+import RatingFilter from 'src/components/RatingFilter';
+import RecipeAttributeWidget from 'src/components/RecipeAttributeWidget';
+import RecipeTile from 'src/components/RecipeTile';
+import Section from 'src/components/Section';
+import ServingsIncrementor from 'src/components/ServingsIncrementor';
+import PlanRecipeDialog from 'src/dialogs/PlanRecipeDialog';
+import RecipeImageViewerDialog from 'src/dialogs/RecipeImageViewerDialog';
+import useAPI from 'src/hooks/useAPI';
+import useAuth from 'src/hooks/useAuth';
+import usePagedFetch from 'src/hooks/usePagedFetch';
+import { capitalizeFirstLetter, truncateText } from 'src/utils/stringUtils';
+import { getFormattedTimeString, getMeasurementSystemTranslation } from 'src/utils/translations';
+import { isNull, isUndefined } from 'src/utils/utils';
 
-import { ReactComponent as CookIcon } from 'assets/icons/cook.svg';
-import { ReactComponent as CopyIcon } from 'assets/icons/copy.svg';
-import { ReactComponent as PlannerIcon } from 'assets/icons/planner.svg';
-import { ReactComponent as PrepIcon } from 'assets/icons/prep.svg';
-import { capitalizeFirstLetter, truncateText } from 'utils/stringUtils';
-import { getFormattedTimeString, getMeasurementSystemTranslation } from 'utils/translations';
-import { isNull, isUndefined } from 'utils/utils';
+import CookIcon from 'src/assets/icons/cook.svg?react';
+import CopyIcon from 'src/assets/icons/copy.svg?react';
+import PlannerIcon from 'src/assets/icons/planner.svg?react';
+import PrepIcon from 'src/assets/icons/prep.svg?react';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
 
 import 'react-spring-bottom-sheet/dist/style.css';
-import { MeasurementSystem, RecipeState } from 'types';
+import { MeasurementSystem, RecipeState } from 'src/types';
 import styles from './Recipe.module.css';
 
 const Transition = React.forwardRef((props, ref) => {
@@ -110,7 +110,7 @@ export default () => {
   const api = useAPI();
  
   const { results: variants, totalResults: totalVariants, loading: loadingVariants } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL
+    `${import.meta.env.VITE_APP_API_URL
     }/recipes?random=true&pageSize=25&variantOfRecipeId=${id}`
   );
 

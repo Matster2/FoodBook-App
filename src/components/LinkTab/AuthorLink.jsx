@@ -1,9 +1,9 @@
 import { Icon } from '@mui/material';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import socialIcons from 'config/socialIcons';
+import socialIcons from 'src/config/socialIcons';
 
 import styles from './AuthorLink.module.css';
 

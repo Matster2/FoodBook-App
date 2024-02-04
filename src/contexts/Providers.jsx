@@ -1,12 +1,11 @@
-import React, { createElement } from 'react';
 import PropTypes from 'prop-types';
-
+import { createElement } from 'react';
 import { AppProvider } from './AppContext';
-import { LanguageProvider } from './LanguageContext';
 import { AuthProvider } from './AuthContext';
-import { UserProvider } from './UserContext';
-import { UnitOfMeasurementProvider } from './UnitOfMeasurementContext';
+import { LanguageProvider } from './LanguageContext';
 import { TagProvider } from './TagContext';
+import { UnitOfMeasurementProvider } from './UnitOfMeasurementContext';
+import { UserProvider } from './UserContext';
 
 const Providers = ({ children }) => (
   <AppProvider>

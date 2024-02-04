@@ -1,15 +1,15 @@
 import NiceModal from '@ebay/nice-modal-react';
 import { LoadingButton } from "@mui/lab";
 import { Box, Container, Stack, TextField, Typography } from '@mui/material';
-import logo from 'assets/logo.svg';
-import useAuth from 'hooks/useAuth';
-import useInput from 'hooks/useInput';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
-import { isEmptyOrWhiteSpace, isUndefined, isValidEmail } from 'utils/utils';
+import logo from 'src/assets/logo.svg';
+import useAuth from 'src/hooks/useAuth';
+import useInput from 'src/hooks/useInput';
+import { isEmptyOrWhiteSpace, isUndefined, isValidEmail } from 'src/utils/utils';
 import styles from './SignIn.module.css';
 
 const SignIn = ({ onSignUpClick, onForgottenPasswordClick, onComplete }) => {

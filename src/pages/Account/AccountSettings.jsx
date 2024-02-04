@@ -1,23 +1,23 @@
 import {
-  Button,
-  Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
+    Button,
+    Container,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText,
 } from '@mui/material';
-import Header from 'components/Header';
-import useAPI from 'hooks/useAPI';
-import useAuth from 'hooks/useAuth';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from 'react-router-dom';
+import Header from 'src/components/Header';
+import useAPI from 'src/hooks/useAPI';
+import useAuth from 'src/hooks/useAuth';
 
 export default () => {
   const { t } = useTranslation();

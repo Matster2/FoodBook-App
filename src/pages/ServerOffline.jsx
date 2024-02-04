@@ -1,11 +1,11 @@
 import {
-  Box,
-  Container,
-  Stack,
-  Typography
+    Box,
+    Container,
+    Stack,
+    Typography
 } from '@mui/material';
-import { ReactComponent as OfflineLogo } from 'assets/icons/offline.svg';
 import { useTranslation } from "react-i18next";
+import OfflineLogo from 'src/assets/icons/offline.svg?react';
 
 export default () => {
   const { t } = useTranslation();

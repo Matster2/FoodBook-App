@@ -6,10 +6,10 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 import dayjs, { Dayjs } from 'dayjs';
-import useAPI from 'hooks/useAPI';
 import React, { useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { toISOLocal } from 'utils/utils';
+import useAPI from 'src/hooks/useAPI';
+import { toISOLocal } from 'src/utils/utils';
 
 import styles from './IngredientListDateDialog.module.css';
 
@@ -69,7 +69,7 @@ function Day(props: PickersDayProps<Dayjs> & { fromDay?: Dayjs, toDay?: Dayjs })
   const dayIsBetween = day.isAfter(fromDay, 'day') && day.isBefore(toDay, 'day');
   const isFirstDay = day.isSame(fromDay, 'day');
   const isLastDay = day.isSame(toDay, 'day');
-  
+
   const isSelected = isFirstDay || dayIsBetween || isLastDay;
 
   const onlyOneDay = toDay?.isSame(fromDay);
@@ -109,7 +109,7 @@ const IngredientListDateDialog = ({ defaultValues, open, onClose, transitionComp
         setFromDay(newDay);
         return;
       }
-  
+
       if (newDay.isAfter(toDay)) {
         setFromDay(toDay);
         setToDay(newDay);
@@ -126,7 +126,7 @@ const IngredientListDateDialog = ({ defaultValues, open, onClose, transitionComp
         setFromDay(newDay);
         return;
       }
-      
+
       setToDay(newDay)
       return;
     }
@@ -137,7 +137,7 @@ const IngredientListDateDialog = ({ defaultValues, open, onClose, transitionComp
         setToDay(newDay);
         return;
       }
-      
+
       setFromDay(newDay)
       return;
     }
@@ -177,7 +177,7 @@ const IngredientListDateDialog = ({ defaultValues, open, onClose, transitionComp
               } as any,
             }}
           />
-        </LocalizationProvider>      
+        </LocalizationProvider>
 
         <Button
           type="button"

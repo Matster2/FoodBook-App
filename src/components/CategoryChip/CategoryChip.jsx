@@ -1,8 +1,8 @@
 import { Chip, Icon } from '@mui/material';
-import tagIcons from 'config/tagIcons';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { isNullOrEmpty } from 'utils/utils';
+import tagIcons from 'src/config/tagIcons';
+import { isNullOrEmpty } from 'src/utils/utils';
 import styles from './CategoryChip.module.css';
 
 const CategoryChip = ({ category, onClick, ...props }) => {

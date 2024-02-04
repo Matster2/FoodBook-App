@@ -3,9 +3,9 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 
 import useAuth from './useAuth';
 
-import { LanguageContext } from 'contexts/LanguageContext';
-import { isEmptyOrWhiteSpace } from 'utils/stringUtils';
-import { isNullOrUndefined } from 'utils/utils';
+import { LanguageContext } from 'src/contexts/LanguageContext';
+import { isEmptyOrWhiteSpace } from 'src/utils/stringUtils';
+import { isNullOrUndefined } from 'src/utils/utils';
 
 const useFetch = (url) => {
   const [data, setData] = useState(undefined);

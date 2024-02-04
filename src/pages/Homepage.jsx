@@ -1,33 +1,33 @@
 import NiceModal from '@ebay/nice-modal-react';
 import {
-  Avatar,
-  Box,
-  CircularProgress,
-  Container,
-  Dialog,
-  Grid,
-  InputAdornment,
-  Slide,
-  TextField,
-  Typography
+    Avatar,
+    Box,
+    CircularProgress,
+    Container,
+    Dialog,
+    Grid,
+    InputAdornment,
+    Slide,
+    TextField,
+    Typography
 } from '@mui/material';
-import { ReactComponent as SearchIcon } from 'assets/icons/search.svg';
-import CategoryChip from 'components/CategoryChip';
-import FilterButton from 'components/FilterButton';
-import RecipeTile from 'components/RecipeTile';
-import Section from 'components/Section';
-import { UserContext } from 'contexts/UserContext';
-import useAuth from 'hooks/useAuth';
-import useInput from 'hooks/useInput';
-import usePagedFetch from 'hooks/usePagedFetch';
 import React, { useContext, useMemo, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
 import PullToRefresh from 'react-simple-pull-to-refresh';
 import uuid from 'react-uuid';
+import SearchIcon from 'src/assets/icons/search.svg?react';
+import CategoryChip from 'src/components/CategoryChip';
+import FilterButton from 'src/components/FilterButton';
+import RecipeTile from 'src/components/RecipeTile';
+import Section from 'src/components/Section';
+import { UserContext } from 'src/contexts/UserContext';
+import useAuth from 'src/hooks/useAuth';
+import useInput from 'src/hooks/useInput';
+import usePagedFetch from 'src/hooks/usePagedFetch';
+import { includeResizeQueryParameters } from 'src/utils/imageUtils';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-import { includeResizeQueryParameters } from 'utils/imageUtils';
 import Filters from './Filters';
 import styles from './Homepage.module.css';
 
@@ -40,7 +40,7 @@ const CollectionSection = ({ collection }) => {
   const navigate = useNavigate();
 
   const { results: recipes, totalResults: totalRecipes, loading: loadingRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL
+    `${import.meta.env.VITE_APP_API_URL
     }/recipes?random=true&pageSize=25&collectionIds=${collection.id}`
   );
 
@@ -103,7 +103,7 @@ export default () => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
   const { results: tags, loading: loadingTags, refetch: fetchTags } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/tags?random=true&pageSize=10&hidden=false`
+    `${import.meta.env.VITE_APP_API_URL}/tags?random=true&pageSize=10&hidden=false`
   );
 
   const sevenDaysAgo = useMemo(() => {
@@ -113,26 +113,26 @@ export default () => {
   }, []);
 
   const { results: recentlyAddedRecipes, totalResults: totalRecentlyAddedRecipes, loading: loadingRecentlyAddedRecipes, refetch: refetchRecentlyAddedRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL
+    `${import.meta.env.VITE_APP_API_URL
     }/recipes?random=true&pageSize=25&publishedAfter=${sevenDaysAgo.toISOString()}&sortBy=datepublished&sortDesc=true&states=Published`
   );
   const { results: recommendedRecipes, totalResults: totalRecommendedRecipes, loading: loadingRecommendedRecipes, refetch: refetchRecommendedRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&personal=false&states=Published`
+    `${import.meta.env.VITE_APP_API_URL}/recipes?random=true&pageSize=25&personal=false&states=Published`
   );
   const { results: favouriteRecipes, totalResults: totalFavouriteRecipes, loading: loadingFavouriteRecipes, refetch: refetchFavouriteRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&favourited=true`
+    `${import.meta.env.VITE_APP_API_URL}/recipes?random=true&pageSize=25&favourited=true`
   );
   const { results: personalRecipes, totalResults: totalPersonalRecipes, loading: loadingPersonalRecipes, refetch: refetchPersonalRecipes } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL}/recipes?random=true&pageSize=25&personal=true`
+    `${import.meta.env.VITE_APP_API_URL}/recipes?random=true&pageSize=25&personal=true`
   );
 
   const { results: promotedCollections, refetch: refetchPromotedCollections } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL
+    `${import.meta.env.VITE_APP_API_URL
     }/collections?random=true&pageSize=5&promoted=true`
   );
   
   const { results: collections, refetch: refetchCollections } = usePagedFetch(
-    `${process.env.REACT_APP_API_URL
+    `${import.meta.env.VITE_APP_API_URL
     }/collections?random=true&pageSize=10&promoted=false`
   );
 

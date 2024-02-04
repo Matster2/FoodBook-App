@@ -1,7 +1,6 @@
 import { Icon, IconButton } from '@mui/material';
-import FilterIcon from 'assets/icons/filter.svg';
 import PropTypes from 'prop-types';
-import React from 'react';
+import FilterIcon from 'src/assets/icons/filter.svg';
 import styles from './FilterButton.module.css';
 
 const FilterButton = ({ onClick }) => {

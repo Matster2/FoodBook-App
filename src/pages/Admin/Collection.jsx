@@ -1,27 +1,27 @@
 import {
-  Box,
-  Checkbox,
-  CircularProgress,
-  Container,
-  Paper,
-  Tab,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Tabs,
-  Typography
+    Box,
+    Checkbox,
+    CircularProgress,
+    Container,
+    Paper,
+    Tab,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tabs,
+    Typography
 } from '@mui/material';
-import Header from 'components/Header';
-import CollectionForm from 'forms/CollectionForm';
-import useAPI from 'hooks/useAPI';
-import useFilters from 'hooks/useFilters';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import Header from 'src/components/Header';
+import CollectionForm from 'src/forms/CollectionForm';
+import useAPI from 'src/hooks/useAPI';
+import useFilters from 'src/hooks/useFilters';
 
 const tabs = {
   info: "info",

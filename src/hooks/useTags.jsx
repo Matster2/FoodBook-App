@@ -1,6 +1,6 @@
-import { TagContext } from 'contexts/TagContext';
-import useAPI from 'hooks/useAPI';
 import { useContext, useState } from 'react';
+import { TagContext } from 'src/contexts/TagContext';
+import useAPI from 'src/hooks/useAPI';
 
 export default () => {
   const { tags, setTags } = useContext(TagContext);
