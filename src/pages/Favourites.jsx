@@ -1,18 +1,18 @@
 import NiceModal from '@ebay/nice-modal-react';
 import { Masonry } from '@mui/lab';
 import {
-    Box,
-    Button,
-    CircularProgress,
-    Container,
-    Dialog,
-    Grid,
-    InputAdornment,
-    Slide,
-    Tab,
-    Tabs,
-    TextField,
-    Typography
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Dialog,
+  Grid,
+  InputAdornment,
+  Slide,
+  Tab,
+  Tabs,
+  TextField,
+  Typography
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
@@ -24,7 +24,6 @@ import Header from 'src/components/Header';
 import RecipeTile from 'src/components/RecipeTile';
 import useAPI from 'src/hooks/useAPI';
 import useAuth from 'src/hooks/useAuth';
-import useTags from 'src/hooks/useTags';
 import { includeResizeQueryParameters } from 'src/utils/imageUtils';
 import { isUndefined } from 'src/utils/utils';
 import styles from './Favourites.module.css';
@@ -42,8 +41,6 @@ export default () => {
 
   const api = useAPI();
   const { authenticated } = useAuth();
-
-  const { fetch: fetchTags } = useTags();
 
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
@@ -135,13 +132,13 @@ export default () => {
       <Tabs
         sx={{ mb: 2 }}
         value={"favourites"}
-        onChange={() => {}}
+        onChange={() => { }}
         textColor="primary"
         indicatorColor="primary"
         centered
       >
         <Tab value="favourites" label={t('pages.favourites.title')} onClick={() => navigate('/favourites')} />
-        <Tab value="personal" label={t('pages.personal.title')} onClick={() => navigate('/personal')}  />
+        <Tab value="personal" label={t('pages.personal.title')} onClick={() => navigate('/personal')} />
       </Tabs>
       <Box sx={{ mb: 3 }}>
         <Grid item xs={12} container gap={2} justifyContent="space-between" alignItems="center">
@@ -159,7 +156,7 @@ export default () => {
               }}
             />
           </Grid>
-          <Grid item  xs="auto">
+          <Grid item xs="auto">
             <FilterButton onClick={handleAdvancedFiltersClick} />
           </Grid>
         </Grid>

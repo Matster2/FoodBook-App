@@ -48,7 +48,7 @@ import MainLayout from 'src/layouts/MainLayout';
 const ErrorBoundary = () => {
   // let error = useRouteError();
   return <NotFound />;
-} 
+}
 
 const Recipe = () => {
   const { id } = useParams();
@@ -60,7 +60,7 @@ export default createBrowserRouter([
   {
     element: (
       <MaintenanceRoute>
-        <MainLayout />  
+        <MainLayout />
       </MaintenanceRoute>
     ),
     errorElement: <ErrorBoundary />,
@@ -319,10 +319,10 @@ export default createBrowserRouter([
       },
     ]
   },
-  {    
+  {
     element: (
       <MaintenanceRoute>
-        <MainLayout />  
+        <MainLayout />
       </MaintenanceRoute>
     ), // Change when hidable
     errorElement: <ErrorBoundary />,
@@ -379,7 +379,7 @@ export default createBrowserRouter([
       {
         path: '*',
         element: (
-          <MaintenanceRoute>          
+          <MaintenanceRoute>
             <NotFound />
           </MaintenanceRoute>
         ),

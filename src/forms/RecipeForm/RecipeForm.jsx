@@ -45,8 +45,7 @@ import NewPersonalIngredientDialog from 'src/dialogs/NewPersonalIngredientDialog
 import RecipeImageViewerDialog from 'src/dialogs/RecipeImageViewerDialog';
 import useAPI from 'src/hooks/useAPI';
 import useSearch from 'src/hooks/useSearch';
-import useTags from 'src/hooks/useTags';
-import useUnitOfMeasurements from 'src/hooks/useUnitOfMeasurements';
+import useTagsQuery from 'src/hooks/Queries/useTagsQuery';
 import { RecipeDifficulty, RecipeState, RecipeType } from 'src/types';
 import { getRecipeScheme } from 'src/types/schemas';
 import FormModes from 'src/utils/formModes';
@@ -96,31 +95,32 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
   const [updating, setUpdating] = useState(false);
 
-  const { fetch: fetchUnitOfMeasurements } = useUnitOfMeasurements();
-  const { tags, fetch: fetchTags } = useTags();
+  const {
+    data: tags
+  } = useTagsQuery();
 
   const mode = !initialValues?.id ? FormModes.Create : FormModes.Update;
 
   const [showAddIngredientButton, setShowAddIngredientButton] = useState(false);
   const [showAddEquipmentButton, setShowAddEquipmentButton] = useState(false);
 
-  const typeOptions = Object.entries(RecipeType).map(( [k, v] ) => ({
+  const typeOptions = Object.entries(RecipeType).map(([k, v]) => ({
     label: t(`types.recipe.types.${lowercaseFirstLetter(k)}.name`),
     value: v
   }));
 
-  const difficultyOptions = Object.entries(RecipeDifficulty).map(( [k, v] ) => ({
+  const difficultyOptions = Object.entries(RecipeDifficulty).map(([k, v]) => ({
     label: t(`types.recipe.difficulty.${lowercaseFirstLetter(k)}`),
     value: v
   }));
-  
+
   const [ingredientSearch, setIngredientSearch, ingredientSearchResults, searchingIngredients] = useSearch(async () => {
     const { data: { results, totalResults } } = await api.getIngredients({ search: ingredientSearch, pageSize: 50, sortBy: 'name' });
-    
+
     if (!isNullOrEmpty(ingredientSearch) && (totalResults === 0 || !results.some(x => x.name.toLowerCase() === ingredientSearch.toLowerCase() || x.pluralName.toLowerCase() === ingredientSearch.toLowerCase()))) {
       setShowAddIngredientButton(true);
     }
-    
+
     return results;
   }, { delay: 1000 })
 
@@ -144,7 +144,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   }, { delay: 1000 })
 
   const [filesToUpload, setFilesToUpload] = useState([]);
-  
+
   const [showRecipeImageViewerDialog, setShowRecipeImageViewerDialog] = useState(false);
   const [showDeleteRecipeImageDialog, setShowDeleteRecipeImageDialog] = useState(false);
   const [showPublishDialog, setShowPublishDialog] = useState(false);
@@ -177,13 +177,13 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       }))
     }
   }
-  
+
   const [originalRecipe] = useState({
     ...getDefaultRecipe(),
     ...formatInitialValue(),
     languageCode: i18n.resolvedLanguage
   });
-  
+
   const fetchDescendantRecipe = async () => {
     setLoadingDescendantRecipe(true);
     try {
@@ -210,7 +210,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       } = await api.createRecipe({
         ...newRecipe,
         parts: newRecipe.parts.map((part) => ({
-          name: part.name,          
+          name: part.name,
           ingredients: part.ingredients.map(x => ({
             ingredientId: x.ingredient.id,
             unitOfMeasurementId: x.unitOfMeasurement.id,
@@ -243,7 +243,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       filesToUpload.forEach(async (imageFile, index) => {
         try {
           await api.uploadRecipeImage(id, imageFile.file, index);
-        } catch (e) {          
+        } catch (e) {
           toast.error(e.message);
           console.log(e.message);
         }
@@ -252,7 +252,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       if (!isUndefined(descendantRecipe) && recipe.isVariant) {
         try {
           await api.addRecipeVariantRelationship(descendantRecipe.id, id);
-        } catch {}
+        } catch { }
       }
 
       toast.success(t("requests.recipes.create.success"));
@@ -275,7 +275,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       await api.updateRecipe(newRecipe.id, {
         ...newRecipe,
         parts: newRecipe.parts.map((part) => ({
-          name: part.name,          
+          name: part.name,
           ingredients: part.ingredients.map(x => ({
             ingredientId: x.ingredient.id,
             unitOfMeasurementId: x.unitOfMeasurement.id,
@@ -310,22 +310,22 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       imagesToRemove.forEach(async (image) => {
         try {
           await api.removeRecipeImage(image.id);
-        } catch {}
+        } catch { }
       })
 
       recipe.images.forEach(async (image, index) => {
         try {
           if (originalRecipe.images.some(x => x.id === image.id)) {
             var oldIndex = originalRecipe.images.findIndex(x => x.id === image.id);
-  
+
             if (oldIndex !== index) {
               await api.updateRecipeImageIndex(image.id, index);
             }
           } else {
-            var imageFile = filesToUpload.find(x => x.id === image.id);            
+            var imageFile = filesToUpload.find(x => x.id === image.id);
             await api.uploadRecipeImage(recipe.id, imageFile.file, index);
           }
-        } catch (e) {          
+        } catch (e) {
           toast.error(e.message);
           console.log(e.message);
         }
@@ -336,16 +336,16 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       tagsToAdd.forEach(async (tag) => {
         try {
           await api.addTagToRecipe(recipe.id, tag.id);
-        } catch {}
+        } catch { }
       })
 
       const tagsToRemove = originalRecipe.tags.filter(x => !newRecipe.tags.some(tag => x.id === tag.id));
       tagsToRemove.forEach(async (tag) => {
         try {
           await api.removeTagFromRecipe(recipe.id, tag.id);
-        } catch {}
+        } catch { }
       })
-      
+
       toast.success(t("requests.recipes.update.success"));
       onSubmit({
         ...newRecipe,
@@ -372,7 +372,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       }
     },
   });
-  
+
   const { handleSubmit, values: recipe, setValues: setRecipe, handleChange, errors, touched } = formik;
 
   /* Handlers */
@@ -397,7 +397,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       id: uuid(),
       ingredient: ingredient,
       amount: undefined,
-      optional: existingIngredient ? !existingIngredient.optional: false,
+      optional: existingIngredient ? !existingIngredient.optional : false,
       unitOfMeasurement: {
         id: ingredient.defaultUnitOfMeasurement.id,
       },
@@ -411,7 +411,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       ingredients: newRecipeIngredients,
     }));
   };
-  
+
   const handleAddPieceOfEquipment = (pieceOfEquipment) => {
     const recipePieceOfEquipment = {
       ...pieceOfEquipment,
@@ -444,7 +444,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   };
 
   const handleRecipeIngredientChange = (newRecipeIngredient) => {
-    const newRecipeIngredients = [ ...recipe.ingredients];
+    const newRecipeIngredients = [...recipe.ingredients];
 
     const index = newRecipeIngredients.findIndex((x) => x.id === newRecipeIngredient.id && x.optional === newRecipeIngredient.optional);
 
@@ -572,7 +572,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     }));
   };
 
-  const handleStepDragEnd = (result) => { 
+  const handleStepDragEnd = (result) => {
     // dropped outside the list
     if (!result.destination) {
       return;
@@ -610,8 +610,8 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     setRecipe((state) => ({
       ...state,
       images: [
-        ...recipe.images, 
-        newImage       
+        ...recipe.images,
+        newImage
       ],
     }));
     setFilesToUpload((state) => [...state, {
@@ -634,14 +634,14 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
   const handleImageClick = (image) => {
     setShowRecipeImageViewerDialog(true);
-  };  
-  
+  };
+
   const handleImageDeleteClick = (image) => {
     setSelectedRecipeImage(image)
     setShowDeleteRecipeImageDialog(true);
   };
 
-  const handleImageDragEnd = (result) => {    
+  const handleImageDragEnd = (result) => {
     // dropped outside the list
     if (!result.destination) {
       return;
@@ -658,8 +658,8 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       images: images,
     }));
   }
-  
-  const handlePublishRecipe = async () => {    
+
+  const handlePublishRecipe = async () => {
     try {
       await api.publishRecipe(recipe.id);
       setRecipe({
@@ -674,7 +674,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
     setShowPublishDialog(false);
   }
 
-  const handleDeleteRecipe = async () => {    
+  const handleDeleteRecipe = async () => {
     try {
       await api.deleteRecipe(recipe.id);
 
@@ -687,33 +687,33 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
   }
 
   const handleAddingNewIngredient = (name) => {
-    newPersonalIngredientDialog.show({ 
-        open: true,
-        ingredient: {
-          name,
-          pluralName: name
-        },
-        onClose: () => newPersonalIngredientDialog.remove(),
-        onComplete: (newIngredient) => {
-          newPersonalIngredientDialog.remove();
-          handleAddIngredient(newIngredient);
-        }
-      });
+    newPersonalIngredientDialog.show({
+      open: true,
+      ingredient: {
+        name,
+        pluralName: name
+      },
+      onClose: () => newPersonalIngredientDialog.remove(),
+      onComplete: (newIngredient) => {
+        newPersonalIngredientDialog.remove();
+        handleAddIngredient(newIngredient);
+      }
+    });
   }
 
   const handleAddingNewPieceOfEquipment = (name) => {
-    newPersonalEquipmentDialog.show({ 
-        open: true,
-        pieceOfEquipment: {
-          name,
-          pluralName: name
-        },
-        onClose: () => newPersonalEquipmentDialog.remove(),
-        onComplete: (newPieceOfEquipment) => {
-          newPersonalEquipmentDialog.remove();
-          onNewPieceOfEquipmentAdded(newPieceOfEquipment);
-        }
-      });
+    newPersonalEquipmentDialog.show({
+      open: true,
+      pieceOfEquipment: {
+        name,
+        pluralName: name
+      },
+      onClose: () => newPersonalEquipmentDialog.remove(),
+      onComplete: (newPieceOfEquipment) => {
+        newPersonalEquipmentDialog.remove();
+        onNewPieceOfEquipmentAdded(newPieceOfEquipment);
+      }
+    });
   }
 
   const onNewPieceOfEquipmentAdded = (pieceOfEquipment) => {
@@ -746,7 +746,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       }
     }
   }, [formik.submitCount, formik.isValid, formik.errors, formik.isSubmitting]);
-  
+
   const ImageList = useMemo(() => (
     <List sx={{ overflow: "auto" }}>
       <DragDropContext onDragEnd={handleImageDragEnd}>
@@ -781,7 +781,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
             </Stack>
           )}
         </Droppable>
-      </DragDropContext> 
+      </DragDropContext>
     </List>
   ), [recipe.images, filesToUpload])
 
@@ -805,7 +805,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-recipe-dialog-description">
-            {t("dialogs.deleteRecipe.description")}            
+            {t("dialogs.deleteRecipe.description")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -829,7 +829,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="publish-recipe-dialog-description">
-          {t("dialogs.publishRecipe.description")}
+            {t("dialogs.publishRecipe.description")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -853,7 +853,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-recipe-image-dialog-description">
-          {t("dialogs.deleteRecipeImage.description")}
+            {t("dialogs.deleteRecipeImage.description")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -867,7 +867,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       </Dialog>
 
       {(mode === FormModes.Create && !isUndefined(descendantRecipe)) && (
-        <Box sx={{ mt: 2 }}> 
+        <Box sx={{ mt: 2 }}>
           <Typography sx={{ fontSize: 12, fontWeight: 'bold', mb: 1 }}>{`${t('forms.recipe.copiedFrom')}:`}</Typography>
 
           <Stack display="flex" direction="row" alignItems="center" gap={2}>
@@ -883,28 +883,28 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
           <FormControlLabel
             control={<Checkbox
               checked={recipe.isVariant}
-              onChange={handleChange}  
-            />}            
+              onChange={handleChange}
+            />}
             name="isVariant"
             label={`${t('forms.recipe.inputs.isVariant.label')} ${descendantRecipe.name}`}
           />
         </Box>
       )}
-      
+
       {(!recipe.personal && mode === FormModes.Update) && (
         <Box sx={{ mb: 2 }}>
           <Typography variant="body1" sx={{ color: 'var(--primary-colour)', fontWeight: 'bold' }}>{recipe.state}</Typography>
         </Box>
       )}
 
-      <Stack display="flex" direction="row" justifyContent="end" gap={1} sx={{ mb: 2}}>
+      <Stack display="flex" direction="row" justifyContent="end" gap={1} sx={{ mb: 2 }}>
         {(mode === FormModes.Update && !recipe.personal && recipe.state === RecipeState.Draft) && (
           <Button
             type="button"
             variant="contained"
             onClick={() => setShowPublishDialog(true)}
           >
-          {t("types.recipe.actions.publish")}
+            {t("types.recipe.actions.publish")}
           </Button>
         )}
         {(mode === FormModes.Update && (recipe.personal || recipe.state === RecipeState.Draft)) && (
@@ -925,7 +925,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
       </Box>
 
       <Box sx={{ mt: 1, mb: 2 }}>
-        <form onSubmit={handleSubmit}>          
+        <form onSubmit={handleSubmit}>
           <Box>
             <TextField
               required
@@ -940,7 +940,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               helperText={touched.name && errors.name}
               autoFocus
             />
-            
+
             <TextField
               fullWidth
               margin="normal"
@@ -957,7 +957,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
             <FormControl
               fullWidth
-              sx={{ mt: 2, mb: 1 }} 
+              sx={{ mt: 2, mb: 1 }}
               required
               error={errors.type && touched.type}
             >
@@ -980,7 +980,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
 
             <FormControl
               fullWidth
-              sx={{ mt: 2, mb: 1 }} 
+              sx={{ mt: 2, mb: 1 }}
               required
               error={errors.difficulty && touched.difficulty}
             >
@@ -1072,12 +1072,12 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               </Grid>
             </Grid>
 
-            <Box sx={{ mt: 2 }}>              
+            <Box sx={{ mt: 2 }}>
               <FormControlLabel
                 control={<Checkbox
                   checked={recipe.containsAlcohol}
-                  onChange={handleChange}  
-                />}   
+                  onChange={handleChange}
+                />}
                 name="containsAlcohol"
                 label={t("types.recipe.fields.containsAlcohol.name")}
               />
@@ -1179,9 +1179,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               </Stack>
 
               {recipe.parts.length > 0 && (
-                <Box sx={{ mt: 2 }} style={{ borderTop: '1px solid #d1d1d1'}}>
+                <Box sx={{ mt: 2 }} style={{ borderTop: '1px solid #d1d1d1' }}>
                   {recipe.parts.map((recipePart, index) => (
-                    <RecipePart                    
+                    <RecipePart
                       key={recipePart.id}
                       recipePart={{
                         ...recipePart,
@@ -1192,7 +1192,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     />
                   ))}
                 </Box>
-              )}     
+              )}
 
               <Button sx={{ mt: 2 }} type="button" variant="contained" onClick={handleAddPartClick}>
                 {`${t("common.words.actions.add")} ${t("types.recipe.fields.parts.singularName")}`}
@@ -1200,7 +1200,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
             </Box>
 
 
-            
+
             <Box sx={{ mt: 5 }}>
               <Typography variant="h6">{t("types.equipment.pluralName")}</Typography>
 
@@ -1214,7 +1214,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                   />
                 ))}
               </Box>
-              
+
               <Stack sx={{ mt: 3 }} direction="row" gap={1}>
                 <Autocomplete
                   fullWidth
@@ -1237,7 +1237,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     return newOptions;
                   }}
                   // eslint-disable-next-line react/jsx-props-no-spreading
-                  renderInput={(params) => <TextField {...params} label={`${t("common.words.actions.add")} ${t("types.equipment.name")}`}  />}
+                  renderInput={(params) => <TextField {...params} label={`${t("common.words.actions.add")} ${t("types.equipment.name")}`} />}
                   value={equipmentSearch}
                   inputValue={equipmentSearch}
                   onInputChange={(event, newValue) => {
@@ -1280,12 +1280,12 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                               onChange={handleStepChange}
                               onDelete={handleDeleteStep}
                             />
-                            )}
-                          </Draggable>
-                        ))}
-        
-                        {provided.placeholder}
-                      </Stack>
+                          )}
+                        </Draggable>
+                      ))}
+
+                      {provided.placeholder}
+                    </Stack>
                   )}
                 </Droppable>
               </DragDropContext>
@@ -1312,9 +1312,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                     helperText={touched.nutrition?.calories && errors.nutrition?.calories}
                     InputLabelProps={{ shrink: true }}
                     InputProps={{
-                      inputProps: { 
-                        min: 0, 
-                        step: 1 
+                      inputProps: {
+                        min: 0,
+                        step: 1
                       }
                     }}
                   />
@@ -1334,11 +1334,11 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
                         error={errors.nutrition?.[key] && touched.nutrition?.[key]}
                         helperText={touched.nutrition?.[key] && errors.nutrition?.[key]}
                         InputLabelProps={{ shrink: true }}
-                        InputProps={{ 
-                          inputProps: { 
+                        InputProps={{
+                          inputProps: {
                             min: 0,
                             step: 0.1
-                          } 
+                          }
                         }}
                       />
                     </Grid>
@@ -1349,7 +1349,7 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
             {tags.length > 0 && (
               <Box sx={{ mt: 5 }}>
                 <Typography sx={{ mb: 2 }} variant="h6">{t("types.tag.pluralName")}</Typography>
-  
+
                 <Stack direction="row" alignItems="center" gap={2} sx={{ mt: 1, flexWrap: 'wrap', gap: 1 }}>
                   {tags.map((tag) => (
                     <FilterOption
@@ -1388,9 +1388,9 @@ export default ({ recipe: initialValues, onSubmit, admin }) => {
               <LoadingButton
                 type="submit"
                 fullWidth
-                variant="contained" 
+                variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-                loading={updating}  
+                loading={updating}
               >
                 {mode === FormModes.Create ? t("common.words.actions.create") : t("common.words.actions.update")}
               </LoadingButton>

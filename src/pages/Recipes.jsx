@@ -10,7 +10,7 @@ import Header from 'src/components/Header';
 import RecipeTile from 'src/components/RecipeTile';
 import useAPI from 'src/hooks/useAPI';
 import useInput from 'src/hooks/useInput';
-import useTags from 'src/hooks/useTags';
+import useTagsQuery from 'src/hooks/Queries/useTagsQuery';
 import { RecipeState } from 'src/types';
 import { includeResizeQueryParameters } from 'src/utils/imageUtils';
 import Filters from './Filters';
@@ -27,7 +27,9 @@ export default () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { fetch: fetchTags } = useTags();
+  const {
+    data: tags
+  } = useTagsQuery();
 
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
@@ -35,7 +37,7 @@ export default () => {
   const [filters, setFilters] = useState({
     ...location?.state?.filters,
     pageSize: 40,
-    states: [ RecipeState.Published ]
+    states: [RecipeState.Published]
   });
 
   const [loadingRecipes, setLoadingRecipes] = useState(false);

@@ -1,24 +1,26 @@
 import { Clear as ClearIcon } from '@mui/icons-material';
 import {
-    Box,
-    Checkbox,
-    FormControl,
-    FormControlLabel,
-    IconButton,
-    InputLabel,
-    MenuItem,
-    Select,
-    Stack,
-    TextField
+  Box,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
 import { useTranslation } from "react-i18next";
-import { UnitOfMeasurementContext } from 'src/contexts/UnitOfMeasurementContext';
+import useUnitOfMeasurementsQuery from "src/hooks/Queries/useUnitOfMeasurementsQuery";
 
 const RecipeIngredient = ({ recipeIngredient, onChange, onDelete, optionalDisabled }) => {
   const { t } = useTranslation();
-  const { unitOfMeasurements } = useContext(UnitOfMeasurementContext);
+
+  const {
+    data: unitOfMeasurements
+  } = useUnitOfMeasurementsQuery();
 
   const handleChange = (e) => {
     onChange({
@@ -55,7 +57,7 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete, optionalDisabl
           value={recipeIngredient.ingredient.name}
           disabled
         />
-        
+
         <IconButton onClick={() => onDelete(recipeIngredient)}>
           <ClearIcon />
         </IconButton>
@@ -72,12 +74,12 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete, optionalDisabl
           type="number"
           value={recipeIngredient.amount}
           onChange={handleChange}
-          InputProps={{ 
+          InputProps={{
             min: 0,
             step: "any"
           }}
         />
-        <FormControl 
+        <FormControl
           fullWidth
           sx={{ flex: 2 }}
         >
@@ -99,8 +101,8 @@ const RecipeIngredient = ({ recipeIngredient, onChange, onDelete, optionalDisabl
           control={
             <Checkbox
               id="optional"
-              name="optional"  
-              checked={recipeIngredient.optional}              
+              name="optional"
+              checked={recipeIngredient.optional}
               onChange={handleCheckboxChange}
               disabled={optionalDisabled}
             />

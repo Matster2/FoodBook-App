@@ -1,13 +1,13 @@
 import {
-    Autocomplete,
-    Box,
-    Button,
-    Chip,
-    Container,
-    Grid,
-    Stack,
-    TextField,
-    Typography
+  Autocomplete,
+  Box,
+  Button,
+  Chip,
+  Container,
+  Grid,
+  Stack,
+  TextField,
+  Typography
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ import Header from 'src/components/Header';
 import RatingFilter from 'src/components/RatingFilter';
 import useAPI from 'src/hooks/useAPI';
 import useFilters from 'src/hooks/useFilters';
-import useTags from 'src/hooks/useTags';
+import useTagsQuery from 'src/hooks/Queries/useTagsQuery';
 import { RecipeDifficulty, RecipeType } from 'src/types';
 import { lowercaseFirstLetter } from 'src/utils/stringUtils';
 import { isNullOrEmpty, isUndefined } from 'src/utils/utils';
@@ -26,7 +26,9 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
   const { t } = useTranslation();
   const api = useAPI();
 
-  const { tags } = useTags();
+  const {
+    data: tags
+  } = useTagsQuery();
 
   const { filters, setFilter } = useFilters({
     ingredientIds: [],
@@ -42,13 +44,13 @@ const Filters = ({ filters: originalFilters, onApply, onClose }) => {
 
   const [ingredientSearch, setIngredientSearch] = useState('');
   const [selectedTime, setSelectedTime] = useState();
-  
-  const typeOptions = Object.entries(RecipeType).map(( [k, v] ) => ({
+
+  const typeOptions = Object.entries(RecipeType).map(([k, v]) => ({
     label: t(`types.recipe.types.${lowercaseFirstLetter(k)}.name`),
     value: v
   }));
 
-  const difficultyOptions = Object.entries(RecipeDifficulty).map(( [k, v] ) => ({
+  const difficultyOptions = Object.entries(RecipeDifficulty).map(([k, v]) => ({
     label: t(`types.recipe.difficulty.${lowercaseFirstLetter(k)}`),
     value: v
   }));

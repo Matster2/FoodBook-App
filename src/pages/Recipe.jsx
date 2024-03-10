@@ -1,24 +1,24 @@
 import {
-    AccessTime as AccessTimeIcon,
-    ChevronLeft as ChevronLeftIcon,
-    Edit as EditIcon,
-    Scale as MeasurementIcon,
-    Star as StarIcon
+  AccessTime as AccessTimeIcon,
+  ChevronLeft as ChevronLeftIcon,
+  Edit as EditIcon,
+  Scale as MeasurementIcon,
+  Star as StarIcon
 } from '@mui/icons-material';
 import {
-    Avatar,
-    Box,
-    CircularProgress,
-    Container,
-    Dialog,
-    Grid,
-    IconButton,
-    Slide,
-    Stack,
-    Step,
-    StepLabel,
-    Stepper,
-    Typography,
+  Avatar,
+  Box,
+  CircularProgress,
+  Container,
+  Dialog,
+  Grid,
+  IconButton,
+  Slide,
+  Stack,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
 } from '@mui/material';
 import classnames from 'classnames';
 import _ from "lodash";
@@ -108,7 +108,7 @@ export default () => {
   } = useAuth();
 
   const api = useAPI();
- 
+
   const { results: variants, totalResults: totalVariants, loading: loadingVariants } = usePagedFetch(
     `${import.meta.env.VITE_APP_API_URL
     }/recipes?random=true&pageSize=25&variantOfRecipeId=${id}`
@@ -151,7 +151,7 @@ export default () => {
       setMeasurementSystem(undefined);
 
       const { data } = await api.getRecipeIngredients(id);
-      setIngredients(data.ingredients);   
+      setIngredients(data.ingredients);
     } catch (e) {
       setIsError(true)
       console.log('error fetching recipe');
@@ -295,7 +295,7 @@ export default () => {
         personal: true,
         descendantOfRecipeId: id
       }
-    })    
+    })
   }
 
   const handleRecipeClick = (id) => {
@@ -304,7 +304,7 @@ export default () => {
 
   const handleMeasurementSystemClick = async () => {
     var newMeasurementSystem = measurementSystem;
-    
+
     switch (measurementSystem) {
       case MeasurementSystem.Metric:
         newMeasurementSystem = MeasurementSystem.Imperial;
@@ -312,14 +312,14 @@ export default () => {
       case MeasurementSystem.Imperial:
         newMeasurementSystem = undefined;
         break;
-      default: 
+      default:
         newMeasurementSystem = MeasurementSystem.Metric;
     }
 
     try {
       const { data } = await api.getRecipeIngredients(recipe.id, { measurementSystem: newMeasurementSystem });
       setIngredients(data.ingredients);
-      setMeasurementSystem(newMeasurementSystem);      
+      setMeasurementSystem(newMeasurementSystem);
     } catch (e) {
       toast.error(t('requests.recipes.ingredients.error'));
     }
@@ -421,7 +421,7 @@ export default () => {
     >
       <RecipeTile key={recipe.id} recipe={recipe} onClick={handleRecipeClick} />
     </Box>
-  );  
+  );
 
   if (isUndefined(recipe)) {
     return <div />;
@@ -548,7 +548,7 @@ export default () => {
         skipInitialTransition
         scrollLocking={recipe.images.length === 0}
         blocking={false}
-        defaultSnap={({ snapPoints, lastSnap }) => recipe.images.length > 0 ? lastSnap / 2 : Math.max(...snapPoints) }
+        defaultSnap={({ snapPoints, lastSnap }) => recipe.images.length > 0 ? lastSnap / 2 : Math.max(...snapPoints)}
         snapPoints={({ maxHeight }) => recipe.images.length > 0 ? [maxHeight - (maxHeight / 10), maxHeight - swiperRef.current.clientHeight] : [maxHeight - (maxHeight / 10)]}
       >
         <Container sx={{ mb: 12 }}>
@@ -592,13 +592,13 @@ export default () => {
               <Stack direction="row" display="flex" alignItems="center" onClick={handleAuthorClick}>
                 <Typography className={styles.author} sx={{ mr: 1 }} style={{ fontWeight: 'bold' }}>{t('pages.recipe.author')}:</Typography>
                 <Avatar sx={{ height: 21, width: 21, mr: 1, bgcolor: 'var(--primary-colour)' }} src={author?.profilePictureUrl} />
-                
+
                 <Stack direction="row" alignItems="center" gap={0.5}>
                   <Typography className={styles.author}>
                     {recipe?.author?.name ?? ""}
                   </Typography>
                   {(recipe.createdBy.id === userId) && (
-                    <Typography className={styles.author} sx={{ fontWeight: 'bold'}}>
+                    <Typography className={styles.author} sx={{ fontWeight: 'bold' }}>
                       {`(${t('common.words.you')})`}
                     </Typography>
                   )}
@@ -674,13 +674,13 @@ export default () => {
                   max={100}
                 />
               </Box>
-            
+
               <CollapsibleSection
                 title={t('pages.recipe.sections.ingredients')}
                 renderEnd={
                   <Stack sx={{ marginLeft: 'auto' }} direction="row" alignItems="center" gap={1}>
                     {measurementSystem && <Typography className={styles.measurementSystem}>{getMeasurementSystemTranslation(measurementSystem)}</Typography>}
-                    
+
                     <IconButton className={styles.optionButton} onClick={handleMeasurementSystemClick}>
                       <MeasurementIcon className={styles.optionIcon} />
                     </IconButton>
@@ -688,15 +688,15 @@ export default () => {
                 }
               >
                 {!isUndefined(servings) && (
-                  <>                  
+                  <>
                     <IngredientList
                       ingredients={convertRecipeIngredients(ingredients.filter(x => isNull(x.recipePart)))}
                     />
 
                     {recipe.parts.map((part) => (
-                      <Box sx={{ mt: 2 }}>  
+                      <Box sx={{ mt: 2 }}>
                         <Typography className={styles.partName}>{part.name}</Typography>
-                                                               
+
                         <IngredientList
                           ingredients={convertRecipeIngredients(ingredients.filter(x => x.recipePart?.id === part.id))}
                         />

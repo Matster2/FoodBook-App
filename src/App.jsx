@@ -2,27 +2,30 @@ import NiceModal from '@ebay/nice-modal-react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import axios from 'axios';
+import { LanguageContext } from 'src/contexts/LanguageContext';
 import { useContext, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { RouterProvider } from 'react-router-dom';
+import apiAxiosInstance from 'src/config/axios';
 import { AppContext } from 'src/contexts/AppContext';
-import { LanguageContext } from 'src/contexts/LanguageContext';
-import { UserContext } from 'src/contexts/UserContext';
 import useAPI from 'src/hooks/useAPI';
 import useAuth from 'src/hooks/useAuth';
-import useTags from 'src/hooks/useTags';
 import router from 'src/router';
 
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
+import { useQuery } from '@tanstack/react-query';
 
-const App = () => {  
-  const { authenticated, refreshTokens, logout } = useAuth();
+const App = () => {
+  const { authenticated, tokens, refreshTokens, logout } = useAuth();
+  const { currentLanguage } = useContext(LanguageContext);
   const api = useAPI();
 
-  const { setSupportedLanguages } = useContext(LanguageContext);
   const { initialized, setInitialized, maintenance, setMaintenance } = useContext(AppContext);
-  const { setUser } = useContext(UserContext);
-  const { fetch: fetchTags  } = useTags();
+
+  useEffect(() => {
+    apiAxiosInstance.defaults.headers.common.Authorization = `Bearer ${tokens?.accessToken}`;
+    apiAxiosInstance.defaults.headers.common.Language = currentLanguage;
+  }, [tokens]);
 
   let isRefreshing = false;
   let failedQueue = [];
@@ -79,58 +82,31 @@ const App = () => {
     }
   );
 
-  const fetchUser = async () => {
-    try {
-      const { data } = await api.getMe();
-      setUser(data);
-    } catch {
-      console.log('error fetching user');
-    }
-  };
+  useQuery({
+    queryKey: ["system"],
+    queryFn: () => api.getSystem()
+      .then(({ data }) => data),
+    onSuccess: () => setMaintenance(false)
+  });
 
-  const fetchSystem = async () => {
-    try {
-      const { data } = await api.getSystem();
-      setMaintenance(false);
-    } catch {
-      console.log('error fetching system');
-    }
-  }
+  useQuery({
+    queryKey: ["languages"],
+    queryFn: () => api.getSupportedLanguages()
+      .then(({ data }) => data.results),
+  });
 
-  const fetchSupportedLanguages = async () => {
-    try {
-      const { data } = await api.getSupportedLanguages();
-      setSupportedLanguages(data.results);
-    } catch {
-      console.log('error fetching supported languages');
-    }
-  }
+  useQuery({
+    queryKey: ["tags"],
+    queryFn: () => api.getTags()
+      .then(({ data }) => data.results)
+  });
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchSystem()
-    }, 60000);
-  
-    return () => clearInterval(interval);
-  }, [])
-
-  const initializeApp = async () => {
-    fetchSupportedLanguages();
-    fetchTags();
-    await fetchSystem()
-    setInitialized(true);
-  }
-
-  useEffect(() => {
-    initializeApp();
-    fetchTags();
-  }, []);
-
-  useEffect(() => {
-    if (authenticated) {
-      fetchUser();
-    }
-  }, [authenticated]);
+  useQuery({
+    queryKey: ["profile"],
+    queryFn: () => api.getMe()
+      .then(({ data }) => data),
+    enabled: authenticated,
+  });
 
   const theme = createTheme({
     typography: {
@@ -219,6 +195,11 @@ const App = () => {
     },
   });
 
+  useEffect(() => {
+    setMaintenance(false);
+    setInitialized(true);
+  }, [])
+
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
@@ -248,7 +229,7 @@ const App = () => {
         {!isOnline && (
           <OfflinePage />
         )}
-        
+
         {(isOnline && initialized) && (<RouterProvider router={router} />)}
 
         <Toaster />

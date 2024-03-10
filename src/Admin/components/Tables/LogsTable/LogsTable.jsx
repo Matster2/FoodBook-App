@@ -1,0 +1,64 @@
+import PropTypes from 'prop-types';
+import { useTranslation } from "react-i18next";
+import Table from 'src/components/Table';
+
+const LogsTable = ({
+  rows: logs,
+  loading,
+  sortBy,
+  sortDescending,
+  onHeadingClick,
+  onRowClick,
+}) => {
+  const { t } = useTranslation();
+
+  const columns = [
+    {
+      heading: t('types.log.fields.createdOn.name'),
+      identifier: 'createdOn',
+      width: '18%',
+      sortable: true,
+    },
+    {
+      heading: t('types.log.fields.message.name'),
+      identifier: 'message',
+      sortable: true,
+    },
+  ];
+
+  return (
+    <Table
+      columns={columns}
+      rows={logs.map((log) => ({
+        identifier: log.id,
+        data: [
+          log.createdOn.format("HH:mm DD/MM/YYYY"),
+          log.message
+        ],
+      }))}
+      loading={loading}
+      sortBy={sortBy}
+      sortDescending={sortDescending}
+      onHeadingClick={onHeadingClick}
+      onRowClick={onRowClick}
+    />
+  );
+};
+
+LogsTable.propTypes = {
+  loading: PropTypes.bool,
+  sortBy: PropTypes.string,
+  sortDescending: PropTypes.bool,
+  onHeadingClick: PropTypes.func,
+  onRowClick: PropTypes.func,
+};
+
+LogsTable.defaultProps = {
+  loading: false,
+  sortBy: undefined,
+  sortDescending: false,
+  onHeadingClick: () => { },
+  onRowClick: () => { },
+};
+
+export default LogsTable;

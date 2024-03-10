@@ -13,11 +13,11 @@ import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import useAPI from 'src/hooks/useAPI';
 import usePrevious from 'src/hooks/usePrevious';
-import useUnitOfMeasurements from 'src/hooks/useUnitOfMeasurements';
 import { getIngredientScheme } from 'src/types/schemas';
 import FormModes from 'src/utils/formModes';
 import { capitaliseEachWord } from "src/utils/stringUtils";
 import { isUndefined } from 'src/utils/utils';
+import useUnitOfMeasurementsQuery from "src/hooks/Queries/useUnitOfMeasurementsQuery";
 
 const initialIngredientValue = {
   name: '',
@@ -35,10 +35,12 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
 
   const [updating, setUpdating] = useState(false);
 
-  const { unitOfMeasurements, fetch: fetchUnitOfMeasurements } = useUnitOfMeasurements();
+  const {
+    data: unitOfMeasurements
+  } = useUnitOfMeasurementsQuery();
 
   const mode = !initialValues?.id ? FormModes.Create : FormModes.Update;
-  
+
   const originalIngredient = {
     ...initialIngredientValue,
     ...initialValues,
@@ -58,7 +60,7 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
         return;
       }
 
-      const { data: { id } } =await api.createIngredient({
+      const { data: { id } } = await api.createIngredient({
         languageCode: "en",
         name: newIngredient.name,
         pluralName: newIngredient.pluralName,
@@ -79,7 +81,7 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
 
     setUpdating(false);
   }
-  
+
   const handleUpdateIngredient = async (newIngredient) => {
     setUpdating(true);
 
@@ -106,7 +108,7 @@ export default ({ ingredient: initialValues, onSubmit, admin }) => {
   useEffect(() => {
     fetchUnitOfMeasurements();
   }, []);
-  
+
   /* Rendering */
   return (
     <Formik

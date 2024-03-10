@@ -3,8 +3,6 @@ import { createElement } from 'react';
 import { AppProvider } from './AppContext';
 import { AuthProvider } from './AuthContext';
 import { LanguageProvider } from './LanguageContext';
-import { TagProvider } from './TagContext';
-import { UnitOfMeasurementProvider } from './UnitOfMeasurementContext';
 import { UserProvider } from './UserContext';
 
 const Providers = ({ children }) => (
@@ -12,9 +10,7 @@ const Providers = ({ children }) => (
     <LanguageProvider>
       <AuthProvider>
         <UserProvider>
-          <UnitOfMeasurementProvider>
-            <TagProvider>{children}</TagProvider>
-          </UnitOfMeasurementProvider>
+          {children}
         </UserProvider>
       </AuthProvider>
     </LanguageProvider>
