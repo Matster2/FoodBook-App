@@ -160,7 +160,7 @@
           }
         }
       }
-    },    
+    },
     "ingredientList": {
       "title": "Ingredient List",
       "noPlannedRecipesDay": "You have no recipes planned on this day",
@@ -228,20 +228,20 @@
           "email": {
             "label": "Email Address",
             "validationMessages": {
-              "empty": "Email is required",
+              "required": "Email is required",
               "invalid": "Invalid email"
             }
           },
           "password": {
             "label": "Password",
             "validationMessages": {
-              "empty": "Password is required"
+              "required": "Password is required"
             }
           },
           "confirmPassword": {
             "label": "Confirm Password",
             "validationMessages": {
-              "empty": "Please confirm your password",
+              "required": "Please confirm your password",
               "notSame": "Passwords do not match"
             }
           }
@@ -257,14 +257,14 @@
           "email": {
             "label": "Email Address",
             "validationMessages": {
-              "empty": "Email is required",
+              "required": "Email is required",
               "invalid": "Invalid email"
             }
           },
           "password": {
             "label": "Password",
             "validationMessages": {
-              "empty": "Password is required"
+              "required": "Password is required"
             }
           }
         },
@@ -279,7 +279,7 @@
           "email": {
             "label": "Email Address",
             "validationMessages": {
-              "empty": "Email is required"
+              "required": "Email is required"
             }
           }
         },
@@ -295,20 +295,20 @@
           "currentPassword": {
             "label": "Current Password",
             "validationMessages": {
-              "empty": "Current Password is required"
+              "required": "Current Password is required"
             }
           },
           "newPassword": {
             "label": "New Password",
             "validationMessages": {
-              "empty": "New Password is required",
+              "required": "New Password is required",
               "sameAsCurrent": "New Password must be different from current password."
             }
           },
           "confirmPassword": {
             "label": "Confirm Password",
             "validationMessages": {
-              "empty": "Please confirm your password",
+              "required": "Please confirm your password",
               "notSame": "Passwords do not match"
             }
           }
@@ -325,7 +325,7 @@
           "newEmail": {
             "label": "New Email",
             "validationMessages": {
-              "empty": "New Email is required",
+              "required": "New Email is required",
               "invalid": "Invalid email",
               "sameAsCurrent": "New Password must be different from current password."
             }
@@ -333,7 +333,7 @@
           "password": {
             "label": "Password",
             "validationMessages": {
-              "empty": "Please enter your password."
+              "required": "Please enter your password."
             }
           }
         },
@@ -349,13 +349,13 @@
           "newPassword": {
             "label": "New Password",
             "validationMessages": {
-              "empty": "New Password is required"
+              "required": "New Password is required"
             }
           },
           "confirmPassword": {
             "label": "Confirm Password",
             "validationMessages": {
-              "empty": "Please confirm your password",
+              "required": "Please confirm your password",
               "notSame": "Passwords do not match"
             }
           }
@@ -386,14 +386,14 @@
         "email": {
           "label": "Email Address",
           "validationMessages": {
-            "empty": "Email is required",
+            "required": "Email is required",
             "invalid": "Invalid email"
           }
         },
         "message": {
           "label": "Message",
           "validationMessages": {
-            "empty": "Message is required"
+            "required": "Message is required"
           }
         }
       },
@@ -543,19 +543,19 @@
         "error": "Unable remove recipe from planner. Please try again later."
       }
     },
-    "recipes": {      
+    "recipes": {
       "create": {
         "success": "Recipe has been created.",
         "error": "Unable to create recipe. Please try again later."
-      },   
+      },
       "update": {
         "success": "Recipe has been updated.",
         "error": "Unable to update recipe. Please try again later."
-      },   
+      },
       "delete": {
         "success": "Recipe has been deleted.",
         "error": "Unable to delete recipe. Please try again later."
-      },   
+      },
       "publish": {
         "success": "Recipe has been published.",
         "error": "Unable to publish recipe. Please try again later."
@@ -564,53 +564,53 @@
         "error": "Unable to retrieve recipe's ingredients."
       }
     },
-    "ingredients": {      
+    "ingredients": {
       "create": {
         "validation": {
           "nameExistsAlready": "An ingredient already exists with this name"
         },
         "success": "Ingredient has been created.",
         "error": "Unable to create ingredient. Please try again later."
-      },   
+      },
       "update": {
         "success": "Ingredient has been updated.",
         "error": "Unable to update ingredient. Please try again later."
       }
     },
-    "equipment": {      
+    "equipment": {
       "create": {
         "validation": {
           "nameExistsAlready": "A piece of equipment already exists with this name"
         },
         "success": "Piece of equipment has been created.",
         "error": "Unable to create piece of equipment. Please try again later."
-      },   
+      },
       "update": {
         "success": "Piece of equipment has been updated.",
         "error": "Unable to update piece of equipment. Please try again later."
       }
     },
-    "tags": {      
+    "tags": {
       "create": {
         "validation": {
           "nameExistsAlready": "An tag already exists with this name"
         },
         "success": "Tag has been created.",
         "error": "Unable to create tag. Please try again later."
-      },   
+      },
       "update": {
         "success": "Tag has been updated.",
         "error": "Unable to update tag. Please try again later."
       }
     },
-    "collections": {      
+    "collections": {
       "create": {
         "validation": {
           "titleExistsAlready": "An collection already exists with this title"
         },
         "success": "Collection has been created.",
         "error": "Unable to create collection. Please try again later."
-      },   
+      },
       "update": {
         "success": "Collection has been updated.",
         "error": "Unable to update collection. Please try again later."
@@ -624,11 +624,11 @@
         "error": "Unable to remove recipe from the collection. Please try again later."
       }
     },
-    "authors": {      
+    "authors": {
       "create": {
         "success": "Author has been created.",
         "error": "Unable to create author. Please try again later."
-      },   
+      },
       "update": {
         "success": "Author has been updated.",
         "error": "Unable to update author. Please try again later."
@@ -636,7 +636,7 @@
     }
   },
   "types": {
-    "unitOfMeasurement": {      
+    "unitOfMeasurement": {
       "measurementSystems": {
         "metric": "Metric",
         "imperial": "Imperial"
@@ -656,7 +656,7 @@
         },
         "message": {
           "name": "Message"
-        }        
+        }
       },
       "actions": {
         "resolve": "Resolve"
@@ -665,7 +665,6 @@
     "tag": {
       "name": "Tag",
       "pluralName": "Tags",
-      
       "fields": {
         "name": {
           "name": "Name",
@@ -675,25 +674,21 @@
         },
         "icon": {
           "name": "Icon",
-          "validation": {
-          }
+          "validation": {}
         },
         "hidden": {
           "name": "Hidden",
-          "validation": {
-          }
+          "validation": {}
         },
         "promoted": {
           "name": "Promoted",
-          "validation": {
-          }
+          "validation": {}
         }
       }
     },
     "collection": {
       "name": "Collection",
       "pluralName": "Collection",
-      
       "fields": {
         "title": {
           "name": "Title",
@@ -703,20 +698,17 @@
         },
         "hidden": {
           "name": "Hidden",
-          "validation": {
-          }
+          "validation": {}
         },
         "promoted": {
           "name": "Promoted",
-          "validation": {
-          }
+          "validation": {}
         }
       }
     },
     "author": {
       "name": "Author",
       "pluralName": "Authors",
-      
       "fields": {
         "name": {
           "name": "Name",
@@ -726,23 +718,19 @@
         },
         "biography": {
           "name": "Biography",
-          "validation": {
-          }
+          "validation": {}
         },
         "links": {
           "name": "Links",
           "singularName": "Link",
-
           "fields": {
             "name": {
               "name": "Name",
-              "validation": {
-              }
+              "validation": {}
             },
             "description": {
               "name": "Description",
-              "validation": {
-              }
+              "validation": {}
             },
             "url": {
               "name": "URL",
@@ -750,7 +738,6 @@
                 "required": "Please provide the url of this link."
               }
             }
-
           }
         }
       }
@@ -758,7 +745,6 @@
     "ingredient": {
       "name": "Ingredient",
       "pluralName": "Ingredients",
-      
       "fields": {
         "name": {
           "name": "Name",
@@ -783,7 +769,6 @@
     "equipment": {
       "name": "Piece Of Equipment",
       "pluralName": "Equipment",
-      
       "fields": {
         "name": {
           "name": "Name",
@@ -802,14 +787,12 @@
     "recipe": {
       "name": "Recipe",
       "pluralName": "Recipes",
-
       "actions": {
         "create": "Create",
         "update": "Update",
         "delete": "Delete",
         "publish": "Publish"
       },
-
       "times": {
         "slow": "Slow",
         "medium": "Medium",
@@ -900,7 +883,6 @@
         "parts": {
           "name": "Parts",
           "singularName": "Part",
-
           "fields": {
             "name": {
               "name": "Name"
@@ -910,7 +892,6 @@
         "steps": {
           "name": "Steps",
           "singularName": "Step",
-
           "fields": {
             "name": {
               "name": "Name"
@@ -919,7 +900,6 @@
           "instructions": {
             "name": "Instructions",
             "singularName": "Instruction",
-
             "fields": {
               "instruction": {
                 "name": "Instruction"
@@ -958,28 +938,27 @@
         },
         "nutrition": {
           "name": "Nutrition",
-
           "calories": {
             "name": "Calories"
-          },          
+          },
           "sugar": {
             "name": "Sugar"
           },
           "fat": {
             "name": "Fat"
-          },          
+          },
           "saturatedFat": {
             "name": "Saturated Fat"
           },
           "sodium": {
             "name": "Sodium"
-          },          
+          },
           "protein": {
             "name": "Carbohydrates"
-          },          
+          },
           "carbohydrates": {
             "name": "Protein"
-          },          
+          },
           "fiber": {
             "name": "Fiber"
           }

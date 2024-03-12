@@ -13,7 +13,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fancyapps/ui": "^5.0.13",
-    "@hookform/resolvers": "^3.0.0",
+    "@hookform/resolvers": "^3.3.4",
     "@meinefinsternis/react-horizontal-date-picker": "^1.0.1",
     "@mui/icons-material": "^5.11.11",
     "@mui/lab": "^5.0.0-alpha.137",
@@ -41,7 +41,7 @@
     "react-detect-offline": "^2.4.5",
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.43.7",
+    "react-hook-form": "^7.51.0",
     "react-hot-toast": "^2.4.0",
     "react-i18next": "^13.0.0",
     "react-router-dom": "^6.9.0",
@@ -55,7 +55,7 @@
     "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^4.3.1",
     "web-vitals": "^2.1.4",
-    "yup": "^1.0.2"
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",

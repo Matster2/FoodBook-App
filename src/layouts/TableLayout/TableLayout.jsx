@@ -2,7 +2,6 @@ import { Box, Button, CircularProgress, Pagination, Stack, TableContainer, Typog
 import { useEffect, useState } from 'react';
 import Dropdown from 'src/components/Dropdown';
 import useFilters from 'src/hooks/useFilters';
-import { getResultsText } from 'src/utils/translationUtils';
 
 const _defaultPageSize = 25;
 
@@ -36,7 +35,7 @@ const TableLayout = ({
     setLoading(true);
 
     try {
-      const data = await callback({ 
+      const data = await callback({
         pageSize: _defaultPageSize,
         ...filters
       });
@@ -44,7 +43,7 @@ const TableLayout = ({
     } catch (e) {
       console.log(e);
     }
-    
+
     setLoading(false);
   }
 
@@ -57,10 +56,19 @@ const TableLayout = ({
   const handlePageChange = (_, value) => {
     setFilter('page', value);
   };
-  
+
   const handlePageSizeChange = (event) => {
     setFilter('pageSize', event.target.value);
   };
+
+  const getResultsText = (page, pageSize, totalResults, type = "results") => {
+    const resultsRange = {
+      from: (page - 1) * pageSize,
+      to: page * pageSize > totalResults ? totalResults : page * pageSize
+    }
+
+    return `Showing ${resultsRange.from} - ${resultsRange.to} out of ${totalResults} ${type}`;
+  }
 
   /* Rendering */
   return (
@@ -82,16 +90,16 @@ const TableLayout = ({
         {renderUnderFilters}
       </Box>
 
-      <Box sx={{ mt: 1 }}>        
+      <Box sx={{ mt: 1 }}>
         {(response && response.results.length > 0) && (
           <>
             <Stack direction="row" justifyContent="space-between" alignItems="end" gap={1}>
               <Typography>
-                {showResultsText 
+                {showResultsText
                   ? getResultsText(response.page, filters.pageSize ?? _defaultPageSize, response.totalResults, type.pluralName)
                   : ""}
               </Typography>
-              
+
               {showPageSizeSelector && (
                 <Dropdown
                   options={[
@@ -101,7 +109,7 @@ const TableLayout = ({
                   ]}
                   value={filters.pageSize}
                   defaultValue={_defaultPageSize}
-                  onChange={handlePageSizeChange}              
+                  onChange={handlePageSizeChange}
                 />
               )}
             </Stack>
@@ -122,7 +130,7 @@ const TableLayout = ({
             <Typography>No results Found</Typography>
           </Box>
         )}
-        
+
         {loading && (
           <Box sx={{ mt: 2, mb: 3 }} display="flex" justifyContent="center">
             <CircularProgress />
@@ -130,7 +138,7 @@ const TableLayout = ({
         )}
       </Box>
 
-      
+
       {response?.totalPages > 1 && (
         <Box sx={{ mt: 3 }} display="flex" justifyContent="center">
           <Pagination count={response.totalPages} page={response.currentPage} onChange={handlePageChange} shape="rounded" />

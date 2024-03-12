@@ -5,24 +5,24 @@ import AuthRoute from 'src/routings/AuthRoute';
 import MaintenanceRoute from 'src/routings/MaintenanceRoute';
 import UnAuthRoute from 'src/routings/UnAuthRoute';
 
-import AccountSettings from 'src/pages/Account/AccountSettings';
-import ChangeEmail from 'src/pages/Account/ChangeEmail';
-import ChangePassword from 'src/pages/Account/ChangePassword';
-import AdminAuthor from 'src/pages/Admin/Author';
-import AdminAuthors from 'src/pages/Admin/Authors';
-import AdminCollection from 'src/pages/Admin/Collection';
-import AdminCollections from 'src/pages/Admin/Collections';
-import AdminEquipment from 'src/pages/Admin/Equipment';
-import AdminEquipments from 'src/pages/Admin/Equipments';
-import AdminIngredient from 'src/pages/Admin/Ingredient';
-import AdminIngredients from 'src/pages/Admin/Ingredients';
-import AdminLogs from 'src/pages/Admin/Logs';
-import AdminRecipe from 'src/pages/Admin/Recipe';
-import AdminRecipes from 'src/pages/Admin/Recipes';
-import AdminSettings from 'src/pages/Admin/Settings';
-import AdminSupportTickets from 'src/pages/Admin/SupportTickets';
-import AdminTag from 'src/pages/Admin/Tag';
-import AdminTags from 'src/pages/Admin/Tags';
+import AccountSettings from 'src/pages/account/AccountSettings';
+import ChangeEmail from 'src/pages/account/ChangeEmail';
+import ChangePassword from 'src/pages/account/ChangePassword';
+import AdminAuthor from 'src/Admin/pages/Author';
+import AdminAuthors from 'src/Admin/pages/Authors';
+import AdminCollection from 'src/Admin/pages/Collection';
+import AdminCollections from 'src/Admin/pages/Collections';
+import AdminEquipment from 'src/Admin/pages/Equipment';
+import AdminEquipments from 'src/Admin/pages/Equipments';
+import AdminIngredient from 'src/Admin/pages/Ingredient';
+import AdminIngredients from 'src/Admin/pages/Ingredients';
+import AdminLogs from 'src/Admin/pages/Logs';
+import AdminRecipe from 'src/Admin/pages/Recipe';
+import AdminRecipes from 'src/Admin/pages/Recipes';
+import AdminMenu from 'src/Admin/pages/Menu';
+import AdminSupportTickets from 'src/Admin/pages/SupportTickets';
+import AdminTag from 'src/Admin/pages/Tag';
+import AdminTags from 'src/Admin/pages/Tags';
 import Author from 'src/pages/Author';
 import ContactUs from 'src/pages/ContactUs';
 import Favourites from 'src/pages/Favourites';
@@ -33,14 +33,14 @@ import NotFound from 'src/pages/NotFound';
 import Personal from 'src/pages/Personal';
 import PersonalRecipe from 'src/pages/PersonalRecipe';
 import Planner from 'src/pages/Planner';
-import PrivacyPolicy from 'src/pages/PrivacyPolicy';
+import PrivacyPolicy from 'src/pages/legal/PrivacyPolicy';
 import _Recipe from 'src/pages/Recipe';
 import Recipes from 'src/pages/Recipes';
 import Register from 'src/pages/Register';
 import ResetPassword from 'src/pages/ResetPassword';
 import Settings from 'src/pages/Settings';
 import SignIn from 'src/pages/SignIn';
-import TermsOfService from 'src/pages/TermsOfService';
+import TermsOfService from 'src/pages/legal/TermsOfService';
 import Version from 'src/pages/Version';
 
 import MainLayout from 'src/layouts/MainLayout';
@@ -153,7 +153,7 @@ export default createBrowserRouter([
         path: '/admin/settings',
         element: (
           <AdminRoute>
-            <AdminSettings />
+            <AdminMenu />
           </AdminRoute>
         ),
       },

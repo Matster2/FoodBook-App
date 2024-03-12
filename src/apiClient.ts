@@ -11,12426 +11,12430 @@
 import axios, { AxiosError } from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
 
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
-export class APIClient {
-    protected instance: AxiosInstance;
-    protected baseUrl: string;
-    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+export module API {
 
-    constructor(baseUrl?: string, instance?: AxiosInstance) {
+    export class Client {
+        protected instance: AxiosInstance;
+        protected baseUrl: string;
+        protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
-        this.instance = instance || axios.create();
+        constructor(baseUrl?: string, instance?: AxiosInstance) {
 
-        this.baseUrl = baseUrl ?? "";
+            this.instance = instance || axios.create();
 
-    }
+            this.baseUrl = baseUrl ?? "";
 
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    login(body?: LoginCommand | undefined, cancelToken?: CancelToken): Promise<LoginCommandResponse> {
-        let url_ = this.baseUrl + "/auth/login";
-        url_ = url_.replace(/[?&]$/, "");
+        }
 
-        const content_ = JSON.stringify(body);
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        login(body?: LoginCommand | undefined, cancelToken?: CancelToken): Promise<LoginCommandResponse> {
+            let url_ = this.baseUrl + "/auth/login";
+            url_ = url_.replace(/[?&]$/, "");
 
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
+            const content_ = JSON.stringify(body);
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processLogin(_response);
-        });
-    }
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
 
-    protected processLogin(response: AxiosResponse): Promise<LoginCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processLogin(_response);
+            });
+        }
+
+        protected processLogin(response: AxiosResponse): Promise<LoginCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = LoginCommandResponse.fromJS(resultData200);
-            return Promise.resolve<LoginCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = LoginCommandResponse.fromJS(resultData200);
+                return Promise.resolve<LoginCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<LoginCommandResponse>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    refreshTokens(body?: RefreshTokensCommand | undefined, cancelToken?: CancelToken): Promise<RefreshTokensCommandResponse> {
-        let url_ = this.baseUrl + "/auth/tokens/refresh";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processRefreshTokens(_response);
-        });
-    }
+            return Promise.resolve<LoginCommandResponse>(null as any);
+        }
 
-    protected processRefreshTokens(response: AxiosResponse): Promise<RefreshTokensCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        refreshTokens(body?: RefreshTokensCommand | undefined, cancelToken?: CancelToken): Promise<RefreshTokensCommandResponse> {
+            let url_ = this.baseUrl + "/auth/tokens/refresh";
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processRefreshTokens(_response);
+            });
+        }
+
+        protected processRefreshTokens(response: AxiosResponse): Promise<RefreshTokensCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RefreshTokensCommandResponse.fromJS(resultData200);
-            return Promise.resolve<RefreshTokensCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RefreshTokensCommandResponse.fromJS(resultData200);
+                return Promise.resolve<RefreshTokensCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RefreshTokensCommandResponse>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    forgotPassword(body?: ForgotPasswordCommand | undefined, cancelToken?: CancelToken): Promise<ForgotPasswordCommandResponse> {
-        let url_ = this.baseUrl + "/forgot-password";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processForgotPassword(_response);
-        });
-    }
+            return Promise.resolve<RefreshTokensCommandResponse>(null as any);
+        }
 
-    protected processForgotPassword(response: AxiosResponse): Promise<ForgotPasswordCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        forgotPassword(body?: ForgotPasswordCommand | undefined, cancelToken?: CancelToken): Promise<ForgotPasswordCommandResponse> {
+            let url_ = this.baseUrl + "/forgot-password";
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processForgotPassword(_response);
+            });
+        }
+
+        protected processForgotPassword(response: AxiosResponse): Promise<ForgotPasswordCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = ForgotPasswordCommandResponse.fromJS(resultData200);
-            return Promise.resolve<ForgotPasswordCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = ForgotPasswordCommandResponse.fromJS(resultData200);
+                return Promise.resolve<ForgotPasswordCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<ForgotPasswordCommandResponse>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    resetPassword(body?: ResetPasswordCommand | undefined, cancelToken?: CancelToken): Promise<ResetPasswordCommandResponse> {
-        let url_ = this.baseUrl + "/reset-password";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processResetPassword(_response);
-        });
-    }
+            return Promise.resolve<ForgotPasswordCommandResponse>(null as any);
+        }
 
-    protected processResetPassword(response: AxiosResponse): Promise<ResetPasswordCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        resetPassword(body?: ResetPasswordCommand | undefined, cancelToken?: CancelToken): Promise<ResetPasswordCommandResponse> {
+            let url_ = this.baseUrl + "/reset-password";
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processResetPassword(_response);
+            });
+        }
+
+        protected processResetPassword(response: AxiosResponse): Promise<ResetPasswordCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = ResetPasswordCommandResponse.fromJS(resultData200);
-            return Promise.resolve<ResetPasswordCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = ResetPasswordCommandResponse.fromJS(resultData200);
+                return Promise.resolve<ResetPasswordCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<ResetPasswordCommandResponse>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    changeEmail(userId: string, body?: ChangeEmailCommand | undefined, cancelToken?: CancelToken): Promise<ChangeEmailCommandResponse> {
-        let url_ = this.baseUrl + "/users/{userId}/change-email";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined.");
-        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processChangeEmail(_response);
-        });
-    }
+            return Promise.resolve<ResetPasswordCommandResponse>(null as any);
+        }
 
-    protected processChangeEmail(response: AxiosResponse): Promise<ChangeEmailCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        changeEmail(userId: string, body?: ChangeEmailCommand | undefined, cancelToken?: CancelToken): Promise<ChangeEmailCommandResponse> {
+            let url_ = this.baseUrl + "/users/{userId}/change-email";
+            if (userId === undefined || userId === null)
+                throw new Error("The parameter 'userId' must be defined.");
+            url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processChangeEmail(_response);
+            });
+        }
+
+        protected processChangeEmail(response: AxiosResponse): Promise<ChangeEmailCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = ChangeEmailCommandResponse.fromJS(resultData200);
-            return Promise.resolve<ChangeEmailCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = ChangeEmailCommandResponse.fromJS(resultData200);
+                return Promise.resolve<ChangeEmailCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<ChangeEmailCommandResponse>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    changePassword(userId: string, body?: ChangePasswordCommand | undefined, cancelToken?: CancelToken): Promise<ChangePasswordCommandResponse> {
-        let url_ = this.baseUrl + "/users/{userId}/change-password";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined.");
-        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processChangePassword(_response);
-        });
-    }
+            return Promise.resolve<ChangeEmailCommandResponse>(null as any);
+        }
 
-    protected processChangePassword(response: AxiosResponse): Promise<ChangePasswordCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        changePassword(userId: string, body?: ChangePasswordCommand | undefined, cancelToken?: CancelToken): Promise<ChangePasswordCommandResponse> {
+            let url_ = this.baseUrl + "/users/{userId}/change-password";
+            if (userId === undefined || userId === null)
+                throw new Error("The parameter 'userId' must be defined.");
+            url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processChangePassword(_response);
+            });
+        }
+
+        protected processChangePassword(response: AxiosResponse): Promise<ChangePasswordCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = ChangePasswordCommandResponse.fromJS(resultData200);
-            return Promise.resolve<ChangePasswordCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = ChangePasswordCommandResponse.fromJS(resultData200);
+                return Promise.resolve<ChangePasswordCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<ChangePasswordCommandResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getAuthor(id: string, cancelToken?: CancelToken): Promise<AuthorDto> {
-        let url_ = this.baseUrl + "/authors/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetAuthor(_response);
-        });
-    }
+            return Promise.resolve<ChangePasswordCommandResponse>(null as any);
+        }
 
-    protected processGetAuthor(response: AxiosResponse): Promise<AuthorDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        getAuthor(id: string, cancelToken?: CancelToken): Promise<AuthorDto> {
+            let url_ = this.baseUrl + "/authors/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetAuthor(_response);
+            });
+        }
+
+        protected processGetAuthor(response: AxiosResponse): Promise<AuthorDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = AuthorDto.fromJS(resultData200);
-            return Promise.resolve<AuthorDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = AuthorDto.fromJS(resultData200);
+                return Promise.resolve<AuthorDto>(result200);
 
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<AuthorDto>(null as any);
-    }
-
-    /**
-     * @param search (optional) 
-     * @param random (optional) 
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param sortBy (optional) 
-     * @param sortDesc (optional) 
-     * @return Success
-     */
-    getAuthors(search?: string | undefined, random?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        let url_ = this.baseUrl + "/authors?";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "Search=" + encodeURIComponent("" + search) + "&";
-        if (random === null)
-            throw new Error("The parameter 'random' cannot be null.");
-        else if (random !== undefined)
-            url_ += "Random=" + encodeURIComponent("" + random) + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortBy === null)
-            throw new Error("The parameter 'sortBy' cannot be null.");
-        else if (sortBy !== undefined)
-            url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
-        if (sortDesc === null)
-            throw new Error("The parameter 'sortDesc' cannot be null.");
-        else if (sortDesc !== undefined)
-            url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetAuthors(_response);
-        });
-    }
+            return Promise.resolve<AuthorDto>(null as any);
+        }
 
-    protected processGetAuthors(response: AxiosResponse): Promise<PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param search (optional) 
+         * @param random (optional) 
+         * @param page (optional) 
+         * @param pageSize (optional) 
+         * @param sortBy (optional) 
+         * @param sortDesc (optional) 
+         * @return Success
+         */
+        getAuthors(search?: string | undefined, random?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            let url_ = this.baseUrl + "/authors?";
+            if (search === null)
+                throw new Error("The parameter 'search' cannot be null.");
+            else if (search !== undefined)
+                url_ += "Search=" + encodeURIComponent("" + search) + "&";
+            if (random === null)
+                throw new Error("The parameter 'random' cannot be null.");
+            else if (random !== undefined)
+                url_ += "Random=" + encodeURIComponent("" + random) + "&";
+            if (page === null)
+                throw new Error("The parameter 'page' cannot be null.");
+            else if (page !== undefined)
+                url_ += "Page=" + encodeURIComponent("" + page) + "&";
+            if (pageSize === null)
+                throw new Error("The parameter 'pageSize' cannot be null.");
+            else if (pageSize !== undefined)
+                url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+            if (sortBy === null)
+                throw new Error("The parameter 'sortBy' cannot be null.");
+            else if (sortBy !== undefined)
+                url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
+            if (sortDesc === null)
+                throw new Error("The parameter 'sortDesc' cannot be null.");
+            else if (sortDesc !== undefined)
+                url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetAuthors(_response);
+            });
+        }
+
+        protected processGetAuthors(response: AxiosResponse): Promise<PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
-            return Promise.resolve<PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
+                return Promise.resolve<PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    admin_CreateAuthor(body?: CreateAuthorCommand | undefined, cancelToken?: CancelToken): Promise<CreateAuthorCommandResponse> {
-        let url_ = this.baseUrl + "/admin/authors";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_CreateAuthor(_response);
-        });
-    }
+            return Promise.resolve<PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
+        }
 
-    protected processAdmin_CreateAuthor(response: AxiosResponse): Promise<CreateAuthorCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        admin_CreateAuthor(body?: CreateAuthorCommand | undefined, cancelToken?: CancelToken): Promise<CreateAuthorCommandResponse> {
+            let url_ = this.baseUrl + "/admin/authors";
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_CreateAuthor(_response);
+            });
+        }
+
+        protected processAdmin_CreateAuthor(response: AxiosResponse): Promise<CreateAuthorCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = CreateAuthorCommandResponse.fromJS(resultData200);
-            return Promise.resolve<CreateAuthorCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = CreateAuthorCommandResponse.fromJS(resultData200);
+                return Promise.resolve<CreateAuthorCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<CreateAuthorCommandResponse>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    admin_UpdateAuthor(id: string, body?: UpdateAuthorCommand | undefined, cancelToken?: CancelToken): Promise<UpdateAuthorCommandResponse> {
-        let url_ = this.baseUrl + "/admin/authors/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_UpdateAuthor(_response);
-        });
-    }
+            return Promise.resolve<CreateAuthorCommandResponse>(null as any);
+        }
 
-    protected processAdmin_UpdateAuthor(response: AxiosResponse): Promise<UpdateAuthorCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        admin_UpdateAuthor(id: string, body?: UpdateAuthorCommand | undefined, cancelToken?: CancelToken): Promise<UpdateAuthorCommandResponse> {
+            let url_ = this.baseUrl + "/admin/authors/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "PUT",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_UpdateAuthor(_response);
+            });
+        }
+
+        protected processAdmin_UpdateAuthor(response: AxiosResponse): Promise<UpdateAuthorCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = UpdateAuthorCommandResponse.fromJS(resultData200);
-            return Promise.resolve<UpdateAuthorCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = UpdateAuthorCommandResponse.fromJS(resultData200);
+                return Promise.resolve<UpdateAuthorCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<UpdateAuthorCommandResponse>(null as any);
-    }
-
-    /**
-     * @param file (optional) 
-     * @return Success
-     */
-    admin_UpdateAuthorProfilePicture(authorId: string, file?: FileParameter | undefined, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/admin/authors/{authorId}/profile-picture";
-        if (authorId === undefined || authorId === null)
-            throw new Error("The parameter 'authorId' must be defined.");
-        url_ = url_.replace("{authorId}", encodeURIComponent("" + authorId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = new FormData();
-        if (file === null || file === undefined)
-            throw new Error("The parameter 'file' cannot be null.");
-        else
-            content_.append("File", file.data, file.fileName ? file.fileName : "File");
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_UpdateAuthorProfilePicture(_response);
-        });
-    }
+            return Promise.resolve<UpdateAuthorCommandResponse>(null as any);
+        }
 
-    protected processAdmin_UpdateAuthorProfilePicture(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param file (optional) 
+         * @return Success
+         */
+        admin_UpdateAuthorProfilePicture(authorId: string, file?: FileParameter | undefined, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/admin/authors/{authorId}/profile-picture";
+            if (authorId === undefined || authorId === null)
+                throw new Error("The parameter 'authorId' must be defined.");
+            url_ = url_.replace("{authorId}", encodeURIComponent("" + authorId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = new FormData();
+            if (file === null || file === undefined)
+                throw new Error("The parameter 'file' cannot be null.");
+            else
+                content_.append("File", file.data, file.fileName ? file.fileName : "File");
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "PUT",
+                url: url_,
+                headers: {
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_UpdateAuthorProfilePicture(_response);
+            });
+        }
+
+        protected processAdmin_UpdateAuthorProfilePicture(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    /**
-     * @return Success
-     */
-    getCollection(id: string, cancelToken?: CancelToken): Promise<CollectionDto> {
-        let url_ = this.baseUrl + "/collections/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+        /**
+         * @return Success
+         */
+        getCollection(id: string, cancelToken?: CancelToken): Promise<CollectionDto> {
+            let url_ = this.baseUrl + "/collections/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
 
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetCollection(_response);
-        });
-    }
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetCollection(_response);
+            });
+        }
 
-    protected processGetCollection(response: AxiosResponse): Promise<CollectionDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        protected processGetCollection(response: AxiosResponse): Promise<CollectionDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = CollectionDto.fromJS(resultData200);
-            return Promise.resolve<CollectionDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = CollectionDto.fromJS(resultData200);
+                return Promise.resolve<CollectionDto>(result200);
 
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<CollectionDto>(null as any);
-    }
-
-    /**
-     * @param hidden (optional) 
-     * @param promoted (optional) 
-     * @param search (optional) 
-     * @param random (optional) 
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param sortBy (optional) 
-     * @param sortDesc (optional) 
-     * @return Success
-     */
-    getCollections(hidden?: boolean | undefined, promoted?: boolean | undefined, search?: string | undefined, random?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        let url_ = this.baseUrl + "/collections?";
-        if (hidden === null)
-            throw new Error("The parameter 'hidden' cannot be null.");
-        else if (hidden !== undefined)
-            url_ += "Hidden=" + encodeURIComponent("" + hidden) + "&";
-        if (promoted === null)
-            throw new Error("The parameter 'promoted' cannot be null.");
-        else if (promoted !== undefined)
-            url_ += "Promoted=" + encodeURIComponent("" + promoted) + "&";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "Search=" + encodeURIComponent("" + search) + "&";
-        if (random === null)
-            throw new Error("The parameter 'random' cannot be null.");
-        else if (random !== undefined)
-            url_ += "Random=" + encodeURIComponent("" + random) + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortBy === null)
-            throw new Error("The parameter 'sortBy' cannot be null.");
-        else if (sortBy !== undefined)
-            url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
-        if (sortDesc === null)
-            throw new Error("The parameter 'sortDesc' cannot be null.");
-        else if (sortDesc !== undefined)
-            url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetCollections(_response);
-        });
-    }
+            return Promise.resolve<CollectionDto>(null as any);
+        }
 
-    protected processGetCollections(response: AxiosResponse): Promise<PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param hidden (optional) 
+         * @param promoted (optional) 
+         * @param search (optional) 
+         * @param random (optional) 
+         * @param page (optional) 
+         * @param pageSize (optional) 
+         * @param sortBy (optional) 
+         * @param sortDesc (optional) 
+         * @return Success
+         */
+        getCollections(hidden?: boolean | undefined, promoted?: boolean | undefined, search?: string | undefined, random?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            let url_ = this.baseUrl + "/collections?";
+            if (hidden === null)
+                throw new Error("The parameter 'hidden' cannot be null.");
+            else if (hidden !== undefined)
+                url_ += "Hidden=" + encodeURIComponent("" + hidden) + "&";
+            if (promoted === null)
+                throw new Error("The parameter 'promoted' cannot be null.");
+            else if (promoted !== undefined)
+                url_ += "Promoted=" + encodeURIComponent("" + promoted) + "&";
+            if (search === null)
+                throw new Error("The parameter 'search' cannot be null.");
+            else if (search !== undefined)
+                url_ += "Search=" + encodeURIComponent("" + search) + "&";
+            if (random === null)
+                throw new Error("The parameter 'random' cannot be null.");
+            else if (random !== undefined)
+                url_ += "Random=" + encodeURIComponent("" + random) + "&";
+            if (page === null)
+                throw new Error("The parameter 'page' cannot be null.");
+            else if (page !== undefined)
+                url_ += "Page=" + encodeURIComponent("" + page) + "&";
+            if (pageSize === null)
+                throw new Error("The parameter 'pageSize' cannot be null.");
+            else if (pageSize !== undefined)
+                url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+            if (sortBy === null)
+                throw new Error("The parameter 'sortBy' cannot be null.");
+            else if (sortBy !== undefined)
+                url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
+            if (sortDesc === null)
+                throw new Error("The parameter 'sortDesc' cannot be null.");
+            else if (sortDesc !== undefined)
+                url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetCollections(_response);
+            });
+        }
+
+        protected processGetCollections(response: AxiosResponse): Promise<PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
-            return Promise.resolve<PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
+                return Promise.resolve<PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    admin_CreateCollection(body?: CreateCollectionCommand | undefined, cancelToken?: CancelToken): Promise<CreateCollectionCommandResponse> {
-        let url_ = this.baseUrl + "/admin/collections";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_CreateCollection(_response);
-        });
-    }
+            return Promise.resolve<PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
+        }
 
-    protected processAdmin_CreateCollection(response: AxiosResponse): Promise<CreateCollectionCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        admin_CreateCollection(body?: CreateCollectionCommand | undefined, cancelToken?: CancelToken): Promise<CreateCollectionCommandResponse> {
+            let url_ = this.baseUrl + "/admin/collections";
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_CreateCollection(_response);
+            });
+        }
+
+        protected processAdmin_CreateCollection(response: AxiosResponse): Promise<CreateCollectionCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = CreateCollectionCommandResponse.fromJS(resultData200);
-            return Promise.resolve<CreateCollectionCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = CreateCollectionCommandResponse.fromJS(resultData200);
+                return Promise.resolve<CreateCollectionCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<CreateCollectionCommandResponse>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    admin_UpdateCollection(id: string, body?: UpdateCollectionCommand | undefined, cancelToken?: CancelToken): Promise<UpdateCollectionCommandResponse> {
-        let url_ = this.baseUrl + "/admin/collections/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_UpdateCollection(_response);
-        });
-    }
+            return Promise.resolve<CreateCollectionCommandResponse>(null as any);
+        }
 
-    protected processAdmin_UpdateCollection(response: AxiosResponse): Promise<UpdateCollectionCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        admin_UpdateCollection(id: string, body?: UpdateCollectionCommand | undefined, cancelToken?: CancelToken): Promise<UpdateCollectionCommandResponse> {
+            let url_ = this.baseUrl + "/admin/collections/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "PUT",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_UpdateCollection(_response);
+            });
+        }
+
+        protected processAdmin_UpdateCollection(response: AxiosResponse): Promise<UpdateCollectionCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = UpdateCollectionCommandResponse.fromJS(resultData200);
-            return Promise.resolve<UpdateCollectionCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = UpdateCollectionCommandResponse.fromJS(resultData200);
+                return Promise.resolve<UpdateCollectionCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<UpdateCollectionCommandResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    admin_AddRecipeToCollection(collectionId: string, recipeId: string, cancelToken?: CancelToken): Promise<AddRecipeToCollectionCommandResponse> {
-        let url_ = this.baseUrl + "/admin/collections/{collectionId}/recipes/{recipeId}";
-        if (collectionId === undefined || collectionId === null)
-            throw new Error("The parameter 'collectionId' must be defined.");
-        url_ = url_.replace("{collectionId}", encodeURIComponent("" + collectionId));
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "POST",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_AddRecipeToCollection(_response);
-        });
-    }
+            return Promise.resolve<UpdateCollectionCommandResponse>(null as any);
+        }
 
-    protected processAdmin_AddRecipeToCollection(response: AxiosResponse): Promise<AddRecipeToCollectionCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        admin_AddRecipeToCollection(collectionId: string, recipeId: string, cancelToken?: CancelToken): Promise<AddRecipeToCollectionCommandResponse> {
+            let url_ = this.baseUrl + "/admin/collections/{collectionId}/recipes/{recipeId}";
+            if (collectionId === undefined || collectionId === null)
+                throw new Error("The parameter 'collectionId' must be defined.");
+            url_ = url_.replace("{collectionId}", encodeURIComponent("" + collectionId));
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_AddRecipeToCollection(_response);
+            });
+        }
+
+        protected processAdmin_AddRecipeToCollection(response: AxiosResponse): Promise<AddRecipeToCollectionCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = AddRecipeToCollectionCommandResponse.fromJS(resultData200);
-            return Promise.resolve<AddRecipeToCollectionCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = AddRecipeToCollectionCommandResponse.fromJS(resultData200);
+                return Promise.resolve<AddRecipeToCollectionCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<AddRecipeToCollectionCommandResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    admin_RemoveRecipeFromCollection(collectionId: string, recipeId: string, cancelToken?: CancelToken): Promise<RemoveRecipeFromCollectionCommandResponse> {
-        let url_ = this.baseUrl + "/admin/collections/{collectionId}/recipes/{recipeId}";
-        if (collectionId === undefined || collectionId === null)
-            throw new Error("The parameter 'collectionId' must be defined.");
-        url_ = url_.replace("{collectionId}", encodeURIComponent("" + collectionId));
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "DELETE",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_RemoveRecipeFromCollection(_response);
-        });
-    }
+            return Promise.resolve<AddRecipeToCollectionCommandResponse>(null as any);
+        }
 
-    protected processAdmin_RemoveRecipeFromCollection(response: AxiosResponse): Promise<RemoveRecipeFromCollectionCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        admin_RemoveRecipeFromCollection(collectionId: string, recipeId: string, cancelToken?: CancelToken): Promise<RemoveRecipeFromCollectionCommandResponse> {
+            let url_ = this.baseUrl + "/admin/collections/{collectionId}/recipes/{recipeId}";
+            if (collectionId === undefined || collectionId === null)
+                throw new Error("The parameter 'collectionId' must be defined.");
+            url_ = url_.replace("{collectionId}", encodeURIComponent("" + collectionId));
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "DELETE",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_RemoveRecipeFromCollection(_response);
+            });
+        }
+
+        protected processAdmin_RemoveRecipeFromCollection(response: AxiosResponse): Promise<RemoveRecipeFromCollectionCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RemoveRecipeFromCollectionCommandResponse.fromJS(resultData200);
-            return Promise.resolve<RemoveRecipeFromCollectionCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RemoveRecipeFromCollectionCommandResponse.fromJS(resultData200);
+                return Promise.resolve<RemoveRecipeFromCollectionCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RemoveRecipeFromCollectionCommandResponse>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    contactUs(body?: ContactUsDto | undefined, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/contact-us";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processContactUs(_response);
-        });
-    }
+            return Promise.resolve<RemoveRecipeFromCollectionCommandResponse>(null as any);
+        }
 
-    protected processContactUs(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        contactUs(body?: ContactUsDto | undefined, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/contact-us";
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processContactUs(_response);
+            });
+        }
+
+        protected processContactUs(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    /**
-     * @return Success
-     */
-    admin_ResolveSupportTicket(id: string, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/admin/support-tickets/{id}/resolve";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+        /**
+         * @return Success
+         */
+        admin_ResolveSupportTicket(id: string, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/admin/support-tickets/{id}/resolve";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
 
-        let options_: AxiosRequestConfig = {
-            method: "POST",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                method: "POST",
+                url: url_,
+                headers: {
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_ResolveSupportTicket(_response);
-        });
-    }
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_ResolveSupportTicket(_response);
+            });
+        }
 
-    protected processAdmin_ResolveSupportTicket(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        protected processAdmin_ResolveSupportTicket(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    createPieceOfRequipment(body?: CreateEquipmentCommand | undefined, cancelToken?: CancelToken): Promise<CreateEquipmentCommandResponse> {
-        let url_ = this.baseUrl + "/equipment";
-        url_ = url_.replace(/[?&]$/, "");
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        createPieceOfRequipment(body?: CreateEquipmentCommand | undefined, cancelToken?: CancelToken): Promise<CreateEquipmentCommandResponse> {
+            let url_ = this.baseUrl + "/equipment";
+            url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
+            const content_ = JSON.stringify(body);
 
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processCreatePieceOfRequipment(_response);
-        });
-    }
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processCreatePieceOfRequipment(_response);
+            });
+        }
 
-    protected processCreatePieceOfRequipment(response: AxiosResponse): Promise<CreateEquipmentCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        protected processCreatePieceOfRequipment(response: AxiosResponse): Promise<CreateEquipmentCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = CreateEquipmentCommandResponse.fromJS(resultData200);
-            return Promise.resolve<CreateEquipmentCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = CreateEquipmentCommandResponse.fromJS(resultData200);
+                return Promise.resolve<CreateEquipmentCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<CreateEquipmentCommandResponse>(null as any);
-    }
-
-    /**
-     * @param search (optional) 
-     * @param personal (optional) 
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param sortBy (optional) 
-     * @param sortDesc (optional) 
-     * @return Success
-     */
-    getEquipment(search?: string | undefined, personal?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        let url_ = this.baseUrl + "/equipment?";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "Search=" + encodeURIComponent("" + search) + "&";
-        if (personal === null)
-            throw new Error("The parameter 'personal' cannot be null.");
-        else if (personal !== undefined)
-            url_ += "Personal=" + encodeURIComponent("" + personal) + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortBy === null)
-            throw new Error("The parameter 'sortBy' cannot be null.");
-        else if (sortBy !== undefined)
-            url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
-        if (sortDesc === null)
-            throw new Error("The parameter 'sortDesc' cannot be null.");
-        else if (sortDesc !== undefined)
-            url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetEquipment(_response);
-        });
-    }
+            return Promise.resolve<CreateEquipmentCommandResponse>(null as any);
+        }
 
-    protected processGetEquipment(response: AxiosResponse): Promise<PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param search (optional) 
+         * @param personal (optional) 
+         * @param page (optional) 
+         * @param pageSize (optional) 
+         * @param sortBy (optional) 
+         * @param sortDesc (optional) 
+         * @return Success
+         */
+        getEquipment(search?: string | undefined, personal?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            let url_ = this.baseUrl + "/equipment?";
+            if (search === null)
+                throw new Error("The parameter 'search' cannot be null.");
+            else if (search !== undefined)
+                url_ += "Search=" + encodeURIComponent("" + search) + "&";
+            if (personal === null)
+                throw new Error("The parameter 'personal' cannot be null.");
+            else if (personal !== undefined)
+                url_ += "Personal=" + encodeURIComponent("" + personal) + "&";
+            if (page === null)
+                throw new Error("The parameter 'page' cannot be null.");
+            else if (page !== undefined)
+                url_ += "Page=" + encodeURIComponent("" + page) + "&";
+            if (pageSize === null)
+                throw new Error("The parameter 'pageSize' cannot be null.");
+            else if (pageSize !== undefined)
+                url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+            if (sortBy === null)
+                throw new Error("The parameter 'sortBy' cannot be null.");
+            else if (sortBy !== undefined)
+                url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
+            if (sortDesc === null)
+                throw new Error("The parameter 'sortDesc' cannot be null.");
+            else if (sortDesc !== undefined)
+                url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetEquipment(_response);
+            });
+        }
+
+        protected processGetEquipment(response: AxiosResponse): Promise<PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
-            return Promise.resolve<PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
+                return Promise.resolve<PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getPieceOfEquipment(id: string, cancelToken?: CancelToken): Promise<PieceOfEquipmentDto> {
-        let url_ = this.baseUrl + "/equipment/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetPieceOfEquipment(_response);
-        });
-    }
+            return Promise.resolve<PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
+        }
 
-    protected processGetPieceOfEquipment(response: AxiosResponse): Promise<PieceOfEquipmentDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        getPieceOfEquipment(id: string, cancelToken?: CancelToken): Promise<PieceOfEquipmentDto> {
+            let url_ = this.baseUrl + "/equipment/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetPieceOfEquipment(_response);
+            });
+        }
+
+        protected processGetPieceOfEquipment(response: AxiosResponse): Promise<PieceOfEquipmentDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = PieceOfEquipmentDto.fromJS(resultData200);
-            return Promise.resolve<PieceOfEquipmentDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = PieceOfEquipmentDto.fromJS(resultData200);
+                return Promise.resolve<PieceOfEquipmentDto>(result200);
 
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PieceOfEquipmentDto>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    admin_UpdatePieceOfEquipment(id: string, body?: UpdateEquipmentCommand | undefined, cancelToken?: CancelToken): Promise<UpdateEquipmentCommandResponse> {
-        let url_ = this.baseUrl + "/admin/equipment/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_UpdatePieceOfEquipment(_response);
-        });
-    }
+            return Promise.resolve<PieceOfEquipmentDto>(null as any);
+        }
 
-    protected processAdmin_UpdatePieceOfEquipment(response: AxiosResponse): Promise<UpdateEquipmentCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        admin_UpdatePieceOfEquipment(id: string, body?: UpdateEquipmentCommand | undefined, cancelToken?: CancelToken): Promise<UpdateEquipmentCommandResponse> {
+            let url_ = this.baseUrl + "/admin/equipment/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "PUT",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_UpdatePieceOfEquipment(_response);
+            });
+        }
+
+        protected processAdmin_UpdatePieceOfEquipment(response: AxiosResponse): Promise<UpdateEquipmentCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = UpdateEquipmentCommandResponse.fromJS(resultData200);
-            return Promise.resolve<UpdateEquipmentCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = UpdateEquipmentCommandResponse.fromJS(resultData200);
+                return Promise.resolve<UpdateEquipmentCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<UpdateEquipmentCommandResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    favouriteRecipe(recipeId: string, cancelToken?: CancelToken): Promise<FavouriteRecipeCommandResponse> {
-        let url_ = this.baseUrl + "/recipes/{recipeId}/favourite";
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "POST",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processFavouriteRecipe(_response);
-        });
-    }
+            return Promise.resolve<UpdateEquipmentCommandResponse>(null as any);
+        }
 
-    protected processFavouriteRecipe(response: AxiosResponse): Promise<FavouriteRecipeCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        favouriteRecipe(recipeId: string, cancelToken?: CancelToken): Promise<FavouriteRecipeCommandResponse> {
+            let url_ = this.baseUrl + "/recipes/{recipeId}/favourite";
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processFavouriteRecipe(_response);
+            });
+        }
+
+        protected processFavouriteRecipe(response: AxiosResponse): Promise<FavouriteRecipeCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = FavouriteRecipeCommandResponse.fromJS(resultData200);
-            return Promise.resolve<FavouriteRecipeCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = FavouriteRecipeCommandResponse.fromJS(resultData200);
+                return Promise.resolve<FavouriteRecipeCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<FavouriteRecipeCommandResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    unfavouriteRecipe(recipeId: string, cancelToken?: CancelToken): Promise<UnfavouriteRecipeCommandResponse> {
-        let url_ = this.baseUrl + "/recipes/{recipeId}/unfavourite";
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "POST",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processUnfavouriteRecipe(_response);
-        });
-    }
+            return Promise.resolve<FavouriteRecipeCommandResponse>(null as any);
+        }
 
-    protected processUnfavouriteRecipe(response: AxiosResponse): Promise<UnfavouriteRecipeCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        unfavouriteRecipe(recipeId: string, cancelToken?: CancelToken): Promise<UnfavouriteRecipeCommandResponse> {
+            let url_ = this.baseUrl + "/recipes/{recipeId}/unfavourite";
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processUnfavouriteRecipe(_response);
+            });
+        }
+
+        protected processUnfavouriteRecipe(response: AxiosResponse): Promise<UnfavouriteRecipeCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = UnfavouriteRecipeCommandResponse.fromJS(resultData200);
-            return Promise.resolve<UnfavouriteRecipeCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = UnfavouriteRecipeCommandResponse.fromJS(resultData200);
+                return Promise.resolve<UnfavouriteRecipeCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<UnfavouriteRecipeCommandResponse>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    createIngredient(body?: CreateIngredientCommand | undefined, cancelToken?: CancelToken): Promise<CreateIngredientCommandResponse> {
-        let url_ = this.baseUrl + "/ingredients";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processCreateIngredient(_response);
-        });
-    }
+            return Promise.resolve<UnfavouriteRecipeCommandResponse>(null as any);
+        }
 
-    protected processCreateIngredient(response: AxiosResponse): Promise<CreateIngredientCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        createIngredient(body?: CreateIngredientCommand | undefined, cancelToken?: CancelToken): Promise<CreateIngredientCommandResponse> {
+            let url_ = this.baseUrl + "/ingredients";
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processCreateIngredient(_response);
+            });
+        }
+
+        protected processCreateIngredient(response: AxiosResponse): Promise<CreateIngredientCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = CreateIngredientCommandResponse.fromJS(resultData200);
-            return Promise.resolve<CreateIngredientCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = CreateIngredientCommandResponse.fromJS(resultData200);
+                return Promise.resolve<CreateIngredientCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<CreateIngredientCommandResponse>(null as any);
-    }
-
-    /**
-     * @param search (optional) 
-     * @param random (optional) 
-     * @param personal (optional) 
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param sortBy (optional) 
-     * @param sortDesc (optional) 
-     * @return Success
-     */
-    getIngredients(search?: string | undefined, random?: boolean | undefined, personal?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        let url_ = this.baseUrl + "/ingredients?";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "Search=" + encodeURIComponent("" + search) + "&";
-        if (random === null)
-            throw new Error("The parameter 'random' cannot be null.");
-        else if (random !== undefined)
-            url_ += "Random=" + encodeURIComponent("" + random) + "&";
-        if (personal === null)
-            throw new Error("The parameter 'personal' cannot be null.");
-        else if (personal !== undefined)
-            url_ += "Personal=" + encodeURIComponent("" + personal) + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortBy === null)
-            throw new Error("The parameter 'sortBy' cannot be null.");
-        else if (sortBy !== undefined)
-            url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
-        if (sortDesc === null)
-            throw new Error("The parameter 'sortDesc' cannot be null.");
-        else if (sortDesc !== undefined)
-            url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetIngredients(_response);
-        });
-    }
+            return Promise.resolve<CreateIngredientCommandResponse>(null as any);
+        }
 
-    protected processGetIngredients(response: AxiosResponse): Promise<PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param search (optional) 
+         * @param random (optional) 
+         * @param personal (optional) 
+         * @param page (optional) 
+         * @param pageSize (optional) 
+         * @param sortBy (optional) 
+         * @param sortDesc (optional) 
+         * @return Success
+         */
+        getIngredients(search?: string | undefined, random?: boolean | undefined, personal?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            let url_ = this.baseUrl + "/ingredients?";
+            if (search === null)
+                throw new Error("The parameter 'search' cannot be null.");
+            else if (search !== undefined)
+                url_ += "Search=" + encodeURIComponent("" + search) + "&";
+            if (random === null)
+                throw new Error("The parameter 'random' cannot be null.");
+            else if (random !== undefined)
+                url_ += "Random=" + encodeURIComponent("" + random) + "&";
+            if (personal === null)
+                throw new Error("The parameter 'personal' cannot be null.");
+            else if (personal !== undefined)
+                url_ += "Personal=" + encodeURIComponent("" + personal) + "&";
+            if (page === null)
+                throw new Error("The parameter 'page' cannot be null.");
+            else if (page !== undefined)
+                url_ += "Page=" + encodeURIComponent("" + page) + "&";
+            if (pageSize === null)
+                throw new Error("The parameter 'pageSize' cannot be null.");
+            else if (pageSize !== undefined)
+                url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+            if (sortBy === null)
+                throw new Error("The parameter 'sortBy' cannot be null.");
+            else if (sortBy !== undefined)
+                url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
+            if (sortDesc === null)
+                throw new Error("The parameter 'sortDesc' cannot be null.");
+            else if (sortDesc !== undefined)
+                url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetIngredients(_response);
+            });
+        }
+
+        protected processGetIngredients(response: AxiosResponse): Promise<PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
-            return Promise.resolve<PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
+                return Promise.resolve<PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getIngredient(id: string, cancelToken?: CancelToken): Promise<IngredientDto> {
-        let url_ = this.baseUrl + "/ingredients/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetIngredient(_response);
-        });
-    }
+            return Promise.resolve<PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
+        }
 
-    protected processGetIngredient(response: AxiosResponse): Promise<IngredientDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        getIngredient(id: string, cancelToken?: CancelToken): Promise<IngredientDto> {
+            let url_ = this.baseUrl + "/ingredients/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetIngredient(_response);
+            });
+        }
+
+        protected processGetIngredient(response: AxiosResponse): Promise<IngredientDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = IngredientDto.fromJS(resultData200);
-            return Promise.resolve<IngredientDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = IngredientDto.fromJS(resultData200);
+                return Promise.resolve<IngredientDto>(result200);
 
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<IngredientDto>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    admin_UpdateIngredient(id: string, body?: UpdateIngredientCommand | undefined, cancelToken?: CancelToken): Promise<UpdateIngredientCommandResponse> {
-        let url_ = this.baseUrl + "/admin/ingredients/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_UpdateIngredient(_response);
-        });
-    }
+            return Promise.resolve<IngredientDto>(null as any);
+        }
 
-    protected processAdmin_UpdateIngredient(response: AxiosResponse): Promise<UpdateIngredientCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        admin_UpdateIngredient(id: string, body?: UpdateIngredientCommand | undefined, cancelToken?: CancelToken): Promise<UpdateIngredientCommandResponse> {
+            let url_ = this.baseUrl + "/admin/ingredients/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "PUT",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_UpdateIngredient(_response);
+            });
+        }
+
+        protected processAdmin_UpdateIngredient(response: AxiosResponse): Promise<UpdateIngredientCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = UpdateIngredientCommandResponse.fromJS(resultData200);
-            return Promise.resolve<UpdateIngredientCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = UpdateIngredientCommandResponse.fromJS(resultData200);
+                return Promise.resolve<UpdateIngredientCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<UpdateIngredientCommandResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getLanguages(cancelToken?: CancelToken): Promise<CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        let url_ = this.baseUrl + "/languages";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetLanguages(_response);
-        });
-    }
+            return Promise.resolve<UpdateIngredientCommandResponse>(null as any);
+        }
 
-    protected processGetLanguages(response: AxiosResponse): Promise<CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        getLanguages(cancelToken?: CancelToken): Promise<CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            let url_ = this.baseUrl + "/languages";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetLanguages(_response);
+            });
+        }
+
+        protected processGetLanguages(response: AxiosResponse): Promise<CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
-            return Promise.resolve<CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
+                return Promise.resolve<CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getLog(id: string, cancelToken?: CancelToken): Promise<LogDto> {
-        let url_ = this.baseUrl + "/logs/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetLog(_response);
-        });
-    }
+            return Promise.resolve<CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
+        }
 
-    protected processGetLog(response: AxiosResponse): Promise<LogDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        getLog(id: string, cancelToken?: CancelToken): Promise<LogDto> {
+            let url_ = this.baseUrl + "/logs/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetLog(_response);
+            });
+        }
+
+        protected processGetLog(response: AxiosResponse): Promise<LogDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = LogDto.fromJS(resultData200);
-            return Promise.resolve<LogDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = LogDto.fromJS(resultData200);
+                return Promise.resolve<LogDto>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<LogDto>(null as any);
-    }
-
-    /**
-     * @param levels (optional) 
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param sortBy (optional) 
-     * @param sortDesc (optional) 
-     * @return Success
-     */
-    getLogs(levels?: LogLevel[] | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        let url_ = this.baseUrl + "/logs?";
-        if (levels === null)
-            throw new Error("The parameter 'levels' cannot be null.");
-        else if (levels !== undefined)
-            levels && levels.forEach(item => { url_ += "Levels=" + encodeURIComponent("" + item) + "&"; });
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortBy === null)
-            throw new Error("The parameter 'sortBy' cannot be null.");
-        else if (sortBy !== undefined)
-            url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
-        if (sortDesc === null)
-            throw new Error("The parameter 'sortDesc' cannot be null.");
-        else if (sortDesc !== undefined)
-            url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetLogs(_response);
-        });
-    }
+            return Promise.resolve<LogDto>(null as any);
+        }
 
-    protected processGetLogs(response: AxiosResponse): Promise<PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param levels (optional) 
+         * @param page (optional) 
+         * @param pageSize (optional) 
+         * @param sortBy (optional) 
+         * @param sortDesc (optional) 
+         * @return Success
+         */
+        getLogs(levels?: LogLevel[] | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            let url_ = this.baseUrl + "/logs?";
+            if (levels === null)
+                throw new Error("The parameter 'levels' cannot be null.");
+            else if (levels !== undefined)
+                levels && levels.forEach(item => { url_ += "Levels=" + encodeURIComponent("" + item) + "&"; });
+            if (page === null)
+                throw new Error("The parameter 'page' cannot be null.");
+            else if (page !== undefined)
+                url_ += "Page=" + encodeURIComponent("" + page) + "&";
+            if (pageSize === null)
+                throw new Error("The parameter 'pageSize' cannot be null.");
+            else if (pageSize !== undefined)
+                url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+            if (sortBy === null)
+                throw new Error("The parameter 'sortBy' cannot be null.");
+            else if (sortBy !== undefined)
+                url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
+            if (sortDesc === null)
+                throw new Error("The parameter 'sortDesc' cannot be null.");
+            else if (sortDesc !== undefined)
+                url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetLogs(_response);
+            });
+        }
+
+        protected processGetLogs(response: AxiosResponse): Promise<PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
-            return Promise.resolve<PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
+                return Promise.resolve<PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    addRecipeToPlanner(userId: string, body?: AddRecipeToPlannerCommand | undefined, cancelToken?: CancelToken): Promise<AddRecipeToPlannerCommandResponse> {
-        let url_ = this.baseUrl + "/users/{userId}/planner";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined.");
-        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAddRecipeToPlanner(_response);
-        });
-    }
+            return Promise.resolve<PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
+        }
 
-    protected processAddRecipeToPlanner(response: AxiosResponse): Promise<AddRecipeToPlannerCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        addRecipeToPlanner(userId: string, body?: AddRecipeToPlannerCommand | undefined, cancelToken?: CancelToken): Promise<AddRecipeToPlannerCommandResponse> {
+            let url_ = this.baseUrl + "/users/{userId}/planner";
+            if (userId === undefined || userId === null)
+                throw new Error("The parameter 'userId' must be defined.");
+            url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAddRecipeToPlanner(_response);
+            });
+        }
+
+        protected processAddRecipeToPlanner(response: AxiosResponse): Promise<AddRecipeToPlannerCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = AddRecipeToPlannerCommandResponse.fromJS(resultData200);
-            return Promise.resolve<AddRecipeToPlannerCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = AddRecipeToPlannerCommandResponse.fromJS(resultData200);
+                return Promise.resolve<AddRecipeToPlannerCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<AddRecipeToPlannerCommandResponse>(null as any);
-    }
-
-    /**
-     * @param measurementSystem (optional) 
-     * @param dateFrom (optional) 
-     * @param dateTo (optional) 
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param sortBy (optional) 
-     * @param sortDesc (optional) 
-     * @return Success
-     */
-    getPlanner(userId: string, measurementSystem?: MeasurementSystem | undefined, dateFrom?: dayjs.Dayjs | undefined, dateTo?: dayjs.Dayjs | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PlannerDto> {
-        let url_ = this.baseUrl + "/users/{userId}/planner?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined.");
-        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-        if (measurementSystem === null)
-            throw new Error("The parameter 'measurementSystem' cannot be null.");
-        else if (measurementSystem !== undefined)
-            url_ += "MeasurementSystem=" + encodeURIComponent("" + measurementSystem) + "&";
-        if (dateFrom === null)
-            throw new Error("The parameter 'dateFrom' cannot be null.");
-        else if (dateFrom !== undefined)
-            url_ += "DateFrom=" + encodeURIComponent(dateFrom ? "" + dateFrom.toISOString() : "") + "&";
-        if (dateTo === null)
-            throw new Error("The parameter 'dateTo' cannot be null.");
-        else if (dateTo !== undefined)
-            url_ += "DateTo=" + encodeURIComponent(dateTo ? "" + dateTo.toISOString() : "") + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortBy === null)
-            throw new Error("The parameter 'sortBy' cannot be null.");
-        else if (sortBy !== undefined)
-            url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
-        if (sortDesc === null)
-            throw new Error("The parameter 'sortDesc' cannot be null.");
-        else if (sortDesc !== undefined)
-            url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetPlanner(_response);
-        });
-    }
+            return Promise.resolve<AddRecipeToPlannerCommandResponse>(null as any);
+        }
 
-    protected processGetPlanner(response: AxiosResponse): Promise<PlannerDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param measurementSystem (optional) 
+         * @param dateFrom (optional) 
+         * @param dateTo (optional) 
+         * @param page (optional) 
+         * @param pageSize (optional) 
+         * @param sortBy (optional) 
+         * @param sortDesc (optional) 
+         * @return Success
+         */
+        getPlanner(userId: string, measurementSystem?: MeasurementSystem | undefined, dateFrom?: dayjs.Dayjs | undefined, dateTo?: dayjs.Dayjs | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PlannerDto> {
+            let url_ = this.baseUrl + "/users/{userId}/planner?";
+            if (userId === undefined || userId === null)
+                throw new Error("The parameter 'userId' must be defined.");
+            url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+            if (measurementSystem === null)
+                throw new Error("The parameter 'measurementSystem' cannot be null.");
+            else if (measurementSystem !== undefined)
+                url_ += "MeasurementSystem=" + encodeURIComponent("" + measurementSystem) + "&";
+            if (dateFrom === null)
+                throw new Error("The parameter 'dateFrom' cannot be null.");
+            else if (dateFrom !== undefined)
+                url_ += "DateFrom=" + encodeURIComponent(dateFrom ? "" + dateFrom.toISOString() : "") + "&";
+            if (dateTo === null)
+                throw new Error("The parameter 'dateTo' cannot be null.");
+            else if (dateTo !== undefined)
+                url_ += "DateTo=" + encodeURIComponent(dateTo ? "" + dateTo.toISOString() : "") + "&";
+            if (page === null)
+                throw new Error("The parameter 'page' cannot be null.");
+            else if (page !== undefined)
+                url_ += "Page=" + encodeURIComponent("" + page) + "&";
+            if (pageSize === null)
+                throw new Error("The parameter 'pageSize' cannot be null.");
+            else if (pageSize !== undefined)
+                url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+            if (sortBy === null)
+                throw new Error("The parameter 'sortBy' cannot be null.");
+            else if (sortBy !== undefined)
+                url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
+            if (sortDesc === null)
+                throw new Error("The parameter 'sortDesc' cannot be null.");
+            else if (sortDesc !== undefined)
+                url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetPlanner(_response);
+            });
+        }
+
+        protected processGetPlanner(response: AxiosResponse): Promise<PlannerDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = PlannerDto.fromJS(resultData200);
-            return Promise.resolve<PlannerDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = PlannerDto.fromJS(resultData200);
+                return Promise.resolve<PlannerDto>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PlannerDto>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    updatePlannedRecipe(id: string, body?: UpdatePlannedRecipeCommand | undefined, cancelToken?: CancelToken): Promise<UpdatePlannedRecipeCommandResponse> {
-        let url_ = this.baseUrl + "/planned-recipes/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processUpdatePlannedRecipe(_response);
-        });
-    }
+            return Promise.resolve<PlannerDto>(null as any);
+        }
 
-    protected processUpdatePlannedRecipe(response: AxiosResponse): Promise<UpdatePlannedRecipeCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        updatePlannedRecipe(id: string, body?: UpdatePlannedRecipeCommand | undefined, cancelToken?: CancelToken): Promise<UpdatePlannedRecipeCommandResponse> {
+            let url_ = this.baseUrl + "/planned-recipes/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "PUT",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processUpdatePlannedRecipe(_response);
+            });
+        }
+
+        protected processUpdatePlannedRecipe(response: AxiosResponse): Promise<UpdatePlannedRecipeCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = UpdatePlannedRecipeCommandResponse.fromJS(resultData200);
-            return Promise.resolve<UpdatePlannedRecipeCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = UpdatePlannedRecipeCommandResponse.fromJS(resultData200);
+                return Promise.resolve<UpdatePlannedRecipeCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<UpdatePlannedRecipeCommandResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    removePlannedRecipe(id: string, cancelToken?: CancelToken): Promise<RemovePlannedRecipeCommandResponse> {
-        let url_ = this.baseUrl + "/planned-recipes/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "DELETE",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processRemovePlannedRecipe(_response);
-        });
-    }
+            return Promise.resolve<UpdatePlannedRecipeCommandResponse>(null as any);
+        }
 
-    protected processRemovePlannedRecipe(response: AxiosResponse): Promise<RemovePlannedRecipeCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        removePlannedRecipe(id: string, cancelToken?: CancelToken): Promise<RemovePlannedRecipeCommandResponse> {
+            let url_ = this.baseUrl + "/planned-recipes/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "DELETE",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processRemovePlannedRecipe(_response);
+            });
+        }
+
+        protected processRemovePlannedRecipe(response: AxiosResponse): Promise<RemovePlannedRecipeCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RemovePlannedRecipeCommandResponse.fromJS(resultData200);
-            return Promise.resolve<RemovePlannedRecipeCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RemovePlannedRecipeCommandResponse.fromJS(resultData200);
+                return Promise.resolve<RemovePlannedRecipeCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RemovePlannedRecipeCommandResponse>(null as any);
-    }
-
-    /**
-     * @param dateFrom (optional) 
-     * @param dateTo (optional) 
-     * @param excludedPlannedRecipeIds (optional) 
-     * @param measurementSystem (optional) 
-     * @return Success
-     */
-    getPlannerIngredientList(userId: string, dateFrom?: dayjs.Dayjs | undefined, dateTo?: dayjs.Dayjs | undefined, excludedPlannedRecipeIds?: string[] | undefined, measurementSystem?: MeasurementSystem | undefined, cancelToken?: CancelToken): Promise<PlannerIngredientListDto> {
-        let url_ = this.baseUrl + "/users/{userId}/planner/ingredients?";
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined.");
-        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-        if (dateFrom === null)
-            throw new Error("The parameter 'dateFrom' cannot be null.");
-        else if (dateFrom !== undefined)
-            url_ += "DateFrom=" + encodeURIComponent(dateFrom ? "" + dateFrom.toISOString() : "") + "&";
-        if (dateTo === null)
-            throw new Error("The parameter 'dateTo' cannot be null.");
-        else if (dateTo !== undefined)
-            url_ += "DateTo=" + encodeURIComponent(dateTo ? "" + dateTo.toISOString() : "") + "&";
-        if (excludedPlannedRecipeIds === null)
-            throw new Error("The parameter 'excludedPlannedRecipeIds' cannot be null.");
-        else if (excludedPlannedRecipeIds !== undefined)
-            excludedPlannedRecipeIds && excludedPlannedRecipeIds.forEach(item => { url_ += "ExcludedPlannedRecipeIds=" + encodeURIComponent("" + item) + "&"; });
-        if (measurementSystem === null)
-            throw new Error("The parameter 'measurementSystem' cannot be null.");
-        else if (measurementSystem !== undefined)
-            url_ += "MeasurementSystem=" + encodeURIComponent("" + measurementSystem) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetPlannerIngredientList(_response);
-        });
-    }
+            return Promise.resolve<RemovePlannedRecipeCommandResponse>(null as any);
+        }
 
-    protected processGetPlannerIngredientList(response: AxiosResponse): Promise<PlannerIngredientListDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param dateFrom (optional) 
+         * @param dateTo (optional) 
+         * @param excludedPlannedRecipeIds (optional) 
+         * @param measurementSystem (optional) 
+         * @return Success
+         */
+        getPlannerIngredientList(userId: string, dateFrom?: dayjs.Dayjs | undefined, dateTo?: dayjs.Dayjs | undefined, excludedPlannedRecipeIds?: string[] | undefined, measurementSystem?: MeasurementSystem | undefined, cancelToken?: CancelToken): Promise<PlannerIngredientListDto> {
+            let url_ = this.baseUrl + "/users/{userId}/planner/ingredients?";
+            if (userId === undefined || userId === null)
+                throw new Error("The parameter 'userId' must be defined.");
+            url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+            if (dateFrom === null)
+                throw new Error("The parameter 'dateFrom' cannot be null.");
+            else if (dateFrom !== undefined)
+                url_ += "DateFrom=" + encodeURIComponent(dateFrom ? "" + dateFrom.toISOString() : "") + "&";
+            if (dateTo === null)
+                throw new Error("The parameter 'dateTo' cannot be null.");
+            else if (dateTo !== undefined)
+                url_ += "DateTo=" + encodeURIComponent(dateTo ? "" + dateTo.toISOString() : "") + "&";
+            if (excludedPlannedRecipeIds === null)
+                throw new Error("The parameter 'excludedPlannedRecipeIds' cannot be null.");
+            else if (excludedPlannedRecipeIds !== undefined)
+                excludedPlannedRecipeIds && excludedPlannedRecipeIds.forEach(item => { url_ += "ExcludedPlannedRecipeIds=" + encodeURIComponent("" + item) + "&"; });
+            if (measurementSystem === null)
+                throw new Error("The parameter 'measurementSystem' cannot be null.");
+            else if (measurementSystem !== undefined)
+                url_ += "MeasurementSystem=" + encodeURIComponent("" + measurementSystem) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetPlannerIngredientList(_response);
+            });
+        }
+
+        protected processGetPlannerIngredientList(response: AxiosResponse): Promise<PlannerIngredientListDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = PlannerIngredientListDto.fromJS(resultData200);
-            return Promise.resolve<PlannerIngredientListDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = PlannerIngredientListDto.fromJS(resultData200);
+                return Promise.resolve<PlannerIngredientListDto>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PlannerIngredientListDto>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    rateRecipe(recipeId: string, body?: RateRecipeCommand | undefined, cancelToken?: CancelToken): Promise<RateRecipeCommandResponse> {
-        let url_ = this.baseUrl + "/recipes/{recipeId}/rate";
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processRateRecipe(_response);
-        });
-    }
+            return Promise.resolve<PlannerIngredientListDto>(null as any);
+        }
 
-    protected processRateRecipe(response: AxiosResponse): Promise<RateRecipeCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        rateRecipe(recipeId: string, body?: RateRecipeCommand | undefined, cancelToken?: CancelToken): Promise<RateRecipeCommandResponse> {
+            let url_ = this.baseUrl + "/recipes/{recipeId}/rate";
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "PUT",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processRateRecipe(_response);
+            });
+        }
+
+        protected processRateRecipe(response: AxiosResponse): Promise<RateRecipeCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RateRecipeCommandResponse.fromJS(resultData200);
-            return Promise.resolve<RateRecipeCommandResponse>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RateRecipeCommandResponse.fromJS(resultData200);
+                return Promise.resolve<RateRecipeCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RateRecipeCommandResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getUserRecipeRating(recipeId: string, userId: string, cancelToken?: CancelToken): Promise<RecipeRatingDto> {
-        let url_ = this.baseUrl + "/recipes/{recipeId}/rating/users/{userId}";
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        if (userId === undefined || userId === null)
-            throw new Error("The parameter 'userId' must be defined.");
-        url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetUserRecipeRating(_response);
-        });
-    }
+            return Promise.resolve<RateRecipeCommandResponse>(null as any);
+        }
 
-    protected processGetUserRecipeRating(response: AxiosResponse): Promise<RecipeRatingDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        getUserRecipeRating(recipeId: string, userId: string, cancelToken?: CancelToken): Promise<RecipeRatingDto> {
+            let url_ = this.baseUrl + "/recipes/{recipeId}/rating/users/{userId}";
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            if (userId === undefined || userId === null)
+                throw new Error("The parameter 'userId' must be defined.");
+            url_ = url_.replace("{userId}", encodeURIComponent("" + userId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetUserRecipeRating(_response);
+            });
+        }
+
+        protected processGetUserRecipeRating(response: AxiosResponse): Promise<RecipeRatingDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RecipeRatingDto.fromJS(resultData200);
-            return Promise.resolve<RecipeRatingDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RecipeRatingDto.fromJS(resultData200);
+                return Promise.resolve<RecipeRatingDto>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RecipeRatingDto>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getRecipeRating(recipeId: string, cancelToken?: CancelToken): Promise<RecipeRatingDto> {
-        let url_ = this.baseUrl + "/recipes/{recipeId}/rating";
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetRecipeRating(_response);
-        });
-    }
+            return Promise.resolve<RecipeRatingDto>(null as any);
+        }
 
-    protected processGetRecipeRating(response: AxiosResponse): Promise<RecipeRatingDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        getRecipeRating(recipeId: string, cancelToken?: CancelToken): Promise<RecipeRatingDto> {
+            let url_ = this.baseUrl + "/recipes/{recipeId}/rating";
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetRecipeRating(_response);
+            });
+        }
+
+        protected processGetRecipeRating(response: AxiosResponse): Promise<RecipeRatingDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RecipeRatingDto.fromJS(resultData200);
-            return Promise.resolve<RecipeRatingDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RecipeRatingDto.fromJS(resultData200);
+                return Promise.resolve<RecipeRatingDto>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RecipeRatingDto>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    createRecipe(body?: RecipeCreationDto | undefined, cancelToken?: CancelToken): Promise<RecipeCreationResponseDto> {
-        let url_ = this.baseUrl + "/recipes";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processCreateRecipe(_response);
-        });
-    }
+            return Promise.resolve<RecipeRatingDto>(null as any);
+        }
 
-    protected processCreateRecipe(response: AxiosResponse): Promise<RecipeCreationResponseDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        createRecipe(body?: RecipeCreationDto | undefined, cancelToken?: CancelToken): Promise<RecipeCreationResponseDto> {
+            let url_ = this.baseUrl + "/recipes";
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processCreateRecipe(_response);
+            });
+        }
+
+        protected processCreateRecipe(response: AxiosResponse): Promise<RecipeCreationResponseDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RecipeCreationResponseDto.fromJS(resultData200);
-            return Promise.resolve<RecipeCreationResponseDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RecipeCreationResponseDto.fromJS(resultData200);
+                return Promise.resolve<RecipeCreationResponseDto>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RecipeCreationResponseDto>(null as any);
-    }
-
-    /**
-     * @param search (optional) 
-     * @param random (optional) 
-     * @param ingredientIds (optional) 
-     * @param equipmentIds (optional) 
-     * @param tagIds (optional) 
-     * @param collectionIds (optional) 
-     * @param minTotalTime (optional) 
-     * @param maxTotalTime (optional) 
-     * @param types (optional) 
-     * @param difficulties (optional) 
-     * @param states (optional) 
-     * @param personal (optional) 
-     * @param variantOfRecipeId (optional) 
-     * @param containsAlcohol (optional) 
-     * @param authorId (optional) 
-     * @param publishedAfter (optional) 
-     * @param publishedBefore (optional) 
-     * @param favourited (optional) 
-     * @param hidden (optional) 
-     * @param promoted (optional) 
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param sortBy (optional) 
-     * @param sortDesc (optional) 
-     * @return Success
-     */
-    getRecipes(search?: string | undefined, random?: boolean | undefined, ingredientIds?: string[] | undefined, equipmentIds?: string[] | undefined, tagIds?: string[] | undefined, collectionIds?: string[] | undefined, minTotalTime?: number | undefined, maxTotalTime?: number | undefined, types?: RecipeType[] | undefined, difficulties?: RecipeDifficulty[] | undefined, states?: RecipeState[] | undefined, personal?: boolean | undefined, variantOfRecipeId?: string | undefined, containsAlcohol?: boolean | undefined, authorId?: string | undefined, publishedAfter?: dayjs.Dayjs | undefined, publishedBefore?: dayjs.Dayjs | undefined, favourited?: boolean | undefined, hidden?: boolean | undefined, promoted?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        let url_ = this.baseUrl + "/recipes?";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "Search=" + encodeURIComponent("" + search) + "&";
-        if (random === null)
-            throw new Error("The parameter 'random' cannot be null.");
-        else if (random !== undefined)
-            url_ += "Random=" + encodeURIComponent("" + random) + "&";
-        if (ingredientIds === null)
-            throw new Error("The parameter 'ingredientIds' cannot be null.");
-        else if (ingredientIds !== undefined)
-            ingredientIds && ingredientIds.forEach(item => { url_ += "IngredientIds=" + encodeURIComponent("" + item) + "&"; });
-        if (equipmentIds === null)
-            throw new Error("The parameter 'equipmentIds' cannot be null.");
-        else if (equipmentIds !== undefined)
-            equipmentIds && equipmentIds.forEach(item => { url_ += "EquipmentIds=" + encodeURIComponent("" + item) + "&"; });
-        if (tagIds === null)
-            throw new Error("The parameter 'tagIds' cannot be null.");
-        else if (tagIds !== undefined)
-            tagIds && tagIds.forEach(item => { url_ += "TagIds=" + encodeURIComponent("" + item) + "&"; });
-        if (collectionIds === null)
-            throw new Error("The parameter 'collectionIds' cannot be null.");
-        else if (collectionIds !== undefined)
-            collectionIds && collectionIds.forEach(item => { url_ += "CollectionIds=" + encodeURIComponent("" + item) + "&"; });
-        if (minTotalTime === null)
-            throw new Error("The parameter 'minTotalTime' cannot be null.");
-        else if (minTotalTime !== undefined)
-            url_ += "MinTotalTime=" + encodeURIComponent("" + minTotalTime) + "&";
-        if (maxTotalTime === null)
-            throw new Error("The parameter 'maxTotalTime' cannot be null.");
-        else if (maxTotalTime !== undefined)
-            url_ += "MaxTotalTime=" + encodeURIComponent("" + maxTotalTime) + "&";
-        if (types === null)
-            throw new Error("The parameter 'types' cannot be null.");
-        else if (types !== undefined)
-            types && types.forEach(item => { url_ += "Types=" + encodeURIComponent("" + item) + "&"; });
-        if (difficulties === null)
-            throw new Error("The parameter 'difficulties' cannot be null.");
-        else if (difficulties !== undefined)
-            difficulties && difficulties.forEach(item => { url_ += "Difficulties=" + encodeURIComponent("" + item) + "&"; });
-        if (states === null)
-            throw new Error("The parameter 'states' cannot be null.");
-        else if (states !== undefined)
-            states && states.forEach(item => { url_ += "States=" + encodeURIComponent("" + item) + "&"; });
-        if (personal === null)
-            throw new Error("The parameter 'personal' cannot be null.");
-        else if (personal !== undefined)
-            url_ += "Personal=" + encodeURIComponent("" + personal) + "&";
-        if (variantOfRecipeId === null)
-            throw new Error("The parameter 'variantOfRecipeId' cannot be null.");
-        else if (variantOfRecipeId !== undefined)
-            url_ += "VariantOfRecipeId=" + encodeURIComponent("" + variantOfRecipeId) + "&";
-        if (containsAlcohol === null)
-            throw new Error("The parameter 'containsAlcohol' cannot be null.");
-        else if (containsAlcohol !== undefined)
-            url_ += "ContainsAlcohol=" + encodeURIComponent("" + containsAlcohol) + "&";
-        if (authorId === null)
-            throw new Error("The parameter 'authorId' cannot be null.");
-        else if (authorId !== undefined)
-            url_ += "AuthorId=" + encodeURIComponent("" + authorId) + "&";
-        if (publishedAfter === null)
-            throw new Error("The parameter 'publishedAfter' cannot be null.");
-        else if (publishedAfter !== undefined)
-            url_ += "PublishedAfter=" + encodeURIComponent(publishedAfter ? "" + publishedAfter.toISOString() : "") + "&";
-        if (publishedBefore === null)
-            throw new Error("The parameter 'publishedBefore' cannot be null.");
-        else if (publishedBefore !== undefined)
-            url_ += "PublishedBefore=" + encodeURIComponent(publishedBefore ? "" + publishedBefore.toISOString() : "") + "&";
-        if (favourited === null)
-            throw new Error("The parameter 'favourited' cannot be null.");
-        else if (favourited !== undefined)
-            url_ += "Favourited=" + encodeURIComponent("" + favourited) + "&";
-        if (hidden === null)
-            throw new Error("The parameter 'hidden' cannot be null.");
-        else if (hidden !== undefined)
-            url_ += "Hidden=" + encodeURIComponent("" + hidden) + "&";
-        if (promoted === null)
-            throw new Error("The parameter 'promoted' cannot be null.");
-        else if (promoted !== undefined)
-            url_ += "Promoted=" + encodeURIComponent("" + promoted) + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortBy === null)
-            throw new Error("The parameter 'sortBy' cannot be null.");
-        else if (sortBy !== undefined)
-            url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
-        if (sortDesc === null)
-            throw new Error("The parameter 'sortDesc' cannot be null.");
-        else if (sortDesc !== undefined)
-            url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetRecipes(_response);
-        });
-    }
+            return Promise.resolve<RecipeCreationResponseDto>(null as any);
+        }
 
-    protected processGetRecipes(response: AxiosResponse): Promise<PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param search (optional) 
+         * @param random (optional) 
+         * @param ingredientIds (optional) 
+         * @param equipmentIds (optional) 
+         * @param tagIds (optional) 
+         * @param collectionIds (optional) 
+         * @param minTotalTime (optional) 
+         * @param maxTotalTime (optional) 
+         * @param types (optional) 
+         * @param difficulties (optional) 
+         * @param states (optional) 
+         * @param personal (optional) 
+         * @param variantOfRecipeId (optional) 
+         * @param containsAlcohol (optional) 
+         * @param authorId (optional) 
+         * @param publishedAfter (optional) 
+         * @param publishedBefore (optional) 
+         * @param favourited (optional) 
+         * @param hidden (optional) 
+         * @param promoted (optional) 
+         * @param page (optional) 
+         * @param pageSize (optional) 
+         * @param sortBy (optional) 
+         * @param sortDesc (optional) 
+         * @return Success
+         */
+        getRecipes(search?: string | undefined, random?: boolean | undefined, ingredientIds?: string[] | undefined, equipmentIds?: string[] | undefined, tagIds?: string[] | undefined, collectionIds?: string[] | undefined, minTotalTime?: number | undefined, maxTotalTime?: number | undefined, types?: RecipeType[] | undefined, difficulties?: RecipeDifficulty[] | undefined, states?: RecipeState[] | undefined, personal?: boolean | undefined, variantOfRecipeId?: string | undefined, containsAlcohol?: boolean | undefined, authorId?: string | undefined, publishedAfter?: dayjs.Dayjs | undefined, publishedBefore?: dayjs.Dayjs | undefined, favourited?: boolean | undefined, hidden?: boolean | undefined, promoted?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            let url_ = this.baseUrl + "/recipes?";
+            if (search === null)
+                throw new Error("The parameter 'search' cannot be null.");
+            else if (search !== undefined)
+                url_ += "Search=" + encodeURIComponent("" + search) + "&";
+            if (random === null)
+                throw new Error("The parameter 'random' cannot be null.");
+            else if (random !== undefined)
+                url_ += "Random=" + encodeURIComponent("" + random) + "&";
+            if (ingredientIds === null)
+                throw new Error("The parameter 'ingredientIds' cannot be null.");
+            else if (ingredientIds !== undefined)
+                ingredientIds && ingredientIds.forEach(item => { url_ += "IngredientIds=" + encodeURIComponent("" + item) + "&"; });
+            if (equipmentIds === null)
+                throw new Error("The parameter 'equipmentIds' cannot be null.");
+            else if (equipmentIds !== undefined)
+                equipmentIds && equipmentIds.forEach(item => { url_ += "EquipmentIds=" + encodeURIComponent("" + item) + "&"; });
+            if (tagIds === null)
+                throw new Error("The parameter 'tagIds' cannot be null.");
+            else if (tagIds !== undefined)
+                tagIds && tagIds.forEach(item => { url_ += "TagIds=" + encodeURIComponent("" + item) + "&"; });
+            if (collectionIds === null)
+                throw new Error("The parameter 'collectionIds' cannot be null.");
+            else if (collectionIds !== undefined)
+                collectionIds && collectionIds.forEach(item => { url_ += "CollectionIds=" + encodeURIComponent("" + item) + "&"; });
+            if (minTotalTime === null)
+                throw new Error("The parameter 'minTotalTime' cannot be null.");
+            else if (minTotalTime !== undefined)
+                url_ += "MinTotalTime=" + encodeURIComponent("" + minTotalTime) + "&";
+            if (maxTotalTime === null)
+                throw new Error("The parameter 'maxTotalTime' cannot be null.");
+            else if (maxTotalTime !== undefined)
+                url_ += "MaxTotalTime=" + encodeURIComponent("" + maxTotalTime) + "&";
+            if (types === null)
+                throw new Error("The parameter 'types' cannot be null.");
+            else if (types !== undefined)
+                types && types.forEach(item => { url_ += "Types=" + encodeURIComponent("" + item) + "&"; });
+            if (difficulties === null)
+                throw new Error("The parameter 'difficulties' cannot be null.");
+            else if (difficulties !== undefined)
+                difficulties && difficulties.forEach(item => { url_ += "Difficulties=" + encodeURIComponent("" + item) + "&"; });
+            if (states === null)
+                throw new Error("The parameter 'states' cannot be null.");
+            else if (states !== undefined)
+                states && states.forEach(item => { url_ += "States=" + encodeURIComponent("" + item) + "&"; });
+            if (personal === null)
+                throw new Error("The parameter 'personal' cannot be null.");
+            else if (personal !== undefined)
+                url_ += "Personal=" + encodeURIComponent("" + personal) + "&";
+            if (variantOfRecipeId === null)
+                throw new Error("The parameter 'variantOfRecipeId' cannot be null.");
+            else if (variantOfRecipeId !== undefined)
+                url_ += "VariantOfRecipeId=" + encodeURIComponent("" + variantOfRecipeId) + "&";
+            if (containsAlcohol === null)
+                throw new Error("The parameter 'containsAlcohol' cannot be null.");
+            else if (containsAlcohol !== undefined)
+                url_ += "ContainsAlcohol=" + encodeURIComponent("" + containsAlcohol) + "&";
+            if (authorId === null)
+                throw new Error("The parameter 'authorId' cannot be null.");
+            else if (authorId !== undefined)
+                url_ += "AuthorId=" + encodeURIComponent("" + authorId) + "&";
+            if (publishedAfter === null)
+                throw new Error("The parameter 'publishedAfter' cannot be null.");
+            else if (publishedAfter !== undefined)
+                url_ += "PublishedAfter=" + encodeURIComponent(publishedAfter ? "" + publishedAfter.toISOString() : "") + "&";
+            if (publishedBefore === null)
+                throw new Error("The parameter 'publishedBefore' cannot be null.");
+            else if (publishedBefore !== undefined)
+                url_ += "PublishedBefore=" + encodeURIComponent(publishedBefore ? "" + publishedBefore.toISOString() : "") + "&";
+            if (favourited === null)
+                throw new Error("The parameter 'favourited' cannot be null.");
+            else if (favourited !== undefined)
+                url_ += "Favourited=" + encodeURIComponent("" + favourited) + "&";
+            if (hidden === null)
+                throw new Error("The parameter 'hidden' cannot be null.");
+            else if (hidden !== undefined)
+                url_ += "Hidden=" + encodeURIComponent("" + hidden) + "&";
+            if (promoted === null)
+                throw new Error("The parameter 'promoted' cannot be null.");
+            else if (promoted !== undefined)
+                url_ += "Promoted=" + encodeURIComponent("" + promoted) + "&";
+            if (page === null)
+                throw new Error("The parameter 'page' cannot be null.");
+            else if (page !== undefined)
+                url_ += "Page=" + encodeURIComponent("" + page) + "&";
+            if (pageSize === null)
+                throw new Error("The parameter 'pageSize' cannot be null.");
+            else if (pageSize !== undefined)
+                url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+            if (sortBy === null)
+                throw new Error("The parameter 'sortBy' cannot be null.");
+            else if (sortBy !== undefined)
+                url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
+            if (sortDesc === null)
+                throw new Error("The parameter 'sortDesc' cannot be null.");
+            else if (sortDesc !== undefined)
+                url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetRecipes(_response);
+            });
+        }
+
+        protected processGetRecipes(response: AxiosResponse): Promise<PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
-            return Promise.resolve<PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
+                return Promise.resolve<PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    updateRecipe(id: string, body?: RecipeUpdateDto | undefined, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/recipes/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processUpdateRecipe(_response);
-        });
-    }
+            return Promise.resolve<PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
+        }
 
-    protected processUpdateRecipe(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        updateRecipe(id: string, body?: RecipeUpdateDto | undefined, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/recipes/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "PUT",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processUpdateRecipe(_response);
+            });
+        }
+
+        protected processUpdateRecipe(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    /**
-     * @return Success
-     */
-    deleteRecipe(id: string, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/recipes/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+        /**
+         * @return Success
+         */
+        deleteRecipe(id: string, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/recipes/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
 
-        let options_: AxiosRequestConfig = {
-            method: "DELETE",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                method: "DELETE",
+                url: url_,
+                headers: {
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processDeleteRecipe(_response);
-        });
-    }
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processDeleteRecipe(_response);
+            });
+        }
 
-    protected processDeleteRecipe(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        protected processDeleteRecipe(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    /**
-     * @return Success
-     */
-    getRecipe(id: string, cancelToken?: CancelToken): Promise<RecipeDto> {
-        let url_ = this.baseUrl + "/recipes/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+        /**
+         * @return Success
+         */
+        getRecipe(id: string, cancelToken?: CancelToken): Promise<RecipeDto> {
+            let url_ = this.baseUrl + "/recipes/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
 
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetRecipe(_response);
-        });
-    }
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetRecipe(_response);
+            });
+        }
 
-    protected processGetRecipe(response: AxiosResponse): Promise<RecipeDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        protected processGetRecipe(response: AxiosResponse): Promise<RecipeDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RecipeDto.fromJS(resultData200);
-            return Promise.resolve<RecipeDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RecipeDto.fromJS(resultData200);
+                return Promise.resolve<RecipeDto>(result200);
 
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RecipeDto>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    tagRecipe(recipeId: string, tagId: string, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/recipes/{recipeId}/tags/{tagId}";
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        if (tagId === undefined || tagId === null)
-            throw new Error("The parameter 'tagId' must be defined.");
-        url_ = url_.replace("{tagId}", encodeURIComponent("" + tagId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "POST",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processTagRecipe(_response);
-        });
-    }
+            return Promise.resolve<RecipeDto>(null as any);
+        }
 
-    protected processTagRecipe(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        tagRecipe(recipeId: string, tagId: string, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/recipes/{recipeId}/tags/{tagId}";
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            if (tagId === undefined || tagId === null)
+                throw new Error("The parameter 'tagId' must be defined.");
+            url_ = url_.replace("{tagId}", encodeURIComponent("" + tagId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "POST",
+                url: url_,
+                headers: {
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processTagRecipe(_response);
+            });
+        }
+
+        protected processTagRecipe(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    /**
-     * @return Success
-     */
-    untagRecipe(recipeId: string, tagId: string, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/recipes/{recipeId}/tags/{tagId}";
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        if (tagId === undefined || tagId === null)
-            throw new Error("The parameter 'tagId' must be defined.");
-        url_ = url_.replace("{tagId}", encodeURIComponent("" + tagId));
-        url_ = url_.replace(/[?&]$/, "");
+        /**
+         * @return Success
+         */
+        untagRecipe(recipeId: string, tagId: string, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/recipes/{recipeId}/tags/{tagId}";
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            if (tagId === undefined || tagId === null)
+                throw new Error("The parameter 'tagId' must be defined.");
+            url_ = url_.replace("{tagId}", encodeURIComponent("" + tagId));
+            url_ = url_.replace(/[?&]$/, "");
 
-        let options_: AxiosRequestConfig = {
-            method: "DELETE",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                method: "DELETE",
+                url: url_,
+                headers: {
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processUntagRecipe(_response);
-        });
-    }
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processUntagRecipe(_response);
+            });
+        }
 
-    protected processUntagRecipe(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        protected processUntagRecipe(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    /**
-     * @param measurementSystem (optional) 
-     * @return Success
-     */
-    getRecipeIngredients(recipeId: string, measurementSystem?: MeasurementSystem | undefined, cancelToken?: CancelToken): Promise<RecipeIngredientsDto> {
-        let url_ = this.baseUrl + "/recipes/{recipeId}/ingredients?";
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        if (measurementSystem === null)
-            throw new Error("The parameter 'measurementSystem' cannot be null.");
-        else if (measurementSystem !== undefined)
-            url_ += "MeasurementSystem=" + encodeURIComponent("" + measurementSystem) + "&";
-        url_ = url_.replace(/[?&]$/, "");
+        /**
+         * @param measurementSystem (optional) 
+         * @return Success
+         */
+        getRecipeIngredients(recipeId: string, measurementSystem?: MeasurementSystem | undefined, cancelToken?: CancelToken): Promise<RecipeIngredientsDto> {
+            let url_ = this.baseUrl + "/recipes/{recipeId}/ingredients?";
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            if (measurementSystem === null)
+                throw new Error("The parameter 'measurementSystem' cannot be null.");
+            else if (measurementSystem !== undefined)
+                url_ += "MeasurementSystem=" + encodeURIComponent("" + measurementSystem) + "&";
+            url_ = url_.replace(/[?&]$/, "");
 
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetRecipeIngredients(_response);
-        });
-    }
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetRecipeIngredients(_response);
+            });
+        }
 
-    protected processGetRecipeIngredients(response: AxiosResponse): Promise<RecipeIngredientsDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        protected processGetRecipeIngredients(response: AxiosResponse): Promise<RecipeIngredientsDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RecipeIngredientsDto.fromJS(resultData200);
-            return Promise.resolve<RecipeIngredientsDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RecipeIngredientsDto.fromJS(resultData200);
+                return Promise.resolve<RecipeIngredientsDto>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RecipeIngredientsDto>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getRecipeInstructions(id: string, cancelToken?: CancelToken): Promise<RecipeInstructionsDto> {
-        let url_ = this.baseUrl + "/recipes/{id}/instructions";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetRecipeInstructions(_response);
-        });
-    }
+            return Promise.resolve<RecipeIngredientsDto>(null as any);
+        }
 
-    protected processGetRecipeInstructions(response: AxiosResponse): Promise<RecipeInstructionsDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        getRecipeInstructions(id: string, cancelToken?: CancelToken): Promise<RecipeInstructionsDto> {
+            let url_ = this.baseUrl + "/recipes/{id}/instructions";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetRecipeInstructions(_response);
+            });
+        }
+
+        protected processGetRecipeInstructions(response: AxiosResponse): Promise<RecipeInstructionsDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RecipeInstructionsDto.fromJS(resultData200);
-            return Promise.resolve<RecipeInstructionsDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RecipeInstructionsDto.fromJS(resultData200);
+                return Promise.resolve<RecipeInstructionsDto>(result200);
 
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RecipeInstructionsDto>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    admin_PublishRecipe(id: string, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/admin/recipes/{id}/publish";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "POST",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_PublishRecipe(_response);
-        });
-    }
+            return Promise.resolve<RecipeInstructionsDto>(null as any);
+        }
 
-    protected processAdmin_PublishRecipe(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        admin_PublishRecipe(id: string, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/admin/recipes/{id}/publish";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "POST",
+                url: url_,
+                headers: {
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_PublishRecipe(_response);
+            });
+        }
+
+        protected processAdmin_PublishRecipe(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    /**
-     * @param file (optional) 
-     * @param sequence (optional) 
-     * @return Success
-     */
-    uploadImageForRecipe(recipeId: string, file?: FileParameter | undefined, sequence?: number | undefined, cancelToken?: CancelToken): Promise<RecipeImageUploadResponseDto> {
-        let url_ = this.baseUrl + "/recipes/{recipeId}/images";
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        url_ = url_.replace(/[?&]$/, "");
+        /**
+         * @param file (optional) 
+         * @param sequence (optional) 
+         * @return Success
+         */
+        uploadImageForRecipe(recipeId: string, file?: FileParameter | undefined, sequence?: number | undefined, cancelToken?: CancelToken): Promise<RecipeImageUploadResponseDto> {
+            let url_ = this.baseUrl + "/recipes/{recipeId}/images";
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = new FormData();
-        if (file === null || file === undefined)
-            throw new Error("The parameter 'file' cannot be null.");
-        else
-            content_.append("File", file.data, file.fileName ? file.fileName : "File");
-        if (sequence === null || sequence === undefined)
-            throw new Error("The parameter 'sequence' cannot be null.");
-        else
-            content_.append("Sequence", sequence.toString());
+            const content_ = new FormData();
+            if (file === null || file === undefined)
+                throw new Error("The parameter 'file' cannot be null.");
+            else
+                content_.append("File", file.data, file.fileName ? file.fileName : "File");
+            if (sequence === null || sequence === undefined)
+                throw new Error("The parameter 'sequence' cannot be null.");
+            else
+                content_.append("Sequence", sequence.toString());
 
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processUploadImageForRecipe(_response);
-        });
-    }
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processUploadImageForRecipe(_response);
+            });
+        }
 
-    protected processUploadImageForRecipe(response: AxiosResponse): Promise<RecipeImageUploadResponseDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        protected processUploadImageForRecipe(response: AxiosResponse): Promise<RecipeImageUploadResponseDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RecipeImageUploadResponseDto.fromJS(resultData200);
-            return Promise.resolve<RecipeImageUploadResponseDto>(result200);
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RecipeImageUploadResponseDto.fromJS(resultData200);
+                return Promise.resolve<RecipeImageUploadResponseDto>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RecipeImageUploadResponseDto>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getImagesForRecipe(recipeId: string, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/recipes/{recipeId}/images";
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetImagesForRecipe(_response);
-        });
-    }
+            return Promise.resolve<RecipeImageUploadResponseDto>(null as any);
+        }
 
-    protected processGetImagesForRecipe(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        /**
+         * @return Success
+         */
+        getImagesForRecipe(recipeId: string, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/recipes/{recipeId}/images";
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetImagesForRecipe(_response);
+            });
+        }
+
+        protected processGetImagesForRecipe(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    /**
-     * @return Success
-     */
-    deleteRecipeImage(id: string, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/recipe-images/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+        /**
+         * @return Success
+         */
+        deleteRecipeImage(id: string, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/recipe-images/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
 
-        let options_: AxiosRequestConfig = {
-            method: "DELETE",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                method: "DELETE",
+                url: url_,
+                headers: {
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processDeleteRecipeImage(_response);
-        });
-    }
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processDeleteRecipeImage(_response);
+            });
+        }
 
-    protected processDeleteRecipeImage(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        protected processDeleteRecipeImage(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    updateRecipeImageIndex(id: string, body?: RecipeImageIndexUpdateDto | undefined, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/recipe-images/{id}/index";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        updateRecipeImageIndex(id: string, body?: RecipeImageIndexUpdateDto | undefined, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/recipe-images/{id}/index";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
+            const content_ = JSON.stringify(body);
 
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "PUT",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processUpdateRecipeImageIndex(_response);
-        });
-    }
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processUpdateRecipeImageIndex(_response);
+            });
+        }
 
-    protected processUpdateRecipeImageIndex(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        protected processUpdateRecipeImageIndex(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    createVariantOfRecipe(recipeId: string, body?: AddVariantDto | undefined, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/recipes/{recipeId}/variants";
-        if (recipeId === undefined || recipeId === null)
-            throw new Error("The parameter 'recipeId' must be defined.");
-        url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
-        url_ = url_.replace(/[?&]$/, "");
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        createVariantOfRecipe(recipeId: string, body?: AddVariantDto | undefined, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/recipes/{recipeId}/variants";
+            if (recipeId === undefined || recipeId === null)
+                throw new Error("The parameter 'recipeId' must be defined.");
+            url_ = url_.replace("{recipeId}", encodeURIComponent("" + recipeId));
+            url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
+            const content_ = JSON.stringify(body);
 
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processCreateVariantOfRecipe(_response);
-        });
-    }
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processCreateVariantOfRecipe(_response);
+            });
+        }
 
-    protected processCreateVariantOfRecipe(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        protected processCreateVariantOfRecipe(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
                 }
             }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
+            if (status === 200) {
+                const _responseText = response.data;
+                return Promise.resolve<void>(null as any);
+
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
             return Promise.resolve<void>(null as any);
-
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<void>(null as any);
-    }
 
-    resize(key: string, width?: number | undefined, height?: number | undefined, cancelToken?: CancelToken): Promise<void> {
-        let url_ = this.baseUrl + "/resize?";
-        if (key === undefined || key === null)
-            throw new Error("The parameter 'key' must be defined and cannot be null.");
-        else
-            url_ += "Key=" + encodeURIComponent("" + key) + "&";
-        if (width === null)
-            throw new Error("The parameter 'width' cannot be null.");
-        else if (width !== undefined)
-            url_ += "Width=" + encodeURIComponent("" + width) + "&";
-        if (height === null)
-            throw new Error("The parameter 'height' cannot be null.");
-        else if (height !== undefined)
-            url_ += "Height=" + encodeURIComponent("" + height) + "&";
-        url_ = url_.replace(/[?&]$/, "");
+        resize(key: string, width?: number | undefined, height?: number | undefined, cancelToken?: CancelToken): Promise<void> {
+            let url_ = this.baseUrl + "/resize?";
+            if (key === undefined || key === null)
+                throw new Error("The parameter 'key' must be defined and cannot be null.");
+            else
+                url_ += "Key=" + encodeURIComponent("" + key) + "&";
+            if (width === null)
+                throw new Error("The parameter 'width' cannot be null.");
+            else if (width !== undefined)
+                url_ += "Width=" + encodeURIComponent("" + width) + "&";
+            if (height === null)
+                throw new Error("The parameter 'height' cannot be null.");
+            else if (height !== undefined)
+                url_ += "Height=" + encodeURIComponent("" + height) + "&";
+            url_ = url_.replace(/[?&]$/, "");
 
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-            },
-            cancelToken
-        };
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                },
+                cancelToken
+            };
 
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processResize(_response);
+            });
+        }
+
+        protected processResize(response: AxiosResponse): Promise<void> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processResize(_response);
-        });
+            if (status === 302) {
+                const _responseText = response.data;
+                return throwException("Redirect", status, _responseText, _headers);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<void>(null as any);
+        }
+
+        /**
+         * @return Success
+         */
+        admin_GetSupportTicket(id: string, cancelToken?: CancelToken): Promise<SupportTicketDto> {
+            let url_ = this.baseUrl + "/admin/support-tickets/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_GetSupportTicket(_response);
+            });
+        }
+
+        protected processAdmin_GetSupportTicket(response: AxiosResponse): Promise<SupportTicketDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = SupportTicketDto.fromJS(resultData200);
+                return Promise.resolve<SupportTicketDto>(result200);
+
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<SupportTicketDto>(null as any);
+        }
+
+        /**
+         * @param status (optional) 
+         * @param page (optional) 
+         * @param pageSize (optional) 
+         * @param sortBy (optional) 
+         * @param sortDesc (optional) 
+         * @return Success
+         */
+        admin_GetSupportTickets(status?: SupportTicketStatus | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            let url_ = this.baseUrl + "/admin/support-tickets?";
+            if (status === null)
+                throw new Error("The parameter 'status' cannot be null.");
+            else if (status !== undefined)
+                url_ += "Status=" + encodeURIComponent("" + status) + "&";
+            if (page === null)
+                throw new Error("The parameter 'page' cannot be null.");
+            else if (page !== undefined)
+                url_ += "Page=" + encodeURIComponent("" + page) + "&";
+            if (pageSize === null)
+                throw new Error("The parameter 'pageSize' cannot be null.");
+            else if (pageSize !== undefined)
+                url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+            if (sortBy === null)
+                throw new Error("The parameter 'sortBy' cannot be null.");
+            else if (sortBy !== undefined)
+                url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
+            if (sortDesc === null)
+                throw new Error("The parameter 'sortDesc' cannot be null.");
+            else if (sortDesc !== undefined)
+                url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_GetSupportTickets(_response);
+            });
+        }
+
+        protected processAdmin_GetSupportTickets(response: AxiosResponse): Promise<PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
+                return Promise.resolve<PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
+        }
+
+        /**
+         * @return Success
+         */
+        getVersion(cancelToken?: CancelToken): Promise<string> {
+            let url_ = this.baseUrl + "/version";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetVersion(_response);
+            });
+        }
+
+        protected processGetVersion(response: AxiosResponse): Promise<string> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+
+                return Promise.resolve<string>(result200);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<string>(null as any);
+        }
+
+        /**
+         * @return Success
+         */
+        getSystem(cancelToken?: CancelToken): Promise<SystemDto> {
+            let url_ = this.baseUrl + "/system";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetSystem(_response);
+            });
+        }
+
+        protected processGetSystem(response: AxiosResponse): Promise<SystemDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = SystemDto.fromJS(resultData200);
+                return Promise.resolve<SystemDto>(result200);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<SystemDto>(null as any);
+        }
+
+        /**
+         * @return Success
+         */
+        getTag(id: string, cancelToken?: CancelToken): Promise<TagDto> {
+            let url_ = this.baseUrl + "/tags/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetTag(_response);
+            });
+        }
+
+        protected processGetTag(response: AxiosResponse): Promise<TagDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = TagDto.fromJS(resultData200);
+                return Promise.resolve<TagDto>(result200);
+
+            } else if (status === 404) {
+                const _responseText = response.data;
+                let result404: any = null;
+                let resultData404 = _responseText;
+                result404 = ProblemDetails.fromJS(resultData404);
+                return throwException("Not Found", status, _responseText, _headers, result404);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<TagDto>(null as any);
+        }
+
+        /**
+         * @param hidden (optional) 
+         * @param promoted (optional) 
+         * @param search (optional) 
+         * @param random (optional) 
+         * @param page (optional) 
+         * @param pageSize (optional) 
+         * @param sortBy (optional) 
+         * @param sortDesc (optional) 
+         * @return Success
+         */
+        getTags(hidden?: boolean | undefined, promoted?: boolean | undefined, search?: string | undefined, random?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            let url_ = this.baseUrl + "/tags?";
+            if (hidden === null)
+                throw new Error("The parameter 'hidden' cannot be null.");
+            else if (hidden !== undefined)
+                url_ += "Hidden=" + encodeURIComponent("" + hidden) + "&";
+            if (promoted === null)
+                throw new Error("The parameter 'promoted' cannot be null.");
+            else if (promoted !== undefined)
+                url_ += "Promoted=" + encodeURIComponent("" + promoted) + "&";
+            if (search === null)
+                throw new Error("The parameter 'search' cannot be null.");
+            else if (search !== undefined)
+                url_ += "Search=" + encodeURIComponent("" + search) + "&";
+            if (random === null)
+                throw new Error("The parameter 'random' cannot be null.");
+            else if (random !== undefined)
+                url_ += "Random=" + encodeURIComponent("" + random) + "&";
+            if (page === null)
+                throw new Error("The parameter 'page' cannot be null.");
+            else if (page !== undefined)
+                url_ += "Page=" + encodeURIComponent("" + page) + "&";
+            if (pageSize === null)
+                throw new Error("The parameter 'pageSize' cannot be null.");
+            else if (pageSize !== undefined)
+                url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
+            if (sortBy === null)
+                throw new Error("The parameter 'sortBy' cannot be null.");
+            else if (sortBy !== undefined)
+                url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
+            if (sortDesc === null)
+                throw new Error("The parameter 'sortDesc' cannot be null.");
+            else if (sortDesc !== undefined)
+                url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetTags(_response);
+            });
+        }
+
+        protected processGetTags(response: AxiosResponse): Promise<PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
+                return Promise.resolve<PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
+        }
+
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        admin_CreateTag(body?: CreateTagCommand | undefined, cancelToken?: CancelToken): Promise<CreateTagCommandResponse> {
+            let url_ = this.baseUrl + "/admin/tags";
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_CreateTag(_response);
+            });
+        }
+
+        protected processAdmin_CreateTag(response: AxiosResponse): Promise<CreateTagCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = CreateTagCommandResponse.fromJS(resultData200);
+                return Promise.resolve<CreateTagCommandResponse>(result200);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<CreateTagCommandResponse>(null as any);
+        }
+
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        admin_UpdateTag(id: string, body?: UpdateTagCommand | undefined, cancelToken?: CancelToken): Promise<UpdateTagCommandResponse> {
+            let url_ = this.baseUrl + "/admin/tags/{id}";
+            if (id === undefined || id === null)
+                throw new Error("The parameter 'id' must be defined.");
+            url_ = url_.replace("{id}", encodeURIComponent("" + id));
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "PUT",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processAdmin_UpdateTag(_response);
+            });
+        }
+
+        protected processAdmin_UpdateTag(response: AxiosResponse): Promise<UpdateTagCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = UpdateTagCommandResponse.fromJS(resultData200);
+                return Promise.resolve<UpdateTagCommandResponse>(result200);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<UpdateTagCommandResponse>(null as any);
+        }
+
+        /**
+         * @param sortBy (optional) 
+         * @param sortDesc (optional) 
+         * @return Success
+         */
+        getUnitOfMeasurements(sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            let url_ = this.baseUrl + "/unit-of-measurements?";
+            if (sortBy === null)
+                throw new Error("The parameter 'sortBy' cannot be null.");
+            else if (sortBy !== undefined)
+                url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
+            if (sortDesc === null)
+                throw new Error("The parameter 'sortDesc' cannot be null.");
+            else if (sortDesc !== undefined)
+                url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetUnitOfMeasurements(_response);
+            });
+        }
+
+        protected processGetUnitOfMeasurements(response: AxiosResponse): Promise<CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
+                return Promise.resolve<CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
+        }
+
+        /**
+         * @param body (optional) 
+         * @return Success
+         */
+        registerUser(body?: RegisterUserCommand | undefined, cancelToken?: CancelToken): Promise<RegisterUserCommandResponse> {
+            let url_ = this.baseUrl + "/register";
+            url_ = url_.replace(/[?&]$/, "");
+
+            const content_ = JSON.stringify(body);
+
+            let options_: AxiosRequestConfig = {
+                data: content_,
+                method: "POST",
+                url: url_,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processRegisterUser(_response);
+            });
+        }
+
+        protected processRegisterUser(response: AxiosResponse): Promise<RegisterUserCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = RegisterUserCommandResponse.fromJS(resultData200);
+                return Promise.resolve<RegisterUserCommandResponse>(result200);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<RegisterUserCommandResponse>(null as any);
+        }
+
+        /**
+         * @return Success
+         */
+        deleteAccount(cancelToken?: CancelToken): Promise<DeleteAccountCommandResponse> {
+            let url_ = this.baseUrl + "/me";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "DELETE",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processDeleteAccount(_response);
+            });
+        }
+
+        protected processDeleteAccount(response: AxiosResponse): Promise<DeleteAccountCommandResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = DeleteAccountCommandResponse.fromJS(resultData200);
+                return Promise.resolve<DeleteAccountCommandResponse>(result200);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<DeleteAccountCommandResponse>(null as any);
+        }
+
+        /**
+         * @return Success
+         */
+        queryEmail(email: string, cancelToken?: CancelToken): Promise<QueryEmailResponse> {
+            let url_ = this.baseUrl + "/users/email/{email}";
+            if (email === undefined || email === null)
+                throw new Error("The parameter 'email' must be defined.");
+            url_ = url_.replace("{email}", encodeURIComponent("" + email));
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processQueryEmail(_response);
+            });
+        }
+
+        protected processQueryEmail(response: AxiosResponse): Promise<QueryEmailResponse> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = QueryEmailResponse.fromJS(resultData200);
+                return Promise.resolve<QueryEmailResponse>(result200);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<QueryEmailResponse>(null as any);
+        }
+
+        /**
+         * @return Success
+         */
+        getMe(cancelToken?: CancelToken): Promise<UserDto> {
+            let url_ = this.baseUrl + "/users/me";
+            url_ = url_.replace(/[?&]$/, "");
+
+            let options_: AxiosRequestConfig = {
+                method: "GET",
+                url: url_,
+                headers: {
+                    "Accept": "text/plain"
+                },
+                cancelToken
+            };
+
+            return this.instance.request(options_).catch((_error: any) => {
+                if (isAxiosError(_error) && _error.response) {
+                    return _error.response;
+                } else {
+                    throw _error;
+                }
+            }).then((_response: AxiosResponse) => {
+                return this.processGetMe(_response);
+            });
+        }
+
+        protected processGetMe(response: AxiosResponse): Promise<UserDto> {
+            const status = response.status;
+            let _headers: any = {};
+            if (response.headers && typeof response.headers === "object") {
+                for (const k in response.headers) {
+                    if (response.headers.hasOwnProperty(k)) {
+                        _headers[k] = response.headers[k];
+                    }
+                }
+            }
+            if (status === 200) {
+                const _responseText = response.data;
+                let result200: any = null;
+                let resultData200 = _responseText;
+                result200 = UserDto.fromJS(resultData200);
+                return Promise.resolve<UserDto>(result200);
+
+            } else if (status !== 200 && status !== 204) {
+                const _responseText = response.data;
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }
+            return Promise.resolve<UserDto>(null as any);
+        }
     }
 
-    protected processResize(response: AxiosResponse): Promise<void> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+    export class LogDto implements ILogDto {
+        id!: string;
+        dateCreated!: dayjs.Dayjs;
+        level!: LogLevel;
+        message!: string;
+        stackTrace!: string;
+
+        constructor(data?: ILogDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
                 }
             }
         }
-        if (status === 302) {
-            const _responseText = response.data;
-            return throwException("Redirect", status, _responseText, _headers);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<void>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    admin_GetSupportTicket(id: string, cancelToken?: CancelToken): Promise<SupportTicketDto> {
-        let url_ = this.baseUrl + "/admin/support-tickets/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.dateCreated = _data["dateCreated"] ? dayjs(_data["dateCreated"].toString()) : <any>undefined;
+                this.level = _data["level"];
+                this.message = _data["message"];
+                this.stackTrace = _data["stackTrace"];
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_GetSupportTicket(_response);
-        });
+        }
+
+        static fromJS(data: any): LogDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new LogDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["dateCreated"] = this.dateCreated ? this.dateCreated.toISOString() : <any>undefined;
+            data["level"] = this.level;
+            data["message"] = this.message;
+            data["stackTrace"] = this.stackTrace;
+            return data;
+        }
     }
 
-    protected processAdmin_GetSupportTicket(response: AxiosResponse): Promise<SupportTicketDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+    export interface ILogDto {
+        id: string;
+        dateCreated: dayjs.Dayjs;
+        level: LogLevel;
+        message: string;
+        stackTrace: string;
+    }
+
+    export class SupportTicketDto implements ISupportTicketDto {
+        id!: string;
+        dateCreated!: dayjs.Dayjs;
+        status!: SupportTicketStatus;
+        email!: string;
+        message!: string;
+
+        constructor(data?: ISupportTicketDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
                 }
             }
         }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = SupportTicketDto.fromJS(resultData200);
-            return Promise.resolve<SupportTicketDto>(result200);
 
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<SupportTicketDto>(null as any);
-    }
-
-    /**
-     * @param status (optional) 
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param sortBy (optional) 
-     * @param sortDesc (optional) 
-     * @return Success
-     */
-    admin_GetSupportTickets(status?: SupportTicketStatus | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        let url_ = this.baseUrl + "/admin/support-tickets?";
-        if (status === null)
-            throw new Error("The parameter 'status' cannot be null.");
-        else if (status !== undefined)
-            url_ += "Status=" + encodeURIComponent("" + status) + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortBy === null)
-            throw new Error("The parameter 'sortBy' cannot be null.");
-        else if (sortBy !== undefined)
-            url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
-        if (sortDesc === null)
-            throw new Error("The parameter 'sortDesc' cannot be null.");
-        else if (sortDesc !== undefined)
-            url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.dateCreated = _data["dateCreated"] ? dayjs(_data["dateCreated"].toString()) : <any>undefined;
+                this.status = _data["status"];
+                this.email = _data["email"];
+                this.message = _data["message"];
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_GetSupportTickets(_response);
-        });
+        }
+
+        static fromJS(data: any): SupportTicketDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new SupportTicketDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["dateCreated"] = this.dateCreated ? this.dateCreated.toISOString() : <any>undefined;
+            data["status"] = this.status;
+            data["email"] = this.email;
+            data["message"] = this.message;
+            return data;
+        }
     }
 
-    protected processAdmin_GetSupportTickets(response: AxiosResponse): Promise<PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+    export interface ISupportTicketDto {
+        id: string;
+        dateCreated: dayjs.Dayjs;
+        status: SupportTicketStatus;
+        email: string;
+        message: string;
+    }
+
+    export class QueryEmailResponse implements IQueryEmailResponse {
+        isUsed!: boolean;
+
+        constructor(data?: IQueryEmailResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
                 }
             }
         }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
-            return Promise.resolve<PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getVersion(cancelToken?: CancelToken): Promise<string> {
-        let url_ = this.baseUrl + "/version";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+        init(_data?: any) {
+            if (_data) {
+                this.isUsed = _data["isUsed"];
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetVersion(_response);
-        });
+        }
+
+        static fromJS(data: any): QueryEmailResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new QueryEmailResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["isUsed"] = this.isUsed;
+            return data;
+        }
     }
 
-    protected processGetVersion(response: AxiosResponse): Promise<string> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+    export interface IQueryEmailResponse {
+        isUsed: boolean;
+    }
+
+    export class Author_ReferenceDto implements IAuthor_ReferenceDto {
+        id!: string;
+        name!: string;
+
+        constructor(data?: IAuthor_ReferenceDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
                 }
             }
         }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = resultData200 !== undefined ? resultData200 : <any>null;
 
-            return Promise.resolve<string>(result200);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<string>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getSystem(cancelToken?: CancelToken): Promise<SystemDto> {
-        let url_ = this.baseUrl + "/system";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetSystem(_response);
-        });
+        }
+
+        static fromJS(data: any): Author_ReferenceDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new Author_ReferenceDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["name"] = this.name;
+            return data;
+        }
     }
 
-    protected processGetSystem(response: AxiosResponse): Promise<SystemDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+    export interface IAuthor_ReferenceDto {
+        id: string;
+        name: string;
+    }
+
+    export class AuthorDto implements IAuthorDto {
+        id!: string;
+        state!: AuthorState;
+        name!: string;
+        biography!: string;
+        profilePictureUrl!: string;
+        links!: AuthorDto_Link[];
+
+        constructor(data?: IAuthorDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
                 }
             }
         }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = SystemDto.fromJS(resultData200);
-            return Promise.resolve<SystemDto>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<SystemDto>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getTag(id: string, cancelToken?: CancelToken): Promise<TagDto> {
-        let url_ = this.baseUrl + "/tags/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetTag(_response);
-        });
-    }
-
-    protected processGetTag(response: AxiosResponse): Promise<TagDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.state = _data["state"];
+                this.name = _data["name"];
+                this.biography = _data["biography"];
+                this.profilePictureUrl = _data["profilePictureUrl"];
+                if (Array.isArray(_data["links"])) {
+                    this.links = [] as any;
+                    for (let item of _data["links"])
+                        this.links!.push(AuthorDto_Link.fromJS(item));
                 }
             }
         }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = TagDto.fromJS(resultData200);
-            return Promise.resolve<TagDto>(result200);
 
-        } else if (status === 404) {
-            const _responseText = response.data;
-            let result404: any = null;
-            let resultData404 = _responseText;
-            result404 = ProblemDetails.fromJS(resultData404);
-            return throwException("Not Found", status, _responseText, _headers, result404);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        static fromJS(data: any): AuthorDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new AuthorDto();
+            result.init(data);
+            return result;
         }
-        return Promise.resolve<TagDto>(null as any);
-    }
 
-    /**
-     * @param hidden (optional) 
-     * @param promoted (optional) 
-     * @param search (optional) 
-     * @param random (optional) 
-     * @param page (optional) 
-     * @param pageSize (optional) 
-     * @param sortBy (optional) 
-     * @param sortDesc (optional) 
-     * @return Success
-     */
-    getTags(hidden?: boolean | undefined, promoted?: boolean | undefined, search?: string | undefined, random?: boolean | undefined, page?: number | undefined, pageSize?: number | undefined, sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        let url_ = this.baseUrl + "/tags?";
-        if (hidden === null)
-            throw new Error("The parameter 'hidden' cannot be null.");
-        else if (hidden !== undefined)
-            url_ += "Hidden=" + encodeURIComponent("" + hidden) + "&";
-        if (promoted === null)
-            throw new Error("The parameter 'promoted' cannot be null.");
-        else if (promoted !== undefined)
-            url_ += "Promoted=" + encodeURIComponent("" + promoted) + "&";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "Search=" + encodeURIComponent("" + search) + "&";
-        if (random === null)
-            throw new Error("The parameter 'random' cannot be null.");
-        else if (random !== undefined)
-            url_ += "Random=" + encodeURIComponent("" + random) + "&";
-        if (page === null)
-            throw new Error("The parameter 'page' cannot be null.");
-        else if (page !== undefined)
-            url_ += "Page=" + encodeURIComponent("" + page) + "&";
-        if (pageSize === null)
-            throw new Error("The parameter 'pageSize' cannot be null.");
-        else if (pageSize !== undefined)
-            url_ += "PageSize=" + encodeURIComponent("" + pageSize) + "&";
-        if (sortBy === null)
-            throw new Error("The parameter 'sortBy' cannot be null.");
-        else if (sortBy !== undefined)
-            url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
-        if (sortDesc === null)
-            throw new Error("The parameter 'sortDesc' cannot be null.");
-        else if (sortDesc !== undefined)
-            url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["state"] = this.state;
+            data["name"] = this.name;
+            data["biography"] = this.biography;
+            data["profilePictureUrl"] = this.profilePictureUrl;
+            if (Array.isArray(this.links)) {
+                data["links"] = [];
+                for (let item of this.links)
+                    data["links"].push(item.toJSON());
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetTags(_response);
-        });
+            return data;
+        }
     }
 
-    protected processGetTags(response: AxiosResponse): Promise<PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+    export interface IAuthorDto {
+        id: string;
+        state: AuthorState;
+        name: string;
+        biography: string;
+        profilePictureUrl: string;
+        links: AuthorDto_Link[];
+    }
+
+    export class AuthorDto_Link implements IAuthorDto_Link {
+        id!: string;
+        name!: string;
+        url!: string;
+
+        constructor(data?: IAuthorDto_Link) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
                 }
             }
         }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
-            return Promise.resolve<PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    admin_CreateTag(body?: CreateTagCommand | undefined, cancelToken?: CancelToken): Promise<CreateTagCommandResponse> {
-        let url_ = this.baseUrl + "/admin/tags";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
+                this.url = _data["url"];
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_CreateTag(_response);
-        });
+        }
+
+        static fromJS(data: any): AuthorDto_Link {
+            data = typeof data === 'object' ? data : {};
+            let result = new AuthorDto_Link();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["name"] = this.name;
+            data["url"] = this.url;
+            return data;
+        }
     }
 
-    protected processAdmin_CreateTag(response: AxiosResponse): Promise<CreateTagCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
+    export interface IAuthorDto_Link {
+        id: string;
+        name: string;
+        url: string;
+    }
+
+    export class Collection_ReferenceDto implements ICollection_ReferenceDto {
+        id!: string;
+        title!: string;
+
+        protected _discriminator: string;
+
+        constructor(data?: ICollection_ReferenceDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
                 }
             }
+            this._discriminator = "Collection_ReferenceDto";
         }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = CreateTagCommandResponse.fromJS(resultData200);
-            return Promise.resolve<CreateTagCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<CreateTagCommandResponse>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    admin_UpdateTag(id: string, body?: UpdateTagCommand | undefined, cancelToken?: CancelToken): Promise<UpdateTagCommandResponse> {
-        let url_ = this.baseUrl + "/admin/tags/{id}";
-        if (id === undefined || id === null)
-            throw new Error("The parameter 'id' must be defined.");
-        url_ = url_.replace("{id}", encodeURIComponent("" + id));
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "PUT",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processAdmin_UpdateTag(_response);
-        });
-    }
-
-    protected processAdmin_UpdateTag(response: AxiosResponse): Promise<UpdateTagCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.title = _data["title"];
             }
         }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = UpdateTagCommandResponse.fromJS(resultData200);
-            return Promise.resolve<UpdateTagCommandResponse>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<UpdateTagCommandResponse>(null as any);
-    }
-
-    /**
-     * @param sortBy (optional) 
-     * @param sortDesc (optional) 
-     * @return Success
-     */
-    getUnitOfMeasurements(sortBy?: string | undefined, sortDesc?: boolean | undefined, cancelToken?: CancelToken): Promise<CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        let url_ = this.baseUrl + "/unit-of-measurements?";
-        if (sortBy === null)
-            throw new Error("The parameter 'sortBy' cannot be null.");
-        else if (sortBy !== undefined)
-            url_ += "SortBy=" + encodeURIComponent("" + sortBy) + "&";
-        if (sortDesc === null)
-            throw new Error("The parameter 'sortDesc' cannot be null.");
-        else if (sortDesc !== undefined)
-            url_ += "SortDesc=" + encodeURIComponent("" + sortDesc) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
+        static fromJS(data: any): Collection_ReferenceDto {
+            data = typeof data === 'object' ? data : {};
+            if (data["$type"] === "CollectionDto") {
+                let result = new CollectionDto();
+                result.init(data);
+                return result;
             }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetUnitOfMeasurements(_response);
-        });
+            let result = new Collection_ReferenceDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["$type"] = this._discriminator;
+            data["id"] = this.id;
+            data["title"] = this.title;
+            return data;
+        }
     }
 
-    protected processGetUnitOfMeasurements(response: AxiosResponse): Promise<CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
+    export interface ICollection_ReferenceDto {
+        id: string;
+        title: string;
+    }
+
+    export class CollectionDto extends Collection_ReferenceDto implements ICollectionDto {
+        hidden!: boolean;
+        promoted!: boolean;
+
+        constructor(data?: ICollectionDto) {
+            super(data);
+            this._discriminator = "CollectionDto";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.hidden = _data["hidden"];
+                this.promoted = _data["promoted"];
             }
         }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null.fromJS(resultData200);
-            return Promise.resolve<CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null>(result200);
 
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null>(null as any);
-    }
-
-    /**
-     * @param body (optional) 
-     * @return Success
-     */
-    registerUser(body?: RegisterUserCommand | undefined, cancelToken?: CancelToken): Promise<RegisterUserCommandResponse> {
-        let url_ = this.baseUrl + "/register";
-        url_ = url_.replace(/[?&]$/, "");
-
-        const content_ = JSON.stringify(body);
-
-        let options_: AxiosRequestConfig = {
-            data: content_,
-            method: "POST",
-            url: url_,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processRegisterUser(_response);
-        });
-    }
-
-    protected processRegisterUser(response: AxiosResponse): Promise<RegisterUserCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = RegisterUserCommandResponse.fromJS(resultData200);
-            return Promise.resolve<RegisterUserCommandResponse>(result200);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<RegisterUserCommandResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    deleteAccount(cancelToken?: CancelToken): Promise<DeleteAccountCommandResponse> {
-        let url_ = this.baseUrl + "/me";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "DELETE",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processDeleteAccount(_response);
-        });
-    }
-
-    protected processDeleteAccount(response: AxiosResponse): Promise<DeleteAccountCommandResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = DeleteAccountCommandResponse.fromJS(resultData200);
-            return Promise.resolve<DeleteAccountCommandResponse>(result200);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<DeleteAccountCommandResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    queryEmail(email: string, cancelToken?: CancelToken): Promise<QueryEmailResponse> {
-        let url_ = this.baseUrl + "/users/email/{email}";
-        if (email === undefined || email === null)
-            throw new Error("The parameter 'email' must be defined.");
-        url_ = url_.replace("{email}", encodeURIComponent("" + email));
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processQueryEmail(_response);
-        });
-    }
-
-    protected processQueryEmail(response: AxiosResponse): Promise<QueryEmailResponse> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = QueryEmailResponse.fromJS(resultData200);
-            return Promise.resolve<QueryEmailResponse>(result200);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<QueryEmailResponse>(null as any);
-    }
-
-    /**
-     * @return Success
-     */
-    getMe(cancelToken?: CancelToken): Promise<UserDto> {
-        let url_ = this.baseUrl + "/users/me";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: AxiosRequestConfig = {
-            method: "GET",
-            url: url_,
-            headers: {
-                "Accept": "text/plain"
-            },
-            cancelToken
-        };
-
-        return this.instance.request(options_).catch((_error: any) => {
-            if (isAxiosError(_error) && _error.response) {
-                return _error.response;
-            } else {
-                throw _error;
-            }
-        }).then((_response: AxiosResponse) => {
-            return this.processGetMe(_response);
-        });
-    }
-
-    protected processGetMe(response: AxiosResponse): Promise<UserDto> {
-        const status = response.status;
-        let _headers: any = {};
-        if (response.headers && typeof response.headers === "object") {
-            for (const k in response.headers) {
-                if (response.headers.hasOwnProperty(k)) {
-                    _headers[k] = response.headers[k];
-                }
-            }
-        }
-        if (status === 200) {
-            const _responseText = response.data;
-            let result200: any = null;
-            let resultData200 = _responseText;
-            result200 = UserDto.fromJS(resultData200);
-            return Promise.resolve<UserDto>(result200);
-
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.data;
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Promise.resolve<UserDto>(null as any);
-    }
-}
-
-export class LogDto implements ILogDto {
-    id!: string;
-    dateCreated!: dayjs.Dayjs;
-    level!: LogLevel;
-    message!: string;
-    stackTrace!: string;
-
-    constructor(data?: ILogDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.dateCreated = _data["dateCreated"] ? dayjs(_data["dateCreated"].toString()) : <any>undefined;
-            this.level = _data["level"];
-            this.message = _data["message"];
-            this.stackTrace = _data["stackTrace"];
-        }
-    }
-
-    static fromJS(data: any): LogDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new LogDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["dateCreated"] = this.dateCreated ? this.dateCreated.toISOString() : <any>undefined;
-        data["level"] = this.level;
-        data["message"] = this.message;
-        data["stackTrace"] = this.stackTrace;
-        return data;
-    }
-}
-
-export interface ILogDto {
-    id: string;
-    dateCreated: dayjs.Dayjs;
-    level: LogLevel;
-    message: string;
-    stackTrace: string;
-}
-
-export class SupportTicketDto implements ISupportTicketDto {
-    id!: string;
-    dateCreated!: dayjs.Dayjs;
-    status!: SupportTicketStatus;
-    email!: string;
-    message!: string;
-
-    constructor(data?: ISupportTicketDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.dateCreated = _data["dateCreated"] ? dayjs(_data["dateCreated"].toString()) : <any>undefined;
-            this.status = _data["status"];
-            this.email = _data["email"];
-            this.message = _data["message"];
-        }
-    }
-
-    static fromJS(data: any): SupportTicketDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new SupportTicketDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["dateCreated"] = this.dateCreated ? this.dateCreated.toISOString() : <any>undefined;
-        data["status"] = this.status;
-        data["email"] = this.email;
-        data["message"] = this.message;
-        return data;
-    }
-}
-
-export interface ISupportTicketDto {
-    id: string;
-    dateCreated: dayjs.Dayjs;
-    status: SupportTicketStatus;
-    email: string;
-    message: string;
-}
-
-export class QueryEmailResponse implements IQueryEmailResponse {
-    isUsed!: boolean;
-
-    constructor(data?: IQueryEmailResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.isUsed = _data["isUsed"];
-        }
-    }
-
-    static fromJS(data: any): QueryEmailResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new QueryEmailResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["isUsed"] = this.isUsed;
-        return data;
-    }
-}
-
-export interface IQueryEmailResponse {
-    isUsed: boolean;
-}
-
-export class Author_ReferenceDto implements IAuthor_ReferenceDto {
-    id!: string;
-    name!: string;
-
-    constructor(data?: IAuthor_ReferenceDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): Author_ReferenceDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new Author_ReferenceDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data;
-    }
-}
-
-export interface IAuthor_ReferenceDto {
-    id: string;
-    name: string;
-}
-
-export class AuthorDto implements IAuthorDto {
-    id!: string;
-    state!: AuthorState;
-    name!: string;
-    biography!: string;
-    profilePictureUrl!: string;
-    links!: AuthorDto_Link[];
-
-    constructor(data?: IAuthorDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.state = _data["state"];
-            this.name = _data["name"];
-            this.biography = _data["biography"];
-            this.profilePictureUrl = _data["profilePictureUrl"];
-            if (Array.isArray(_data["links"])) {
-                this.links = [] as any;
-                for (let item of _data["links"])
-                    this.links!.push(AuthorDto_Link.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): AuthorDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new AuthorDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["state"] = this.state;
-        data["name"] = this.name;
-        data["biography"] = this.biography;
-        data["profilePictureUrl"] = this.profilePictureUrl;
-        if (Array.isArray(this.links)) {
-            data["links"] = [];
-            for (let item of this.links)
-                data["links"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IAuthorDto {
-    id: string;
-    state: AuthorState;
-    name: string;
-    biography: string;
-    profilePictureUrl: string;
-    links: AuthorDto_Link[];
-}
-
-export class AuthorDto_Link implements IAuthorDto_Link {
-    id!: string;
-    name!: string;
-    url!: string;
-
-    constructor(data?: IAuthorDto_Link) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.url = _data["url"];
-        }
-    }
-
-    static fromJS(data: any): AuthorDto_Link {
-        data = typeof data === 'object' ? data : {};
-        let result = new AuthorDto_Link();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["url"] = this.url;
-        return data;
-    }
-}
-
-export interface IAuthorDto_Link {
-    id: string;
-    name: string;
-    url: string;
-}
-
-export class Collection_ReferenceDto implements ICollection_ReferenceDto {
-    id!: string;
-    title!: string;
-
-    protected _discriminator: string;
-
-    constructor(data?: ICollection_ReferenceDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        this._discriminator = "Collection_ReferenceDto";
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
-        }
-    }
-
-    static fromJS(data: any): Collection_ReferenceDto {
-        data = typeof data === 'object' ? data : {};
-        if (data["$type"] === "CollectionDto") {
+        static override fromJS(data: any): CollectionDto {
+            data = typeof data === 'object' ? data : {};
             let result = new CollectionDto();
             result.init(data);
             return result;
         }
-        let result = new Collection_ReferenceDto();
-        result.init(data);
-        return result;
-    }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["$type"] = this._discriminator;
-        data["id"] = this.id;
-        data["title"] = this.title;
-        return data;
-    }
-}
-
-export interface ICollection_ReferenceDto {
-    id: string;
-    title: string;
-}
-
-export class CollectionDto extends Collection_ReferenceDto implements ICollectionDto {
-    hidden!: boolean;
-    promoted!: boolean;
-
-    constructor(data?: ICollectionDto) {
-        super(data);
-        this._discriminator = "CollectionDto";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.hidden = _data["hidden"];
-            this.promoted = _data["promoted"];
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["hidden"] = this.hidden;
+            data["promoted"] = this.promoted;
+            super.toJSON(data);
+            return data;
         }
     }
 
-    static override fromJS(data: any): CollectionDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new CollectionDto();
-        result.init(data);
-        return result;
+    export interface ICollectionDto extends ICollection_ReferenceDto {
+        hidden: boolean;
+        promoted: boolean;
     }
 
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["hidden"] = this.hidden;
-        data["promoted"] = this.promoted;
-        super.toJSON(data);
-        return data;
-    }
-}
+    export class ContactUsDto implements IContactUsDto {
+        email!: string;
+        message!: string;
 
-export interface ICollectionDto extends ICollection_ReferenceDto {
-    hidden: boolean;
-    promoted: boolean;
-}
-
-export class ContactUsDto implements IContactUsDto {
-    email!: string;
-    message!: string;
-
-    constructor(data?: IContactUsDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IContactUsDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.email = _data["email"];
-            this.message = _data["message"];
-        }
-    }
-
-    static fromJS(data: any): ContactUsDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new ContactUsDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["email"] = this.email;
-        data["message"] = this.message;
-        return data;
-    }
-}
-
-export interface IContactUsDto {
-    email: string;
-    message: string;
-}
-
-export class PieceOfEquipment_ReferenceDto implements IPieceOfEquipment_ReferenceDto {
-    id!: string;
-    name!: string;
-    pluralName!: string;
-
-    protected _discriminator: string;
-
-    constructor(data?: IPieceOfEquipment_ReferenceDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                this.email = _data["email"];
+                this.message = _data["message"];
             }
         }
-        this._discriminator = "PieceOfEquipment_ReferenceDto";
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
+        static fromJS(data: any): ContactUsDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new ContactUsDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["email"] = this.email;
+            data["message"] = this.message;
+            return data;
         }
     }
 
-    static fromJS(data: any): PieceOfEquipment_ReferenceDto {
-        data = typeof data === 'object' ? data : {};
-        if (data["$type"] === "PieceOfEquipmentDto") {
+    export interface IContactUsDto {
+        email: string;
+        message: string;
+    }
+
+    export class PieceOfEquipment_ReferenceDto implements IPieceOfEquipment_ReferenceDto {
+        id!: string;
+        name!: string;
+        pluralName!: string;
+
+        protected _discriminator: string;
+
+        constructor(data?: IPieceOfEquipment_ReferenceDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+            this._discriminator = "PieceOfEquipment_ReferenceDto";
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+            }
+        }
+
+        static fromJS(data: any): PieceOfEquipment_ReferenceDto {
+            data = typeof data === 'object' ? data : {};
+            if (data["$type"] === "PieceOfEquipmentDto") {
+                let result = new PieceOfEquipmentDto();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "RecipeDto_RecipePieceOfEquipment") {
+                let result = new RecipeDto_RecipePieceOfEquipment();
+                result.init(data);
+                return result;
+            }
+            let result = new PieceOfEquipment_ReferenceDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["$type"] = this._discriminator;
+            data["id"] = this.id;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            return data;
+        }
+    }
+
+    export interface IPieceOfEquipment_ReferenceDto {
+        id: string;
+        name: string;
+        pluralName: string;
+    }
+
+    export class PieceOfEquipmentDto extends PieceOfEquipment_ReferenceDto implements IPieceOfEquipmentDto {
+
+        constructor(data?: IPieceOfEquipmentDto) {
+            super(data);
+            this._discriminator = "PieceOfEquipmentDto";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+        }
+
+        static override fromJS(data: any): PieceOfEquipmentDto {
+            data = typeof data === 'object' ? data : {};
             let result = new PieceOfEquipmentDto();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "RecipeDto_RecipePieceOfEquipment") {
-            let result = new RecipeDto_RecipePieceOfEquipment();
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            super.toJSON(data);
+            return data;
+        }
+    }
+
+    export interface IPieceOfEquipmentDto extends IPieceOfEquipment_ReferenceDto {
+    }
+
+    export class Ingredient_ReferenceDto implements IIngredient_ReferenceDto {
+        id!: string;
+        name!: string;
+        pluralName!: string;
+
+        protected _discriminator: string;
+
+        constructor(data?: IIngredient_ReferenceDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+            this._discriminator = "Ingredient_ReferenceDto";
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+            }
+        }
+
+        static fromJS(data: any): Ingredient_ReferenceDto {
+            data = typeof data === 'object' ? data : {};
+            if (data["$type"] === "IngredientDto") {
+                let result = new IngredientDto();
+                result.init(data);
+                return result;
+            }
+            let result = new Ingredient_ReferenceDto();
             result.init(data);
             return result;
         }
-        let result = new PieceOfEquipment_ReferenceDto();
-        result.init(data);
-        return result;
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["$type"] = this._discriminator;
+            data["id"] = this.id;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            return data;
+        }
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["$type"] = this._discriminator;
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        return data;
-    }
-}
-
-export interface IPieceOfEquipment_ReferenceDto {
-    id: string;
-    name: string;
-    pluralName: string;
-}
-
-export class PieceOfEquipmentDto extends PieceOfEquipment_ReferenceDto implements IPieceOfEquipmentDto {
-
-    constructor(data?: IPieceOfEquipmentDto) {
-        super(data);
-        this._discriminator = "PieceOfEquipmentDto";
+    export interface IIngredient_ReferenceDto {
+        id: string;
+        name: string;
+        pluralName: string;
     }
 
-    override init(_data?: any) {
-        super.init(_data);
-    }
+    export class IngredientDto extends Ingredient_ReferenceDto implements IIngredientDto {
+        defaultUnitOfMeasurement!: UnitOfMeasurement_ReferenceDto;
 
-    static override fromJS(data: any): PieceOfEquipmentDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PieceOfEquipmentDto();
-        result.init(data);
-        return result;
-    }
+        constructor(data?: IIngredientDto) {
+            super(data);
+            this._discriminator = "IngredientDto";
+        }
 
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IPieceOfEquipmentDto extends IPieceOfEquipment_ReferenceDto {
-}
-
-export class Ingredient_ReferenceDto implements IIngredient_ReferenceDto {
-    id!: string;
-    name!: string;
-    pluralName!: string;
-
-    protected _discriminator: string;
-
-    constructor(data?: IIngredient_ReferenceDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.defaultUnitOfMeasurement = _data["defaultUnitOfMeasurement"] ? UnitOfMeasurement_ReferenceDto.fromJS(_data["defaultUnitOfMeasurement"]) : <any>undefined;
             }
         }
-        this._discriminator = "Ingredient_ReferenceDto";
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-        }
-    }
-
-    static fromJS(data: any): Ingredient_ReferenceDto {
-        data = typeof data === 'object' ? data : {};
-        if (data["$type"] === "IngredientDto") {
+        static override fromJS(data: any): IngredientDto {
+            data = typeof data === 'object' ? data : {};
             let result = new IngredientDto();
             result.init(data);
             return result;
         }
-        let result = new Ingredient_ReferenceDto();
-        result.init(data);
-        return result;
-    }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["$type"] = this._discriminator;
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        return data;
-    }
-}
-
-export interface IIngredient_ReferenceDto {
-    id: string;
-    name: string;
-    pluralName: string;
-}
-
-export class IngredientDto extends Ingredient_ReferenceDto implements IIngredientDto {
-    defaultUnitOfMeasurement!: UnitOfMeasurement_ReferenceDto;
-
-    constructor(data?: IIngredientDto) {
-        super(data);
-        this._discriminator = "IngredientDto";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.defaultUnitOfMeasurement = _data["defaultUnitOfMeasurement"] ? UnitOfMeasurement_ReferenceDto.fromJS(_data["defaultUnitOfMeasurement"]) : <any>undefined;
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["defaultUnitOfMeasurement"] = this.defaultUnitOfMeasurement ? this.defaultUnitOfMeasurement.toJSON() : <any>undefined;
+            super.toJSON(data);
+            return data;
         }
     }
 
-    static override fromJS(data: any): IngredientDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new IngredientDto();
-        result.init(data);
-        return result;
+    export interface IIngredientDto extends IIngredient_ReferenceDto {
+        defaultUnitOfMeasurement: UnitOfMeasurement_ReferenceDto;
     }
 
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["defaultUnitOfMeasurement"] = this.defaultUnitOfMeasurement ? this.defaultUnitOfMeasurement.toJSON() : <any>undefined;
-        super.toJSON(data);
-        return data;
-    }
-}
+    export class LanguageDto implements ILanguageDto {
+        iso639!: string;
+        name!: string;
+        nativeName!: string;
 
-export interface IIngredientDto extends IIngredient_ReferenceDto {
-    defaultUnitOfMeasurement: UnitOfMeasurement_ReferenceDto;
-}
-
-export class LanguageDto implements ILanguageDto {
-    iso639!: string;
-    name!: string;
-    nativeName!: string;
-
-    constructor(data?: ILanguageDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: ILanguageDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.iso639 = _data["iso639"];
-            this.name = _data["name"];
-            this.nativeName = _data["nativeName"];
-        }
-    }
-
-    static fromJS(data: any): LanguageDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new LanguageDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["iso639"] = this.iso639;
-        data["name"] = this.name;
-        data["nativeName"] = this.nativeName;
-        return data;
-    }
-}
-
-export interface ILanguageDto {
-    iso639: string;
-    name: string;
-    nativeName: string;
-}
-
-export class PlannerDto implements IPlannerDto {
-    plannedRecipes!: PlannerDto_PlannedRecipe[];
-
-    constructor(data?: IPlannerDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                this.iso639 = _data["iso639"];
+                this.name = _data["name"];
+                this.nativeName = _data["nativeName"];
             }
         }
+
+        static fromJS(data: any): LanguageDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new LanguageDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["iso639"] = this.iso639;
+            data["name"] = this.name;
+            data["nativeName"] = this.nativeName;
+            return data;
+        }
     }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["plannedRecipes"])) {
-                this.plannedRecipes = [] as any;
-                for (let item of _data["plannedRecipes"])
-                    this.plannedRecipes!.push(PlannerDto_PlannedRecipe.fromJS(item));
+    export interface ILanguageDto {
+        iso639: string;
+        name: string;
+        nativeName: string;
+    }
+
+    export class PlannerDto implements IPlannerDto {
+        plannedRecipes!: PlannerDto_PlannedRecipe[];
+
+        constructor(data?: IPlannerDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    static fromJS(data: any): PlannerDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PlannerDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.plannedRecipes)) {
-            data["plannedRecipes"] = [];
-            for (let item of this.plannedRecipes)
-                data["plannedRecipes"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IPlannerDto {
-    plannedRecipes: PlannerDto_PlannedRecipe[];
-}
-
-export class PlannerDto_PlannedRecipe implements IPlannerDto_PlannedRecipe {
-    id!: string;
-    date!: dayjs.Dayjs;
-    servings!: number;
-    recipe!: PlannerDto_PlannedRecipe_Recipe;
-
-    constructor(data?: IPlannerDto_PlannedRecipe) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["plannedRecipes"])) {
+                    this.plannedRecipes = [] as any;
+                    for (let item of _data["plannedRecipes"])
+                        this.plannedRecipes!.push(PlannerDto_PlannedRecipe.fromJS(item));
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.date = _data["date"] ? dayjs(_data["date"].toString()) : <any>undefined;
-            this.servings = _data["servings"];
-            this.recipe = _data["recipe"] ? PlannerDto_PlannedRecipe_Recipe.fromJS(_data["recipe"]) : <any>undefined;
+        static fromJS(data: any): PlannerDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new PlannerDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.plannedRecipes)) {
+                data["plannedRecipes"] = [];
+                for (let item of this.plannedRecipes)
+                    data["plannedRecipes"].push(item.toJSON());
+            }
+            return data;
         }
     }
 
-    static fromJS(data: any): PlannerDto_PlannedRecipe {
-        data = typeof data === 'object' ? data : {};
-        let result = new PlannerDto_PlannedRecipe();
-        result.init(data);
-        return result;
+    export interface IPlannerDto {
+        plannedRecipes: PlannerDto_PlannedRecipe[];
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["date"] = this.date ? this.date.format('YYYY-MM-DD') : <any>undefined;
-        data["servings"] = this.servings;
-        data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
-        return data;
-    }
-}
+    export class PlannerDto_PlannedRecipe implements IPlannerDto_PlannedRecipe {
+        id!: string;
+        date!: dayjs.Dayjs;
+        servings!: number;
+        recipe!: PlannerDto_PlannedRecipe_Recipe;
 
-export interface IPlannerDto_PlannedRecipe {
-    id: string;
-    date: dayjs.Dayjs;
-    servings: number;
-    recipe: PlannerDto_PlannedRecipe_Recipe;
-}
-
-export class Recipe_ReferenceDto implements IRecipe_ReferenceDto {
-    id!: string;
-    name!: string;
-    type!: RecipeType;
-    createdBy!: User_ReferenceDto;
-    author!: Author_ReferenceDto | undefined;
-
-    protected _discriminator: string;
-
-    constructor(data?: IRecipe_ReferenceDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IPlannerDto_PlannedRecipe) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-        this._discriminator = "Recipe_ReferenceDto";
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.type = _data["type"];
-            this.createdBy = _data["createdBy"] ? User_ReferenceDto.fromJS(_data["createdBy"]) : <any>undefined;
-            this.author = _data["author"] ? Author_ReferenceDto.fromJS(_data["author"]) : <any>undefined;
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.date = _data["date"] ? dayjs(_data["date"].toString()) : <any>undefined;
+                this.servings = _data["servings"];
+                this.recipe = _data["recipe"] ? PlannerDto_PlannedRecipe_Recipe.fromJS(_data["recipe"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): PlannerDto_PlannedRecipe {
+            data = typeof data === 'object' ? data : {};
+            let result = new PlannerDto_PlannedRecipe();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["date"] = this.date ? this.date.format('YYYY-MM-DD') : <any>undefined;
+            data["servings"] = this.servings;
+            data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
+            return data;
         }
     }
 
-    static fromJS(data: any): Recipe_ReferenceDto {
-        data = typeof data === 'object' ? data : {};
-        if (data["$type"] === "PlannerDto_PlannedRecipe_Recipe") {
+    export interface IPlannerDto_PlannedRecipe {
+        id: string;
+        date: dayjs.Dayjs;
+        servings: number;
+        recipe: PlannerDto_PlannedRecipe_Recipe;
+    }
+
+    export class Recipe_ReferenceDto implements IRecipe_ReferenceDto {
+        id!: string;
+        name!: string;
+        type!: RecipeType;
+        createdBy!: User_ReferenceDto;
+        author!: Author_ReferenceDto | undefined;
+
+        protected _discriminator: string;
+
+        constructor(data?: IRecipe_ReferenceDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+            this._discriminator = "Recipe_ReferenceDto";
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
+                this.type = _data["type"];
+                this.createdBy = _data["createdBy"] ? User_ReferenceDto.fromJS(_data["createdBy"]) : <any>undefined;
+                this.author = _data["author"] ? Author_ReferenceDto.fromJS(_data["author"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): Recipe_ReferenceDto {
+            data = typeof data === 'object' ? data : {};
+            if (data["$type"] === "PlannerDto_PlannedRecipe_Recipe") {
+                let result = new PlannerDto_PlannedRecipe_Recipe();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "PlannerIngredientListDto_PlannedRecipe_Recipe") {
+                let result = new PlannerIngredientListDto_PlannedRecipe_Recipe();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "RecipeDto") {
+                let result = new RecipeDto();
+                result.init(data);
+                return result;
+            }
+            let result = new Recipe_ReferenceDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["$type"] = this._discriminator;
+            data["id"] = this.id;
+            data["name"] = this.name;
+            data["type"] = this.type;
+            data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
+            data["author"] = this.author ? this.author.toJSON() : <any>undefined;
+            return data;
+        }
+    }
+
+    export interface IRecipe_ReferenceDto {
+        id: string;
+        name: string;
+        type: RecipeType;
+        createdBy: User_ReferenceDto;
+        author: Author_ReferenceDto | undefined;
+    }
+
+    export class PlannerDto_PlannedRecipe_Recipe extends Recipe_ReferenceDto implements IPlannerDto_PlannedRecipe_Recipe {
+        description!: string;
+        dateCreated!: dayjs.Dayjs;
+        datePublished!: dayjs.Dayjs | undefined;
+        difficulty!: RecipeDifficulty;
+        personal!: boolean;
+        prepTime!: number;
+        cookTime!: number;
+        totalTime!: number;
+        servings!: number;
+        containsAlcohol!: boolean;
+        rating!: number;
+        favourited!: boolean | undefined;
+        nutrition!: RecipeNutrition_ReferenceDto;
+        ingredients!: RecipeIngredient_ReferenceDto[];
+        images!: RecipeImage_ReferenceDto[];
+        tags!: Tag_ReferenceDto[];
+
+        constructor(data?: IPlannerDto_PlannedRecipe_Recipe) {
+            super(data);
+            this._discriminator = "PlannerDto_PlannedRecipe_Recipe";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.description = _data["description"];
+                this.dateCreated = _data["dateCreated"] ? dayjs(_data["dateCreated"].toString()) : <any>undefined;
+                this.datePublished = _data["datePublished"] ? dayjs(_data["datePublished"].toString()) : <any>undefined;
+                this.difficulty = _data["difficulty"];
+                this.personal = _data["personal"];
+                this.prepTime = _data["prepTime"];
+                this.cookTime = _data["cookTime"];
+                this.totalTime = _data["totalTime"];
+                this.servings = _data["servings"];
+                this.containsAlcohol = _data["containsAlcohol"];
+                this.rating = _data["rating"];
+                this.favourited = _data["favourited"];
+                this.nutrition = _data["nutrition"] ? RecipeNutrition_ReferenceDto.fromJS(_data["nutrition"]) : <any>undefined;
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeIngredient_ReferenceDto.fromJS(item));
+                }
+                if (Array.isArray(_data["images"])) {
+                    this.images = [] as any;
+                    for (let item of _data["images"])
+                        this.images!.push(RecipeImage_ReferenceDto.fromJS(item));
+                }
+                if (Array.isArray(_data["tags"])) {
+                    this.tags = [] as any;
+                    for (let item of _data["tags"])
+                        this.tags!.push(Tag_ReferenceDto.fromJS(item));
+                }
+            }
+        }
+
+        static override fromJS(data: any): PlannerDto_PlannedRecipe_Recipe {
+            data = typeof data === 'object' ? data : {};
             let result = new PlannerDto_PlannedRecipe_Recipe();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "PlannerIngredientListDto_PlannedRecipe_Recipe") {
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["description"] = this.description;
+            data["dateCreated"] = this.dateCreated ? this.dateCreated.toISOString() : <any>undefined;
+            data["datePublished"] = this.datePublished ? this.datePublished.toISOString() : <any>undefined;
+            data["difficulty"] = this.difficulty;
+            data["personal"] = this.personal;
+            data["prepTime"] = this.prepTime;
+            data["cookTime"] = this.cookTime;
+            data["totalTime"] = this.totalTime;
+            data["servings"] = this.servings;
+            data["containsAlcohol"] = this.containsAlcohol;
+            data["rating"] = this.rating;
+            data["favourited"] = this.favourited;
+            data["nutrition"] = this.nutrition ? this.nutrition.toJSON() : <any>undefined;
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
+            }
+            if (Array.isArray(this.images)) {
+                data["images"] = [];
+                for (let item of this.images)
+                    data["images"].push(item.toJSON());
+            }
+            if (Array.isArray(this.tags)) {
+                data["tags"] = [];
+                for (let item of this.tags)
+                    data["tags"].push(item.toJSON());
+            }
+            super.toJSON(data);
+            return data;
+        }
+    }
+
+    export interface IPlannerDto_PlannedRecipe_Recipe extends IRecipe_ReferenceDto {
+        description: string;
+        dateCreated: dayjs.Dayjs;
+        datePublished: dayjs.Dayjs | undefined;
+        difficulty: RecipeDifficulty;
+        personal: boolean;
+        prepTime: number;
+        cookTime: number;
+        totalTime: number;
+        servings: number;
+        containsAlcohol: boolean;
+        rating: number;
+        favourited: boolean | undefined;
+        nutrition: RecipeNutrition_ReferenceDto;
+        ingredients: RecipeIngredient_ReferenceDto[];
+        images: RecipeImage_ReferenceDto[];
+        tags: Tag_ReferenceDto[];
+    }
+
+    export class PlannerIngredientListDto implements IPlannerIngredientListDto {
+        ingredients!: RecipeIngredient_ReferenceDto[];
+        breakdown!: PlannerIngredientListDto_Breakdown;
+
+        constructor(data?: IPlannerIngredientListDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeIngredient_ReferenceDto.fromJS(item));
+                }
+                this.breakdown = _data["breakdown"] ? PlannerIngredientListDto_Breakdown.fromJS(_data["breakdown"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): PlannerIngredientListDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new PlannerIngredientListDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
+            }
+            data["breakdown"] = this.breakdown ? this.breakdown.toJSON() : <any>undefined;
+            return data;
+        }
+    }
+
+    export interface IPlannerIngredientListDto {
+        ingredients: RecipeIngredient_ReferenceDto[];
+        breakdown: PlannerIngredientListDto_Breakdown;
+    }
+
+    export class PlannerIngredientListDto_Breakdown implements IPlannerIngredientListDto_Breakdown {
+        plannedRecipes!: PlannerIngredientListDto_PlannedRecipe[];
+
+        constructor(data?: IPlannerIngredientListDto_Breakdown) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["plannedRecipes"])) {
+                    this.plannedRecipes = [] as any;
+                    for (let item of _data["plannedRecipes"])
+                        this.plannedRecipes!.push(PlannerIngredientListDto_PlannedRecipe.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): PlannerIngredientListDto_Breakdown {
+            data = typeof data === 'object' ? data : {};
+            let result = new PlannerIngredientListDto_Breakdown();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.plannedRecipes)) {
+                data["plannedRecipes"] = [];
+                for (let item of this.plannedRecipes)
+                    data["plannedRecipes"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IPlannerIngredientListDto_Breakdown {
+        plannedRecipes: PlannerIngredientListDto_PlannedRecipe[];
+    }
+
+    export class PlannerIngredientListDto_PlannedRecipe implements IPlannerIngredientListDto_PlannedRecipe {
+        id!: string;
+        date!: dayjs.Dayjs;
+        servings!: number;
+        recipe!: PlannerIngredientListDto_PlannedRecipe_Recipe;
+        ingredients!: RecipeIngredient_ReferenceDto[];
+
+        constructor(data?: IPlannerIngredientListDto_PlannedRecipe) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.date = _data["date"] ? dayjs(_data["date"].toString()) : <any>undefined;
+                this.servings = _data["servings"];
+                this.recipe = _data["recipe"] ? PlannerIngredientListDto_PlannedRecipe_Recipe.fromJS(_data["recipe"]) : <any>undefined;
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeIngredient_ReferenceDto.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): PlannerIngredientListDto_PlannedRecipe {
+            data = typeof data === 'object' ? data : {};
+            let result = new PlannerIngredientListDto_PlannedRecipe();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["date"] = this.date ? this.date.format('YYYY-MM-DD') : <any>undefined;
+            data["servings"] = this.servings;
+            data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IPlannerIngredientListDto_PlannedRecipe {
+        id: string;
+        date: dayjs.Dayjs;
+        servings: number;
+        recipe: PlannerIngredientListDto_PlannedRecipe_Recipe;
+        ingredients: RecipeIngredient_ReferenceDto[];
+    }
+
+    export class PlannerIngredientListDto_PlannedRecipe_Recipe extends Recipe_ReferenceDto implements IPlannerIngredientListDto_PlannedRecipe_Recipe {
+        description!: string;
+        difficulty!: RecipeDifficulty;
+        personal!: boolean;
+        prepTime!: number;
+        cookTime!: number;
+        totalTime!: number;
+        servings!: number;
+        containsAlcohol!: boolean;
+        ingredients!: RecipeIngredient_ReferenceDto[];
+        images!: RecipeImage_ReferenceDto[];
+
+        constructor(data?: IPlannerIngredientListDto_PlannedRecipe_Recipe) {
+            super(data);
+            this._discriminator = "PlannerIngredientListDto_PlannedRecipe_Recipe";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.description = _data["description"];
+                this.difficulty = _data["difficulty"];
+                this.personal = _data["personal"];
+                this.prepTime = _data["prepTime"];
+                this.cookTime = _data["cookTime"];
+                this.totalTime = _data["totalTime"];
+                this.servings = _data["servings"];
+                this.containsAlcohol = _data["containsAlcohol"];
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeIngredient_ReferenceDto.fromJS(item));
+                }
+                if (Array.isArray(_data["images"])) {
+                    this.images = [] as any;
+                    for (let item of _data["images"])
+                        this.images!.push(RecipeImage_ReferenceDto.fromJS(item));
+                }
+            }
+        }
+
+        static override fromJS(data: any): PlannerIngredientListDto_PlannedRecipe_Recipe {
+            data = typeof data === 'object' ? data : {};
             let result = new PlannerIngredientListDto_PlannedRecipe_Recipe();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "RecipeDto") {
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["description"] = this.description;
+            data["difficulty"] = this.difficulty;
+            data["personal"] = this.personal;
+            data["prepTime"] = this.prepTime;
+            data["cookTime"] = this.cookTime;
+            data["totalTime"] = this.totalTime;
+            data["servings"] = this.servings;
+            data["containsAlcohol"] = this.containsAlcohol;
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
+            }
+            if (Array.isArray(this.images)) {
+                data["images"] = [];
+                for (let item of this.images)
+                    data["images"].push(item.toJSON());
+            }
+            super.toJSON(data);
+            return data;
+        }
+    }
+
+    export interface IPlannerIngredientListDto_PlannedRecipe_Recipe extends IRecipe_ReferenceDto {
+        description: string;
+        difficulty: RecipeDifficulty;
+        personal: boolean;
+        prepTime: number;
+        cookTime: number;
+        totalTime: number;
+        servings: number;
+        containsAlcohol: boolean;
+        ingredients: RecipeIngredient_ReferenceDto[];
+        images: RecipeImage_ReferenceDto[];
+    }
+
+    export class RecipeImage_ReferenceDto implements IRecipeImage_ReferenceDto {
+        id!: string;
+        url!: string;
+
+        constructor(data?: IRecipeImage_ReferenceDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.url = _data["url"];
+            }
+        }
+
+        static fromJS(data: any): RecipeImage_ReferenceDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeImage_ReferenceDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["url"] = this.url;
+            return data;
+        }
+    }
+
+    export interface IRecipeImage_ReferenceDto {
+        id: string;
+        url: string;
+    }
+
+    export class RecipeIngredient_ReferenceDto implements IRecipeIngredient_ReferenceDto {
+        id!: string;
+        amount!: number;
+        optional!: boolean;
+        partId!: string | undefined;
+        unitOfMeasurement!: UnitOfMeasurement_ReferenceDto;
+        ingredient!: Ingredient_ReferenceDto;
+
+        protected _discriminator: string;
+
+        constructor(data?: IRecipeIngredient_ReferenceDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+            this._discriminator = "RecipeIngredient_ReferenceDto";
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.amount = _data["amount"];
+                this.optional = _data["optional"];
+                this.partId = _data["partId"];
+                this.unitOfMeasurement = _data["unitOfMeasurement"] ? UnitOfMeasurement_ReferenceDto.fromJS(_data["unitOfMeasurement"]) : <any>undefined;
+                this.ingredient = _data["ingredient"] ? Ingredient_ReferenceDto.fromJS(_data["ingredient"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): RecipeIngredient_ReferenceDto {
+            data = typeof data === 'object' ? data : {};
+            if (data["$type"] === "RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient") {
+                let result = new RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient();
+                result.init(data);
+                return result;
+            }
+            let result = new RecipeIngredient_ReferenceDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["$type"] = this._discriminator;
+            data["id"] = this.id;
+            data["amount"] = this.amount;
+            data["optional"] = this.optional;
+            data["partId"] = this.partId;
+            data["unitOfMeasurement"] = this.unitOfMeasurement ? this.unitOfMeasurement.toJSON() : <any>undefined;
+            data["ingredient"] = this.ingredient ? this.ingredient.toJSON() : <any>undefined;
+            return data;
+        }
+    }
+
+    export interface IRecipeIngredient_ReferenceDto {
+        id: string;
+        amount: number;
+        optional: boolean;
+        partId: string | undefined;
+        unitOfMeasurement: UnitOfMeasurement_ReferenceDto;
+        ingredient: Ingredient_ReferenceDto;
+    }
+
+    export class RecipeNutrition_ReferenceDto implements IRecipeNutrition_ReferenceDto {
+        calories!: number | undefined;
+        sugar!: number | undefined;
+        fat!: number | undefined;
+        saturatedFat!: number | undefined;
+        sodium!: number | undefined;
+        protein!: number | undefined;
+        carbohydrates!: number | undefined;
+        fiber!: number | undefined;
+
+        constructor(data?: IRecipeNutrition_ReferenceDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.calories = _data["calories"];
+                this.sugar = _data["sugar"];
+                this.fat = _data["fat"];
+                this.saturatedFat = _data["saturatedFat"];
+                this.sodium = _data["sodium"];
+                this.protein = _data["protein"];
+                this.carbohydrates = _data["carbohydrates"];
+                this.fiber = _data["fiber"];
+            }
+        }
+
+        static fromJS(data: any): RecipeNutrition_ReferenceDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeNutrition_ReferenceDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["calories"] = this.calories;
+            data["sugar"] = this.sugar;
+            data["fat"] = this.fat;
+            data["saturatedFat"] = this.saturatedFat;
+            data["sodium"] = this.sodium;
+            data["protein"] = this.protein;
+            data["carbohydrates"] = this.carbohydrates;
+            data["fiber"] = this.fiber;
+            return data;
+        }
+    }
+
+    export interface IRecipeNutrition_ReferenceDto {
+        calories: number | undefined;
+        sugar: number | undefined;
+        fat: number | undefined;
+        saturatedFat: number | undefined;
+        sodium: number | undefined;
+        protein: number | undefined;
+        carbohydrates: number | undefined;
+        fiber: number | undefined;
+    }
+
+    export class RecipeDto extends Recipe_ReferenceDto implements IRecipeDto {
+        description!: string;
+        state!: RecipeState;
+        dateCreated!: dayjs.Dayjs;
+        datePublished!: dayjs.Dayjs | undefined;
+        difficulty!: RecipeDifficulty;
+        personal!: boolean;
+        prepTime!: number;
+        cookTime!: number;
+        totalTime!: number;
+        servings!: number;
+        containsAlcohol!: boolean;
+        rating!: number;
+        favourited!: boolean | undefined;
+        referenceUrl!: string | undefined;
+        parts!: RecipeDto_Part[];
+        steps!: RecipeDto_Step[];
+        ingredients!: RecipeIngredient_ReferenceDto[];
+        equipment!: RecipeDto_RecipePieceOfEquipment[];
+        nutrition!: RecipeNutrition_ReferenceDto;
+        images!: RecipeImage_ReferenceDto[];
+        tags!: Tag_ReferenceDto[];
+
+        constructor(data?: IRecipeDto) {
+            super(data);
+            this._discriminator = "RecipeDto";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.description = _data["description"];
+                this.state = _data["state"];
+                this.dateCreated = _data["dateCreated"] ? dayjs(_data["dateCreated"].toString()) : <any>undefined;
+                this.datePublished = _data["datePublished"] ? dayjs(_data["datePublished"].toString()) : <any>undefined;
+                this.difficulty = _data["difficulty"];
+                this.personal = _data["personal"];
+                this.prepTime = _data["prepTime"];
+                this.cookTime = _data["cookTime"];
+                this.totalTime = _data["totalTime"];
+                this.servings = _data["servings"];
+                this.containsAlcohol = _data["containsAlcohol"];
+                this.rating = _data["rating"];
+                this.favourited = _data["favourited"];
+                this.referenceUrl = _data["referenceUrl"];
+                if (Array.isArray(_data["parts"])) {
+                    this.parts = [] as any;
+                    for (let item of _data["parts"])
+                        this.parts!.push(RecipeDto_Part.fromJS(item));
+                }
+                if (Array.isArray(_data["steps"])) {
+                    this.steps = [] as any;
+                    for (let item of _data["steps"])
+                        this.steps!.push(RecipeDto_Step.fromJS(item));
+                }
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeIngredient_ReferenceDto.fromJS(item));
+                }
+                if (Array.isArray(_data["equipment"])) {
+                    this.equipment = [] as any;
+                    for (let item of _data["equipment"])
+                        this.equipment!.push(RecipeDto_RecipePieceOfEquipment.fromJS(item));
+                }
+                this.nutrition = _data["nutrition"] ? RecipeNutrition_ReferenceDto.fromJS(_data["nutrition"]) : <any>undefined;
+                if (Array.isArray(_data["images"])) {
+                    this.images = [] as any;
+                    for (let item of _data["images"])
+                        this.images!.push(RecipeImage_ReferenceDto.fromJS(item));
+                }
+                if (Array.isArray(_data["tags"])) {
+                    this.tags = [] as any;
+                    for (let item of _data["tags"])
+                        this.tags!.push(Tag_ReferenceDto.fromJS(item));
+                }
+            }
+        }
+
+        static override fromJS(data: any): RecipeDto {
+            data = typeof data === 'object' ? data : {};
             let result = new RecipeDto();
             result.init(data);
             return result;
         }
-        let result = new Recipe_ReferenceDto();
-        result.init(data);
-        return result;
-    }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["$type"] = this._discriminator;
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["type"] = this.type;
-        data["createdBy"] = this.createdBy ? this.createdBy.toJSON() : <any>undefined;
-        data["author"] = this.author ? this.author.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IRecipe_ReferenceDto {
-    id: string;
-    name: string;
-    type: RecipeType;
-    createdBy: User_ReferenceDto;
-    author: Author_ReferenceDto | undefined;
-}
-
-export class PlannerDto_PlannedRecipe_Recipe extends Recipe_ReferenceDto implements IPlannerDto_PlannedRecipe_Recipe {
-    description!: string;
-    dateCreated!: dayjs.Dayjs;
-    datePublished!: dayjs.Dayjs | undefined;
-    difficulty!: RecipeDifficulty;
-    personal!: boolean;
-    prepTime!: number;
-    cookTime!: number;
-    totalTime!: number;
-    servings!: number;
-    containsAlcohol!: boolean;
-    rating!: number;
-    favourited!: boolean | undefined;
-    nutrition!: RecipeNutrition_ReferenceDto;
-    ingredients!: RecipeIngredient_ReferenceDto[];
-    images!: RecipeImage_ReferenceDto[];
-    tags!: Tag_ReferenceDto[];
-
-    constructor(data?: IPlannerDto_PlannedRecipe_Recipe) {
-        super(data);
-        this._discriminator = "PlannerDto_PlannedRecipe_Recipe";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.description = _data["description"];
-            this.dateCreated = _data["dateCreated"] ? dayjs(_data["dateCreated"].toString()) : <any>undefined;
-            this.datePublished = _data["datePublished"] ? dayjs(_data["datePublished"].toString()) : <any>undefined;
-            this.difficulty = _data["difficulty"];
-            this.personal = _data["personal"];
-            this.prepTime = _data["prepTime"];
-            this.cookTime = _data["cookTime"];
-            this.totalTime = _data["totalTime"];
-            this.servings = _data["servings"];
-            this.containsAlcohol = _data["containsAlcohol"];
-            this.rating = _data["rating"];
-            this.favourited = _data["favourited"];
-            this.nutrition = _data["nutrition"] ? RecipeNutrition_ReferenceDto.fromJS(_data["nutrition"]) : <any>undefined;
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeIngredient_ReferenceDto.fromJS(item));
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["description"] = this.description;
+            data["state"] = this.state;
+            data["dateCreated"] = this.dateCreated ? this.dateCreated.toISOString() : <any>undefined;
+            data["datePublished"] = this.datePublished ? this.datePublished.toISOString() : <any>undefined;
+            data["difficulty"] = this.difficulty;
+            data["personal"] = this.personal;
+            data["prepTime"] = this.prepTime;
+            data["cookTime"] = this.cookTime;
+            data["totalTime"] = this.totalTime;
+            data["servings"] = this.servings;
+            data["containsAlcohol"] = this.containsAlcohol;
+            data["rating"] = this.rating;
+            data["favourited"] = this.favourited;
+            data["referenceUrl"] = this.referenceUrl;
+            if (Array.isArray(this.parts)) {
+                data["parts"] = [];
+                for (let item of this.parts)
+                    data["parts"].push(item.toJSON());
             }
-            if (Array.isArray(_data["images"])) {
-                this.images = [] as any;
-                for (let item of _data["images"])
-                    this.images!.push(RecipeImage_ReferenceDto.fromJS(item));
+            if (Array.isArray(this.steps)) {
+                data["steps"] = [];
+                for (let item of this.steps)
+                    data["steps"].push(item.toJSON());
             }
-            if (Array.isArray(_data["tags"])) {
-                this.tags = [] as any;
-                for (let item of _data["tags"])
-                    this.tags!.push(Tag_ReferenceDto.fromJS(item));
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
             }
+            if (Array.isArray(this.equipment)) {
+                data["equipment"] = [];
+                for (let item of this.equipment)
+                    data["equipment"].push(item.toJSON());
+            }
+            data["nutrition"] = this.nutrition ? this.nutrition.toJSON() : <any>undefined;
+            if (Array.isArray(this.images)) {
+                data["images"] = [];
+                for (let item of this.images)
+                    data["images"].push(item.toJSON());
+            }
+            if (Array.isArray(this.tags)) {
+                data["tags"] = [];
+                for (let item of this.tags)
+                    data["tags"].push(item.toJSON());
+            }
+            super.toJSON(data);
+            return data;
         }
     }
 
-    static override fromJS(data: any): PlannerDto_PlannedRecipe_Recipe {
-        data = typeof data === 'object' ? data : {};
-        let result = new PlannerDto_PlannedRecipe_Recipe();
-        result.init(data);
-        return result;
+    export interface IRecipeDto extends IRecipe_ReferenceDto {
+        description: string;
+        state: RecipeState;
+        dateCreated: dayjs.Dayjs;
+        datePublished: dayjs.Dayjs | undefined;
+        difficulty: RecipeDifficulty;
+        personal: boolean;
+        prepTime: number;
+        cookTime: number;
+        totalTime: number;
+        servings: number;
+        containsAlcohol: boolean;
+        rating: number;
+        favourited: boolean | undefined;
+        referenceUrl: string | undefined;
+        parts: RecipeDto_Part[];
+        steps: RecipeDto_Step[];
+        ingredients: RecipeIngredient_ReferenceDto[];
+        equipment: RecipeDto_RecipePieceOfEquipment[];
+        nutrition: RecipeNutrition_ReferenceDto;
+        images: RecipeImage_ReferenceDto[];
+        tags: Tag_ReferenceDto[];
     }
 
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["description"] = this.description;
-        data["dateCreated"] = this.dateCreated ? this.dateCreated.toISOString() : <any>undefined;
-        data["datePublished"] = this.datePublished ? this.datePublished.toISOString() : <any>undefined;
-        data["difficulty"] = this.difficulty;
-        data["personal"] = this.personal;
-        data["prepTime"] = this.prepTime;
-        data["cookTime"] = this.cookTime;
-        data["totalTime"] = this.totalTime;
-        data["servings"] = this.servings;
-        data["containsAlcohol"] = this.containsAlcohol;
-        data["rating"] = this.rating;
-        data["favourited"] = this.favourited;
-        data["nutrition"] = this.nutrition ? this.nutrition.toJSON() : <any>undefined;
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
-        }
-        if (Array.isArray(this.images)) {
-            data["images"] = [];
-            for (let item of this.images)
-                data["images"].push(item.toJSON());
-        }
-        if (Array.isArray(this.tags)) {
-            data["tags"] = [];
-            for (let item of this.tags)
-                data["tags"].push(item.toJSON());
-        }
-        super.toJSON(data);
-        return data;
-    }
-}
+    export class RecipeDto_Part implements IRecipeDto_Part {
+        id!: string;
+        name!: string;
 
-export interface IPlannerDto_PlannedRecipe_Recipe extends IRecipe_ReferenceDto {
-    description: string;
-    dateCreated: dayjs.Dayjs;
-    datePublished: dayjs.Dayjs | undefined;
-    difficulty: RecipeDifficulty;
-    personal: boolean;
-    prepTime: number;
-    cookTime: number;
-    totalTime: number;
-    servings: number;
-    containsAlcohol: boolean;
-    rating: number;
-    favourited: boolean | undefined;
-    nutrition: RecipeNutrition_ReferenceDto;
-    ingredients: RecipeIngredient_ReferenceDto[];
-    images: RecipeImage_ReferenceDto[];
-    tags: Tag_ReferenceDto[];
-}
-
-export class PlannerIngredientListDto implements IPlannerIngredientListDto {
-    ingredients!: RecipeIngredient_ReferenceDto[];
-    breakdown!: PlannerIngredientListDto_Breakdown;
-
-    constructor(data?: IPlannerIngredientListDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IRecipeDto_Part) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeIngredient_ReferenceDto.fromJS(item));
-            }
-            this.breakdown = _data["breakdown"] ? PlannerIngredientListDto_Breakdown.fromJS(_data["breakdown"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): PlannerIngredientListDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new PlannerIngredientListDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
-        }
-        data["breakdown"] = this.breakdown ? this.breakdown.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IPlannerIngredientListDto {
-    ingredients: RecipeIngredient_ReferenceDto[];
-    breakdown: PlannerIngredientListDto_Breakdown;
-}
-
-export class PlannerIngredientListDto_Breakdown implements IPlannerIngredientListDto_Breakdown {
-    plannedRecipes!: PlannerIngredientListDto_PlannedRecipe[];
-
-    constructor(data?: IPlannerIngredientListDto_Breakdown) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
             }
         }
+
+        static fromJS(data: any): RecipeDto_Part {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeDto_Part();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["name"] = this.name;
+            return data;
+        }
     }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["plannedRecipes"])) {
-                this.plannedRecipes = [] as any;
-                for (let item of _data["plannedRecipes"])
-                    this.plannedRecipes!.push(PlannerIngredientListDto_PlannedRecipe.fromJS(item));
+    export interface IRecipeDto_Part {
+        id: string;
+        name: string;
+    }
+
+    export class RecipeDto_RecipePieceOfEquipment extends PieceOfEquipment_ReferenceDto implements IRecipeDto_RecipePieceOfEquipment {
+        amount!: number;
+        dependsOnServings!: boolean;
+
+        constructor(data?: IRecipeDto_RecipePieceOfEquipment) {
+            super(data);
+            this._discriminator = "RecipeDto_RecipePieceOfEquipment";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.amount = _data["amount"];
+                this.dependsOnServings = _data["dependsOnServings"];
             }
         }
-    }
 
-    static fromJS(data: any): PlannerIngredientListDto_Breakdown {
-        data = typeof data === 'object' ? data : {};
-        let result = new PlannerIngredientListDto_Breakdown();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.plannedRecipes)) {
-            data["plannedRecipes"] = [];
-            for (let item of this.plannedRecipes)
-                data["plannedRecipes"].push(item.toJSON());
+        static override fromJS(data: any): RecipeDto_RecipePieceOfEquipment {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeDto_RecipePieceOfEquipment();
+            result.init(data);
+            return result;
         }
-        return data;
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["amount"] = this.amount;
+            data["dependsOnServings"] = this.dependsOnServings;
+            super.toJSON(data);
+            return data;
+        }
     }
-}
 
-export interface IPlannerIngredientListDto_Breakdown {
-    plannedRecipes: PlannerIngredientListDto_PlannedRecipe[];
-}
+    export interface IRecipeDto_RecipePieceOfEquipment extends IPieceOfEquipment_ReferenceDto {
+        amount: number;
+        dependsOnServings: boolean;
+    }
 
-export class PlannerIngredientListDto_PlannedRecipe implements IPlannerIngredientListDto_PlannedRecipe {
-    id!: string;
-    date!: dayjs.Dayjs;
-    servings!: number;
-    recipe!: PlannerIngredientListDto_PlannedRecipe_Recipe;
-    ingredients!: RecipeIngredient_ReferenceDto[];
+    export class RecipeDto_Step implements IRecipeDto_Step {
+        id!: string;
+        name!: string;
+        instructions!: RecipeDto_Step_Instruction[];
 
-    constructor(data?: IPlannerIngredientListDto_PlannedRecipe) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IRecipeDto_Step) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.date = _data["date"] ? dayjs(_data["date"].toString()) : <any>undefined;
-            this.servings = _data["servings"];
-            this.recipe = _data["recipe"] ? PlannerIngredientListDto_PlannedRecipe_Recipe.fromJS(_data["recipe"]) : <any>undefined;
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeIngredient_ReferenceDto.fromJS(item));
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
+                if (Array.isArray(_data["instructions"])) {
+                    this.instructions = [] as any;
+                    for (let item of _data["instructions"])
+                        this.instructions!.push(RecipeDto_Step_Instruction.fromJS(item));
+                }
             }
         }
-    }
 
-    static fromJS(data: any): PlannerIngredientListDto_PlannedRecipe {
-        data = typeof data === 'object' ? data : {};
-        let result = new PlannerIngredientListDto_PlannedRecipe();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["date"] = this.date ? this.date.format('YYYY-MM-DD') : <any>undefined;
-        data["servings"] = this.servings;
-        data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
+        static fromJS(data: any): RecipeDto_Step {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeDto_Step();
+            result.init(data);
+            return result;
         }
-        return data;
-    }
-}
 
-export interface IPlannerIngredientListDto_PlannedRecipe {
-    id: string;
-    date: dayjs.Dayjs;
-    servings: number;
-    recipe: PlannerIngredientListDto_PlannedRecipe_Recipe;
-    ingredients: RecipeIngredient_ReferenceDto[];
-}
-
-export class PlannerIngredientListDto_PlannedRecipe_Recipe extends Recipe_ReferenceDto implements IPlannerIngredientListDto_PlannedRecipe_Recipe {
-    description!: string;
-    difficulty!: RecipeDifficulty;
-    personal!: boolean;
-    prepTime!: number;
-    cookTime!: number;
-    totalTime!: number;
-    servings!: number;
-    containsAlcohol!: boolean;
-    ingredients!: RecipeIngredient_ReferenceDto[];
-    images!: RecipeImage_ReferenceDto[];
-
-    constructor(data?: IPlannerIngredientListDto_PlannedRecipe_Recipe) {
-        super(data);
-        this._discriminator = "PlannerIngredientListDto_PlannedRecipe_Recipe";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.description = _data["description"];
-            this.difficulty = _data["difficulty"];
-            this.personal = _data["personal"];
-            this.prepTime = _data["prepTime"];
-            this.cookTime = _data["cookTime"];
-            this.totalTime = _data["totalTime"];
-            this.servings = _data["servings"];
-            this.containsAlcohol = _data["containsAlcohol"];
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeIngredient_ReferenceDto.fromJS(item));
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["name"] = this.name;
+            if (Array.isArray(this.instructions)) {
+                data["instructions"] = [];
+                for (let item of this.instructions)
+                    data["instructions"].push(item.toJSON());
             }
-            if (Array.isArray(_data["images"])) {
-                this.images = [] as any;
-                for (let item of _data["images"])
-                    this.images!.push(RecipeImage_ReferenceDto.fromJS(item));
+            return data;
+        }
+    }
+
+    export interface IRecipeDto_Step {
+        id: string;
+        name: string;
+        instructions: RecipeDto_Step_Instruction[];
+    }
+
+    export class RecipeDto_Step_Instruction implements IRecipeDto_Step_Instruction {
+        id!: string;
+        number!: number;
+        instruction!: string;
+
+        constructor(data?: IRecipeDto_Step_Instruction) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    static override fromJS(data: any): PlannerIngredientListDto_PlannedRecipe_Recipe {
-        data = typeof data === 'object' ? data : {};
-        let result = new PlannerIngredientListDto_PlannedRecipe_Recipe();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["description"] = this.description;
-        data["difficulty"] = this.difficulty;
-        data["personal"] = this.personal;
-        data["prepTime"] = this.prepTime;
-        data["cookTime"] = this.cookTime;
-        data["totalTime"] = this.totalTime;
-        data["servings"] = this.servings;
-        data["containsAlcohol"] = this.containsAlcohol;
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
-        }
-        if (Array.isArray(this.images)) {
-            data["images"] = [];
-            for (let item of this.images)
-                data["images"].push(item.toJSON());
-        }
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IPlannerIngredientListDto_PlannedRecipe_Recipe extends IRecipe_ReferenceDto {
-    description: string;
-    difficulty: RecipeDifficulty;
-    personal: boolean;
-    prepTime: number;
-    cookTime: number;
-    totalTime: number;
-    servings: number;
-    containsAlcohol: boolean;
-    ingredients: RecipeIngredient_ReferenceDto[];
-    images: RecipeImage_ReferenceDto[];
-}
-
-export class RecipeImage_ReferenceDto implements IRecipeImage_ReferenceDto {
-    id!: string;
-    url!: string;
-
-    constructor(data?: IRecipeImage_ReferenceDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.number = _data["number"];
+                this.instruction = _data["instruction"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.url = _data["url"];
+        static fromJS(data: any): RecipeDto_Step_Instruction {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeDto_Step_Instruction();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["number"] = this.number;
+            data["instruction"] = this.instruction;
+            return data;
         }
     }
 
-    static fromJS(data: any): RecipeImage_ReferenceDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeImage_ReferenceDto();
-        result.init(data);
-        return result;
+    export interface IRecipeDto_Step_Instruction {
+        id: string;
+        number: number;
+        instruction: string;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["url"] = this.url;
-        return data;
-    }
-}
+    export class RecipeIngredientsDto implements IRecipeIngredientsDto {
+        ingredients!: RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient[];
 
-export interface IRecipeImage_ReferenceDto {
-    id: string;
-    url: string;
-}
-
-export class RecipeIngredient_ReferenceDto implements IRecipeIngredient_ReferenceDto {
-    id!: string;
-    amount!: number;
-    optional!: boolean;
-    partId!: string | undefined;
-    unitOfMeasurement!: UnitOfMeasurement_ReferenceDto;
-    ingredient!: Ingredient_ReferenceDto;
-
-    protected _discriminator: string;
-
-    constructor(data?: IRecipeIngredient_ReferenceDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IRecipeIngredientsDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-        this._discriminator = "RecipeIngredient_ReferenceDto";
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.amount = _data["amount"];
-            this.optional = _data["optional"];
-            this.partId = _data["partId"];
-            this.unitOfMeasurement = _data["unitOfMeasurement"] ? UnitOfMeasurement_ReferenceDto.fromJS(_data["unitOfMeasurement"]) : <any>undefined;
-            this.ingredient = _data["ingredient"] ? Ingredient_ReferenceDto.fromJS(_data["ingredient"]) : <any>undefined;
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): RecipeIngredientsDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeIngredientsDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
+            }
+            return data;
         }
     }
 
-    static fromJS(data: any): RecipeIngredient_ReferenceDto {
-        data = typeof data === 'object' ? data : {};
-        if (data["$type"] === "RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient") {
+    export interface IRecipeIngredientsDto {
+        ingredients: RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient[];
+    }
+
+    export class RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient extends RecipeIngredient_ReferenceDto implements IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient {
+        recipePart!: RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart | undefined;
+
+        constructor(data?: IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient) {
+            super(data);
+            this._discriminator = "RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.recipePart = _data["recipePart"] ? RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart.fromJS(_data["recipePart"]) : <any>undefined;
+            }
+        }
+
+        static override fromJS(data: any): RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient {
+            data = typeof data === 'object' ? data : {};
             let result = new RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient();
             result.init(data);
             return result;
         }
-        let result = new RecipeIngredient_ReferenceDto();
-        result.init(data);
-        return result;
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["recipePart"] = this.recipePart ? this.recipePart.toJSON() : <any>undefined;
+            super.toJSON(data);
+            return data;
+        }
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["$type"] = this._discriminator;
-        data["id"] = this.id;
-        data["amount"] = this.amount;
-        data["optional"] = this.optional;
-        data["partId"] = this.partId;
-        data["unitOfMeasurement"] = this.unitOfMeasurement ? this.unitOfMeasurement.toJSON() : <any>undefined;
-        data["ingredient"] = this.ingredient ? this.ingredient.toJSON() : <any>undefined;
-        return data;
+    export interface IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient extends IRecipeIngredient_ReferenceDto {
+        recipePart: RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart | undefined;
     }
-}
 
-export interface IRecipeIngredient_ReferenceDto {
-    id: string;
-    amount: number;
-    optional: boolean;
-    partId: string | undefined;
-    unitOfMeasurement: UnitOfMeasurement_ReferenceDto;
-    ingredient: Ingredient_ReferenceDto;
-}
+    export class RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart implements IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart {
+        id!: string | undefined;
 
-export class RecipeNutrition_ReferenceDto implements IRecipeNutrition_ReferenceDto {
-    calories!: number | undefined;
-    sugar!: number | undefined;
-    fat!: number | undefined;
-    saturatedFat!: number | undefined;
-    sodium!: number | undefined;
-    protein!: number | undefined;
-    carbohydrates!: number | undefined;
-    fiber!: number | undefined;
-
-    constructor(data?: IRecipeNutrition_ReferenceDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.calories = _data["calories"];
-            this.sugar = _data["sugar"];
-            this.fat = _data["fat"];
-            this.saturatedFat = _data["saturatedFat"];
-            this.sodium = _data["sodium"];
-            this.protein = _data["protein"];
-            this.carbohydrates = _data["carbohydrates"];
-            this.fiber = _data["fiber"];
-        }
-    }
-
-    static fromJS(data: any): RecipeNutrition_ReferenceDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeNutrition_ReferenceDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["calories"] = this.calories;
-        data["sugar"] = this.sugar;
-        data["fat"] = this.fat;
-        data["saturatedFat"] = this.saturatedFat;
-        data["sodium"] = this.sodium;
-        data["protein"] = this.protein;
-        data["carbohydrates"] = this.carbohydrates;
-        data["fiber"] = this.fiber;
-        return data;
-    }
-}
-
-export interface IRecipeNutrition_ReferenceDto {
-    calories: number | undefined;
-    sugar: number | undefined;
-    fat: number | undefined;
-    saturatedFat: number | undefined;
-    sodium: number | undefined;
-    protein: number | undefined;
-    carbohydrates: number | undefined;
-    fiber: number | undefined;
-}
-
-export class RecipeDto extends Recipe_ReferenceDto implements IRecipeDto {
-    description!: string;
-    state!: RecipeState;
-    dateCreated!: dayjs.Dayjs;
-    datePublished!: dayjs.Dayjs | undefined;
-    difficulty!: RecipeDifficulty;
-    personal!: boolean;
-    prepTime!: number;
-    cookTime!: number;
-    totalTime!: number;
-    servings!: number;
-    containsAlcohol!: boolean;
-    rating!: number;
-    favourited!: boolean | undefined;
-    referenceUrl!: string | undefined;
-    parts!: RecipeDto_Part[];
-    steps!: RecipeDto_Step[];
-    ingredients!: RecipeIngredient_ReferenceDto[];
-    equipment!: RecipeDto_RecipePieceOfEquipment[];
-    nutrition!: RecipeNutrition_ReferenceDto;
-    images!: RecipeImage_ReferenceDto[];
-    tags!: Tag_ReferenceDto[];
-
-    constructor(data?: IRecipeDto) {
-        super(data);
-        this._discriminator = "RecipeDto";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.description = _data["description"];
-            this.state = _data["state"];
-            this.dateCreated = _data["dateCreated"] ? dayjs(_data["dateCreated"].toString()) : <any>undefined;
-            this.datePublished = _data["datePublished"] ? dayjs(_data["datePublished"].toString()) : <any>undefined;
-            this.difficulty = _data["difficulty"];
-            this.personal = _data["personal"];
-            this.prepTime = _data["prepTime"];
-            this.cookTime = _data["cookTime"];
-            this.totalTime = _data["totalTime"];
-            this.servings = _data["servings"];
-            this.containsAlcohol = _data["containsAlcohol"];
-            this.rating = _data["rating"];
-            this.favourited = _data["favourited"];
-            this.referenceUrl = _data["referenceUrl"];
-            if (Array.isArray(_data["parts"])) {
-                this.parts = [] as any;
-                for (let item of _data["parts"])
-                    this.parts!.push(RecipeDto_Part.fromJS(item));
-            }
-            if (Array.isArray(_data["steps"])) {
-                this.steps = [] as any;
-                for (let item of _data["steps"])
-                    this.steps!.push(RecipeDto_Step.fromJS(item));
-            }
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeIngredient_ReferenceDto.fromJS(item));
-            }
-            if (Array.isArray(_data["equipment"])) {
-                this.equipment = [] as any;
-                for (let item of _data["equipment"])
-                    this.equipment!.push(RecipeDto_RecipePieceOfEquipment.fromJS(item));
-            }
-            this.nutrition = _data["nutrition"] ? RecipeNutrition_ReferenceDto.fromJS(_data["nutrition"]) : <any>undefined;
-            if (Array.isArray(_data["images"])) {
-                this.images = [] as any;
-                for (let item of _data["images"])
-                    this.images!.push(RecipeImage_ReferenceDto.fromJS(item));
-            }
-            if (Array.isArray(_data["tags"])) {
-                this.tags = [] as any;
-                for (let item of _data["tags"])
-                    this.tags!.push(Tag_ReferenceDto.fromJS(item));
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
             }
         }
+
+        static fromJS(data: any): RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
     }
 
-    static override fromJS(data: any): RecipeDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeDto();
-        result.init(data);
-        return result;
+    export interface IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart {
+        id: string | undefined;
     }
 
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["description"] = this.description;
-        data["state"] = this.state;
-        data["dateCreated"] = this.dateCreated ? this.dateCreated.toISOString() : <any>undefined;
-        data["datePublished"] = this.datePublished ? this.datePublished.toISOString() : <any>undefined;
-        data["difficulty"] = this.difficulty;
-        data["personal"] = this.personal;
-        data["prepTime"] = this.prepTime;
-        data["cookTime"] = this.cookTime;
-        data["totalTime"] = this.totalTime;
-        data["servings"] = this.servings;
-        data["containsAlcohol"] = this.containsAlcohol;
-        data["rating"] = this.rating;
-        data["favourited"] = this.favourited;
-        data["referenceUrl"] = this.referenceUrl;
-        if (Array.isArray(this.parts)) {
-            data["parts"] = [];
-            for (let item of this.parts)
-                data["parts"].push(item.toJSON());
-        }
-        if (Array.isArray(this.steps)) {
-            data["steps"] = [];
-            for (let item of this.steps)
-                data["steps"].push(item.toJSON());
-        }
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
-        }
-        if (Array.isArray(this.equipment)) {
-            data["equipment"] = [];
-            for (let item of this.equipment)
-                data["equipment"].push(item.toJSON());
-        }
-        data["nutrition"] = this.nutrition ? this.nutrition.toJSON() : <any>undefined;
-        if (Array.isArray(this.images)) {
-            data["images"] = [];
-            for (let item of this.images)
-                data["images"].push(item.toJSON());
-        }
-        if (Array.isArray(this.tags)) {
-            data["tags"] = [];
-            for (let item of this.tags)
-                data["tags"].push(item.toJSON());
-        }
-        super.toJSON(data);
-        return data;
-    }
-}
+    export class RecipeInstructionsDto implements IRecipeInstructionsDto {
+        steps!: RecipeInstructionsDto_Step[];
 
-export interface IRecipeDto extends IRecipe_ReferenceDto {
-    description: string;
-    state: RecipeState;
-    dateCreated: dayjs.Dayjs;
-    datePublished: dayjs.Dayjs | undefined;
-    difficulty: RecipeDifficulty;
-    personal: boolean;
-    prepTime: number;
-    cookTime: number;
-    totalTime: number;
-    servings: number;
-    containsAlcohol: boolean;
-    rating: number;
-    favourited: boolean | undefined;
-    referenceUrl: string | undefined;
-    parts: RecipeDto_Part[];
-    steps: RecipeDto_Step[];
-    ingredients: RecipeIngredient_ReferenceDto[];
-    equipment: RecipeDto_RecipePieceOfEquipment[];
-    nutrition: RecipeNutrition_ReferenceDto;
-    images: RecipeImage_ReferenceDto[];
-    tags: Tag_ReferenceDto[];
-}
-
-export class RecipeDto_Part implements IRecipeDto_Part {
-    id!: string;
-    name!: string;
-
-    constructor(data?: IRecipeDto_Part) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IRecipeInstructionsDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): RecipeDto_Part {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeDto_Part();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data;
-    }
-}
-
-export interface IRecipeDto_Part {
-    id: string;
-    name: string;
-}
-
-export class RecipeDto_RecipePieceOfEquipment extends PieceOfEquipment_ReferenceDto implements IRecipeDto_RecipePieceOfEquipment {
-    amount!: number;
-    dependsOnServings!: boolean;
-
-    constructor(data?: IRecipeDto_RecipePieceOfEquipment) {
-        super(data);
-        this._discriminator = "RecipeDto_RecipePieceOfEquipment";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.amount = _data["amount"];
-            this.dependsOnServings = _data["dependsOnServings"];
-        }
-    }
-
-    static override fromJS(data: any): RecipeDto_RecipePieceOfEquipment {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeDto_RecipePieceOfEquipment();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["amount"] = this.amount;
-        data["dependsOnServings"] = this.dependsOnServings;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IRecipeDto_RecipePieceOfEquipment extends IPieceOfEquipment_ReferenceDto {
-    amount: number;
-    dependsOnServings: boolean;
-}
-
-export class RecipeDto_Step implements IRecipeDto_Step {
-    id!: string;
-    name!: string;
-    instructions!: RecipeDto_Step_Instruction[];
-
-    constructor(data?: IRecipeDto_Step) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["steps"])) {
+                    this.steps = [] as any;
+                    for (let item of _data["steps"])
+                        this.steps!.push(RecipeInstructionsDto_Step.fromJS(item));
+                }
             }
         }
+
+        static fromJS(data: any): RecipeInstructionsDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeInstructionsDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.steps)) {
+                data["steps"] = [];
+                for (let item of this.steps)
+                    data["steps"].push(item.toJSON());
+            }
+            return data;
+        }
     }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            if (Array.isArray(_data["instructions"])) {
-                this.instructions = [] as any;
-                for (let item of _data["instructions"])
-                    this.instructions!.push(RecipeDto_Step_Instruction.fromJS(item));
+    export interface IRecipeInstructionsDto {
+        steps: RecipeInstructionsDto_Step[];
+    }
+
+    export class RecipeInstructionsDto_Step implements IRecipeInstructionsDto_Step {
+        id!: string;
+        name!: string;
+        instructions!: RecipeInstructionsDto_Step_Instruction[];
+
+        constructor(data?: IRecipeInstructionsDto_Step) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    static fromJS(data: any): RecipeDto_Step {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeDto_Step();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        if (Array.isArray(this.instructions)) {
-            data["instructions"] = [];
-            for (let item of this.instructions)
-                data["instructions"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IRecipeDto_Step {
-    id: string;
-    name: string;
-    instructions: RecipeDto_Step_Instruction[];
-}
-
-export class RecipeDto_Step_Instruction implements IRecipeDto_Step_Instruction {
-    id!: string;
-    number!: number;
-    instruction!: string;
-
-    constructor(data?: IRecipeDto_Step_Instruction) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
+                if (Array.isArray(_data["instructions"])) {
+                    this.instructions = [] as any;
+                    for (let item of _data["instructions"])
+                        this.instructions!.push(RecipeInstructionsDto_Step_Instruction.fromJS(item));
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.number = _data["number"];
-            this.instruction = _data["instruction"];
+        static fromJS(data: any): RecipeInstructionsDto_Step {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeInstructionsDto_Step();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["name"] = this.name;
+            if (Array.isArray(this.instructions)) {
+                data["instructions"] = [];
+                for (let item of this.instructions)
+                    data["instructions"].push(item.toJSON());
+            }
+            return data;
         }
     }
 
-    static fromJS(data: any): RecipeDto_Step_Instruction {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeDto_Step_Instruction();
-        result.init(data);
-        return result;
+    export interface IRecipeInstructionsDto_Step {
+        id: string;
+        name: string;
+        instructions: RecipeInstructionsDto_Step_Instruction[];
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["number"] = this.number;
-        data["instruction"] = this.instruction;
-        return data;
-    }
-}
+    export class RecipeInstructionsDto_Step_Instruction implements IRecipeInstructionsDto_Step_Instruction {
+        id!: string;
+        number!: number;
+        instruction!: string;
 
-export interface IRecipeDto_Step_Instruction {
-    id: string;
-    number: number;
-    instruction: string;
-}
-
-export class RecipeIngredientsDto implements IRecipeIngredientsDto {
-    ingredients!: RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient[];
-
-    constructor(data?: IRecipeIngredientsDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IRecipeInstructionsDto_Step_Instruction) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient.fromJS(item));
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.number = _data["number"];
+                this.instruction = _data["instruction"];
             }
         }
-    }
 
-    static fromJS(data: any): RecipeIngredientsDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeIngredientsDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
+        static fromJS(data: any): RecipeInstructionsDto_Step_Instruction {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeInstructionsDto_Step_Instruction();
+            result.init(data);
+            return result;
         }
-        return data;
-    }
-}
 
-export interface IRecipeIngredientsDto {
-    ingredients: RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient[];
-}
-
-export class RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient extends RecipeIngredient_ReferenceDto implements IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient {
-    recipePart!: RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart | undefined;
-
-    constructor(data?: IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient) {
-        super(data);
-        this._discriminator = "RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.recipePart = _data["recipePart"] ? RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart.fromJS(_data["recipePart"]) : <any>undefined;
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["number"] = this.number;
+            data["instruction"] = this.instruction;
+            return data;
         }
     }
 
-    static override fromJS(data: any): RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient();
-        result.init(data);
-        return result;
+    export interface IRecipeInstructionsDto_Step_Instruction {
+        id: string;
+        number: number;
+        instruction: string;
     }
 
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["recipePart"] = this.recipePart ? this.recipePart.toJSON() : <any>undefined;
-        super.toJSON(data);
-        return data;
-    }
-}
+    export class RecipeRatingDto implements IRecipeRatingDto {
+        rating!: number | undefined;
 
-export interface IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient extends IRecipeIngredient_ReferenceDto {
-    recipePart: RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart | undefined;
-}
-
-export class RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart implements IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart {
-    id!: string | undefined;
-
-    constructor(data?: IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IRecipeRatingDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IRecipeIngredientsDto_RecipeIngredientsDto_RecipeIngredient_RecipePart {
-    id: string | undefined;
-}
-
-export class RecipeInstructionsDto implements IRecipeInstructionsDto {
-    steps!: RecipeInstructionsDto_Step[];
-
-    constructor(data?: IRecipeInstructionsDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                this.rating = _data["rating"];
             }
         }
+
+        static fromJS(data: any): RecipeRatingDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeRatingDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["rating"] = this.rating;
+            return data;
+        }
     }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["steps"])) {
-                this.steps = [] as any;
-                for (let item of _data["steps"])
-                    this.steps!.push(RecipeInstructionsDto_Step.fromJS(item));
+    export interface IRecipeRatingDto {
+        rating: number | undefined;
+    }
+
+    export class SystemDto implements ISystemDto {
+        version!: string;
+        maintenance!: boolean;
+
+        constructor(data?: ISystemDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    static fromJS(data: any): RecipeInstructionsDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeInstructionsDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.steps)) {
-            data["steps"] = [];
-            for (let item of this.steps)
-                data["steps"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IRecipeInstructionsDto {
-    steps: RecipeInstructionsDto_Step[];
-}
-
-export class RecipeInstructionsDto_Step implements IRecipeInstructionsDto_Step {
-    id!: string;
-    name!: string;
-    instructions!: RecipeInstructionsDto_Step_Instruction[];
-
-    constructor(data?: IRecipeInstructionsDto_Step) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                this.version = _data["version"];
+                this.maintenance = _data["maintenance"];
             }
         }
+
+        static fromJS(data: any): SystemDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new SystemDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["version"] = this.version;
+            data["maintenance"] = this.maintenance;
+            return data;
+        }
     }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            if (Array.isArray(_data["instructions"])) {
-                this.instructions = [] as any;
-                for (let item of _data["instructions"])
-                    this.instructions!.push(RecipeInstructionsDto_Step_Instruction.fromJS(item));
+    export interface ISystemDto {
+        version: string;
+        maintenance: boolean;
+    }
+
+    export class Tag_ReferenceDto implements ITag_ReferenceDto {
+        id!: string;
+        name!: string;
+
+        protected _discriminator: string;
+
+        constructor(data?: ITag_ReferenceDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+            this._discriminator = "Tag_ReferenceDto";
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
             }
         }
-    }
 
-    static fromJS(data: any): RecipeInstructionsDto_Step {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeInstructionsDto_Step();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        if (Array.isArray(this.instructions)) {
-            data["instructions"] = [];
-            for (let item of this.instructions)
-                data["instructions"].push(item.toJSON());
+        static fromJS(data: any): Tag_ReferenceDto {
+            data = typeof data === 'object' ? data : {};
+            if (data["$type"] === "TagDto") {
+                let result = new TagDto();
+                result.init(data);
+                return result;
+            }
+            let result = new Tag_ReferenceDto();
+            result.init(data);
+            return result;
         }
-        return data;
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["$type"] = this._discriminator;
+            data["id"] = this.id;
+            data["name"] = this.name;
+            return data;
+        }
     }
-}
 
-export interface IRecipeInstructionsDto_Step {
-    id: string;
-    name: string;
-    instructions: RecipeInstructionsDto_Step_Instruction[];
-}
+    export interface ITag_ReferenceDto {
+        id: string;
+        name: string;
+    }
 
-export class RecipeInstructionsDto_Step_Instruction implements IRecipeInstructionsDto_Step_Instruction {
-    id!: string;
-    number!: number;
-    instruction!: string;
+    export class TagDto extends Tag_ReferenceDto implements ITagDto {
+        icon!: string;
+        hidden!: boolean;
+        promoted!: boolean;
 
-    constructor(data?: IRecipeInstructionsDto_Step_Instruction) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: ITagDto) {
+            super(data);
+            this._discriminator = "TagDto";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.icon = _data["icon"];
+                this.hidden = _data["hidden"];
+                this.promoted = _data["promoted"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.number = _data["number"];
-            this.instruction = _data["instruction"];
-        }
-    }
-
-    static fromJS(data: any): RecipeInstructionsDto_Step_Instruction {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeInstructionsDto_Step_Instruction();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["number"] = this.number;
-        data["instruction"] = this.instruction;
-        return data;
-    }
-}
-
-export interface IRecipeInstructionsDto_Step_Instruction {
-    id: string;
-    number: number;
-    instruction: string;
-}
-
-export class RecipeRatingDto implements IRecipeRatingDto {
-    rating!: number | undefined;
-
-    constructor(data?: IRecipeRatingDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.rating = _data["rating"];
-        }
-    }
-
-    static fromJS(data: any): RecipeRatingDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeRatingDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["rating"] = this.rating;
-        return data;
-    }
-}
-
-export interface IRecipeRatingDto {
-    rating: number | undefined;
-}
-
-export class SystemDto implements ISystemDto {
-    version!: string;
-    maintenance!: boolean;
-
-    constructor(data?: ISystemDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.version = _data["version"];
-            this.maintenance = _data["maintenance"];
-        }
-    }
-
-    static fromJS(data: any): SystemDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new SystemDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["version"] = this.version;
-        data["maintenance"] = this.maintenance;
-        return data;
-    }
-}
-
-export interface ISystemDto {
-    version: string;
-    maintenance: boolean;
-}
-
-export class Tag_ReferenceDto implements ITag_ReferenceDto {
-    id!: string;
-    name!: string;
-
-    protected _discriminator: string;
-
-    constructor(data?: ITag_ReferenceDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-        this._discriminator = "Tag_ReferenceDto";
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): Tag_ReferenceDto {
-        data = typeof data === 'object' ? data : {};
-        if (data["$type"] === "TagDto") {
+        static override fromJS(data: any): TagDto {
+            data = typeof data === 'object' ? data : {};
             let result = new TagDto();
             result.init(data);
             return result;
         }
-        let result = new Tag_ReferenceDto();
-        result.init(data);
-        return result;
-    }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["$type"] = this._discriminator;
-        data["id"] = this.id;
-        data["name"] = this.name;
-        return data;
-    }
-}
-
-export interface ITag_ReferenceDto {
-    id: string;
-    name: string;
-}
-
-export class TagDto extends Tag_ReferenceDto implements ITagDto {
-    icon!: string;
-    hidden!: boolean;
-    promoted!: boolean;
-
-    constructor(data?: ITagDto) {
-        super(data);
-        this._discriminator = "TagDto";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.icon = _data["icon"];
-            this.hidden = _data["hidden"];
-            this.promoted = _data["promoted"];
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["icon"] = this.icon;
+            data["hidden"] = this.hidden;
+            data["promoted"] = this.promoted;
+            super.toJSON(data);
+            return data;
         }
     }
 
-    static override fromJS(data: any): TagDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new TagDto();
-        result.init(data);
-        return result;
+    export interface ITagDto extends ITag_ReferenceDto {
+        icon: string;
+        hidden: boolean;
+        promoted: boolean;
     }
 
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["icon"] = this.icon;
-        data["hidden"] = this.hidden;
-        data["promoted"] = this.promoted;
-        super.toJSON(data);
-        return data;
-    }
-}
+    export class UnitOfMeasurement_ReferenceDto implements IUnitOfMeasurement_ReferenceDto {
+        id!: string;
+        name!: string;
+        pluralName!: string;
+        abbreviation!: string;
+        type!: MeasurementType;
+        system!: MeasurementSystem | undefined;
+        representAs!: UnitOfMeasurementRepresentation;
 
-export interface ITagDto extends ITag_ReferenceDto {
-    icon: string;
-    hidden: boolean;
-    promoted: boolean;
-}
+        protected _discriminator: string;
 
-export class UnitOfMeasurement_ReferenceDto implements IUnitOfMeasurement_ReferenceDto {
-    id!: string;
-    name!: string;
-    pluralName!: string;
-    abbreviation!: string;
-    type!: MeasurementType;
-    system!: MeasurementSystem | undefined;
-    representAs!: UnitOfMeasurementRepresentation;
+        constructor(data?: IUnitOfMeasurement_ReferenceDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+            this._discriminator = "UnitOfMeasurement_ReferenceDto";
+        }
 
-    protected _discriminator: string;
-
-    constructor(data?: IUnitOfMeasurement_ReferenceDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+                this.abbreviation = _data["abbreviation"];
+                this.type = _data["type"];
+                this.system = _data["system"];
+                this.representAs = _data["representAs"];
             }
         }
-        this._discriminator = "UnitOfMeasurement_ReferenceDto";
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-            this.abbreviation = _data["abbreviation"];
-            this.type = _data["type"];
-            this.system = _data["system"];
-            this.representAs = _data["representAs"];
+        static fromJS(data: any): UnitOfMeasurement_ReferenceDto {
+            data = typeof data === 'object' ? data : {};
+            if (data["$type"] === "UnitOfMeasurementDto") {
+                let result = new UnitOfMeasurementDto();
+                result.init(data);
+                return result;
+            }
+            let result = new UnitOfMeasurement_ReferenceDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["$type"] = this._discriminator;
+            data["id"] = this.id;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            data["abbreviation"] = this.abbreviation;
+            data["type"] = this.type;
+            data["system"] = this.system;
+            data["representAs"] = this.representAs;
+            return data;
         }
     }
 
-    static fromJS(data: any): UnitOfMeasurement_ReferenceDto {
-        data = typeof data === 'object' ? data : {};
-        if (data["$type"] === "UnitOfMeasurementDto") {
+    export interface IUnitOfMeasurement_ReferenceDto {
+        id: string;
+        name: string;
+        pluralName: string;
+        abbreviation: string;
+        type: MeasurementType;
+        system: MeasurementSystem | undefined;
+        representAs: UnitOfMeasurementRepresentation;
+    }
+
+    export class UnitOfMeasurementDto extends UnitOfMeasurement_ReferenceDto implements IUnitOfMeasurementDto {
+
+        constructor(data?: IUnitOfMeasurementDto) {
+            super(data);
+            this._discriminator = "UnitOfMeasurementDto";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+        }
+
+        static override fromJS(data: any): UnitOfMeasurementDto {
+            data = typeof data === 'object' ? data : {};
             let result = new UnitOfMeasurementDto();
             result.init(data);
             return result;
         }
-        let result = new UnitOfMeasurement_ReferenceDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["$type"] = this._discriminator;
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        data["abbreviation"] = this.abbreviation;
-        data["type"] = this.type;
-        data["system"] = this.system;
-        data["representAs"] = this.representAs;
-        return data;
-    }
-}
-
-export interface IUnitOfMeasurement_ReferenceDto {
-    id: string;
-    name: string;
-    pluralName: string;
-    abbreviation: string;
-    type: MeasurementType;
-    system: MeasurementSystem | undefined;
-    representAs: UnitOfMeasurementRepresentation;
-}
-
-export class UnitOfMeasurementDto extends UnitOfMeasurement_ReferenceDto implements IUnitOfMeasurementDto {
-
-    constructor(data?: IUnitOfMeasurementDto) {
-        super(data);
-        this._discriminator = "UnitOfMeasurementDto";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-    }
-
-    static override fromJS(data: any): UnitOfMeasurementDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UnitOfMeasurementDto();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IUnitOfMeasurementDto extends IUnitOfMeasurement_ReferenceDto {
-}
-
-export class User_ReferenceDto implements IUser_ReferenceDto {
-    id!: string;
-
-    constructor(data?: IUser_ReferenceDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): User_ReferenceDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new User_ReferenceDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IUser_ReferenceDto {
-    id: string;
-}
-
-export class UserDto implements IUserDto {
-    id!: string;
-    firstName!: string;
-
-    constructor(data?: IUserDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.firstName = _data["firstName"];
-        }
-    }
-
-    static fromJS(data: any): UserDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new UserDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["firstName"] = this.firstName;
-        return data;
-    }
-}
-
-export interface IUserDto {
-    id: string;
-    firstName: string;
-}
-
-export class AddVariantDto implements IAddVariantDto {
-    variantRecipeId!: string;
-
-    constructor(data?: IAddVariantDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.variantRecipeId = _data["variantRecipeId"];
-        }
-    }
-
-    static fromJS(data: any): AddVariantDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new AddVariantDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["variantRecipeId"] = this.variantRecipeId;
-        return data;
-    }
-}
-
-export interface IAddVariantDto {
-    variantRecipeId: string;
-}
-
-export class RecipeCreationResponseDto implements IRecipeCreationResponseDto {
-    id!: string;
-
-    constructor(data?: IRecipeCreationResponseDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): RecipeCreationResponseDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeCreationResponseDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IRecipeCreationResponseDto {
-    id: string;
-}
-
-export class RecipeImageUploadResponseDto implements IRecipeImageUploadResponseDto {
-    id!: string;
-
-    constructor(data?: IRecipeImageUploadResponseDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): RecipeImageUploadResponseDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeImageUploadResponseDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IRecipeImageUploadResponseDto {
-    id: string;
-}
-
-export class RecipeCreationDto implements IRecipeCreationDto {
-    languageCode!: string;
-    name!: string;
-    description!: string;
-    type!: RecipeType;
-    difficulty!: RecipeDifficulty;
-    personal!: boolean;
-    prepTime!: number;
-    cookTime!: number;
-    totalTime!: number;
-    servings!: number;
-    containsAlcohol!: boolean;
-    authorId!: string | undefined;
-    referenceUrl!: string | undefined;
-    descendantOfRecipeId!: string | undefined;
-    parts!: RecipeCreationDto_Part[];
-    steps!: RecipeCreationDto_Step[];
-    ingredients!: RecipeCreationDto_Ingredient[];
-    equipment!: RecipeCreationDto_PieceOfEquipment[];
-    nutrition!: RecipeCreationDto_Nutrition;
-    tags!: RecipeCreationDto_Tag[];
-
-    constructor(data?: IRecipeCreationDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.languageCode = _data["languageCode"];
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.type = _data["type"];
-            this.difficulty = _data["difficulty"];
-            this.personal = _data["personal"];
-            this.prepTime = _data["prepTime"];
-            this.cookTime = _data["cookTime"];
-            this.totalTime = _data["totalTime"];
-            this.servings = _data["servings"];
-            this.containsAlcohol = _data["containsAlcohol"];
-            this.authorId = _data["authorId"];
-            this.referenceUrl = _data["referenceUrl"];
-            this.descendantOfRecipeId = _data["descendantOfRecipeId"];
-            if (Array.isArray(_data["parts"])) {
-                this.parts = [] as any;
-                for (let item of _data["parts"])
-                    this.parts!.push(RecipeCreationDto_Part.fromJS(item));
-            }
-            if (Array.isArray(_data["steps"])) {
-                this.steps = [] as any;
-                for (let item of _data["steps"])
-                    this.steps!.push(RecipeCreationDto_Step.fromJS(item));
-            }
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeCreationDto_Ingredient.fromJS(item));
-            }
-            if (Array.isArray(_data["equipment"])) {
-                this.equipment = [] as any;
-                for (let item of _data["equipment"])
-                    this.equipment!.push(RecipeCreationDto_PieceOfEquipment.fromJS(item));
-            }
-            this.nutrition = _data["nutrition"] ? RecipeCreationDto_Nutrition.fromJS(_data["nutrition"]) : <any>undefined;
-            if (Array.isArray(_data["tags"])) {
-                this.tags = [] as any;
-                for (let item of _data["tags"])
-                    this.tags!.push(RecipeCreationDto_Tag.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): RecipeCreationDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeCreationDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["languageCode"] = this.languageCode;
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["type"] = this.type;
-        data["difficulty"] = this.difficulty;
-        data["personal"] = this.personal;
-        data["prepTime"] = this.prepTime;
-        data["cookTime"] = this.cookTime;
-        data["totalTime"] = this.totalTime;
-        data["servings"] = this.servings;
-        data["containsAlcohol"] = this.containsAlcohol;
-        data["authorId"] = this.authorId;
-        data["referenceUrl"] = this.referenceUrl;
-        data["descendantOfRecipeId"] = this.descendantOfRecipeId;
-        if (Array.isArray(this.parts)) {
-            data["parts"] = [];
-            for (let item of this.parts)
-                data["parts"].push(item.toJSON());
-        }
-        if (Array.isArray(this.steps)) {
-            data["steps"] = [];
-            for (let item of this.steps)
-                data["steps"].push(item.toJSON());
-        }
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
-        }
-        if (Array.isArray(this.equipment)) {
-            data["equipment"] = [];
-            for (let item of this.equipment)
-                data["equipment"].push(item.toJSON());
-        }
-        data["nutrition"] = this.nutrition ? this.nutrition.toJSON() : <any>undefined;
-        if (Array.isArray(this.tags)) {
-            data["tags"] = [];
-            for (let item of this.tags)
-                data["tags"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IRecipeCreationDto {
-    languageCode: string;
-    name: string;
-    description: string;
-    type: RecipeType;
-    difficulty: RecipeDifficulty;
-    personal: boolean;
-    prepTime: number;
-    cookTime: number;
-    totalTime: number;
-    servings: number;
-    containsAlcohol: boolean;
-    authorId: string | undefined;
-    referenceUrl: string | undefined;
-    descendantOfRecipeId: string | undefined;
-    parts: RecipeCreationDto_Part[];
-    steps: RecipeCreationDto_Step[];
-    ingredients: RecipeCreationDto_Ingredient[];
-    equipment: RecipeCreationDto_PieceOfEquipment[];
-    nutrition: RecipeCreationDto_Nutrition;
-    tags: RecipeCreationDto_Tag[];
-}
-
-export class RecipeCreationDto_Ingredient implements IRecipeCreationDto_Ingredient {
-    ingredientId!: string;
-    unitOfMeasurementId!: string;
-    amount!: number;
-    optional!: boolean;
-
-    constructor(data?: IRecipeCreationDto_Ingredient) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.ingredientId = _data["ingredientId"];
-            this.unitOfMeasurementId = _data["unitOfMeasurementId"];
-            this.amount = _data["amount"];
-            this.optional = _data["optional"];
-        }
-    }
-
-    static fromJS(data: any): RecipeCreationDto_Ingredient {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeCreationDto_Ingredient();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["ingredientId"] = this.ingredientId;
-        data["unitOfMeasurementId"] = this.unitOfMeasurementId;
-        data["amount"] = this.amount;
-        data["optional"] = this.optional;
-        return data;
-    }
-}
-
-export interface IRecipeCreationDto_Ingredient {
-    ingredientId: string;
-    unitOfMeasurementId: string;
-    amount: number;
-    optional: boolean;
-}
-
-export class RecipeCreationDto_Nutrition implements IRecipeCreationDto_Nutrition {
-    calories!: number | undefined;
-    sugar!: number | undefined;
-    fat!: number | undefined;
-    saturatedFat!: number | undefined;
-    sodium!: number | undefined;
-    protein!: number | undefined;
-    carbohydrates!: number | undefined;
-    fiber!: number | undefined;
-
-    constructor(data?: IRecipeCreationDto_Nutrition) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.calories = _data["calories"];
-            this.sugar = _data["sugar"];
-            this.fat = _data["fat"];
-            this.saturatedFat = _data["saturatedFat"];
-            this.sodium = _data["sodium"];
-            this.protein = _data["protein"];
-            this.carbohydrates = _data["carbohydrates"];
-            this.fiber = _data["fiber"];
-        }
-    }
-
-    static fromJS(data: any): RecipeCreationDto_Nutrition {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeCreationDto_Nutrition();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["calories"] = this.calories;
-        data["sugar"] = this.sugar;
-        data["fat"] = this.fat;
-        data["saturatedFat"] = this.saturatedFat;
-        data["sodium"] = this.sodium;
-        data["protein"] = this.protein;
-        data["carbohydrates"] = this.carbohydrates;
-        data["fiber"] = this.fiber;
-        return data;
-    }
-}
-
-export interface IRecipeCreationDto_Nutrition {
-    calories: number | undefined;
-    sugar: number | undefined;
-    fat: number | undefined;
-    saturatedFat: number | undefined;
-    sodium: number | undefined;
-    protein: number | undefined;
-    carbohydrates: number | undefined;
-    fiber: number | undefined;
-}
-
-export class RecipeCreationDto_Part implements IRecipeCreationDto_Part {
-    name!: string;
-    ingredients!: RecipeCreationDto_Ingredient[];
-
-    constructor(data?: IRecipeCreationDto_Part) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeCreationDto_Ingredient.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): RecipeCreationDto_Part {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeCreationDto_Part();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IRecipeCreationDto_Part {
-    name: string;
-    ingredients: RecipeCreationDto_Ingredient[];
-}
-
-export class RecipeCreationDto_PieceOfEquipment implements IRecipeCreationDto_PieceOfEquipment {
-    equipmentId!: string;
-    amount!: number;
-    dependsOnServings!: boolean;
-
-    constructor(data?: IRecipeCreationDto_PieceOfEquipment) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.equipmentId = _data["equipmentId"];
-            this.amount = _data["amount"];
-            this.dependsOnServings = _data["dependsOnServings"];
-        }
-    }
-
-    static fromJS(data: any): RecipeCreationDto_PieceOfEquipment {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeCreationDto_PieceOfEquipment();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["equipmentId"] = this.equipmentId;
-        data["amount"] = this.amount;
-        data["dependsOnServings"] = this.dependsOnServings;
-        return data;
-    }
-}
-
-export interface IRecipeCreationDto_PieceOfEquipment {
-    equipmentId: string;
-    amount: number;
-    dependsOnServings: boolean;
-}
-
-export class RecipeCreationDto_Step implements IRecipeCreationDto_Step {
-    number!: number;
-    name!: string;
-    instructions!: RecipeInstruction[];
-
-    constructor(data?: IRecipeCreationDto_Step) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.number = _data["number"];
-            this.name = _data["name"];
-            if (Array.isArray(_data["instructions"])) {
-                this.instructions = [] as any;
-                for (let item of _data["instructions"])
-                    this.instructions!.push(RecipeInstruction.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): RecipeCreationDto_Step {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeCreationDto_Step();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["number"] = this.number;
-        data["name"] = this.name;
-        if (Array.isArray(this.instructions)) {
-            data["instructions"] = [];
-            for (let item of this.instructions)
-                data["instructions"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IRecipeCreationDto_Step {
-    number: number;
-    name: string;
-    instructions: RecipeInstruction[];
-}
-
-export class RecipeCreationDto_Tag implements IRecipeCreationDto_Tag {
-    id!: string;
-
-    constructor(data?: IRecipeCreationDto_Tag) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): RecipeCreationDto_Tag {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeCreationDto_Tag();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IRecipeCreationDto_Tag {
-    id: string;
-}
-
-export class RecipeImageIndexUpdateDto implements IRecipeImageIndexUpdateDto {
-    sequence!: number;
-
-    constructor(data?: IRecipeImageIndexUpdateDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.sequence = _data["sequence"];
-        }
-    }
-
-    static fromJS(data: any): RecipeImageIndexUpdateDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeImageIndexUpdateDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["sequence"] = this.sequence;
-        return data;
-    }
-}
-
-export interface IRecipeImageIndexUpdateDto {
-    sequence: number;
-}
-
-export class RecipeUpdateDto implements IRecipeUpdateDto {
-    languageCode!: string;
-    name!: string;
-    description!: string;
-    type!: RecipeType;
-    difficulty!: RecipeDifficulty;
-    prepTime!: number;
-    cookTime!: number;
-    totalTime!: number;
-    servings!: number;
-    containsAlcohol!: boolean;
-    authorId!: string | undefined;
-    referenceUrl!: string | undefined;
-    parts!: RecipeUpdateDto_Part[];
-    steps!: RecipeUpdateDto_Step[];
-    ingredients!: RecipeUpdateDto_Ingredient[];
-    equipment!: RecipeUpdateDto_PieceOfEquipment[];
-    nutrition!: RecipeUpdateDto_Nutrition;
-
-    constructor(data?: IRecipeUpdateDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.languageCode = _data["languageCode"];
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.type = _data["type"];
-            this.difficulty = _data["difficulty"];
-            this.prepTime = _data["prepTime"];
-            this.cookTime = _data["cookTime"];
-            this.totalTime = _data["totalTime"];
-            this.servings = _data["servings"];
-            this.containsAlcohol = _data["containsAlcohol"];
-            this.authorId = _data["authorId"];
-            this.referenceUrl = _data["referenceUrl"];
-            if (Array.isArray(_data["parts"])) {
-                this.parts = [] as any;
-                for (let item of _data["parts"])
-                    this.parts!.push(RecipeUpdateDto_Part.fromJS(item));
-            }
-            if (Array.isArray(_data["steps"])) {
-                this.steps = [] as any;
-                for (let item of _data["steps"])
-                    this.steps!.push(RecipeUpdateDto_Step.fromJS(item));
-            }
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeUpdateDto_Ingredient.fromJS(item));
-            }
-            if (Array.isArray(_data["equipment"])) {
-                this.equipment = [] as any;
-                for (let item of _data["equipment"])
-                    this.equipment!.push(RecipeUpdateDto_PieceOfEquipment.fromJS(item));
-            }
-            this.nutrition = _data["nutrition"] ? RecipeUpdateDto_Nutrition.fromJS(_data["nutrition"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): RecipeUpdateDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeUpdateDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["languageCode"] = this.languageCode;
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["type"] = this.type;
-        data["difficulty"] = this.difficulty;
-        data["prepTime"] = this.prepTime;
-        data["cookTime"] = this.cookTime;
-        data["totalTime"] = this.totalTime;
-        data["servings"] = this.servings;
-        data["containsAlcohol"] = this.containsAlcohol;
-        data["authorId"] = this.authorId;
-        data["referenceUrl"] = this.referenceUrl;
-        if (Array.isArray(this.parts)) {
-            data["parts"] = [];
-            for (let item of this.parts)
-                data["parts"].push(item.toJSON());
-        }
-        if (Array.isArray(this.steps)) {
-            data["steps"] = [];
-            for (let item of this.steps)
-                data["steps"].push(item.toJSON());
-        }
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
-        }
-        if (Array.isArray(this.equipment)) {
-            data["equipment"] = [];
-            for (let item of this.equipment)
-                data["equipment"].push(item.toJSON());
-        }
-        data["nutrition"] = this.nutrition ? this.nutrition.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IRecipeUpdateDto {
-    languageCode: string;
-    name: string;
-    description: string;
-    type: RecipeType;
-    difficulty: RecipeDifficulty;
-    prepTime: number;
-    cookTime: number;
-    totalTime: number;
-    servings: number;
-    containsAlcohol: boolean;
-    authorId: string | undefined;
-    referenceUrl: string | undefined;
-    parts: RecipeUpdateDto_Part[];
-    steps: RecipeUpdateDto_Step[];
-    ingredients: RecipeUpdateDto_Ingredient[];
-    equipment: RecipeUpdateDto_PieceOfEquipment[];
-    nutrition: RecipeUpdateDto_Nutrition;
-}
-
-export class RecipeUpdateDto_Ingredient implements IRecipeUpdateDto_Ingredient {
-    ingredientId!: string;
-    unitOfMeasurementId!: string;
-    amount!: number;
-    optional!: boolean;
-
-    constructor(data?: IRecipeUpdateDto_Ingredient) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.ingredientId = _data["ingredientId"];
-            this.unitOfMeasurementId = _data["unitOfMeasurementId"];
-            this.amount = _data["amount"];
-            this.optional = _data["optional"];
-        }
-    }
-
-    static fromJS(data: any): RecipeUpdateDto_Ingredient {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeUpdateDto_Ingredient();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["ingredientId"] = this.ingredientId;
-        data["unitOfMeasurementId"] = this.unitOfMeasurementId;
-        data["amount"] = this.amount;
-        data["optional"] = this.optional;
-        return data;
-    }
-}
-
-export interface IRecipeUpdateDto_Ingredient {
-    ingredientId: string;
-    unitOfMeasurementId: string;
-    amount: number;
-    optional: boolean;
-}
-
-export class RecipeUpdateDto_Nutrition implements IRecipeUpdateDto_Nutrition {
-    calories!: number | undefined;
-    sugar!: number | undefined;
-    fat!: number | undefined;
-    saturatedFat!: number | undefined;
-    sodium!: number | undefined;
-    protein!: number | undefined;
-    carbohydrates!: number | undefined;
-    fiber!: number | undefined;
-
-    constructor(data?: IRecipeUpdateDto_Nutrition) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.calories = _data["calories"];
-            this.sugar = _data["sugar"];
-            this.fat = _data["fat"];
-            this.saturatedFat = _data["saturatedFat"];
-            this.sodium = _data["sodium"];
-            this.protein = _data["protein"];
-            this.carbohydrates = _data["carbohydrates"];
-            this.fiber = _data["fiber"];
-        }
-    }
-
-    static fromJS(data: any): RecipeUpdateDto_Nutrition {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeUpdateDto_Nutrition();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["calories"] = this.calories;
-        data["sugar"] = this.sugar;
-        data["fat"] = this.fat;
-        data["saturatedFat"] = this.saturatedFat;
-        data["sodium"] = this.sodium;
-        data["protein"] = this.protein;
-        data["carbohydrates"] = this.carbohydrates;
-        data["fiber"] = this.fiber;
-        return data;
-    }
-}
-
-export interface IRecipeUpdateDto_Nutrition {
-    calories: number | undefined;
-    sugar: number | undefined;
-    fat: number | undefined;
-    saturatedFat: number | undefined;
-    sodium: number | undefined;
-    protein: number | undefined;
-    carbohydrates: number | undefined;
-    fiber: number | undefined;
-}
-
-export class RecipeUpdateDto_Part implements IRecipeUpdateDto_Part {
-    name!: string;
-    ingredients!: RecipeCreationDto_Ingredient[];
-
-    constructor(data?: IRecipeUpdateDto_Part) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeCreationDto_Ingredient.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): RecipeUpdateDto_Part {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeUpdateDto_Part();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IRecipeUpdateDto_Part {
-    name: string;
-    ingredients: RecipeCreationDto_Ingredient[];
-}
-
-export class RecipeUpdateDto_PieceOfEquipment implements IRecipeUpdateDto_PieceOfEquipment {
-    equipmentId!: string;
-    amount!: number;
-    dependsOnServings!: boolean;
-
-    constructor(data?: IRecipeUpdateDto_PieceOfEquipment) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.equipmentId = _data["equipmentId"];
-            this.amount = _data["amount"];
-            this.dependsOnServings = _data["dependsOnServings"];
-        }
-    }
-
-    static fromJS(data: any): RecipeUpdateDto_PieceOfEquipment {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeUpdateDto_PieceOfEquipment();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["equipmentId"] = this.equipmentId;
-        data["amount"] = this.amount;
-        data["dependsOnServings"] = this.dependsOnServings;
-        return data;
-    }
-}
-
-export interface IRecipeUpdateDto_PieceOfEquipment {
-    equipmentId: string;
-    amount: number;
-    dependsOnServings: boolean;
-}
-
-export class RecipeUpdateDto_Step implements IRecipeUpdateDto_Step {
-    number!: number;
-    name!: string;
-    instructions!: RecipeInstruction[];
-
-    constructor(data?: IRecipeUpdateDto_Step) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.number = _data["number"];
-            this.name = _data["name"];
-            if (Array.isArray(_data["instructions"])) {
-                this.instructions = [] as any;
-                for (let item of _data["instructions"])
-                    this.instructions!.push(RecipeInstruction.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): RecipeUpdateDto_Step {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeUpdateDto_Step();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["number"] = this.number;
-        data["name"] = this.name;
-        if (Array.isArray(this.instructions)) {
-            data["instructions"] = [];
-            for (let item of this.instructions)
-                data["instructions"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IRecipeUpdateDto_Step {
-    number: number;
-    name: string;
-    instructions: RecipeInstruction[];
-}
-
-export class FavouriteRecipeCommandResponse implements IFavouriteRecipeCommandResponse {
-
-    constructor(data?: IFavouriteRecipeCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): FavouriteRecipeCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new FavouriteRecipeCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IFavouriteRecipeCommandResponse {
-}
-
-export class RateRecipeCommand implements IRateRecipeCommand {
-    recipeId!: string;
-    userId!: string;
-    rating!: number;
-
-    constructor(data?: IRateRecipeCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.recipeId = _data["recipeId"];
-            this.userId = _data["userId"];
-            this.rating = _data["rating"];
-        }
-    }
-
-    static fromJS(data: any): RateRecipeCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new RateRecipeCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["recipeId"] = this.recipeId;
-        data["userId"] = this.userId;
-        data["rating"] = this.rating;
-        return data;
-    }
-}
-
-export interface IRateRecipeCommand {
-    recipeId: string;
-    userId: string;
-    rating: number;
-}
-
-export class RateRecipeCommandResponse implements IRateRecipeCommandResponse {
-
-    constructor(data?: IRateRecipeCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): RateRecipeCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new RateRecipeCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IRateRecipeCommandResponse {
-}
-
-export class UnfavouriteRecipeCommandResponse implements IUnfavouriteRecipeCommandResponse {
-
-    constructor(data?: IUnfavouriteRecipeCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): UnfavouriteRecipeCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new UnfavouriteRecipeCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IUnfavouriteRecipeCommandResponse {
-}
-
-export class CreateAuthorCommand implements ICreateAuthorCommand {
-    languageCode!: string | undefined;
-    name!: string | undefined;
-    biography!: string | undefined;
-    links!: CreateAuthorCommand_Link[] | undefined;
-
-    constructor(data?: ICreateAuthorCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.languageCode = _data["languageCode"];
-            this.name = _data["name"];
-            this.biography = _data["biography"];
-            if (Array.isArray(_data["links"])) {
-                this.links = [] as any;
-                for (let item of _data["links"])
-                    this.links!.push(CreateAuthorCommand_Link.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): CreateAuthorCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateAuthorCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["languageCode"] = this.languageCode;
-        data["name"] = this.name;
-        data["biography"] = this.biography;
-        if (Array.isArray(this.links)) {
-            data["links"] = [];
-            for (let item of this.links)
-                data["links"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface ICreateAuthorCommand {
-    languageCode: string | undefined;
-    name: string | undefined;
-    biography: string | undefined;
-    links: CreateAuthorCommand_Link[] | undefined;
-}
-
-export class CreateAuthorCommandResponse implements ICreateAuthorCommandResponse {
-    id!: string;
-
-    constructor(data?: ICreateAuthorCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): CreateAuthorCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateAuthorCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface ICreateAuthorCommandResponse {
-    id: string;
-}
-
-export class CreateAuthorCommand_Link implements ICreateAuthorCommand_Link {
-    name!: string | undefined;
-    description!: string | undefined;
-    url!: string | undefined;
-
-    constructor(data?: ICreateAuthorCommand_Link) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.url = _data["url"];
-        }
-    }
-
-    static fromJS(data: any): CreateAuthorCommand_Link {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateAuthorCommand_Link();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["url"] = this.url;
-        return data;
-    }
-}
-
-export interface ICreateAuthorCommand_Link {
-    name: string | undefined;
-    description: string | undefined;
-    url: string | undefined;
-}
-
-export class UpdateAuthorCommand implements IUpdateAuthorCommand {
-    id!: string;
-    languageCode!: string | undefined;
-    name!: string | undefined;
-    biography!: string | undefined;
-    links!: UpdateAuthorCommand_Link[] | undefined;
-
-    constructor(data?: IUpdateAuthorCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.languageCode = _data["languageCode"];
-            this.name = _data["name"];
-            this.biography = _data["biography"];
-            if (Array.isArray(_data["links"])) {
-                this.links = [] as any;
-                for (let item of _data["links"])
-                    this.links!.push(UpdateAuthorCommand_Link.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): UpdateAuthorCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateAuthorCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["languageCode"] = this.languageCode;
-        data["name"] = this.name;
-        data["biography"] = this.biography;
-        if (Array.isArray(this.links)) {
-            data["links"] = [];
-            for (let item of this.links)
-                data["links"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IUpdateAuthorCommand {
-    id: string;
-    languageCode: string | undefined;
-    name: string | undefined;
-    biography: string | undefined;
-    links: UpdateAuthorCommand_Link[] | undefined;
-}
-
-export class UpdateAuthorCommandResponse implements IUpdateAuthorCommandResponse {
-
-    constructor(data?: IUpdateAuthorCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): UpdateAuthorCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateAuthorCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IUpdateAuthorCommandResponse {
-}
-
-export class UpdateAuthorCommand_Link implements IUpdateAuthorCommand_Link {
-    name!: string | undefined;
-    description!: string | undefined;
-    url!: string | undefined;
-
-    constructor(data?: IUpdateAuthorCommand_Link) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.url = _data["url"];
-        }
-    }
-
-    static fromJS(data: any): UpdateAuthorCommand_Link {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateAuthorCommand_Link();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["url"] = this.url;
-        return data;
-    }
-}
-
-export interface IUpdateAuthorCommand_Link {
-    name: string | undefined;
-    description: string | undefined;
-    url: string | undefined;
-}
-
-export class AddRecipeToCollectionCommandResponse implements IAddRecipeToCollectionCommandResponse {
-
-    constructor(data?: IAddRecipeToCollectionCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): AddRecipeToCollectionCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new AddRecipeToCollectionCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IAddRecipeToCollectionCommandResponse {
-}
-
-export class CreateCollectionCommand implements ICreateCollectionCommand {
-    languageCode!: string | undefined;
-    title!: string | undefined;
-
-    constructor(data?: ICreateCollectionCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.languageCode = _data["languageCode"];
-            this.title = _data["title"];
-        }
-    }
-
-    static fromJS(data: any): CreateCollectionCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateCollectionCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["languageCode"] = this.languageCode;
-        data["title"] = this.title;
-        return data;
-    }
-}
-
-export interface ICreateCollectionCommand {
-    languageCode: string | undefined;
-    title: string | undefined;
-}
-
-export class CreateCollectionCommandResponse implements ICreateCollectionCommandResponse {
-    id!: string;
-
-    constructor(data?: ICreateCollectionCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): CreateCollectionCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateCollectionCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface ICreateCollectionCommandResponse {
-    id: string;
-}
-
-export class RemoveRecipeFromCollectionCommandResponse implements IRemoveRecipeFromCollectionCommandResponse {
-
-    constructor(data?: IRemoveRecipeFromCollectionCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): RemoveRecipeFromCollectionCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new RemoveRecipeFromCollectionCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IRemoveRecipeFromCollectionCommandResponse {
-}
-
-export class UpdateCollectionCommand implements IUpdateCollectionCommand {
-    id!: string;
-    title!: string | undefined;
-    hidden!: boolean;
-    promoted!: boolean;
-
-    constructor(data?: IUpdateCollectionCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.title = _data["title"];
-            this.hidden = _data["hidden"];
-            this.promoted = _data["promoted"];
-        }
-    }
-
-    static fromJS(data: any): UpdateCollectionCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateCollectionCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["title"] = this.title;
-        data["hidden"] = this.hidden;
-        data["promoted"] = this.promoted;
-        return data;
-    }
-}
-
-export interface IUpdateCollectionCommand {
-    id: string;
-    title: string | undefined;
-    hidden: boolean;
-    promoted: boolean;
-}
-
-export class UpdateCollectionCommandResponse implements IUpdateCollectionCommandResponse {
-
-    constructor(data?: IUpdateCollectionCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): UpdateCollectionCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateCollectionCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IUpdateCollectionCommandResponse {
-}
-
-export class ChangeEmailCommand implements IChangeEmailCommand {
-    userId!: string;
-    newEmail!: string | undefined;
-    password!: string | undefined;
-    language!: string | undefined;
-
-    constructor(data?: IChangeEmailCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.userId = _data["userId"];
-            this.newEmail = _data["newEmail"];
-            this.password = _data["password"];
-            this.language = _data["language"];
-        }
-    }
-
-    static fromJS(data: any): ChangeEmailCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new ChangeEmailCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["userId"] = this.userId;
-        data["newEmail"] = this.newEmail;
-        data["password"] = this.password;
-        data["language"] = this.language;
-        return data;
-    }
-}
-
-export interface IChangeEmailCommand {
-    userId: string;
-    newEmail: string | undefined;
-    password: string | undefined;
-    language: string | undefined;
-}
-
-export class ChangeEmailCommandResponse implements IChangeEmailCommandResponse {
-
-    constructor(data?: IChangeEmailCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): ChangeEmailCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new ChangeEmailCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IChangeEmailCommandResponse {
-}
-
-export class ChangePasswordCommand implements IChangePasswordCommand {
-    userId!: string;
-    currentPassword!: string | undefined;
-    newPassword!: string | undefined;
-    language!: string | undefined;
-
-    constructor(data?: IChangePasswordCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.userId = _data["userId"];
-            this.currentPassword = _data["currentPassword"];
-            this.newPassword = _data["newPassword"];
-            this.language = _data["language"];
-        }
-    }
-
-    static fromJS(data: any): ChangePasswordCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new ChangePasswordCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["userId"] = this.userId;
-        data["currentPassword"] = this.currentPassword;
-        data["newPassword"] = this.newPassword;
-        data["language"] = this.language;
-        return data;
-    }
-}
-
-export interface IChangePasswordCommand {
-    userId: string;
-    currentPassword: string | undefined;
-    newPassword: string | undefined;
-    language: string | undefined;
-}
-
-export class ChangePasswordCommandResponse implements IChangePasswordCommandResponse {
-
-    constructor(data?: IChangePasswordCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): ChangePasswordCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new ChangePasswordCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IChangePasswordCommandResponse {
-}
-
-export class DeleteAccountCommandResponse implements IDeleteAccountCommandResponse {
-
-    constructor(data?: IDeleteAccountCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): DeleteAccountCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new DeleteAccountCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IDeleteAccountCommandResponse {
-}
-
-export class ForgotPasswordCommand implements IForgotPasswordCommand {
-    email!: string | undefined;
-    language!: string | undefined;
-
-    constructor(data?: IForgotPasswordCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.email = _data["email"];
-            this.language = _data["language"];
-        }
-    }
-
-    static fromJS(data: any): ForgotPasswordCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new ForgotPasswordCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["email"] = this.email;
-        data["language"] = this.language;
-        return data;
-    }
-}
-
-export interface IForgotPasswordCommand {
-    email: string | undefined;
-    language: string | undefined;
-}
-
-export class ForgotPasswordCommandResponse implements IForgotPasswordCommandResponse {
-
-    constructor(data?: IForgotPasswordCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): ForgotPasswordCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new ForgotPasswordCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IForgotPasswordCommandResponse {
-}
-
-export class LoginCommand implements ILoginCommand {
-    email!: string | undefined;
-    password!: string | undefined;
-
-    constructor(data?: ILoginCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.email = _data["email"];
-            this.password = _data["password"];
-        }
-    }
-
-    static fromJS(data: any): LoginCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new LoginCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["email"] = this.email;
-        data["password"] = this.password;
-        return data;
-    }
-}
-
-export interface ILoginCommand {
-    email: string | undefined;
-    password: string | undefined;
-}
-
-export class LoginCommandResponse implements ILoginCommandResponse {
-    accessToken!: string | undefined;
-    refreshToken!: string | undefined;
-
-    constructor(data?: ILoginCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.accessToken = _data["accessToken"];
-            this.refreshToken = _data["refreshToken"];
-        }
-    }
-
-    static fromJS(data: any): LoginCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new LoginCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["accessToken"] = this.accessToken;
-        data["refreshToken"] = this.refreshToken;
-        return data;
-    }
-}
-
-export interface ILoginCommandResponse {
-    accessToken: string | undefined;
-    refreshToken: string | undefined;
-}
-
-export class RefreshTokensCommand implements IRefreshTokensCommand {
-    accessToken!: string | undefined;
-    refreshToken!: string | undefined;
-
-    constructor(data?: IRefreshTokensCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.accessToken = _data["accessToken"];
-            this.refreshToken = _data["refreshToken"];
-        }
-    }
-
-    static fromJS(data: any): RefreshTokensCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new RefreshTokensCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["accessToken"] = this.accessToken;
-        data["refreshToken"] = this.refreshToken;
-        return data;
-    }
-}
-
-export interface IRefreshTokensCommand {
-    accessToken: string | undefined;
-    refreshToken: string | undefined;
-}
-
-export class RefreshTokensCommandResponse implements IRefreshTokensCommandResponse {
-    accessToken!: string | undefined;
-    refreshToken!: string | undefined;
-
-    constructor(data?: IRefreshTokensCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.accessToken = _data["accessToken"];
-            this.refreshToken = _data["refreshToken"];
-        }
-    }
-
-    static fromJS(data: any): RefreshTokensCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new RefreshTokensCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["accessToken"] = this.accessToken;
-        data["refreshToken"] = this.refreshToken;
-        return data;
-    }
-}
-
-export interface IRefreshTokensCommandResponse {
-    accessToken: string | undefined;
-    refreshToken: string | undefined;
-}
-
-export class RegisterUserCommand implements IRegisterUserCommand {
-    email!: string | undefined;
-    password!: string | undefined;
-    language!: string | undefined;
-
-    constructor(data?: IRegisterUserCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.email = _data["email"];
-            this.password = _data["password"];
-            this.language = _data["language"];
-        }
-    }
-
-    static fromJS(data: any): RegisterUserCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new RegisterUserCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["email"] = this.email;
-        data["password"] = this.password;
-        data["language"] = this.language;
-        return data;
-    }
-}
-
-export interface IRegisterUserCommand {
-    email: string | undefined;
-    password: string | undefined;
-    language: string | undefined;
-}
-
-export class RegisterUserCommandResponse implements IRegisterUserCommandResponse {
-    id!: string;
-
-    constructor(data?: IRegisterUserCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): RegisterUserCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new RegisterUserCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IRegisterUserCommandResponse {
-    id: string;
-}
-
-export class ResetPasswordCommand implements IResetPasswordCommand {
-    email!: string | undefined;
-    resetToken!: string | undefined;
-    newPassword!: string | undefined;
-    language!: string | undefined;
-
-    constructor(data?: IResetPasswordCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.email = _data["email"];
-            this.resetToken = _data["resetToken"];
-            this.newPassword = _data["newPassword"];
-            this.language = _data["language"];
-        }
-    }
-
-    static fromJS(data: any): ResetPasswordCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new ResetPasswordCommand();
-        result.init(data);
-        return result;
-    }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["email"] = this.email;
-        data["resetToken"] = this.resetToken;
-        data["newPassword"] = this.newPassword;
-        data["language"] = this.language;
-        return data;
-    }
-}
-
-export interface IResetPasswordCommand {
-    email: string | undefined;
-    resetToken: string | undefined;
-    newPassword: string | undefined;
-    language: string | undefined;
-}
-
-export class ResetPasswordCommandResponse implements IResetPasswordCommandResponse {
-
-    constructor(data?: IResetPasswordCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): ResetPasswordCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new ResetPasswordCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IResetPasswordCommandResponse {
-}
-
-export class CreateEquipmentCommand implements ICreateEquipmentCommand {
-    languageCode!: string | undefined;
-    name!: string | undefined;
-    pluralName!: string | undefined;
-    personal!: boolean;
-
-    constructor(data?: ICreateEquipmentCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.languageCode = _data["languageCode"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-            this.personal = _data["personal"];
-        }
-    }
-
-    static fromJS(data: any): CreateEquipmentCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateEquipmentCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["languageCode"] = this.languageCode;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        data["personal"] = this.personal;
-        return data;
-    }
-}
-
-export interface ICreateEquipmentCommand {
-    languageCode: string | undefined;
-    name: string | undefined;
-    pluralName: string | undefined;
-    personal: boolean;
-}
-
-export class CreateEquipmentCommandResponse implements ICreateEquipmentCommandResponse {
-    id!: string;
-
-    constructor(data?: ICreateEquipmentCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): CreateEquipmentCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateEquipmentCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface ICreateEquipmentCommandResponse {
-    id: string;
-}
-
-export class UpdateEquipmentCommand implements IUpdateEquipmentCommand {
-    id!: string;
-    name!: string | undefined;
-    pluralName!: string | undefined;
-
-    constructor(data?: IUpdateEquipmentCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-        }
-    }
-
-    static fromJS(data: any): UpdateEquipmentCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateEquipmentCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        return data;
-    }
-}
-
-export interface IUpdateEquipmentCommand {
-    id: string;
-    name: string | undefined;
-    pluralName: string | undefined;
-}
-
-export class UpdateEquipmentCommandResponse implements IUpdateEquipmentCommandResponse {
-
-    constructor(data?: IUpdateEquipmentCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): UpdateEquipmentCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateEquipmentCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IUpdateEquipmentCommandResponse {
-}
-
-export class CreateIngredientCommand implements ICreateIngredientCommand {
-    languageCode!: string | undefined;
-    name!: string | undefined;
-    pluralName!: string | undefined;
-    defaultUnitOfMeasurementId!: string;
-    personal!: boolean;
-
-    constructor(data?: ICreateIngredientCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.languageCode = _data["languageCode"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-            this.defaultUnitOfMeasurementId = _data["defaultUnitOfMeasurementId"];
-            this.personal = _data["personal"];
-        }
-    }
-
-    static fromJS(data: any): CreateIngredientCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateIngredientCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["languageCode"] = this.languageCode;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        data["defaultUnitOfMeasurementId"] = this.defaultUnitOfMeasurementId;
-        data["personal"] = this.personal;
-        return data;
-    }
-}
-
-export interface ICreateIngredientCommand {
-    languageCode: string | undefined;
-    name: string | undefined;
-    pluralName: string | undefined;
-    defaultUnitOfMeasurementId: string;
-    personal: boolean;
-}
-
-export class CreateIngredientCommandResponse implements ICreateIngredientCommandResponse {
-    id!: string;
-
-    constructor(data?: ICreateIngredientCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): CreateIngredientCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateIngredientCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface ICreateIngredientCommandResponse {
-    id: string;
-}
-
-export class UpdateIngredientCommand implements IUpdateIngredientCommand {
-    id!: string;
-    name!: string | undefined;
-    pluralName!: string | undefined;
-    defaultUnitOfMeasurementId!: string;
-
-    constructor(data?: IUpdateIngredientCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-            this.defaultUnitOfMeasurementId = _data["defaultUnitOfMeasurementId"];
-        }
-    }
-
-    static fromJS(data: any): UpdateIngredientCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateIngredientCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        data["defaultUnitOfMeasurementId"] = this.defaultUnitOfMeasurementId;
-        return data;
-    }
-}
-
-export interface IUpdateIngredientCommand {
-    id: string;
-    name: string | undefined;
-    pluralName: string | undefined;
-    defaultUnitOfMeasurementId: string;
-}
-
-export class UpdateIngredientCommandResponse implements IUpdateIngredientCommandResponse {
-
-    constructor(data?: IUpdateIngredientCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): UpdateIngredientCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateIngredientCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IUpdateIngredientCommandResponse {
-}
-
-export class AddRecipeToPlannerCommand implements IAddRecipeToPlannerCommand {
-    userId!: string;
-    recipeId!: string;
-    dates!: dayjs.Dayjs[] | undefined;
-    servings!: number;
-
-    constructor(data?: IAddRecipeToPlannerCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.userId = _data["userId"];
-            this.recipeId = _data["recipeId"];
-            if (Array.isArray(_data["dates"])) {
-                this.dates = [] as any;
-                for (let item of _data["dates"])
-                    this.dates!.push(dayjs(item));
-            }
-            this.servings = _data["servings"];
-        }
-    }
-
-    static fromJS(data: any): AddRecipeToPlannerCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new AddRecipeToPlannerCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["userId"] = this.userId;
-        data["recipeId"] = this.recipeId;
-        if (Array.isArray(this.dates)) {
-            data["dates"] = [];
-            for (let item of this.dates)
-                data["dates"].push(item.format('YYYY-MM-DD'));
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            super.toJSON(data);
+            return data;
         }
-        data["servings"] = this.servings;
-        return data;
     }
-}
 
-export interface IAddRecipeToPlannerCommand {
-    userId: string;
-    recipeId: string;
-    dates: dayjs.Dayjs[] | undefined;
-    servings: number;
-}
-
-export class AddRecipeToPlannerCommandResponse implements IAddRecipeToPlannerCommandResponse {
-    plannedRecipes!: AddRecipeToPlannerCommandResponse_PlannedRecipe[] | undefined;
-
-    constructor(data?: IAddRecipeToPlannerCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["plannedRecipes"])) {
-                this.plannedRecipes = [] as any;
-                for (let item of _data["plannedRecipes"])
-                    this.plannedRecipes!.push(AddRecipeToPlannerCommandResponse_PlannedRecipe.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): AddRecipeToPlannerCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new AddRecipeToPlannerCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.plannedRecipes)) {
-            data["plannedRecipes"] = [];
-            for (let item of this.plannedRecipes)
-                data["plannedRecipes"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IAddRecipeToPlannerCommandResponse {
-    plannedRecipes: AddRecipeToPlannerCommandResponse_PlannedRecipe[] | undefined;
-}
-
-export class AddRecipeToPlannerCommandResponse_PlannedRecipe implements IAddRecipeToPlannerCommandResponse_PlannedRecipe {
-    id!: string;
-
-    constructor(data?: IAddRecipeToPlannerCommandResponse_PlannedRecipe) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): AddRecipeToPlannerCommandResponse_PlannedRecipe {
-        data = typeof data === 'object' ? data : {};
-        let result = new AddRecipeToPlannerCommandResponse_PlannedRecipe();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface IAddRecipeToPlannerCommandResponse_PlannedRecipe {
-    id: string;
-}
-
-export class RemovePlannedRecipeCommandResponse implements IRemovePlannedRecipeCommandResponse {
-
-    constructor(data?: IRemovePlannedRecipeCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): RemovePlannedRecipeCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new RemovePlannedRecipeCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IRemovePlannedRecipeCommandResponse {
-}
-
-export class UpdatePlannedRecipeCommand implements IUpdatePlannedRecipeCommand {
-    id!: string;
-    servings!: number;
-
-    constructor(data?: IUpdatePlannedRecipeCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.servings = _data["servings"];
-        }
-    }
-
-    static fromJS(data: any): UpdatePlannedRecipeCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdatePlannedRecipeCommand();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["servings"] = this.servings;
-        return data;
-    }
-}
-
-export interface IUpdatePlannedRecipeCommand {
-    id: string;
-    servings: number;
-}
-
-export class UpdatePlannedRecipeCommandResponse implements IUpdatePlannedRecipeCommandResponse {
-
-    constructor(data?: IUpdatePlannedRecipeCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): UpdatePlannedRecipeCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdatePlannedRecipeCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IUpdatePlannedRecipeCommandResponse {
-}
-
-export class Author implements IAuthor {
-    id!: string;
-    originalLanguageCode!: string | undefined;
-    state!: AuthorState;
-    name!: string | undefined;
-    biography!: string | undefined;
-    links!: AuthorLink[] | undefined;
-    translations!: AuthorTranslation[] | undefined;
-
-    constructor(data?: IAuthor) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.originalLanguageCode = _data["originalLanguageCode"];
-            this.state = _data["state"];
-            this.name = _data["name"];
-            this.biography = _data["biography"];
-            if (Array.isArray(_data["links"])) {
-                this.links = [] as any;
-                for (let item of _data["links"])
-                    this.links!.push(AuthorLink.fromJS(item));
-            }
-            if (Array.isArray(_data["translations"])) {
-                this.translations = [] as any;
-                for (let item of _data["translations"])
-                    this.translations!.push(AuthorTranslation.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Author {
-        data = typeof data === 'object' ? data : {};
-        let result = new Author();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["originalLanguageCode"] = this.originalLanguageCode;
-        data["state"] = this.state;
-        data["name"] = this.name;
-        data["biography"] = this.biography;
-        if (Array.isArray(this.links)) {
-            data["links"] = [];
-            for (let item of this.links)
-                data["links"].push(item.toJSON());
-        }
-        if (Array.isArray(this.translations)) {
-            data["translations"] = [];
-            for (let item of this.translations)
-                data["translations"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IAuthor {
-    id: string;
-    originalLanguageCode: string | undefined;
-    state: AuthorState;
-    name: string | undefined;
-    biography: string | undefined;
-    links: AuthorLink[] | undefined;
-    translations: AuthorTranslation[] | undefined;
-}
-
-export class AuthorLink implements IAuthorLink {
-    id!: string;
-    originalLanguageCode!: string | undefined;
-    authorId!: string;
-    name!: string | undefined;
-    url!: string | undefined;
-    author!: Author | undefined;
-    translations!: AuthorLinkTranslation[] | undefined;
-
-    constructor(data?: IAuthorLink) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.originalLanguageCode = _data["originalLanguageCode"];
-            this.authorId = _data["authorId"];
-            this.name = _data["name"];
-            this.url = _data["url"];
-            this.author = _data["author"] ? Author.fromJS(_data["author"]) : <any>undefined;
-            if (Array.isArray(_data["translations"])) {
-                this.translations = [] as any;
-                for (let item of _data["translations"])
-                    this.translations!.push(AuthorLinkTranslation.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): AuthorLink {
-        data = typeof data === 'object' ? data : {};
-        let result = new AuthorLink();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["originalLanguageCode"] = this.originalLanguageCode;
-        data["authorId"] = this.authorId;
-        data["name"] = this.name;
-        data["url"] = this.url;
-        data["author"] = this.author ? this.author.toJSON() : <any>undefined;
-        if (Array.isArray(this.translations)) {
-            data["translations"] = [];
-            for (let item of this.translations)
-                data["translations"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface IAuthorLink {
-    id: string;
-    originalLanguageCode: string | undefined;
-    authorId: string;
-    name: string | undefined;
-    url: string | undefined;
-    author: Author | undefined;
-    translations: AuthorLinkTranslation[] | undefined;
-}
-
-export enum AuthorState {
-    Published = "Published",
-    Archived = "Archived",
-}
-
-export class Collection implements ICollection {
-    id!: string;
-    originalLanguageCode!: string | undefined;
-    title!: string | undefined;
-    hidden!: boolean;
-    promoted!: boolean;
-    createdByUserId!: string;
-    createdOn!: dayjs.Dayjs;
-    updatedByUserId!: string | undefined;
-    updatedOn!: dayjs.Dayjs | undefined;
-    createdByUser!: User | undefined;
-    updatedByUser!: User | undefined;
-    translations!: CollectionTranslation[] | undefined;
-    recipes!: CollectionRecipe[] | undefined;
-
-    constructor(data?: ICollection) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.originalLanguageCode = _data["originalLanguageCode"];
-            this.title = _data["title"];
-            this.hidden = _data["hidden"];
-            this.promoted = _data["promoted"];
-            this.createdByUserId = _data["createdByUserId"];
-            this.createdOn = _data["createdOn"] ? dayjs(_data["createdOn"].toString()) : <any>undefined;
-            this.updatedByUserId = _data["updatedByUserId"];
-            this.updatedOn = _data["updatedOn"] ? dayjs(_data["updatedOn"].toString()) : <any>undefined;
-            this.createdByUser = _data["createdByUser"] ? User.fromJS(_data["createdByUser"]) : <any>undefined;
-            this.updatedByUser = _data["updatedByUser"] ? User.fromJS(_data["updatedByUser"]) : <any>undefined;
-            if (Array.isArray(_data["translations"])) {
-                this.translations = [] as any;
-                for (let item of _data["translations"])
-                    this.translations!.push(CollectionTranslation.fromJS(item));
-            }
-            if (Array.isArray(_data["recipes"])) {
-                this.recipes = [] as any;
-                for (let item of _data["recipes"])
-                    this.recipes!.push(CollectionRecipe.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): Collection {
-        data = typeof data === 'object' ? data : {};
-        let result = new Collection();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["originalLanguageCode"] = this.originalLanguageCode;
-        data["title"] = this.title;
-        data["hidden"] = this.hidden;
-        data["promoted"] = this.promoted;
-        data["createdByUserId"] = this.createdByUserId;
-        data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
-        data["updatedByUserId"] = this.updatedByUserId;
-        data["updatedOn"] = this.updatedOn ? this.updatedOn.toISOString() : <any>undefined;
-        data["createdByUser"] = this.createdByUser ? this.createdByUser.toJSON() : <any>undefined;
-        data["updatedByUser"] = this.updatedByUser ? this.updatedByUser.toJSON() : <any>undefined;
-        if (Array.isArray(this.translations)) {
-            data["translations"] = [];
-            for (let item of this.translations)
-                data["translations"].push(item.toJSON());
-        }
-        if (Array.isArray(this.recipes)) {
-            data["recipes"] = [];
-            for (let item of this.recipes)
-                data["recipes"].push(item.toJSON());
-        }
-        return data;
+    export interface IUnitOfMeasurementDto extends IUnitOfMeasurement_ReferenceDto {
     }
-}
-
-export interface ICollection {
-    id: string;
-    originalLanguageCode: string | undefined;
-    title: string | undefined;
-    hidden: boolean;
-    promoted: boolean;
-    createdByUserId: string;
-    createdOn: dayjs.Dayjs;
-    updatedByUserId: string | undefined;
-    updatedOn: dayjs.Dayjs | undefined;
-    createdByUser: User | undefined;
-    updatedByUser: User | undefined;
-    translations: CollectionTranslation[] | undefined;
-    recipes: CollectionRecipe[] | undefined;
-}
 
-export class CollectionRecipe implements ICollectionRecipe {
-    collectionId!: string;
-    recipeId!: string;
-    collection!: Collection | undefined;
-    recipe!: Recipe | undefined;
+    export class User_ReferenceDto implements IUser_ReferenceDto {
+        id!: string;
 
-    constructor(data?: ICollectionRecipe) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IUser_ReferenceDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.collectionId = _data["collectionId"];
-            this.recipeId = _data["recipeId"];
-            this.collection = _data["collection"] ? Collection.fromJS(_data["collection"]) : <any>undefined;
-            this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
         }
-    }
-
-    static fromJS(data: any): CollectionRecipe {
-        data = typeof data === 'object' ? data : {};
-        let result = new CollectionRecipe();
-        result.init(data);
-        return result;
-    }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["collectionId"] = this.collectionId;
-        data["recipeId"] = this.recipeId;
-        data["collection"] = this.collection ? this.collection.toJSON() : <any>undefined;
-        data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface ICollectionRecipe {
-    collectionId: string;
-    recipeId: string;
-    collection: Collection | undefined;
-    recipe: Recipe | undefined;
-}
-
-export class TranslationEntity implements ITranslationEntity {
-    languageCode!: string | undefined;
-
-    protected _discriminator: string;
-
-    constructor(data?: ITranslationEntity) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
             }
-        }
-        this._discriminator = "TranslationEntity";
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.languageCode = _data["languageCode"];
         }
-    }
 
-    static fromJS(data: any): TranslationEntity {
-        data = typeof data === 'object' ? data : {};
-        if (data["$type"] === "IngredientTranslation") {
-            let result = new IngredientTranslation();
+        static fromJS(data: any): User_ReferenceDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new User_ReferenceDto();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "UnitOfMeasurementTranslation") {
-            let result = new UnitOfMeasurementTranslation();
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
+    }
+
+    export interface IUser_ReferenceDto {
+        id: string;
+    }
+
+    export class UserDto implements IUserDto {
+        id!: string;
+        firstName!: string;
+
+        constructor(data?: IUserDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.firstName = _data["firstName"];
+            }
+        }
+
+        static fromJS(data: any): UserDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new UserDto();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "RecipePartTranslation") {
-            let result = new RecipePartTranslation();
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["firstName"] = this.firstName;
+            return data;
+        }
+    }
+
+    export interface IUserDto {
+        id: string;
+        firstName: string;
+    }
+
+    export class AddVariantDto implements IAddVariantDto {
+        variantRecipeId!: string;
+
+        constructor(data?: IAddVariantDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.variantRecipeId = _data["variantRecipeId"];
+            }
+        }
+
+        static fromJS(data: any): AddVariantDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new AddVariantDto();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "EquipmentTranslation") {
-            let result = new EquipmentTranslation();
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["variantRecipeId"] = this.variantRecipeId;
+            return data;
+        }
+    }
+
+    export interface IAddVariantDto {
+        variantRecipeId: string;
+    }
+
+    export class RecipeCreationResponseDto implements IRecipeCreationResponseDto {
+        id!: string;
+
+        constructor(data?: IRecipeCreationResponseDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+            }
+        }
+
+        static fromJS(data: any): RecipeCreationResponseDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeCreationResponseDto();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "RecipeTranslation") {
-            let result = new RecipeTranslation();
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
+    }
+
+    export interface IRecipeCreationResponseDto {
+        id: string;
+    }
+
+    export class RecipeImageUploadResponseDto implements IRecipeImageUploadResponseDto {
+        id!: string;
+
+        constructor(data?: IRecipeImageUploadResponseDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+            }
+        }
+
+        static fromJS(data: any): RecipeImageUploadResponseDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeImageUploadResponseDto();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "AuthorLinkTranslation") {
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
+    }
+
+    export interface IRecipeImageUploadResponseDto {
+        id: string;
+    }
+
+    export class RecipeCreationDto implements IRecipeCreationDto {
+        languageCode!: string;
+        name!: string;
+        description!: string;
+        type!: RecipeType;
+        difficulty!: RecipeDifficulty;
+        personal!: boolean;
+        prepTime!: number;
+        cookTime!: number;
+        totalTime!: number;
+        servings!: number;
+        containsAlcohol!: boolean;
+        authorId!: string | undefined;
+        referenceUrl!: string | undefined;
+        descendantOfRecipeId!: string | undefined;
+        parts!: RecipeCreationDto_Part[];
+        steps!: RecipeCreationDto_Step[];
+        ingredients!: RecipeCreationDto_Ingredient[];
+        equipment!: RecipeCreationDto_PieceOfEquipment[];
+        nutrition!: RecipeCreationDto_Nutrition;
+        tags!: RecipeCreationDto_Tag[];
+
+        constructor(data?: IRecipeCreationDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.languageCode = _data["languageCode"];
+                this.name = _data["name"];
+                this.description = _data["description"];
+                this.type = _data["type"];
+                this.difficulty = _data["difficulty"];
+                this.personal = _data["personal"];
+                this.prepTime = _data["prepTime"];
+                this.cookTime = _data["cookTime"];
+                this.totalTime = _data["totalTime"];
+                this.servings = _data["servings"];
+                this.containsAlcohol = _data["containsAlcohol"];
+                this.authorId = _data["authorId"];
+                this.referenceUrl = _data["referenceUrl"];
+                this.descendantOfRecipeId = _data["descendantOfRecipeId"];
+                if (Array.isArray(_data["parts"])) {
+                    this.parts = [] as any;
+                    for (let item of _data["parts"])
+                        this.parts!.push(RecipeCreationDto_Part.fromJS(item));
+                }
+                if (Array.isArray(_data["steps"])) {
+                    this.steps = [] as any;
+                    for (let item of _data["steps"])
+                        this.steps!.push(RecipeCreationDto_Step.fromJS(item));
+                }
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeCreationDto_Ingredient.fromJS(item));
+                }
+                if (Array.isArray(_data["equipment"])) {
+                    this.equipment = [] as any;
+                    for (let item of _data["equipment"])
+                        this.equipment!.push(RecipeCreationDto_PieceOfEquipment.fromJS(item));
+                }
+                this.nutrition = _data["nutrition"] ? RecipeCreationDto_Nutrition.fromJS(_data["nutrition"]) : <any>undefined;
+                if (Array.isArray(_data["tags"])) {
+                    this.tags = [] as any;
+                    for (let item of _data["tags"])
+                        this.tags!.push(RecipeCreationDto_Tag.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): RecipeCreationDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeCreationDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["languageCode"] = this.languageCode;
+            data["name"] = this.name;
+            data["description"] = this.description;
+            data["type"] = this.type;
+            data["difficulty"] = this.difficulty;
+            data["personal"] = this.personal;
+            data["prepTime"] = this.prepTime;
+            data["cookTime"] = this.cookTime;
+            data["totalTime"] = this.totalTime;
+            data["servings"] = this.servings;
+            data["containsAlcohol"] = this.containsAlcohol;
+            data["authorId"] = this.authorId;
+            data["referenceUrl"] = this.referenceUrl;
+            data["descendantOfRecipeId"] = this.descendantOfRecipeId;
+            if (Array.isArray(this.parts)) {
+                data["parts"] = [];
+                for (let item of this.parts)
+                    data["parts"].push(item.toJSON());
+            }
+            if (Array.isArray(this.steps)) {
+                data["steps"] = [];
+                for (let item of this.steps)
+                    data["steps"].push(item.toJSON());
+            }
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
+            }
+            if (Array.isArray(this.equipment)) {
+                data["equipment"] = [];
+                for (let item of this.equipment)
+                    data["equipment"].push(item.toJSON());
+            }
+            data["nutrition"] = this.nutrition ? this.nutrition.toJSON() : <any>undefined;
+            if (Array.isArray(this.tags)) {
+                data["tags"] = [];
+                for (let item of this.tags)
+                    data["tags"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IRecipeCreationDto {
+        languageCode: string;
+        name: string;
+        description: string;
+        type: RecipeType;
+        difficulty: RecipeDifficulty;
+        personal: boolean;
+        prepTime: number;
+        cookTime: number;
+        totalTime: number;
+        servings: number;
+        containsAlcohol: boolean;
+        authorId: string | undefined;
+        referenceUrl: string | undefined;
+        descendantOfRecipeId: string | undefined;
+        parts: RecipeCreationDto_Part[];
+        steps: RecipeCreationDto_Step[];
+        ingredients: RecipeCreationDto_Ingredient[];
+        equipment: RecipeCreationDto_PieceOfEquipment[];
+        nutrition: RecipeCreationDto_Nutrition;
+        tags: RecipeCreationDto_Tag[];
+    }
+
+    export class RecipeCreationDto_Ingredient implements IRecipeCreationDto_Ingredient {
+        ingredientId!: string;
+        unitOfMeasurementId!: string;
+        amount!: number;
+        optional!: boolean;
+
+        constructor(data?: IRecipeCreationDto_Ingredient) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.ingredientId = _data["ingredientId"];
+                this.unitOfMeasurementId = _data["unitOfMeasurementId"];
+                this.amount = _data["amount"];
+                this.optional = _data["optional"];
+            }
+        }
+
+        static fromJS(data: any): RecipeCreationDto_Ingredient {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeCreationDto_Ingredient();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["ingredientId"] = this.ingredientId;
+            data["unitOfMeasurementId"] = this.unitOfMeasurementId;
+            data["amount"] = this.amount;
+            data["optional"] = this.optional;
+            return data;
+        }
+    }
+
+    export interface IRecipeCreationDto_Ingredient {
+        ingredientId: string;
+        unitOfMeasurementId: string;
+        amount: number;
+        optional: boolean;
+    }
+
+    export class RecipeCreationDto_Nutrition implements IRecipeCreationDto_Nutrition {
+        calories!: number | undefined;
+        sugar!: number | undefined;
+        fat!: number | undefined;
+        saturatedFat!: number | undefined;
+        sodium!: number | undefined;
+        protein!: number | undefined;
+        carbohydrates!: number | undefined;
+        fiber!: number | undefined;
+
+        constructor(data?: IRecipeCreationDto_Nutrition) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.calories = _data["calories"];
+                this.sugar = _data["sugar"];
+                this.fat = _data["fat"];
+                this.saturatedFat = _data["saturatedFat"];
+                this.sodium = _data["sodium"];
+                this.protein = _data["protein"];
+                this.carbohydrates = _data["carbohydrates"];
+                this.fiber = _data["fiber"];
+            }
+        }
+
+        static fromJS(data: any): RecipeCreationDto_Nutrition {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeCreationDto_Nutrition();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["calories"] = this.calories;
+            data["sugar"] = this.sugar;
+            data["fat"] = this.fat;
+            data["saturatedFat"] = this.saturatedFat;
+            data["sodium"] = this.sodium;
+            data["protein"] = this.protein;
+            data["carbohydrates"] = this.carbohydrates;
+            data["fiber"] = this.fiber;
+            return data;
+        }
+    }
+
+    export interface IRecipeCreationDto_Nutrition {
+        calories: number | undefined;
+        sugar: number | undefined;
+        fat: number | undefined;
+        saturatedFat: number | undefined;
+        sodium: number | undefined;
+        protein: number | undefined;
+        carbohydrates: number | undefined;
+        fiber: number | undefined;
+    }
+
+    export class RecipeCreationDto_Part implements IRecipeCreationDto_Part {
+        name!: string;
+        ingredients!: RecipeCreationDto_Ingredient[];
+
+        constructor(data?: IRecipeCreationDto_Part) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.name = _data["name"];
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeCreationDto_Ingredient.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): RecipeCreationDto_Part {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeCreationDto_Part();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["name"] = this.name;
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IRecipeCreationDto_Part {
+        name: string;
+        ingredients: RecipeCreationDto_Ingredient[];
+    }
+
+    export class RecipeCreationDto_PieceOfEquipment implements IRecipeCreationDto_PieceOfEquipment {
+        equipmentId!: string;
+        amount!: number;
+        dependsOnServings!: boolean;
+
+        constructor(data?: IRecipeCreationDto_PieceOfEquipment) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.equipmentId = _data["equipmentId"];
+                this.amount = _data["amount"];
+                this.dependsOnServings = _data["dependsOnServings"];
+            }
+        }
+
+        static fromJS(data: any): RecipeCreationDto_PieceOfEquipment {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeCreationDto_PieceOfEquipment();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["equipmentId"] = this.equipmentId;
+            data["amount"] = this.amount;
+            data["dependsOnServings"] = this.dependsOnServings;
+            return data;
+        }
+    }
+
+    export interface IRecipeCreationDto_PieceOfEquipment {
+        equipmentId: string;
+        amount: number;
+        dependsOnServings: boolean;
+    }
+
+    export class RecipeCreationDto_Step implements IRecipeCreationDto_Step {
+        number!: number;
+        name!: string;
+        instructions!: RecipeInstruction[];
+
+        constructor(data?: IRecipeCreationDto_Step) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.number = _data["number"];
+                this.name = _data["name"];
+                if (Array.isArray(_data["instructions"])) {
+                    this.instructions = [] as any;
+                    for (let item of _data["instructions"])
+                        this.instructions!.push(RecipeInstruction.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): RecipeCreationDto_Step {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeCreationDto_Step();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["number"] = this.number;
+            data["name"] = this.name;
+            if (Array.isArray(this.instructions)) {
+                data["instructions"] = [];
+                for (let item of this.instructions)
+                    data["instructions"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IRecipeCreationDto_Step {
+        number: number;
+        name: string;
+        instructions: RecipeInstruction[];
+    }
+
+    export class RecipeCreationDto_Tag implements IRecipeCreationDto_Tag {
+        id!: string;
+
+        constructor(data?: IRecipeCreationDto_Tag) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+            }
+        }
+
+        static fromJS(data: any): RecipeCreationDto_Tag {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeCreationDto_Tag();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
+    }
+
+    export interface IRecipeCreationDto_Tag {
+        id: string;
+    }
+
+    export class RecipeImageIndexUpdateDto implements IRecipeImageIndexUpdateDto {
+        sequence!: number;
+
+        constructor(data?: IRecipeImageIndexUpdateDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.sequence = _data["sequence"];
+            }
+        }
+
+        static fromJS(data: any): RecipeImageIndexUpdateDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeImageIndexUpdateDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["sequence"] = this.sequence;
+            return data;
+        }
+    }
+
+    export interface IRecipeImageIndexUpdateDto {
+        sequence: number;
+    }
+
+    export class RecipeUpdateDto implements IRecipeUpdateDto {
+        languageCode!: string;
+        name!: string;
+        description!: string;
+        type!: RecipeType;
+        difficulty!: RecipeDifficulty;
+        prepTime!: number;
+        cookTime!: number;
+        totalTime!: number;
+        servings!: number;
+        containsAlcohol!: boolean;
+        authorId!: string | undefined;
+        referenceUrl!: string | undefined;
+        parts!: RecipeUpdateDto_Part[];
+        steps!: RecipeUpdateDto_Step[];
+        ingredients!: RecipeUpdateDto_Ingredient[];
+        equipment!: RecipeUpdateDto_PieceOfEquipment[];
+        nutrition!: RecipeUpdateDto_Nutrition;
+
+        constructor(data?: IRecipeUpdateDto) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.languageCode = _data["languageCode"];
+                this.name = _data["name"];
+                this.description = _data["description"];
+                this.type = _data["type"];
+                this.difficulty = _data["difficulty"];
+                this.prepTime = _data["prepTime"];
+                this.cookTime = _data["cookTime"];
+                this.totalTime = _data["totalTime"];
+                this.servings = _data["servings"];
+                this.containsAlcohol = _data["containsAlcohol"];
+                this.authorId = _data["authorId"];
+                this.referenceUrl = _data["referenceUrl"];
+                if (Array.isArray(_data["parts"])) {
+                    this.parts = [] as any;
+                    for (let item of _data["parts"])
+                        this.parts!.push(RecipeUpdateDto_Part.fromJS(item));
+                }
+                if (Array.isArray(_data["steps"])) {
+                    this.steps = [] as any;
+                    for (let item of _data["steps"])
+                        this.steps!.push(RecipeUpdateDto_Step.fromJS(item));
+                }
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeUpdateDto_Ingredient.fromJS(item));
+                }
+                if (Array.isArray(_data["equipment"])) {
+                    this.equipment = [] as any;
+                    for (let item of _data["equipment"])
+                        this.equipment!.push(RecipeUpdateDto_PieceOfEquipment.fromJS(item));
+                }
+                this.nutrition = _data["nutrition"] ? RecipeUpdateDto_Nutrition.fromJS(_data["nutrition"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): RecipeUpdateDto {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeUpdateDto();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["languageCode"] = this.languageCode;
+            data["name"] = this.name;
+            data["description"] = this.description;
+            data["type"] = this.type;
+            data["difficulty"] = this.difficulty;
+            data["prepTime"] = this.prepTime;
+            data["cookTime"] = this.cookTime;
+            data["totalTime"] = this.totalTime;
+            data["servings"] = this.servings;
+            data["containsAlcohol"] = this.containsAlcohol;
+            data["authorId"] = this.authorId;
+            data["referenceUrl"] = this.referenceUrl;
+            if (Array.isArray(this.parts)) {
+                data["parts"] = [];
+                for (let item of this.parts)
+                    data["parts"].push(item.toJSON());
+            }
+            if (Array.isArray(this.steps)) {
+                data["steps"] = [];
+                for (let item of this.steps)
+                    data["steps"].push(item.toJSON());
+            }
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
+            }
+            if (Array.isArray(this.equipment)) {
+                data["equipment"] = [];
+                for (let item of this.equipment)
+                    data["equipment"].push(item.toJSON());
+            }
+            data["nutrition"] = this.nutrition ? this.nutrition.toJSON() : <any>undefined;
+            return data;
+        }
+    }
+
+    export interface IRecipeUpdateDto {
+        languageCode: string;
+        name: string;
+        description: string;
+        type: RecipeType;
+        difficulty: RecipeDifficulty;
+        prepTime: number;
+        cookTime: number;
+        totalTime: number;
+        servings: number;
+        containsAlcohol: boolean;
+        authorId: string | undefined;
+        referenceUrl: string | undefined;
+        parts: RecipeUpdateDto_Part[];
+        steps: RecipeUpdateDto_Step[];
+        ingredients: RecipeUpdateDto_Ingredient[];
+        equipment: RecipeUpdateDto_PieceOfEquipment[];
+        nutrition: RecipeUpdateDto_Nutrition;
+    }
+
+    export class RecipeUpdateDto_Ingredient implements IRecipeUpdateDto_Ingredient {
+        ingredientId!: string;
+        unitOfMeasurementId!: string;
+        amount!: number;
+        optional!: boolean;
+
+        constructor(data?: IRecipeUpdateDto_Ingredient) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.ingredientId = _data["ingredientId"];
+                this.unitOfMeasurementId = _data["unitOfMeasurementId"];
+                this.amount = _data["amount"];
+                this.optional = _data["optional"];
+            }
+        }
+
+        static fromJS(data: any): RecipeUpdateDto_Ingredient {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeUpdateDto_Ingredient();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["ingredientId"] = this.ingredientId;
+            data["unitOfMeasurementId"] = this.unitOfMeasurementId;
+            data["amount"] = this.amount;
+            data["optional"] = this.optional;
+            return data;
+        }
+    }
+
+    export interface IRecipeUpdateDto_Ingredient {
+        ingredientId: string;
+        unitOfMeasurementId: string;
+        amount: number;
+        optional: boolean;
+    }
+
+    export class RecipeUpdateDto_Nutrition implements IRecipeUpdateDto_Nutrition {
+        calories!: number | undefined;
+        sugar!: number | undefined;
+        fat!: number | undefined;
+        saturatedFat!: number | undefined;
+        sodium!: number | undefined;
+        protein!: number | undefined;
+        carbohydrates!: number | undefined;
+        fiber!: number | undefined;
+
+        constructor(data?: IRecipeUpdateDto_Nutrition) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.calories = _data["calories"];
+                this.sugar = _data["sugar"];
+                this.fat = _data["fat"];
+                this.saturatedFat = _data["saturatedFat"];
+                this.sodium = _data["sodium"];
+                this.protein = _data["protein"];
+                this.carbohydrates = _data["carbohydrates"];
+                this.fiber = _data["fiber"];
+            }
+        }
+
+        static fromJS(data: any): RecipeUpdateDto_Nutrition {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeUpdateDto_Nutrition();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["calories"] = this.calories;
+            data["sugar"] = this.sugar;
+            data["fat"] = this.fat;
+            data["saturatedFat"] = this.saturatedFat;
+            data["sodium"] = this.sodium;
+            data["protein"] = this.protein;
+            data["carbohydrates"] = this.carbohydrates;
+            data["fiber"] = this.fiber;
+            return data;
+        }
+    }
+
+    export interface IRecipeUpdateDto_Nutrition {
+        calories: number | undefined;
+        sugar: number | undefined;
+        fat: number | undefined;
+        saturatedFat: number | undefined;
+        sodium: number | undefined;
+        protein: number | undefined;
+        carbohydrates: number | undefined;
+        fiber: number | undefined;
+    }
+
+    export class RecipeUpdateDto_Part implements IRecipeUpdateDto_Part {
+        name!: string;
+        ingredients!: RecipeCreationDto_Ingredient[];
+
+        constructor(data?: IRecipeUpdateDto_Part) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.name = _data["name"];
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeCreationDto_Ingredient.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): RecipeUpdateDto_Part {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeUpdateDto_Part();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["name"] = this.name;
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IRecipeUpdateDto_Part {
+        name: string;
+        ingredients: RecipeCreationDto_Ingredient[];
+    }
+
+    export class RecipeUpdateDto_PieceOfEquipment implements IRecipeUpdateDto_PieceOfEquipment {
+        equipmentId!: string;
+        amount!: number;
+        dependsOnServings!: boolean;
+
+        constructor(data?: IRecipeUpdateDto_PieceOfEquipment) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.equipmentId = _data["equipmentId"];
+                this.amount = _data["amount"];
+                this.dependsOnServings = _data["dependsOnServings"];
+            }
+        }
+
+        static fromJS(data: any): RecipeUpdateDto_PieceOfEquipment {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeUpdateDto_PieceOfEquipment();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["equipmentId"] = this.equipmentId;
+            data["amount"] = this.amount;
+            data["dependsOnServings"] = this.dependsOnServings;
+            return data;
+        }
+    }
+
+    export interface IRecipeUpdateDto_PieceOfEquipment {
+        equipmentId: string;
+        amount: number;
+        dependsOnServings: boolean;
+    }
+
+    export class RecipeUpdateDto_Step implements IRecipeUpdateDto_Step {
+        number!: number;
+        name!: string;
+        instructions!: RecipeInstruction[];
+
+        constructor(data?: IRecipeUpdateDto_Step) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.number = _data["number"];
+                this.name = _data["name"];
+                if (Array.isArray(_data["instructions"])) {
+                    this.instructions = [] as any;
+                    for (let item of _data["instructions"])
+                        this.instructions!.push(RecipeInstruction.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): RecipeUpdateDto_Step {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeUpdateDto_Step();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["number"] = this.number;
+            data["name"] = this.name;
+            if (Array.isArray(this.instructions)) {
+                data["instructions"] = [];
+                for (let item of this.instructions)
+                    data["instructions"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IRecipeUpdateDto_Step {
+        number: number;
+        name: string;
+        instructions: RecipeInstruction[];
+    }
+
+    export class FavouriteRecipeCommandResponse implements IFavouriteRecipeCommandResponse {
+
+        constructor(data?: IFavouriteRecipeCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): FavouriteRecipeCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new FavouriteRecipeCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IFavouriteRecipeCommandResponse {
+    }
+
+    export class RateRecipeCommand implements IRateRecipeCommand {
+        recipeId!: string;
+        userId!: string;
+        rating!: number;
+
+        constructor(data?: IRateRecipeCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.recipeId = _data["recipeId"];
+                this.userId = _data["userId"];
+                this.rating = _data["rating"];
+            }
+        }
+
+        static fromJS(data: any): RateRecipeCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new RateRecipeCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["recipeId"] = this.recipeId;
+            data["userId"] = this.userId;
+            data["rating"] = this.rating;
+            return data;
+        }
+    }
+
+    export interface IRateRecipeCommand {
+        recipeId: string;
+        userId: string;
+        rating: number;
+    }
+
+    export class RateRecipeCommandResponse implements IRateRecipeCommandResponse {
+
+        constructor(data?: IRateRecipeCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): RateRecipeCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new RateRecipeCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IRateRecipeCommandResponse {
+    }
+
+    export class UnfavouriteRecipeCommandResponse implements IUnfavouriteRecipeCommandResponse {
+
+        constructor(data?: IUnfavouriteRecipeCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): UnfavouriteRecipeCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new UnfavouriteRecipeCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IUnfavouriteRecipeCommandResponse {
+    }
+
+    export class CreateAuthorCommand implements ICreateAuthorCommand {
+        languageCode!: string | undefined;
+        name!: string | undefined;
+        biography!: string | undefined;
+        links!: CreateAuthorCommand_Link[] | undefined;
+
+        constructor(data?: ICreateAuthorCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.languageCode = _data["languageCode"];
+                this.name = _data["name"];
+                this.biography = _data["biography"];
+                if (Array.isArray(_data["links"])) {
+                    this.links = [] as any;
+                    for (let item of _data["links"])
+                        this.links!.push(CreateAuthorCommand_Link.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): CreateAuthorCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new CreateAuthorCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["languageCode"] = this.languageCode;
+            data["name"] = this.name;
+            data["biography"] = this.biography;
+            if (Array.isArray(this.links)) {
+                data["links"] = [];
+                for (let item of this.links)
+                    data["links"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface ICreateAuthorCommand {
+        languageCode: string | undefined;
+        name: string | undefined;
+        biography: string | undefined;
+        links: CreateAuthorCommand_Link[] | undefined;
+    }
+
+    export class CreateAuthorCommandResponse implements ICreateAuthorCommandResponse {
+        id!: string;
+
+        constructor(data?: ICreateAuthorCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+            }
+        }
+
+        static fromJS(data: any): CreateAuthorCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new CreateAuthorCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
+    }
+
+    export interface ICreateAuthorCommandResponse {
+        id: string;
+    }
+
+    export class CreateAuthorCommand_Link implements ICreateAuthorCommand_Link {
+        name!: string | undefined;
+        description!: string | undefined;
+        url!: string | undefined;
+
+        constructor(data?: ICreateAuthorCommand_Link) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.name = _data["name"];
+                this.description = _data["description"];
+                this.url = _data["url"];
+            }
+        }
+
+        static fromJS(data: any): CreateAuthorCommand_Link {
+            data = typeof data === 'object' ? data : {};
+            let result = new CreateAuthorCommand_Link();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["name"] = this.name;
+            data["description"] = this.description;
+            data["url"] = this.url;
+            return data;
+        }
+    }
+
+    export interface ICreateAuthorCommand_Link {
+        name: string | undefined;
+        description: string | undefined;
+        url: string | undefined;
+    }
+
+    export class UpdateAuthorCommand implements IUpdateAuthorCommand {
+        id!: string;
+        languageCode!: string | undefined;
+        name!: string | undefined;
+        biography!: string | undefined;
+        links!: UpdateAuthorCommand_Link[] | undefined;
+
+        constructor(data?: IUpdateAuthorCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.languageCode = _data["languageCode"];
+                this.name = _data["name"];
+                this.biography = _data["biography"];
+                if (Array.isArray(_data["links"])) {
+                    this.links = [] as any;
+                    for (let item of _data["links"])
+                        this.links!.push(UpdateAuthorCommand_Link.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): UpdateAuthorCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdateAuthorCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["languageCode"] = this.languageCode;
+            data["name"] = this.name;
+            data["biography"] = this.biography;
+            if (Array.isArray(this.links)) {
+                data["links"] = [];
+                for (let item of this.links)
+                    data["links"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IUpdateAuthorCommand {
+        id: string;
+        languageCode: string | undefined;
+        name: string | undefined;
+        biography: string | undefined;
+        links: UpdateAuthorCommand_Link[] | undefined;
+    }
+
+    export class UpdateAuthorCommandResponse implements IUpdateAuthorCommandResponse {
+
+        constructor(data?: IUpdateAuthorCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): UpdateAuthorCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdateAuthorCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IUpdateAuthorCommandResponse {
+    }
+
+    export class UpdateAuthorCommand_Link implements IUpdateAuthorCommand_Link {
+        name!: string | undefined;
+        description!: string | undefined;
+        url!: string | undefined;
+
+        constructor(data?: IUpdateAuthorCommand_Link) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.name = _data["name"];
+                this.description = _data["description"];
+                this.url = _data["url"];
+            }
+        }
+
+        static fromJS(data: any): UpdateAuthorCommand_Link {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdateAuthorCommand_Link();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["name"] = this.name;
+            data["description"] = this.description;
+            data["url"] = this.url;
+            return data;
+        }
+    }
+
+    export interface IUpdateAuthorCommand_Link {
+        name: string | undefined;
+        description: string | undefined;
+        url: string | undefined;
+    }
+
+    export class AddRecipeToCollectionCommandResponse implements IAddRecipeToCollectionCommandResponse {
+
+        constructor(data?: IAddRecipeToCollectionCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): AddRecipeToCollectionCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new AddRecipeToCollectionCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IAddRecipeToCollectionCommandResponse {
+    }
+
+    export class CreateCollectionCommand implements ICreateCollectionCommand {
+        languageCode!: string | undefined;
+        title!: string | undefined;
+
+        constructor(data?: ICreateCollectionCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.languageCode = _data["languageCode"];
+                this.title = _data["title"];
+            }
+        }
+
+        static fromJS(data: any): CreateCollectionCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new CreateCollectionCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["languageCode"] = this.languageCode;
+            data["title"] = this.title;
+            return data;
+        }
+    }
+
+    export interface ICreateCollectionCommand {
+        languageCode: string | undefined;
+        title: string | undefined;
+    }
+
+    export class CreateCollectionCommandResponse implements ICreateCollectionCommandResponse {
+        id!: string;
+
+        constructor(data?: ICreateCollectionCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+            }
+        }
+
+        static fromJS(data: any): CreateCollectionCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new CreateCollectionCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
+    }
+
+    export interface ICreateCollectionCommandResponse {
+        id: string;
+    }
+
+    export class RemoveRecipeFromCollectionCommandResponse implements IRemoveRecipeFromCollectionCommandResponse {
+
+        constructor(data?: IRemoveRecipeFromCollectionCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): RemoveRecipeFromCollectionCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new RemoveRecipeFromCollectionCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IRemoveRecipeFromCollectionCommandResponse {
+    }
+
+    export class UpdateCollectionCommand implements IUpdateCollectionCommand {
+        id!: string;
+        title!: string | undefined;
+        hidden!: boolean;
+        promoted!: boolean;
+
+        constructor(data?: IUpdateCollectionCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.title = _data["title"];
+                this.hidden = _data["hidden"];
+                this.promoted = _data["promoted"];
+            }
+        }
+
+        static fromJS(data: any): UpdateCollectionCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdateCollectionCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["title"] = this.title;
+            data["hidden"] = this.hidden;
+            data["promoted"] = this.promoted;
+            return data;
+        }
+    }
+
+    export interface IUpdateCollectionCommand {
+        id: string;
+        title: string | undefined;
+        hidden: boolean;
+        promoted: boolean;
+    }
+
+    export class UpdateCollectionCommandResponse implements IUpdateCollectionCommandResponse {
+
+        constructor(data?: IUpdateCollectionCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): UpdateCollectionCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdateCollectionCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IUpdateCollectionCommandResponse {
+    }
+
+    export class ChangeEmailCommand implements IChangeEmailCommand {
+        userId!: string;
+        newEmail!: string | undefined;
+        password!: string | undefined;
+        language!: string | undefined;
+
+        constructor(data?: IChangeEmailCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.userId = _data["userId"];
+                this.newEmail = _data["newEmail"];
+                this.password = _data["password"];
+                this.language = _data["language"];
+            }
+        }
+
+        static fromJS(data: any): ChangeEmailCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new ChangeEmailCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["userId"] = this.userId;
+            data["newEmail"] = this.newEmail;
+            data["password"] = this.password;
+            data["language"] = this.language;
+            return data;
+        }
+    }
+
+    export interface IChangeEmailCommand {
+        userId: string;
+        newEmail: string | undefined;
+        password: string | undefined;
+        language: string | undefined;
+    }
+
+    export class ChangeEmailCommandResponse implements IChangeEmailCommandResponse {
+
+        constructor(data?: IChangeEmailCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): ChangeEmailCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new ChangeEmailCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IChangeEmailCommandResponse {
+    }
+
+    export class ChangePasswordCommand implements IChangePasswordCommand {
+        userId!: string;
+        currentPassword!: string | undefined;
+        newPassword!: string | undefined;
+        language!: string | undefined;
+
+        constructor(data?: IChangePasswordCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.userId = _data["userId"];
+                this.currentPassword = _data["currentPassword"];
+                this.newPassword = _data["newPassword"];
+                this.language = _data["language"];
+            }
+        }
+
+        static fromJS(data: any): ChangePasswordCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new ChangePasswordCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["userId"] = this.userId;
+            data["currentPassword"] = this.currentPassword;
+            data["newPassword"] = this.newPassword;
+            data["language"] = this.language;
+            return data;
+        }
+    }
+
+    export interface IChangePasswordCommand {
+        userId: string;
+        currentPassword: string | undefined;
+        newPassword: string | undefined;
+        language: string | undefined;
+    }
+
+    export class ChangePasswordCommandResponse implements IChangePasswordCommandResponse {
+
+        constructor(data?: IChangePasswordCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): ChangePasswordCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new ChangePasswordCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IChangePasswordCommandResponse {
+    }
+
+    export class DeleteAccountCommandResponse implements IDeleteAccountCommandResponse {
+
+        constructor(data?: IDeleteAccountCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): DeleteAccountCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new DeleteAccountCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IDeleteAccountCommandResponse {
+    }
+
+    export class ForgotPasswordCommand implements IForgotPasswordCommand {
+        email!: string | undefined;
+        language!: string | undefined;
+
+        constructor(data?: IForgotPasswordCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.email = _data["email"];
+                this.language = _data["language"];
+            }
+        }
+
+        static fromJS(data: any): ForgotPasswordCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new ForgotPasswordCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["email"] = this.email;
+            data["language"] = this.language;
+            return data;
+        }
+    }
+
+    export interface IForgotPasswordCommand {
+        email: string | undefined;
+        language: string | undefined;
+    }
+
+    export class ForgotPasswordCommandResponse implements IForgotPasswordCommandResponse {
+
+        constructor(data?: IForgotPasswordCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): ForgotPasswordCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new ForgotPasswordCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IForgotPasswordCommandResponse {
+    }
+
+    export class LoginCommand implements ILoginCommand {
+        email!: string | undefined;
+        password!: string | undefined;
+
+        constructor(data?: ILoginCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.email = _data["email"];
+                this.password = _data["password"];
+            }
+        }
+
+        static fromJS(data: any): LoginCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new LoginCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["email"] = this.email;
+            data["password"] = this.password;
+            return data;
+        }
+    }
+
+    export interface ILoginCommand {
+        email: string | undefined;
+        password: string | undefined;
+    }
+
+    export class LoginCommandResponse implements ILoginCommandResponse {
+        accessToken!: string | undefined;
+        refreshToken!: string | undefined;
+
+        constructor(data?: ILoginCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.accessToken = _data["accessToken"];
+                this.refreshToken = _data["refreshToken"];
+            }
+        }
+
+        static fromJS(data: any): LoginCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new LoginCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["accessToken"] = this.accessToken;
+            data["refreshToken"] = this.refreshToken;
+            return data;
+        }
+    }
+
+    export interface ILoginCommandResponse {
+        accessToken: string | undefined;
+        refreshToken: string | undefined;
+    }
+
+    export class RefreshTokensCommand implements IRefreshTokensCommand {
+        accessToken!: string | undefined;
+        refreshToken!: string | undefined;
+
+        constructor(data?: IRefreshTokensCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.accessToken = _data["accessToken"];
+                this.refreshToken = _data["refreshToken"];
+            }
+        }
+
+        static fromJS(data: any): RefreshTokensCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new RefreshTokensCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["accessToken"] = this.accessToken;
+            data["refreshToken"] = this.refreshToken;
+            return data;
+        }
+    }
+
+    export interface IRefreshTokensCommand {
+        accessToken: string | undefined;
+        refreshToken: string | undefined;
+    }
+
+    export class RefreshTokensCommandResponse implements IRefreshTokensCommandResponse {
+        accessToken!: string | undefined;
+        refreshToken!: string | undefined;
+
+        constructor(data?: IRefreshTokensCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.accessToken = _data["accessToken"];
+                this.refreshToken = _data["refreshToken"];
+            }
+        }
+
+        static fromJS(data: any): RefreshTokensCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new RefreshTokensCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["accessToken"] = this.accessToken;
+            data["refreshToken"] = this.refreshToken;
+            return data;
+        }
+    }
+
+    export interface IRefreshTokensCommandResponse {
+        accessToken: string | undefined;
+        refreshToken: string | undefined;
+    }
+
+    export class RegisterUserCommand implements IRegisterUserCommand {
+        email!: string | undefined;
+        password!: string | undefined;
+        language!: string | undefined;
+
+        constructor(data?: IRegisterUserCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.email = _data["email"];
+                this.password = _data["password"];
+                this.language = _data["language"];
+            }
+        }
+
+        static fromJS(data: any): RegisterUserCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new RegisterUserCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["email"] = this.email;
+            data["password"] = this.password;
+            data["language"] = this.language;
+            return data;
+        }
+    }
+
+    export interface IRegisterUserCommand {
+        email: string | undefined;
+        password: string | undefined;
+        language: string | undefined;
+    }
+
+    export class RegisterUserCommandResponse implements IRegisterUserCommandResponse {
+        id!: string;
+
+        constructor(data?: IRegisterUserCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+            }
+        }
+
+        static fromJS(data: any): RegisterUserCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new RegisterUserCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
+    }
+
+    export interface IRegisterUserCommandResponse {
+        id: string;
+    }
+
+    export class ResetPasswordCommand implements IResetPasswordCommand {
+        email!: string | undefined;
+        resetToken!: string | undefined;
+        newPassword!: string | undefined;
+        language!: string | undefined;
+
+        constructor(data?: IResetPasswordCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.email = _data["email"];
+                this.resetToken = _data["resetToken"];
+                this.newPassword = _data["newPassword"];
+                this.language = _data["language"];
+            }
+        }
+
+        static fromJS(data: any): ResetPasswordCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new ResetPasswordCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["email"] = this.email;
+            data["resetToken"] = this.resetToken;
+            data["newPassword"] = this.newPassword;
+            data["language"] = this.language;
+            return data;
+        }
+    }
+
+    export interface IResetPasswordCommand {
+        email: string | undefined;
+        resetToken: string | undefined;
+        newPassword: string | undefined;
+        language: string | undefined;
+    }
+
+    export class ResetPasswordCommandResponse implements IResetPasswordCommandResponse {
+
+        constructor(data?: IResetPasswordCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): ResetPasswordCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new ResetPasswordCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IResetPasswordCommandResponse {
+    }
+
+    export class CreateEquipmentCommand implements ICreateEquipmentCommand {
+        languageCode!: string | undefined;
+        name!: string | undefined;
+        pluralName!: string | undefined;
+        personal!: boolean;
+
+        constructor(data?: ICreateEquipmentCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.languageCode = _data["languageCode"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+                this.personal = _data["personal"];
+            }
+        }
+
+        static fromJS(data: any): CreateEquipmentCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new CreateEquipmentCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["languageCode"] = this.languageCode;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            data["personal"] = this.personal;
+            return data;
+        }
+    }
+
+    export interface ICreateEquipmentCommand {
+        languageCode: string | undefined;
+        name: string | undefined;
+        pluralName: string | undefined;
+        personal: boolean;
+    }
+
+    export class CreateEquipmentCommandResponse implements ICreateEquipmentCommandResponse {
+        id!: string;
+
+        constructor(data?: ICreateEquipmentCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+            }
+        }
+
+        static fromJS(data: any): CreateEquipmentCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new CreateEquipmentCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
+    }
+
+    export interface ICreateEquipmentCommandResponse {
+        id: string;
+    }
+
+    export class UpdateEquipmentCommand implements IUpdateEquipmentCommand {
+        id!: string;
+        name!: string | undefined;
+        pluralName!: string | undefined;
+
+        constructor(data?: IUpdateEquipmentCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+            }
+        }
+
+        static fromJS(data: any): UpdateEquipmentCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdateEquipmentCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            return data;
+        }
+    }
+
+    export interface IUpdateEquipmentCommand {
+        id: string;
+        name: string | undefined;
+        pluralName: string | undefined;
+    }
+
+    export class UpdateEquipmentCommandResponse implements IUpdateEquipmentCommandResponse {
+
+        constructor(data?: IUpdateEquipmentCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): UpdateEquipmentCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdateEquipmentCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IUpdateEquipmentCommandResponse {
+    }
+
+    export class CreateIngredientCommand implements ICreateIngredientCommand {
+        languageCode!: string | undefined;
+        name!: string | undefined;
+        pluralName!: string | undefined;
+        defaultUnitOfMeasurementId!: string;
+        personal!: boolean;
+
+        constructor(data?: ICreateIngredientCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.languageCode = _data["languageCode"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+                this.defaultUnitOfMeasurementId = _data["defaultUnitOfMeasurementId"];
+                this.personal = _data["personal"];
+            }
+        }
+
+        static fromJS(data: any): CreateIngredientCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new CreateIngredientCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["languageCode"] = this.languageCode;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            data["defaultUnitOfMeasurementId"] = this.defaultUnitOfMeasurementId;
+            data["personal"] = this.personal;
+            return data;
+        }
+    }
+
+    export interface ICreateIngredientCommand {
+        languageCode: string | undefined;
+        name: string | undefined;
+        pluralName: string | undefined;
+        defaultUnitOfMeasurementId: string;
+        personal: boolean;
+    }
+
+    export class CreateIngredientCommandResponse implements ICreateIngredientCommandResponse {
+        id!: string;
+
+        constructor(data?: ICreateIngredientCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+            }
+        }
+
+        static fromJS(data: any): CreateIngredientCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new CreateIngredientCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
+    }
+
+    export interface ICreateIngredientCommandResponse {
+        id: string;
+    }
+
+    export class UpdateIngredientCommand implements IUpdateIngredientCommand {
+        id!: string;
+        name!: string | undefined;
+        pluralName!: string | undefined;
+        defaultUnitOfMeasurementId!: string;
+
+        constructor(data?: IUpdateIngredientCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+                this.defaultUnitOfMeasurementId = _data["defaultUnitOfMeasurementId"];
+            }
+        }
+
+        static fromJS(data: any): UpdateIngredientCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdateIngredientCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            data["defaultUnitOfMeasurementId"] = this.defaultUnitOfMeasurementId;
+            return data;
+        }
+    }
+
+    export interface IUpdateIngredientCommand {
+        id: string;
+        name: string | undefined;
+        pluralName: string | undefined;
+        defaultUnitOfMeasurementId: string;
+    }
+
+    export class UpdateIngredientCommandResponse implements IUpdateIngredientCommandResponse {
+
+        constructor(data?: IUpdateIngredientCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): UpdateIngredientCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdateIngredientCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IUpdateIngredientCommandResponse {
+    }
+
+    export class AddRecipeToPlannerCommand implements IAddRecipeToPlannerCommand {
+        userId!: string;
+        recipeId!: string;
+        dates!: dayjs.Dayjs[] | undefined;
+        servings!: number;
+
+        constructor(data?: IAddRecipeToPlannerCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.userId = _data["userId"];
+                this.recipeId = _data["recipeId"];
+                if (Array.isArray(_data["dates"])) {
+                    this.dates = [] as any;
+                    for (let item of _data["dates"])
+                        this.dates!.push(dayjs(item));
+                }
+                this.servings = _data["servings"];
+            }
+        }
+
+        static fromJS(data: any): AddRecipeToPlannerCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new AddRecipeToPlannerCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["userId"] = this.userId;
+            data["recipeId"] = this.recipeId;
+            if (Array.isArray(this.dates)) {
+                data["dates"] = [];
+                for (let item of this.dates)
+                    data["dates"].push(item.format('YYYY-MM-DD'));
+            }
+            data["servings"] = this.servings;
+            return data;
+        }
+    }
+
+    export interface IAddRecipeToPlannerCommand {
+        userId: string;
+        recipeId: string;
+        dates: dayjs.Dayjs[] | undefined;
+        servings: number;
+    }
+
+    export class AddRecipeToPlannerCommandResponse implements IAddRecipeToPlannerCommandResponse {
+        plannedRecipes!: AddRecipeToPlannerCommandResponse_PlannedRecipe[] | undefined;
+
+        constructor(data?: IAddRecipeToPlannerCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["plannedRecipes"])) {
+                    this.plannedRecipes = [] as any;
+                    for (let item of _data["plannedRecipes"])
+                        this.plannedRecipes!.push(AddRecipeToPlannerCommandResponse_PlannedRecipe.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): AddRecipeToPlannerCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new AddRecipeToPlannerCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.plannedRecipes)) {
+                data["plannedRecipes"] = [];
+                for (let item of this.plannedRecipes)
+                    data["plannedRecipes"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IAddRecipeToPlannerCommandResponse {
+        plannedRecipes: AddRecipeToPlannerCommandResponse_PlannedRecipe[] | undefined;
+    }
+
+    export class AddRecipeToPlannerCommandResponse_PlannedRecipe implements IAddRecipeToPlannerCommandResponse_PlannedRecipe {
+        id!: string;
+
+        constructor(data?: IAddRecipeToPlannerCommandResponse_PlannedRecipe) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+            }
+        }
+
+        static fromJS(data: any): AddRecipeToPlannerCommandResponse_PlannedRecipe {
+            data = typeof data === 'object' ? data : {};
+            let result = new AddRecipeToPlannerCommandResponse_PlannedRecipe();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
+    }
+
+    export interface IAddRecipeToPlannerCommandResponse_PlannedRecipe {
+        id: string;
+    }
+
+    export class RemovePlannedRecipeCommandResponse implements IRemovePlannedRecipeCommandResponse {
+
+        constructor(data?: IRemovePlannedRecipeCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): RemovePlannedRecipeCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new RemovePlannedRecipeCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IRemovePlannedRecipeCommandResponse {
+    }
+
+    export class UpdatePlannedRecipeCommand implements IUpdatePlannedRecipeCommand {
+        id!: string;
+        servings!: number;
+
+        constructor(data?: IUpdatePlannedRecipeCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.servings = _data["servings"];
+            }
+        }
+
+        static fromJS(data: any): UpdatePlannedRecipeCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdatePlannedRecipeCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["servings"] = this.servings;
+            return data;
+        }
+    }
+
+    export interface IUpdatePlannedRecipeCommand {
+        id: string;
+        servings: number;
+    }
+
+    export class UpdatePlannedRecipeCommandResponse implements IUpdatePlannedRecipeCommandResponse {
+
+        constructor(data?: IUpdatePlannedRecipeCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): UpdatePlannedRecipeCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdatePlannedRecipeCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
+        }
+    }
+
+    export interface IUpdatePlannedRecipeCommandResponse {
+    }
+
+    export class Author implements IAuthor {
+        id!: string;
+        originalLanguageCode!: string | undefined;
+        state!: AuthorState;
+        name!: string | undefined;
+        biography!: string | undefined;
+        links!: AuthorLink[] | undefined;
+        translations!: AuthorTranslation[] | undefined;
+
+        constructor(data?: IAuthor) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.originalLanguageCode = _data["originalLanguageCode"];
+                this.state = _data["state"];
+                this.name = _data["name"];
+                this.biography = _data["biography"];
+                if (Array.isArray(_data["links"])) {
+                    this.links = [] as any;
+                    for (let item of _data["links"])
+                        this.links!.push(AuthorLink.fromJS(item));
+                }
+                if (Array.isArray(_data["translations"])) {
+                    this.translations = [] as any;
+                    for (let item of _data["translations"])
+                        this.translations!.push(AuthorTranslation.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): Author {
+            data = typeof data === 'object' ? data : {};
+            let result = new Author();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["originalLanguageCode"] = this.originalLanguageCode;
+            data["state"] = this.state;
+            data["name"] = this.name;
+            data["biography"] = this.biography;
+            if (Array.isArray(this.links)) {
+                data["links"] = [];
+                for (let item of this.links)
+                    data["links"].push(item.toJSON());
+            }
+            if (Array.isArray(this.translations)) {
+                data["translations"] = [];
+                for (let item of this.translations)
+                    data["translations"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IAuthor {
+        id: string;
+        originalLanguageCode: string | undefined;
+        state: AuthorState;
+        name: string | undefined;
+        biography: string | undefined;
+        links: AuthorLink[] | undefined;
+        translations: AuthorTranslation[] | undefined;
+    }
+
+    export class AuthorLink implements IAuthorLink {
+        id!: string;
+        originalLanguageCode!: string | undefined;
+        authorId!: string;
+        name!: string | undefined;
+        url!: string | undefined;
+        author!: Author | undefined;
+        translations!: AuthorLinkTranslation[] | undefined;
+
+        constructor(data?: IAuthorLink) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.originalLanguageCode = _data["originalLanguageCode"];
+                this.authorId = _data["authorId"];
+                this.name = _data["name"];
+                this.url = _data["url"];
+                this.author = _data["author"] ? Author.fromJS(_data["author"]) : <any>undefined;
+                if (Array.isArray(_data["translations"])) {
+                    this.translations = [] as any;
+                    for (let item of _data["translations"])
+                        this.translations!.push(AuthorLinkTranslation.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): AuthorLink {
+            data = typeof data === 'object' ? data : {};
+            let result = new AuthorLink();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["originalLanguageCode"] = this.originalLanguageCode;
+            data["authorId"] = this.authorId;
+            data["name"] = this.name;
+            data["url"] = this.url;
+            data["author"] = this.author ? this.author.toJSON() : <any>undefined;
+            if (Array.isArray(this.translations)) {
+                data["translations"] = [];
+                for (let item of this.translations)
+                    data["translations"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IAuthorLink {
+        id: string;
+        originalLanguageCode: string | undefined;
+        authorId: string;
+        name: string | undefined;
+        url: string | undefined;
+        author: Author | undefined;
+        translations: AuthorLinkTranslation[] | undefined;
+    }
+
+    export enum AuthorState {
+        Published = "Published",
+        Archived = "Archived",
+    }
+
+    export class Collection implements ICollection {
+        id!: string;
+        originalLanguageCode!: string | undefined;
+        title!: string | undefined;
+        hidden!: boolean;
+        promoted!: boolean;
+        createdByUserId!: string;
+        createdOn!: dayjs.Dayjs;
+        updatedByUserId!: string | undefined;
+        updatedOn!: dayjs.Dayjs | undefined;
+        createdByUser!: User | undefined;
+        updatedByUser!: User | undefined;
+        translations!: CollectionTranslation[] | undefined;
+        recipes!: CollectionRecipe[] | undefined;
+
+        constructor(data?: ICollection) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.originalLanguageCode = _data["originalLanguageCode"];
+                this.title = _data["title"];
+                this.hidden = _data["hidden"];
+                this.promoted = _data["promoted"];
+                this.createdByUserId = _data["createdByUserId"];
+                this.createdOn = _data["createdOn"] ? dayjs(_data["createdOn"].toString()) : <any>undefined;
+                this.updatedByUserId = _data["updatedByUserId"];
+                this.updatedOn = _data["updatedOn"] ? dayjs(_data["updatedOn"].toString()) : <any>undefined;
+                this.createdByUser = _data["createdByUser"] ? User.fromJS(_data["createdByUser"]) : <any>undefined;
+                this.updatedByUser = _data["updatedByUser"] ? User.fromJS(_data["updatedByUser"]) : <any>undefined;
+                if (Array.isArray(_data["translations"])) {
+                    this.translations = [] as any;
+                    for (let item of _data["translations"])
+                        this.translations!.push(CollectionTranslation.fromJS(item));
+                }
+                if (Array.isArray(_data["recipes"])) {
+                    this.recipes = [] as any;
+                    for (let item of _data["recipes"])
+                        this.recipes!.push(CollectionRecipe.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): Collection {
+            data = typeof data === 'object' ? data : {};
+            let result = new Collection();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["originalLanguageCode"] = this.originalLanguageCode;
+            data["title"] = this.title;
+            data["hidden"] = this.hidden;
+            data["promoted"] = this.promoted;
+            data["createdByUserId"] = this.createdByUserId;
+            data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
+            data["updatedByUserId"] = this.updatedByUserId;
+            data["updatedOn"] = this.updatedOn ? this.updatedOn.toISOString() : <any>undefined;
+            data["createdByUser"] = this.createdByUser ? this.createdByUser.toJSON() : <any>undefined;
+            data["updatedByUser"] = this.updatedByUser ? this.updatedByUser.toJSON() : <any>undefined;
+            if (Array.isArray(this.translations)) {
+                data["translations"] = [];
+                for (let item of this.translations)
+                    data["translations"].push(item.toJSON());
+            }
+            if (Array.isArray(this.recipes)) {
+                data["recipes"] = [];
+                for (let item of this.recipes)
+                    data["recipes"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface ICollection {
+        id: string;
+        originalLanguageCode: string | undefined;
+        title: string | undefined;
+        hidden: boolean;
+        promoted: boolean;
+        createdByUserId: string;
+        createdOn: dayjs.Dayjs;
+        updatedByUserId: string | undefined;
+        updatedOn: dayjs.Dayjs | undefined;
+        createdByUser: User | undefined;
+        updatedByUser: User | undefined;
+        translations: CollectionTranslation[] | undefined;
+        recipes: CollectionRecipe[] | undefined;
+    }
+
+    export class CollectionRecipe implements ICollectionRecipe {
+        collectionId!: string;
+        recipeId!: string;
+        collection!: Collection | undefined;
+        recipe!: Recipe | undefined;
+
+        constructor(data?: ICollectionRecipe) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.collectionId = _data["collectionId"];
+                this.recipeId = _data["recipeId"];
+                this.collection = _data["collection"] ? Collection.fromJS(_data["collection"]) : <any>undefined;
+                this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): CollectionRecipe {
+            data = typeof data === 'object' ? data : {};
+            let result = new CollectionRecipe();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["collectionId"] = this.collectionId;
+            data["recipeId"] = this.recipeId;
+            data["collection"] = this.collection ? this.collection.toJSON() : <any>undefined;
+            data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
+            return data;
+        }
+    }
+
+    export interface ICollectionRecipe {
+        collectionId: string;
+        recipeId: string;
+        collection: Collection | undefined;
+        recipe: Recipe | undefined;
+    }
+
+    export class TranslationEntity implements ITranslationEntity {
+        languageCode!: string | undefined;
+
+        protected _discriminator: string;
+
+        constructor(data?: ITranslationEntity) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+            this._discriminator = "TranslationEntity";
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.languageCode = _data["languageCode"];
+            }
+        }
+
+        static fromJS(data: any): TranslationEntity {
+            data = typeof data === 'object' ? data : {};
+            if (data["$type"] === "IngredientTranslation") {
+                let result = new IngredientTranslation();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "UnitOfMeasurementTranslation") {
+                let result = new UnitOfMeasurementTranslation();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "RecipePartTranslation") {
+                let result = new RecipePartTranslation();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "EquipmentTranslation") {
+                let result = new EquipmentTranslation();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "RecipeTranslation") {
+                let result = new RecipeTranslation();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "AuthorLinkTranslation") {
+                let result = new AuthorLinkTranslation();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "AuthorTranslation") {
+                let result = new AuthorTranslation();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "TagTranslation") {
+                let result = new TagTranslation();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "CollectionTranslation") {
+                let result = new CollectionTranslation();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "RecipeStepTranslation") {
+                let result = new RecipeStepTranslation();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "RecipeInstructionTranslation") {
+                let result = new RecipeInstructionTranslation();
+                result.init(data);
+                return result;
+            }
+            if (data["$type"] === "FoodBook.Domain.Entities.Translations.StringTranslation") {
+                let result = new StringTranslation();
+                result.init(data);
+                return result;
+            }
+            let result = new TranslationEntity();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["$type"] = this._discriminator;
+            data["languageCode"] = this.languageCode;
+            return data;
+        }
+    }
+
+    export interface ITranslationEntity {
+        languageCode: string | undefined;
+    }
+
+    export class FavouritedRecipe implements IFavouritedRecipe {
+        id!: string;
+        recipeId!: string;
+        userId!: string;
+        recipe!: Recipe | undefined;
+
+        constructor(data?: IFavouritedRecipe) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.recipeId = _data["recipeId"];
+                this.userId = _data["userId"];
+                this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): FavouritedRecipe {
+            data = typeof data === 'object' ? data : {};
+            let result = new FavouritedRecipe();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["recipeId"] = this.recipeId;
+            data["userId"] = this.userId;
+            data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
+            return data;
+        }
+    }
+
+    export interface IFavouritedRecipe {
+        id: string;
+        recipeId: string;
+        userId: string;
+        recipe: Recipe | undefined;
+    }
+
+    export class Ingredient implements IIngredient {
+        id!: string;
+        originalLanguageCode!: string | undefined;
+        name!: string | undefined;
+        pluralName!: string | undefined;
+        defaultUnitOfMeasurementId!: string;
+        personal!: boolean;
+        createdByUserId!: string;
+        createdOn!: dayjs.Dayjs;
+        updatedByUserId!: string | undefined;
+        updatedOn!: dayjs.Dayjs | undefined;
+        createdByUser!: User | undefined;
+        updatedByUser!: User | undefined;
+        translations!: IngredientTranslation[] | undefined;
+        defaultUnitOfMeasurement!: UnitOfMeasurement | undefined;
+
+        constructor(data?: IIngredient) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.originalLanguageCode = _data["originalLanguageCode"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+                this.defaultUnitOfMeasurementId = _data["defaultUnitOfMeasurementId"];
+                this.personal = _data["personal"];
+                this.createdByUserId = _data["createdByUserId"];
+                this.createdOn = _data["createdOn"] ? dayjs(_data["createdOn"].toString()) : <any>undefined;
+                this.updatedByUserId = _data["updatedByUserId"];
+                this.updatedOn = _data["updatedOn"] ? dayjs(_data["updatedOn"].toString()) : <any>undefined;
+                this.createdByUser = _data["createdByUser"] ? User.fromJS(_data["createdByUser"]) : <any>undefined;
+                this.updatedByUser = _data["updatedByUser"] ? User.fromJS(_data["updatedByUser"]) : <any>undefined;
+                if (Array.isArray(_data["translations"])) {
+                    this.translations = [] as any;
+                    for (let item of _data["translations"])
+                        this.translations!.push(IngredientTranslation.fromJS(item));
+                }
+                this.defaultUnitOfMeasurement = _data["defaultUnitOfMeasurement"] ? UnitOfMeasurement.fromJS(_data["defaultUnitOfMeasurement"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): Ingredient {
+            data = typeof data === 'object' ? data : {};
+            let result = new Ingredient();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["originalLanguageCode"] = this.originalLanguageCode;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            data["defaultUnitOfMeasurementId"] = this.defaultUnitOfMeasurementId;
+            data["personal"] = this.personal;
+            data["createdByUserId"] = this.createdByUserId;
+            data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
+            data["updatedByUserId"] = this.updatedByUserId;
+            data["updatedOn"] = this.updatedOn ? this.updatedOn.toISOString() : <any>undefined;
+            data["createdByUser"] = this.createdByUser ? this.createdByUser.toJSON() : <any>undefined;
+            data["updatedByUser"] = this.updatedByUser ? this.updatedByUser.toJSON() : <any>undefined;
+            if (Array.isArray(this.translations)) {
+                data["translations"] = [];
+                for (let item of this.translations)
+                    data["translations"].push(item.toJSON());
+            }
+            data["defaultUnitOfMeasurement"] = this.defaultUnitOfMeasurement ? this.defaultUnitOfMeasurement.toJSON() : <any>undefined;
+            return data;
+        }
+    }
+
+    export interface IIngredient {
+        id: string;
+        originalLanguageCode: string | undefined;
+        name: string | undefined;
+        pluralName: string | undefined;
+        defaultUnitOfMeasurementId: string;
+        personal: boolean;
+        createdByUserId: string;
+        createdOn: dayjs.Dayjs;
+        updatedByUserId: string | undefined;
+        updatedOn: dayjs.Dayjs | undefined;
+        createdByUser: User | undefined;
+        updatedByUser: User | undefined;
+        translations: IngredientTranslation[] | undefined;
+        defaultUnitOfMeasurement: UnitOfMeasurement | undefined;
+    }
+
+    export enum MeasurementSystem {
+        Imperial = "Imperial",
+        Metric = "Metric",
+    }
+
+    export enum MeasurementType {
+        Weight = "Weight",
+        Volume = "Volume",
+        Unit = "Unit",
+    }
+
+    export class PieceOfEquipment implements IPieceOfEquipment {
+        id!: string;
+        originalLanguageCode!: string | undefined;
+        name!: string | undefined;
+        pluralName!: string | undefined;
+        personal!: boolean;
+        createdByUserId!: string;
+        createdOn!: dayjs.Dayjs;
+        updatedByUserId!: string | undefined;
+        updatedOn!: dayjs.Dayjs | undefined;
+        createdByUser!: User | undefined;
+        updatedByUser!: User | undefined;
+        translations!: EquipmentTranslation[] | undefined;
+
+        constructor(data?: IPieceOfEquipment) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.originalLanguageCode = _data["originalLanguageCode"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+                this.personal = _data["personal"];
+                this.createdByUserId = _data["createdByUserId"];
+                this.createdOn = _data["createdOn"] ? dayjs(_data["createdOn"].toString()) : <any>undefined;
+                this.updatedByUserId = _data["updatedByUserId"];
+                this.updatedOn = _data["updatedOn"] ? dayjs(_data["updatedOn"].toString()) : <any>undefined;
+                this.createdByUser = _data["createdByUser"] ? User.fromJS(_data["createdByUser"]) : <any>undefined;
+                this.updatedByUser = _data["updatedByUser"] ? User.fromJS(_data["updatedByUser"]) : <any>undefined;
+                if (Array.isArray(_data["translations"])) {
+                    this.translations = [] as any;
+                    for (let item of _data["translations"])
+                        this.translations!.push(EquipmentTranslation.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): PieceOfEquipment {
+            data = typeof data === 'object' ? data : {};
+            let result = new PieceOfEquipment();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["originalLanguageCode"] = this.originalLanguageCode;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            data["personal"] = this.personal;
+            data["createdByUserId"] = this.createdByUserId;
+            data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
+            data["updatedByUserId"] = this.updatedByUserId;
+            data["updatedOn"] = this.updatedOn ? this.updatedOn.toISOString() : <any>undefined;
+            data["createdByUser"] = this.createdByUser ? this.createdByUser.toJSON() : <any>undefined;
+            data["updatedByUser"] = this.updatedByUser ? this.updatedByUser.toJSON() : <any>undefined;
+            if (Array.isArray(this.translations)) {
+                data["translations"] = [];
+                for (let item of this.translations)
+                    data["translations"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IPieceOfEquipment {
+        id: string;
+        originalLanguageCode: string | undefined;
+        name: string | undefined;
+        pluralName: string | undefined;
+        personal: boolean;
+        createdByUserId: string;
+        createdOn: dayjs.Dayjs;
+        updatedByUserId: string | undefined;
+        updatedOn: dayjs.Dayjs | undefined;
+        createdByUser: User | undefined;
+        updatedByUser: User | undefined;
+        translations: EquipmentTranslation[] | undefined;
+    }
+
+    export class Recipe implements IRecipe {
+        id!: string;
+        originalLanguageCode!: string | undefined;
+        name!: string | undefined;
+        description!: string | undefined;
+        state!: RecipeState;
+        authorId!: string | undefined;
+        publishedOn!: dayjs.Dayjs | undefined;
+        personal!: boolean;
+        type!: RecipeType;
+        difficulty!: RecipeDifficulty;
+        prepTime!: number;
+        cookTime!: number;
+        totalTime!: number;
+        servings!: number;
+        containsAlcohol!: boolean;
+        referenceUrl!: string | undefined;
+        descendantOfRecipeId!: string | undefined;
+        nutrition!: RecipeNutrition | undefined;
+        parts!: RecipePart[] | undefined;
+        ingredients!: RecipeIngredient[] | undefined;
+        equipment!: RecipePieceOfEquipment[] | undefined;
+        steps!: RecipeStep[] | undefined;
+        rating!: number;
+        createdByUserId!: string;
+        createdOn!: dayjs.Dayjs;
+        updatedByUserId!: string | undefined;
+        updatedOn!: dayjs.Dayjs | undefined;
+        createdByUser!: User | undefined;
+        updatedByUser!: User | undefined;
+        translations!: RecipeTranslation[] | undefined;
+        author!: Author | undefined;
+        tags!: RecipeTag[] | undefined;
+        favouriteds!: FavouritedRecipe[] | undefined;
+        images!: RecipeImage[] | undefined;
+        collections!: CollectionRecipe[] | undefined;
+
+        constructor(data?: IRecipe) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.originalLanguageCode = _data["originalLanguageCode"];
+                this.name = _data["name"];
+                this.description = _data["description"];
+                this.state = _data["state"];
+                this.authorId = _data["authorId"];
+                this.publishedOn = _data["publishedOn"] ? dayjs(_data["publishedOn"].toString()) : <any>undefined;
+                this.personal = _data["personal"];
+                this.type = _data["type"];
+                this.difficulty = _data["difficulty"];
+                this.prepTime = _data["prepTime"];
+                this.cookTime = _data["cookTime"];
+                this.totalTime = _data["totalTime"];
+                this.servings = _data["servings"];
+                this.containsAlcohol = _data["containsAlcohol"];
+                this.referenceUrl = _data["referenceUrl"];
+                this.descendantOfRecipeId = _data["descendantOfRecipeId"];
+                this.nutrition = _data["nutrition"] ? RecipeNutrition.fromJS(_data["nutrition"]) : <any>undefined;
+                if (Array.isArray(_data["parts"])) {
+                    this.parts = [] as any;
+                    for (let item of _data["parts"])
+                        this.parts!.push(RecipePart.fromJS(item));
+                }
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeIngredient.fromJS(item));
+                }
+                if (Array.isArray(_data["equipment"])) {
+                    this.equipment = [] as any;
+                    for (let item of _data["equipment"])
+                        this.equipment!.push(RecipePieceOfEquipment.fromJS(item));
+                }
+                if (Array.isArray(_data["steps"])) {
+                    this.steps = [] as any;
+                    for (let item of _data["steps"])
+                        this.steps!.push(RecipeStep.fromJS(item));
+                }
+                this.rating = _data["rating"];
+                this.createdByUserId = _data["createdByUserId"];
+                this.createdOn = _data["createdOn"] ? dayjs(_data["createdOn"].toString()) : <any>undefined;
+                this.updatedByUserId = _data["updatedByUserId"];
+                this.updatedOn = _data["updatedOn"] ? dayjs(_data["updatedOn"].toString()) : <any>undefined;
+                this.createdByUser = _data["createdByUser"] ? User.fromJS(_data["createdByUser"]) : <any>undefined;
+                this.updatedByUser = _data["updatedByUser"] ? User.fromJS(_data["updatedByUser"]) : <any>undefined;
+                if (Array.isArray(_data["translations"])) {
+                    this.translations = [] as any;
+                    for (let item of _data["translations"])
+                        this.translations!.push(RecipeTranslation.fromJS(item));
+                }
+                this.author = _data["author"] ? Author.fromJS(_data["author"]) : <any>undefined;
+                if (Array.isArray(_data["tags"])) {
+                    this.tags = [] as any;
+                    for (let item of _data["tags"])
+                        this.tags!.push(RecipeTag.fromJS(item));
+                }
+                if (Array.isArray(_data["favouriteds"])) {
+                    this.favouriteds = [] as any;
+                    for (let item of _data["favouriteds"])
+                        this.favouriteds!.push(FavouritedRecipe.fromJS(item));
+                }
+                if (Array.isArray(_data["images"])) {
+                    this.images = [] as any;
+                    for (let item of _data["images"])
+                        this.images!.push(RecipeImage.fromJS(item));
+                }
+                if (Array.isArray(_data["collections"])) {
+                    this.collections = [] as any;
+                    for (let item of _data["collections"])
+                        this.collections!.push(CollectionRecipe.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): Recipe {
+            data = typeof data === 'object' ? data : {};
+            let result = new Recipe();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["originalLanguageCode"] = this.originalLanguageCode;
+            data["name"] = this.name;
+            data["description"] = this.description;
+            data["state"] = this.state;
+            data["authorId"] = this.authorId;
+            data["publishedOn"] = this.publishedOn ? this.publishedOn.toISOString() : <any>undefined;
+            data["personal"] = this.personal;
+            data["type"] = this.type;
+            data["difficulty"] = this.difficulty;
+            data["prepTime"] = this.prepTime;
+            data["cookTime"] = this.cookTime;
+            data["totalTime"] = this.totalTime;
+            data["servings"] = this.servings;
+            data["containsAlcohol"] = this.containsAlcohol;
+            data["referenceUrl"] = this.referenceUrl;
+            data["descendantOfRecipeId"] = this.descendantOfRecipeId;
+            data["nutrition"] = this.nutrition ? this.nutrition.toJSON() : <any>undefined;
+            if (Array.isArray(this.parts)) {
+                data["parts"] = [];
+                for (let item of this.parts)
+                    data["parts"].push(item.toJSON());
+            }
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
+            }
+            if (Array.isArray(this.equipment)) {
+                data["equipment"] = [];
+                for (let item of this.equipment)
+                    data["equipment"].push(item.toJSON());
+            }
+            if (Array.isArray(this.steps)) {
+                data["steps"] = [];
+                for (let item of this.steps)
+                    data["steps"].push(item.toJSON());
+            }
+            data["rating"] = this.rating;
+            data["createdByUserId"] = this.createdByUserId;
+            data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
+            data["updatedByUserId"] = this.updatedByUserId;
+            data["updatedOn"] = this.updatedOn ? this.updatedOn.toISOString() : <any>undefined;
+            data["createdByUser"] = this.createdByUser ? this.createdByUser.toJSON() : <any>undefined;
+            data["updatedByUser"] = this.updatedByUser ? this.updatedByUser.toJSON() : <any>undefined;
+            if (Array.isArray(this.translations)) {
+                data["translations"] = [];
+                for (let item of this.translations)
+                    data["translations"].push(item.toJSON());
+            }
+            data["author"] = this.author ? this.author.toJSON() : <any>undefined;
+            if (Array.isArray(this.tags)) {
+                data["tags"] = [];
+                for (let item of this.tags)
+                    data["tags"].push(item.toJSON());
+            }
+            if (Array.isArray(this.favouriteds)) {
+                data["favouriteds"] = [];
+                for (let item of this.favouriteds)
+                    data["favouriteds"].push(item.toJSON());
+            }
+            if (Array.isArray(this.images)) {
+                data["images"] = [];
+                for (let item of this.images)
+                    data["images"].push(item.toJSON());
+            }
+            if (Array.isArray(this.collections)) {
+                data["collections"] = [];
+                for (let item of this.collections)
+                    data["collections"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IRecipe {
+        id: string;
+        originalLanguageCode: string | undefined;
+        name: string | undefined;
+        description: string | undefined;
+        state: RecipeState;
+        authorId: string | undefined;
+        publishedOn: dayjs.Dayjs | undefined;
+        personal: boolean;
+        type: RecipeType;
+        difficulty: RecipeDifficulty;
+        prepTime: number;
+        cookTime: number;
+        totalTime: number;
+        servings: number;
+        containsAlcohol: boolean;
+        referenceUrl: string | undefined;
+        descendantOfRecipeId: string | undefined;
+        nutrition: RecipeNutrition | undefined;
+        parts: RecipePart[] | undefined;
+        ingredients: RecipeIngredient[] | undefined;
+        equipment: RecipePieceOfEquipment[] | undefined;
+        steps: RecipeStep[] | undefined;
+        rating: number;
+        createdByUserId: string;
+        createdOn: dayjs.Dayjs;
+        updatedByUserId: string | undefined;
+        updatedOn: dayjs.Dayjs | undefined;
+        createdByUser: User | undefined;
+        updatedByUser: User | undefined;
+        translations: RecipeTranslation[] | undefined;
+        author: Author | undefined;
+        tags: RecipeTag[] | undefined;
+        favouriteds: FavouritedRecipe[] | undefined;
+        images: RecipeImage[] | undefined;
+        collections: CollectionRecipe[] | undefined;
+    }
+
+    export enum RecipeDifficulty {
+        VeryEasy = "VeryEasy",
+        Easy = "Easy",
+        Average = "Average",
+        Difficult = "Difficult",
+        VeryDifficult = "VeryDifficult",
+    }
+
+    export class RecipeImage implements IRecipeImage {
+        id!: string;
+        recipeId!: string;
+        sequence!: number;
+        s3ObjectKey!: string | undefined;
+        lastUpdated!: dayjs.Dayjs;
+        recipe!: Recipe | undefined;
+
+        constructor(data?: IRecipeImage) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.recipeId = _data["recipeId"];
+                this.sequence = _data["sequence"];
+                this.s3ObjectKey = _data["s3ObjectKey"];
+                this.lastUpdated = _data["lastUpdated"] ? dayjs(_data["lastUpdated"].toString()) : <any>undefined;
+                this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): RecipeImage {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeImage();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["recipeId"] = this.recipeId;
+            data["sequence"] = this.sequence;
+            data["s3ObjectKey"] = this.s3ObjectKey;
+            data["lastUpdated"] = this.lastUpdated ? this.lastUpdated.toISOString() : <any>undefined;
+            data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
+            return data;
+        }
+    }
+
+    export interface IRecipeImage {
+        id: string;
+        recipeId: string;
+        sequence: number;
+        s3ObjectKey: string | undefined;
+        lastUpdated: dayjs.Dayjs;
+        recipe: Recipe | undefined;
+    }
+
+    export class RecipeIngredient implements IRecipeIngredient {
+        id!: string;
+        recipeId!: string;
+        ingredientId!: string;
+        unitOfMeasurementId!: string;
+        amount!: number;
+        optional!: boolean;
+        recipePartId!: string | undefined;
+        recipe!: Recipe | undefined;
+        part!: RecipePart | undefined;
+        ingredient!: Ingredient | undefined;
+        unitOfMeasurement!: UnitOfMeasurement | undefined;
+
+        constructor(data?: IRecipeIngredient) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.recipeId = _data["recipeId"];
+                this.ingredientId = _data["ingredientId"];
+                this.unitOfMeasurementId = _data["unitOfMeasurementId"];
+                this.amount = _data["amount"];
+                this.optional = _data["optional"];
+                this.recipePartId = _data["recipePartId"];
+                this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
+                this.part = _data["part"] ? RecipePart.fromJS(_data["part"]) : <any>undefined;
+                this.ingredient = _data["ingredient"] ? Ingredient.fromJS(_data["ingredient"]) : <any>undefined;
+                this.unitOfMeasurement = _data["unitOfMeasurement"] ? UnitOfMeasurement.fromJS(_data["unitOfMeasurement"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): RecipeIngredient {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeIngredient();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["recipeId"] = this.recipeId;
+            data["ingredientId"] = this.ingredientId;
+            data["unitOfMeasurementId"] = this.unitOfMeasurementId;
+            data["amount"] = this.amount;
+            data["optional"] = this.optional;
+            data["recipePartId"] = this.recipePartId;
+            data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
+            data["part"] = this.part ? this.part.toJSON() : <any>undefined;
+            data["ingredient"] = this.ingredient ? this.ingredient.toJSON() : <any>undefined;
+            data["unitOfMeasurement"] = this.unitOfMeasurement ? this.unitOfMeasurement.toJSON() : <any>undefined;
+            return data;
+        }
+    }
+
+    export interface IRecipeIngredient {
+        id: string;
+        recipeId: string;
+        ingredientId: string;
+        unitOfMeasurementId: string;
+        amount: number;
+        optional: boolean;
+        recipePartId: string | undefined;
+        recipe: Recipe | undefined;
+        part: RecipePart | undefined;
+        ingredient: Ingredient | undefined;
+        unitOfMeasurement: UnitOfMeasurement | undefined;
+    }
+
+    export class RecipeInstruction implements IRecipeInstruction {
+        id!: string;
+        number!: number;
+        instruction!: string | undefined;
+        recipeStepId!: string;
+        step!: RecipeStep | undefined;
+        translations!: RecipeInstructionTranslation[] | undefined;
+
+        constructor(data?: IRecipeInstruction) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.number = _data["number"];
+                this.instruction = _data["instruction"];
+                this.recipeStepId = _data["recipeStepId"];
+                this.step = _data["step"] ? RecipeStep.fromJS(_data["step"]) : <any>undefined;
+                if (Array.isArray(_data["translations"])) {
+                    this.translations = [] as any;
+                    for (let item of _data["translations"])
+                        this.translations!.push(RecipeInstructionTranslation.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): RecipeInstruction {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeInstruction();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["number"] = this.number;
+            data["instruction"] = this.instruction;
+            data["recipeStepId"] = this.recipeStepId;
+            data["step"] = this.step ? this.step.toJSON() : <any>undefined;
+            if (Array.isArray(this.translations)) {
+                data["translations"] = [];
+                for (let item of this.translations)
+                    data["translations"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IRecipeInstruction {
+        id: string;
+        number: number;
+        instruction: string | undefined;
+        recipeStepId: string;
+        step: RecipeStep | undefined;
+        translations: RecipeInstructionTranslation[] | undefined;
+    }
+
+    export class RecipeNutrition implements IRecipeNutrition {
+        calories!: number | undefined;
+        sugar!: number | undefined;
+        fat!: number | undefined;
+        saturatedFat!: number | undefined;
+        sodium!: number | undefined;
+        protein!: number | undefined;
+        carbohydrates!: number | undefined;
+        fiber!: number | undefined;
+
+        constructor(data?: IRecipeNutrition) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.calories = _data["calories"];
+                this.sugar = _data["sugar"];
+                this.fat = _data["fat"];
+                this.saturatedFat = _data["saturatedFat"];
+                this.sodium = _data["sodium"];
+                this.protein = _data["protein"];
+                this.carbohydrates = _data["carbohydrates"];
+                this.fiber = _data["fiber"];
+            }
+        }
+
+        static fromJS(data: any): RecipeNutrition {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeNutrition();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["calories"] = this.calories;
+            data["sugar"] = this.sugar;
+            data["fat"] = this.fat;
+            data["saturatedFat"] = this.saturatedFat;
+            data["sodium"] = this.sodium;
+            data["protein"] = this.protein;
+            data["carbohydrates"] = this.carbohydrates;
+            data["fiber"] = this.fiber;
+            return data;
+        }
+    }
+
+    export interface IRecipeNutrition {
+        calories: number | undefined;
+        sugar: number | undefined;
+        fat: number | undefined;
+        saturatedFat: number | undefined;
+        sodium: number | undefined;
+        protein: number | undefined;
+        carbohydrates: number | undefined;
+        fiber: number | undefined;
+    }
+
+    export class RecipePart implements IRecipePart {
+        id!: string;
+        number!: number;
+        name!: string | undefined;
+        recipeId!: string;
+        recipe!: Recipe | undefined;
+        ingredients!: RecipeIngredient[] | undefined;
+        translations!: RecipePartTranslation[] | undefined;
+
+        constructor(data?: IRecipePart) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.number = _data["number"];
+                this.name = _data["name"];
+                this.recipeId = _data["recipeId"];
+                this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
+                if (Array.isArray(_data["ingredients"])) {
+                    this.ingredients = [] as any;
+                    for (let item of _data["ingredients"])
+                        this.ingredients!.push(RecipeIngredient.fromJS(item));
+                }
+                if (Array.isArray(_data["translations"])) {
+                    this.translations = [] as any;
+                    for (let item of _data["translations"])
+                        this.translations!.push(RecipePartTranslation.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): RecipePart {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipePart();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["number"] = this.number;
+            data["name"] = this.name;
+            data["recipeId"] = this.recipeId;
+            data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
+            if (Array.isArray(this.ingredients)) {
+                data["ingredients"] = [];
+                for (let item of this.ingredients)
+                    data["ingredients"].push(item.toJSON());
+            }
+            if (Array.isArray(this.translations)) {
+                data["translations"] = [];
+                for (let item of this.translations)
+                    data["translations"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IRecipePart {
+        id: string;
+        number: number;
+        name: string | undefined;
+        recipeId: string;
+        recipe: Recipe | undefined;
+        ingredients: RecipeIngredient[] | undefined;
+        translations: RecipePartTranslation[] | undefined;
+    }
+
+    export class RecipePieceOfEquipment implements IRecipePieceOfEquipment {
+        equipmentId!: string;
+        amount!: number;
+        dependsOnServings!: boolean;
+        pieceOfEquipment!: PieceOfEquipment | undefined;
+
+        constructor(data?: IRecipePieceOfEquipment) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.equipmentId = _data["equipmentId"];
+                this.amount = _data["amount"];
+                this.dependsOnServings = _data["dependsOnServings"];
+                this.pieceOfEquipment = _data["pieceOfEquipment"] ? PieceOfEquipment.fromJS(_data["pieceOfEquipment"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): RecipePieceOfEquipment {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipePieceOfEquipment();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["equipmentId"] = this.equipmentId;
+            data["amount"] = this.amount;
+            data["dependsOnServings"] = this.dependsOnServings;
+            data["pieceOfEquipment"] = this.pieceOfEquipment ? this.pieceOfEquipment.toJSON() : <any>undefined;
+            return data;
+        }
+    }
+
+    export interface IRecipePieceOfEquipment {
+        equipmentId: string;
+        amount: number;
+        dependsOnServings: boolean;
+        pieceOfEquipment: PieceOfEquipment | undefined;
+    }
+
+    export enum RecipeState {
+        Draft = "Draft",
+        Published = "Published",
+        Archived = "Archived",
+    }
+
+    export class RecipeStep implements IRecipeStep {
+        id!: string;
+        number!: number;
+        name!: string | undefined;
+        instructions!: RecipeInstruction[] | undefined;
+        readonly recipeId!: string;
+        recipe!: Recipe | undefined;
+        translations!: RecipeStepTranslation[] | undefined;
+
+        constructor(data?: IRecipeStep) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.number = _data["number"];
+                this.name = _data["name"];
+                if (Array.isArray(_data["instructions"])) {
+                    this.instructions = [] as any;
+                    for (let item of _data["instructions"])
+                        this.instructions!.push(RecipeInstruction.fromJS(item));
+                }
+                (<any>this).recipeId = _data["recipeId"];
+                this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
+                if (Array.isArray(_data["translations"])) {
+                    this.translations = [] as any;
+                    for (let item of _data["translations"])
+                        this.translations!.push(RecipeStepTranslation.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): RecipeStep {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeStep();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["number"] = this.number;
+            data["name"] = this.name;
+            if (Array.isArray(this.instructions)) {
+                data["instructions"] = [];
+                for (let item of this.instructions)
+                    data["instructions"].push(item.toJSON());
+            }
+            data["recipeId"] = this.recipeId;
+            data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
+            if (Array.isArray(this.translations)) {
+                data["translations"] = [];
+                for (let item of this.translations)
+                    data["translations"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface IRecipeStep {
+        id: string;
+        number: number;
+        name: string | undefined;
+        instructions: RecipeInstruction[] | undefined;
+        recipeId: string;
+        recipe: Recipe | undefined;
+        translations: RecipeStepTranslation[] | undefined;
+    }
+
+    export class RecipeTag implements IRecipeTag {
+        tagId!: string;
+        recipeId!: string;
+        tag!: Tag | undefined;
+        recipe!: Recipe | undefined;
+
+        constructor(data?: IRecipeTag) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.tagId = _data["tagId"];
+                this.recipeId = _data["recipeId"];
+                this.tag = _data["tag"] ? Tag.fromJS(_data["tag"]) : <any>undefined;
+                this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
+            }
+        }
+
+        static fromJS(data: any): RecipeTag {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeTag();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["tagId"] = this.tagId;
+            data["recipeId"] = this.recipeId;
+            data["tag"] = this.tag ? this.tag.toJSON() : <any>undefined;
+            data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
+            return data;
+        }
+    }
+
+    export interface IRecipeTag {
+        tagId: string;
+        recipeId: string;
+        tag: Tag | undefined;
+        recipe: Recipe | undefined;
+    }
+
+    export enum RecipeType {
+        Breakfast = "Breakfast",
+        Lunch = "Lunch",
+        Dinner = "Dinner",
+        Dessert = "Dessert",
+        Snack = "Snack",
+        Drink = "Drink",
+    }
+
+    export enum SupportTicketStatus {
+        Open = "Open",
+        Resolved = "Resolved",
+    }
+
+    export class Tag implements ITag {
+        id!: string;
+        originalLanguageCode!: string | undefined;
+        name!: string | undefined;
+        hidden!: boolean;
+        promoted!: boolean;
+        icon!: string | undefined;
+        createdByUserId!: string;
+        createdOn!: dayjs.Dayjs;
+        updatedByUserId!: string | undefined;
+        updatedOn!: dayjs.Dayjs | undefined;
+        createdByUser!: User | undefined;
+        updatedByUser!: User | undefined;
+        translations!: TagTranslation[] | undefined;
+        recipes!: RecipeTag[] | undefined;
+
+        constructor(data?: ITag) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
+            }
+        }
+
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.originalLanguageCode = _data["originalLanguageCode"];
+                this.name = _data["name"];
+                this.hidden = _data["hidden"];
+                this.promoted = _data["promoted"];
+                this.icon = _data["icon"];
+                this.createdByUserId = _data["createdByUserId"];
+                this.createdOn = _data["createdOn"] ? dayjs(_data["createdOn"].toString()) : <any>undefined;
+                this.updatedByUserId = _data["updatedByUserId"];
+                this.updatedOn = _data["updatedOn"] ? dayjs(_data["updatedOn"].toString()) : <any>undefined;
+                this.createdByUser = _data["createdByUser"] ? User.fromJS(_data["createdByUser"]) : <any>undefined;
+                this.updatedByUser = _data["updatedByUser"] ? User.fromJS(_data["updatedByUser"]) : <any>undefined;
+                if (Array.isArray(_data["translations"])) {
+                    this.translations = [] as any;
+                    for (let item of _data["translations"])
+                        this.translations!.push(TagTranslation.fromJS(item));
+                }
+                if (Array.isArray(_data["recipes"])) {
+                    this.recipes = [] as any;
+                    for (let item of _data["recipes"])
+                        this.recipes!.push(RecipeTag.fromJS(item));
+                }
+            }
+        }
+
+        static fromJS(data: any): Tag {
+            data = typeof data === 'object' ? data : {};
+            let result = new Tag();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["originalLanguageCode"] = this.originalLanguageCode;
+            data["name"] = this.name;
+            data["hidden"] = this.hidden;
+            data["promoted"] = this.promoted;
+            data["icon"] = this.icon;
+            data["createdByUserId"] = this.createdByUserId;
+            data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
+            data["updatedByUserId"] = this.updatedByUserId;
+            data["updatedOn"] = this.updatedOn ? this.updatedOn.toISOString() : <any>undefined;
+            data["createdByUser"] = this.createdByUser ? this.createdByUser.toJSON() : <any>undefined;
+            data["updatedByUser"] = this.updatedByUser ? this.updatedByUser.toJSON() : <any>undefined;
+            if (Array.isArray(this.translations)) {
+                data["translations"] = [];
+                for (let item of this.translations)
+                    data["translations"].push(item.toJSON());
+            }
+            if (Array.isArray(this.recipes)) {
+                data["recipes"] = [];
+                for (let item of this.recipes)
+                    data["recipes"].push(item.toJSON());
+            }
+            return data;
+        }
+    }
+
+    export interface ITag {
+        id: string;
+        originalLanguageCode: string | undefined;
+        name: string | undefined;
+        hidden: boolean;
+        promoted: boolean;
+        icon: string | undefined;
+        createdByUserId: string;
+        createdOn: dayjs.Dayjs;
+        updatedByUserId: string | undefined;
+        updatedOn: dayjs.Dayjs | undefined;
+        createdByUser: User | undefined;
+        updatedByUser: User | undefined;
+        translations: TagTranslation[] | undefined;
+        recipes: RecipeTag[] | undefined;
+    }
+
+    export class AuthorLinkTranslation extends TranslationEntity implements IAuthorLinkTranslation {
+        id!: string;
+        authorLinkId!: string;
+        name!: string | undefined;
+        description!: string | undefined;
+
+        constructor(data?: IAuthorLinkTranslation) {
+            super(data);
+            this._discriminator = "AuthorLinkTranslation";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.id = _data["id"];
+                this.authorLinkId = _data["authorLinkId"];
+                this.name = _data["name"];
+                this.description = _data["description"];
+            }
+        }
+
+        static override fromJS(data: any): AuthorLinkTranslation {
+            data = typeof data === 'object' ? data : {};
             let result = new AuthorLinkTranslation();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "AuthorTranslation") {
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["authorLinkId"] = this.authorLinkId;
+            data["name"] = this.name;
+            data["description"] = this.description;
+            super.toJSON(data);
+            return data;
+        }
+    }
+
+    export interface IAuthorLinkTranslation extends ITranslationEntity {
+        id: string;
+        authorLinkId: string;
+        name: string | undefined;
+        description: string | undefined;
+    }
+
+    export class AuthorTranslation extends TranslationEntity implements IAuthorTranslation {
+        id!: string;
+        authorId!: string;
+        biography!: string | undefined;
+
+        constructor(data?: IAuthorTranslation) {
+            super(data);
+            this._discriminator = "AuthorTranslation";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.id = _data["id"];
+                this.authorId = _data["authorId"];
+                this.biography = _data["biography"];
+            }
+        }
+
+        static override fromJS(data: any): AuthorTranslation {
+            data = typeof data === 'object' ? data : {};
             let result = new AuthorTranslation();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "TagTranslation") {
-            let result = new TagTranslation();
-            result.init(data);
-            return result;
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["authorId"] = this.authorId;
+            data["biography"] = this.biography;
+            super.toJSON(data);
+            return data;
         }
-        if (data["$type"] === "CollectionTranslation") {
+    }
+
+    export interface IAuthorTranslation extends ITranslationEntity {
+        id: string;
+        authorId: string;
+        biography: string | undefined;
+    }
+
+    export class CollectionTranslation extends TranslationEntity implements ICollectionTranslation {
+        id!: string;
+        collectionId!: string;
+        title!: string | undefined;
+
+        constructor(data?: ICollectionTranslation) {
+            super(data);
+            this._discriminator = "CollectionTranslation";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.id = _data["id"];
+                this.collectionId = _data["collectionId"];
+                this.title = _data["title"];
+            }
+        }
+
+        static override fromJS(data: any): CollectionTranslation {
+            data = typeof data === 'object' ? data : {};
             let result = new CollectionTranslation();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "RecipeStepTranslation") {
-            let result = new RecipeStepTranslation();
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["collectionId"] = this.collectionId;
+            data["title"] = this.title;
+            super.toJSON(data);
+            return data;
+        }
+    }
+
+    export interface ICollectionTranslation extends ITranslationEntity {
+        id: string;
+        collectionId: string;
+        title: string | undefined;
+    }
+
+    export class EquipmentTranslation extends TranslationEntity implements IEquipmentTranslation {
+        id!: string;
+        equipmentId!: string;
+        name!: string | undefined;
+        pluralName!: string | undefined;
+
+        constructor(data?: IEquipmentTranslation) {
+            super(data);
+            this._discriminator = "EquipmentTranslation";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.id = _data["id"];
+                this.equipmentId = _data["equipmentId"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+            }
+        }
+
+        static override fromJS(data: any): EquipmentTranslation {
+            data = typeof data === 'object' ? data : {};
+            let result = new EquipmentTranslation();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "RecipeInstructionTranslation") {
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["equipmentId"] = this.equipmentId;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            super.toJSON(data);
+            return data;
+        }
+    }
+
+    export interface IEquipmentTranslation extends ITranslationEntity {
+        id: string;
+        equipmentId: string;
+        name: string | undefined;
+        pluralName: string | undefined;
+    }
+
+    export class IngredientTranslation extends TranslationEntity implements IIngredientTranslation {
+        id!: string;
+        ingredientId!: string;
+        name!: string | undefined;
+        pluralName!: string | undefined;
+
+        constructor(data?: IIngredientTranslation) {
+            super(data);
+            this._discriminator = "IngredientTranslation";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.id = _data["id"];
+                this.ingredientId = _data["ingredientId"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+            }
+        }
+
+        static override fromJS(data: any): IngredientTranslation {
+            data = typeof data === 'object' ? data : {};
+            let result = new IngredientTranslation();
+            result.init(data);
+            return result;
+        }
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["ingredientId"] = this.ingredientId;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            super.toJSON(data);
+            return data;
+        }
+    }
+
+    export interface IIngredientTranslation extends ITranslationEntity {
+        id: string;
+        ingredientId: string;
+        name: string | undefined;
+        pluralName: string | undefined;
+    }
+
+    export class RecipeInstructionTranslation extends TranslationEntity implements IRecipeInstructionTranslation {
+        id!: string;
+        recipeInstructionId!: string;
+        instruction!: string | undefined;
+
+        constructor(data?: IRecipeInstructionTranslation) {
+            super(data);
+            this._discriminator = "RecipeInstructionTranslation";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.id = _data["id"];
+                this.recipeInstructionId = _data["recipeInstructionId"];
+                this.instruction = _data["instruction"];
+            }
+        }
+
+        static override fromJS(data: any): RecipeInstructionTranslation {
+            data = typeof data === 'object' ? data : {};
             let result = new RecipeInstructionTranslation();
             result.init(data);
             return result;
         }
-        if (data["$type"] === "FoodBook.Domain.Entities.Translations.StringTranslation") {
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["recipeInstructionId"] = this.recipeInstructionId;
+            data["instruction"] = this.instruction;
+            super.toJSON(data);
+            return data;
+        }
+    }
+
+    export interface IRecipeInstructionTranslation extends ITranslationEntity {
+        id: string;
+        recipeInstructionId: string;
+        instruction: string | undefined;
+    }
+
+    export class RecipePartTranslation extends TranslationEntity implements IRecipePartTranslation {
+        id!: string;
+        recipePartId!: string;
+        name!: string | undefined;
+
+        constructor(data?: IRecipePartTranslation) {
+            super(data);
+            this._discriminator = "RecipePartTranslation";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.id = _data["id"];
+                this.recipePartId = _data["recipePartId"];
+                this.name = _data["name"];
+            }
+        }
+
+        static override fromJS(data: any): RecipePartTranslation {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipePartTranslation();
+            result.init(data);
+            return result;
+        }
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["recipePartId"] = this.recipePartId;
+            data["name"] = this.name;
+            super.toJSON(data);
+            return data;
+        }
+    }
+
+    export interface IRecipePartTranslation extends ITranslationEntity {
+        id: string;
+        recipePartId: string;
+        name: string | undefined;
+    }
+
+    export class RecipeStepTranslation extends TranslationEntity implements IRecipeStepTranslation {
+        id!: string;
+        recipeStepId!: string;
+        name!: string | undefined;
+
+        constructor(data?: IRecipeStepTranslation) {
+            super(data);
+            this._discriminator = "RecipeStepTranslation";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.id = _data["id"];
+                this.recipeStepId = _data["recipeStepId"];
+                this.name = _data["name"];
+            }
+        }
+
+        static override fromJS(data: any): RecipeStepTranslation {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeStepTranslation();
+            result.init(data);
+            return result;
+        }
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["recipeStepId"] = this.recipeStepId;
+            data["name"] = this.name;
+            super.toJSON(data);
+            return data;
+        }
+    }
+
+    export interface IRecipeStepTranslation extends ITranslationEntity {
+        id: string;
+        recipeStepId: string;
+        name: string | undefined;
+    }
+
+    export class RecipeTranslation extends TranslationEntity implements IRecipeTranslation {
+        id!: string;
+        recipeId!: string;
+        name!: string | undefined;
+        description!: string | undefined;
+
+        constructor(data?: IRecipeTranslation) {
+            super(data);
+            this._discriminator = "RecipeTranslation";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.id = _data["id"];
+                this.recipeId = _data["recipeId"];
+                this.name = _data["name"];
+                this.description = _data["description"];
+            }
+        }
+
+        static override fromJS(data: any): RecipeTranslation {
+            data = typeof data === 'object' ? data : {};
+            let result = new RecipeTranslation();
+            result.init(data);
+            return result;
+        }
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["recipeId"] = this.recipeId;
+            data["name"] = this.name;
+            data["description"] = this.description;
+            super.toJSON(data);
+            return data;
+        }
+    }
+
+    export interface IRecipeTranslation extends ITranslationEntity {
+        id: string;
+        recipeId: string;
+        name: string | undefined;
+        description: string | undefined;
+    }
+
+    export class StringTranslation extends TranslationEntity implements IStringTranslation {
+        key!: string | undefined;
+        value!: string | undefined;
+
+        constructor(data?: IStringTranslation) {
+            super(data);
+            this._discriminator = "StringTranslation";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.key = _data["key"];
+                this.value = _data["value"];
+            }
+        }
+
+        static override fromJS(data: any): StringTranslation {
+            data = typeof data === 'object' ? data : {};
             let result = new StringTranslation();
             result.init(data);
             return result;
         }
-        let result = new TranslationEntity();
-        result.init(data);
-        return result;
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["key"] = this.key;
+            data["value"] = this.value;
+            super.toJSON(data);
+            return data;
+        }
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["$type"] = this._discriminator;
-        data["languageCode"] = this.languageCode;
-        return data;
+    export interface IStringTranslation extends ITranslationEntity {
+        key: string | undefined;
+        value: string | undefined;
     }
-}
 
-export interface ITranslationEntity {
-    languageCode: string | undefined;
-}
+    export class TagTranslation extends TranslationEntity implements ITagTranslation {
+        id!: string;
+        tagId!: string;
+        name!: string | undefined;
 
-export class FavouritedRecipe implements IFavouritedRecipe {
-    id!: string;
-    recipeId!: string;
-    userId!: string;
-    recipe!: Recipe | undefined;
+        constructor(data?: ITagTranslation) {
+            super(data);
+            this._discriminator = "TagTranslation";
+        }
 
-    constructor(data?: IFavouritedRecipe) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.id = _data["id"];
+                this.tagId = _data["tagId"];
+                this.name = _data["name"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.recipeId = _data["recipeId"];
-            this.userId = _data["userId"];
-            this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
+        static override fromJS(data: any): TagTranslation {
+            data = typeof data === 'object' ? data : {};
+            let result = new TagTranslation();
+            result.init(data);
+            return result;
+        }
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["tagId"] = this.tagId;
+            data["name"] = this.name;
+            super.toJSON(data);
+            return data;
         }
     }
 
-    static fromJS(data: any): FavouritedRecipe {
-        data = typeof data === 'object' ? data : {};
-        let result = new FavouritedRecipe();
-        result.init(data);
-        return result;
+    export interface ITagTranslation extends ITranslationEntity {
+        id: string;
+        tagId: string;
+        name: string | undefined;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["recipeId"] = this.recipeId;
-        data["userId"] = this.userId;
-        data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
-        return data;
-    }
-}
+    export class UnitOfMeasurementTranslation extends TranslationEntity implements IUnitOfMeasurementTranslation {
+        id!: string;
+        unitOfMeasurementId!: string;
+        name!: string | undefined;
+        pluralName!: string | undefined;
 
-export interface IFavouritedRecipe {
-    id: string;
-    recipeId: string;
-    userId: string;
-    recipe: Recipe | undefined;
-}
+        constructor(data?: IUnitOfMeasurementTranslation) {
+            super(data);
+            this._discriminator = "UnitOfMeasurementTranslation";
+        }
 
-export class Ingredient implements IIngredient {
-    id!: string;
-    originalLanguageCode!: string | undefined;
-    name!: string | undefined;
-    pluralName!: string | undefined;
-    defaultUnitOfMeasurementId!: string;
-    personal!: boolean;
-    createdByUserId!: string;
-    createdOn!: dayjs.Dayjs;
-    updatedByUserId!: string | undefined;
-    updatedOn!: dayjs.Dayjs | undefined;
-    createdByUser!: User | undefined;
-    updatedByUser!: User | undefined;
-    translations!: IngredientTranslation[] | undefined;
-    defaultUnitOfMeasurement!: UnitOfMeasurement | undefined;
-
-    constructor(data?: IIngredient) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                this.id = _data["id"];
+                this.unitOfMeasurementId = _data["unitOfMeasurementId"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.originalLanguageCode = _data["originalLanguageCode"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-            this.defaultUnitOfMeasurementId = _data["defaultUnitOfMeasurementId"];
-            this.personal = _data["personal"];
-            this.createdByUserId = _data["createdByUserId"];
-            this.createdOn = _data["createdOn"] ? dayjs(_data["createdOn"].toString()) : <any>undefined;
-            this.updatedByUserId = _data["updatedByUserId"];
-            this.updatedOn = _data["updatedOn"] ? dayjs(_data["updatedOn"].toString()) : <any>undefined;
-            this.createdByUser = _data["createdByUser"] ? User.fromJS(_data["createdByUser"]) : <any>undefined;
-            this.updatedByUser = _data["updatedByUser"] ? User.fromJS(_data["updatedByUser"]) : <any>undefined;
-            if (Array.isArray(_data["translations"])) {
-                this.translations = [] as any;
-                for (let item of _data["translations"])
-                    this.translations!.push(IngredientTranslation.fromJS(item));
-            }
-            this.defaultUnitOfMeasurement = _data["defaultUnitOfMeasurement"] ? UnitOfMeasurement.fromJS(_data["defaultUnitOfMeasurement"]) : <any>undefined;
+        static override fromJS(data: any): UnitOfMeasurementTranslation {
+            data = typeof data === 'object' ? data : {};
+            let result = new UnitOfMeasurementTranslation();
+            result.init(data);
+            return result;
+        }
+
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["unitOfMeasurementId"] = this.unitOfMeasurementId;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            super.toJSON(data);
+            return data;
         }
     }
 
-    static fromJS(data: any): Ingredient {
-        data = typeof data === 'object' ? data : {};
-        let result = new Ingredient();
-        result.init(data);
-        return result;
+    export interface IUnitOfMeasurementTranslation extends ITranslationEntity {
+        id: string;
+        unitOfMeasurementId: string;
+        name: string | undefined;
+        pluralName: string | undefined;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["originalLanguageCode"] = this.originalLanguageCode;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        data["defaultUnitOfMeasurementId"] = this.defaultUnitOfMeasurementId;
-        data["personal"] = this.personal;
-        data["createdByUserId"] = this.createdByUserId;
-        data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
-        data["updatedByUserId"] = this.updatedByUserId;
-        data["updatedOn"] = this.updatedOn ? this.updatedOn.toISOString() : <any>undefined;
-        data["createdByUser"] = this.createdByUser ? this.createdByUser.toJSON() : <any>undefined;
-        data["updatedByUser"] = this.updatedByUser ? this.updatedByUser.toJSON() : <any>undefined;
-        if (Array.isArray(this.translations)) {
-            data["translations"] = [];
-            for (let item of this.translations)
-                data["translations"].push(item.toJSON());
-        }
-        data["defaultUnitOfMeasurement"] = this.defaultUnitOfMeasurement ? this.defaultUnitOfMeasurement.toJSON() : <any>undefined;
-        return data;
-    }
-}
+    export class UnitOfMeasurement implements IUnitOfMeasurement {
+        id!: string;
+        originalLanguageCode!: string | undefined;
+        name!: string | undefined;
+        pluralName!: string | undefined;
+        abbreviation!: string | undefined;
+        type!: MeasurementType;
+        system!: MeasurementSystem | undefined;
+        representAs!: UnitOfMeasurementRepresentation;
+        translations!: UnitOfMeasurementTranslation[] | undefined;
 
-export interface IIngredient {
-    id: string;
-    originalLanguageCode: string | undefined;
-    name: string | undefined;
-    pluralName: string | undefined;
-    defaultUnitOfMeasurementId: string;
-    personal: boolean;
-    createdByUserId: string;
-    createdOn: dayjs.Dayjs;
-    updatedByUserId: string | undefined;
-    updatedOn: dayjs.Dayjs | undefined;
-    createdByUser: User | undefined;
-    updatedByUser: User | undefined;
-    translations: IngredientTranslation[] | undefined;
-    defaultUnitOfMeasurement: UnitOfMeasurement | undefined;
-}
-
-export enum MeasurementSystem {
-    Imperial = "Imperial",
-    Metric = "Metric",
-}
-
-export enum MeasurementType {
-    Weight = "Weight",
-    Volume = "Volume",
-    Unit = "Unit",
-}
-
-export class PieceOfEquipment implements IPieceOfEquipment {
-    id!: string;
-    originalLanguageCode!: string | undefined;
-    name!: string | undefined;
-    pluralName!: string | undefined;
-    personal!: boolean;
-    createdByUserId!: string;
-    createdOn!: dayjs.Dayjs;
-    updatedByUserId!: string | undefined;
-    updatedOn!: dayjs.Dayjs | undefined;
-    createdByUser!: User | undefined;
-    updatedByUser!: User | undefined;
-    translations!: EquipmentTranslation[] | undefined;
-
-    constructor(data?: IPieceOfEquipment) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IUnitOfMeasurement) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.originalLanguageCode = _data["originalLanguageCode"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-            this.personal = _data["personal"];
-            this.createdByUserId = _data["createdByUserId"];
-            this.createdOn = _data["createdOn"] ? dayjs(_data["createdOn"].toString()) : <any>undefined;
-            this.updatedByUserId = _data["updatedByUserId"];
-            this.updatedOn = _data["updatedOn"] ? dayjs(_data["updatedOn"].toString()) : <any>undefined;
-            this.createdByUser = _data["createdByUser"] ? User.fromJS(_data["createdByUser"]) : <any>undefined;
-            this.updatedByUser = _data["updatedByUser"] ? User.fromJS(_data["updatedByUser"]) : <any>undefined;
-            if (Array.isArray(_data["translations"])) {
-                this.translations = [] as any;
-                for (let item of _data["translations"])
-                    this.translations!.push(EquipmentTranslation.fromJS(item));
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.originalLanguageCode = _data["originalLanguageCode"];
+                this.name = _data["name"];
+                this.pluralName = _data["pluralName"];
+                this.abbreviation = _data["abbreviation"];
+                this.type = _data["type"];
+                this.system = _data["system"];
+                this.representAs = _data["representAs"];
+                if (Array.isArray(_data["translations"])) {
+                    this.translations = [] as any;
+                    for (let item of _data["translations"])
+                        this.translations!.push(UnitOfMeasurementTranslation.fromJS(item));
+                }
             }
         }
-    }
 
-    static fromJS(data: any): PieceOfEquipment {
-        data = typeof data === 'object' ? data : {};
-        let result = new PieceOfEquipment();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["originalLanguageCode"] = this.originalLanguageCode;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        data["personal"] = this.personal;
-        data["createdByUserId"] = this.createdByUserId;
-        data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
-        data["updatedByUserId"] = this.updatedByUserId;
-        data["updatedOn"] = this.updatedOn ? this.updatedOn.toISOString() : <any>undefined;
-        data["createdByUser"] = this.createdByUser ? this.createdByUser.toJSON() : <any>undefined;
-        data["updatedByUser"] = this.updatedByUser ? this.updatedByUser.toJSON() : <any>undefined;
-        if (Array.isArray(this.translations)) {
-            data["translations"] = [];
-            for (let item of this.translations)
-                data["translations"].push(item.toJSON());
+        static fromJS(data: any): UnitOfMeasurement {
+            data = typeof data === 'object' ? data : {};
+            let result = new UnitOfMeasurement();
+            result.init(data);
+            return result;
         }
-        return data;
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["originalLanguageCode"] = this.originalLanguageCode;
+            data["name"] = this.name;
+            data["pluralName"] = this.pluralName;
+            data["abbreviation"] = this.abbreviation;
+            data["type"] = this.type;
+            data["system"] = this.system;
+            data["representAs"] = this.representAs;
+            if (Array.isArray(this.translations)) {
+                data["translations"] = [];
+                for (let item of this.translations)
+                    data["translations"].push(item.toJSON());
+            }
+            return data;
+        }
     }
-}
 
-export interface IPieceOfEquipment {
-    id: string;
-    originalLanguageCode: string | undefined;
-    name: string | undefined;
-    pluralName: string | undefined;
-    personal: boolean;
-    createdByUserId: string;
-    createdOn: dayjs.Dayjs;
-    updatedByUserId: string | undefined;
-    updatedOn: dayjs.Dayjs | undefined;
-    createdByUser: User | undefined;
-    updatedByUser: User | undefined;
-    translations: EquipmentTranslation[] | undefined;
-}
+    export interface IUnitOfMeasurement {
+        id: string;
+        originalLanguageCode: string | undefined;
+        name: string | undefined;
+        pluralName: string | undefined;
+        abbreviation: string | undefined;
+        type: MeasurementType;
+        system: MeasurementSystem | undefined;
+        representAs: UnitOfMeasurementRepresentation;
+        translations: UnitOfMeasurementTranslation[] | undefined;
+    }
 
-export class Recipe implements IRecipe {
-    id!: string;
-    originalLanguageCode!: string | undefined;
-    name!: string | undefined;
-    description!: string | undefined;
-    state!: RecipeState;
-    authorId!: string | undefined;
-    publishedOn!: dayjs.Dayjs | undefined;
-    personal!: boolean;
-    type!: RecipeType;
-    difficulty!: RecipeDifficulty;
-    prepTime!: number;
-    cookTime!: number;
-    totalTime!: number;
-    servings!: number;
-    containsAlcohol!: boolean;
-    referenceUrl!: string | undefined;
-    descendantOfRecipeId!: string | undefined;
-    nutrition!: RecipeNutrition | undefined;
-    parts!: RecipePart[] | undefined;
-    ingredients!: RecipeIngredient[] | undefined;
-    equipment!: RecipePieceOfEquipment[] | undefined;
-    steps!: RecipeStep[] | undefined;
-    rating!: number;
-    createdByUserId!: string;
-    createdOn!: dayjs.Dayjs;
-    updatedByUserId!: string | undefined;
-    updatedOn!: dayjs.Dayjs | undefined;
-    createdByUser!: User | undefined;
-    updatedByUser!: User | undefined;
-    translations!: RecipeTranslation[] | undefined;
-    author!: Author | undefined;
-    tags!: RecipeTag[] | undefined;
-    favouriteds!: FavouritedRecipe[] | undefined;
-    images!: RecipeImage[] | undefined;
-    collections!: CollectionRecipe[] | undefined;
+    export enum UnitOfMeasurementRepresentation {
+        Integer = "Integer",
+        Decimal = "Decimal",
+        Fraction = "Fraction",
+    }
 
-    constructor(data?: IRecipe) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+    export class User implements IUser {
+        id!: string;
+        userName!: string | undefined;
+        normalizedUserName!: string | undefined;
+        email!: string | undefined;
+        normalizedEmail!: string | undefined;
+        emailConfirmed!: boolean;
+        passwordHash!: string | undefined;
+        securityStamp!: string | undefined;
+        concurrencyStamp!: string | undefined;
+        phoneNumber!: string | undefined;
+        phoneNumberConfirmed!: boolean;
+        twoFactorEnabled!: boolean;
+        lockoutEnd!: dayjs.Dayjs | undefined;
+        lockoutEnabled!: boolean;
+        accessFailedCount!: number;
+        lastLoggedInOn!: dayjs.Dayjs | undefined;
+        registeredOn!: dayjs.Dayjs;
+        firstName!: string | undefined;
+        deactivated!: boolean;
+
+        constructor(data?: IUser) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.originalLanguageCode = _data["originalLanguageCode"];
-            this.name = _data["name"];
-            this.description = _data["description"];
-            this.state = _data["state"];
-            this.authorId = _data["authorId"];
-            this.publishedOn = _data["publishedOn"] ? dayjs(_data["publishedOn"].toString()) : <any>undefined;
-            this.personal = _data["personal"];
-            this.type = _data["type"];
-            this.difficulty = _data["difficulty"];
-            this.prepTime = _data["prepTime"];
-            this.cookTime = _data["cookTime"];
-            this.totalTime = _data["totalTime"];
-            this.servings = _data["servings"];
-            this.containsAlcohol = _data["containsAlcohol"];
-            this.referenceUrl = _data["referenceUrl"];
-            this.descendantOfRecipeId = _data["descendantOfRecipeId"];
-            this.nutrition = _data["nutrition"] ? RecipeNutrition.fromJS(_data["nutrition"]) : <any>undefined;
-            if (Array.isArray(_data["parts"])) {
-                this.parts = [] as any;
-                for (let item of _data["parts"])
-                    this.parts!.push(RecipePart.fromJS(item));
-            }
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeIngredient.fromJS(item));
-            }
-            if (Array.isArray(_data["equipment"])) {
-                this.equipment = [] as any;
-                for (let item of _data["equipment"])
-                    this.equipment!.push(RecipePieceOfEquipment.fromJS(item));
-            }
-            if (Array.isArray(_data["steps"])) {
-                this.steps = [] as any;
-                for (let item of _data["steps"])
-                    this.steps!.push(RecipeStep.fromJS(item));
-            }
-            this.rating = _data["rating"];
-            this.createdByUserId = _data["createdByUserId"];
-            this.createdOn = _data["createdOn"] ? dayjs(_data["createdOn"].toString()) : <any>undefined;
-            this.updatedByUserId = _data["updatedByUserId"];
-            this.updatedOn = _data["updatedOn"] ? dayjs(_data["updatedOn"].toString()) : <any>undefined;
-            this.createdByUser = _data["createdByUser"] ? User.fromJS(_data["createdByUser"]) : <any>undefined;
-            this.updatedByUser = _data["updatedByUser"] ? User.fromJS(_data["updatedByUser"]) : <any>undefined;
-            if (Array.isArray(_data["translations"])) {
-                this.translations = [] as any;
-                for (let item of _data["translations"])
-                    this.translations!.push(RecipeTranslation.fromJS(item));
-            }
-            this.author = _data["author"] ? Author.fromJS(_data["author"]) : <any>undefined;
-            if (Array.isArray(_data["tags"])) {
-                this.tags = [] as any;
-                for (let item of _data["tags"])
-                    this.tags!.push(RecipeTag.fromJS(item));
-            }
-            if (Array.isArray(_data["favouriteds"])) {
-                this.favouriteds = [] as any;
-                for (let item of _data["favouriteds"])
-                    this.favouriteds!.push(FavouritedRecipe.fromJS(item));
-            }
-            if (Array.isArray(_data["images"])) {
-                this.images = [] as any;
-                for (let item of _data["images"])
-                    this.images!.push(RecipeImage.fromJS(item));
-            }
-            if (Array.isArray(_data["collections"])) {
-                this.collections = [] as any;
-                for (let item of _data["collections"])
-                    this.collections!.push(CollectionRecipe.fromJS(item));
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.userName = _data["userName"];
+                this.normalizedUserName = _data["normalizedUserName"];
+                this.email = _data["email"];
+                this.normalizedEmail = _data["normalizedEmail"];
+                this.emailConfirmed = _data["emailConfirmed"];
+                this.passwordHash = _data["passwordHash"];
+                this.securityStamp = _data["securityStamp"];
+                this.concurrencyStamp = _data["concurrencyStamp"];
+                this.phoneNumber = _data["phoneNumber"];
+                this.phoneNumberConfirmed = _data["phoneNumberConfirmed"];
+                this.twoFactorEnabled = _data["twoFactorEnabled"];
+                this.lockoutEnd = _data["lockoutEnd"] ? dayjs(_data["lockoutEnd"].toString()) : <any>undefined;
+                this.lockoutEnabled = _data["lockoutEnabled"];
+                this.accessFailedCount = _data["accessFailedCount"];
+                this.lastLoggedInOn = _data["lastLoggedInOn"] ? dayjs(_data["lastLoggedInOn"].toString()) : <any>undefined;
+                this.registeredOn = _data["registeredOn"] ? dayjs(_data["registeredOn"].toString()) : <any>undefined;
+                this.firstName = _data["firstName"];
+                this.deactivated = _data["deactivated"];
             }
         }
+
+        static fromJS(data: any): User {
+            data = typeof data === 'object' ? data : {};
+            let result = new User();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["userName"] = this.userName;
+            data["normalizedUserName"] = this.normalizedUserName;
+            data["email"] = this.email;
+            data["normalizedEmail"] = this.normalizedEmail;
+            data["emailConfirmed"] = this.emailConfirmed;
+            data["passwordHash"] = this.passwordHash;
+            data["securityStamp"] = this.securityStamp;
+            data["concurrencyStamp"] = this.concurrencyStamp;
+            data["phoneNumber"] = this.phoneNumber;
+            data["phoneNumberConfirmed"] = this.phoneNumberConfirmed;
+            data["twoFactorEnabled"] = this.twoFactorEnabled;
+            data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString() : <any>undefined;
+            data["lockoutEnabled"] = this.lockoutEnabled;
+            data["accessFailedCount"] = this.accessFailedCount;
+            data["lastLoggedInOn"] = this.lastLoggedInOn ? this.lastLoggedInOn.toISOString() : <any>undefined;
+            data["registeredOn"] = this.registeredOn ? this.registeredOn.toISOString() : <any>undefined;
+            data["firstName"] = this.firstName;
+            data["deactivated"] = this.deactivated;
+            return data;
+        }
     }
 
-    static fromJS(data: any): Recipe {
-        data = typeof data === 'object' ? data : {};
-        let result = new Recipe();
-        result.init(data);
-        return result;
+    export interface IUser {
+        id: string;
+        userName: string | undefined;
+        normalizedUserName: string | undefined;
+        email: string | undefined;
+        normalizedEmail: string | undefined;
+        emailConfirmed: boolean;
+        passwordHash: string | undefined;
+        securityStamp: string | undefined;
+        concurrencyStamp: string | undefined;
+        phoneNumber: string | undefined;
+        phoneNumberConfirmed: boolean;
+        twoFactorEnabled: boolean;
+        lockoutEnd: dayjs.Dayjs | undefined;
+        lockoutEnabled: boolean;
+        accessFailedCount: number;
+        lastLoggedInOn: dayjs.Dayjs | undefined;
+        registeredOn: dayjs.Dayjs;
+        firstName: string | undefined;
+        deactivated: boolean;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["originalLanguageCode"] = this.originalLanguageCode;
-        data["name"] = this.name;
-        data["description"] = this.description;
-        data["state"] = this.state;
-        data["authorId"] = this.authorId;
-        data["publishedOn"] = this.publishedOn ? this.publishedOn.toISOString() : <any>undefined;
-        data["personal"] = this.personal;
-        data["type"] = this.type;
-        data["difficulty"] = this.difficulty;
-        data["prepTime"] = this.prepTime;
-        data["cookTime"] = this.cookTime;
-        data["totalTime"] = this.totalTime;
-        data["servings"] = this.servings;
-        data["containsAlcohol"] = this.containsAlcohol;
-        data["referenceUrl"] = this.referenceUrl;
-        data["descendantOfRecipeId"] = this.descendantOfRecipeId;
-        data["nutrition"] = this.nutrition ? this.nutrition.toJSON() : <any>undefined;
-        if (Array.isArray(this.parts)) {
-            data["parts"] = [];
-            for (let item of this.parts)
-                data["parts"].push(item.toJSON());
-        }
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
-        }
-        if (Array.isArray(this.equipment)) {
-            data["equipment"] = [];
-            for (let item of this.equipment)
-                data["equipment"].push(item.toJSON());
-        }
-        if (Array.isArray(this.steps)) {
-            data["steps"] = [];
-            for (let item of this.steps)
-                data["steps"].push(item.toJSON());
-        }
-        data["rating"] = this.rating;
-        data["createdByUserId"] = this.createdByUserId;
-        data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
-        data["updatedByUserId"] = this.updatedByUserId;
-        data["updatedOn"] = this.updatedOn ? this.updatedOn.toISOString() : <any>undefined;
-        data["createdByUser"] = this.createdByUser ? this.createdByUser.toJSON() : <any>undefined;
-        data["updatedByUser"] = this.updatedByUser ? this.updatedByUser.toJSON() : <any>undefined;
-        if (Array.isArray(this.translations)) {
-            data["translations"] = [];
-            for (let item of this.translations)
-                data["translations"].push(item.toJSON());
-        }
-        data["author"] = this.author ? this.author.toJSON() : <any>undefined;
-        if (Array.isArray(this.tags)) {
-            data["tags"] = [];
-            for (let item of this.tags)
-                data["tags"].push(item.toJSON());
-        }
-        if (Array.isArray(this.favouriteds)) {
-            data["favouriteds"] = [];
-            for (let item of this.favouriteds)
-                data["favouriteds"].push(item.toJSON());
-        }
-        if (Array.isArray(this.images)) {
-            data["images"] = [];
-            for (let item of this.images)
-                data["images"].push(item.toJSON());
-        }
-        if (Array.isArray(this.collections)) {
-            data["collections"] = [];
-            for (let item of this.collections)
-                data["collections"].push(item.toJSON());
-        }
-        return data;
-    }
-}
+    export class CreateTagCommand implements ICreateTagCommand {
+        languageCode!: string | undefined;
+        name!: string | undefined;
+        icon!: string | undefined;
 
-export interface IRecipe {
-    id: string;
-    originalLanguageCode: string | undefined;
-    name: string | undefined;
-    description: string | undefined;
-    state: RecipeState;
-    authorId: string | undefined;
-    publishedOn: dayjs.Dayjs | undefined;
-    personal: boolean;
-    type: RecipeType;
-    difficulty: RecipeDifficulty;
-    prepTime: number;
-    cookTime: number;
-    totalTime: number;
-    servings: number;
-    containsAlcohol: boolean;
-    referenceUrl: string | undefined;
-    descendantOfRecipeId: string | undefined;
-    nutrition: RecipeNutrition | undefined;
-    parts: RecipePart[] | undefined;
-    ingredients: RecipeIngredient[] | undefined;
-    equipment: RecipePieceOfEquipment[] | undefined;
-    steps: RecipeStep[] | undefined;
-    rating: number;
-    createdByUserId: string;
-    createdOn: dayjs.Dayjs;
-    updatedByUserId: string | undefined;
-    updatedOn: dayjs.Dayjs | undefined;
-    createdByUser: User | undefined;
-    updatedByUser: User | undefined;
-    translations: RecipeTranslation[] | undefined;
-    author: Author | undefined;
-    tags: RecipeTag[] | undefined;
-    favouriteds: FavouritedRecipe[] | undefined;
-    images: RecipeImage[] | undefined;
-    collections: CollectionRecipe[] | undefined;
-}
-
-export enum RecipeDifficulty {
-    VeryEasy = "VeryEasy",
-    Easy = "Easy",
-    Average = "Average",
-    Difficult = "Difficult",
-    VeryDifficult = "VeryDifficult",
-}
-
-export class RecipeImage implements IRecipeImage {
-    id!: string;
-    recipeId!: string;
-    sequence!: number;
-    s3ObjectKey!: string | undefined;
-    lastUpdated!: dayjs.Dayjs;
-    recipe!: Recipe | undefined;
-
-    constructor(data?: IRecipeImage) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: ICreateTagCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.recipeId = _data["recipeId"];
-            this.sequence = _data["sequence"];
-            this.s3ObjectKey = _data["s3ObjectKey"];
-            this.lastUpdated = _data["lastUpdated"] ? dayjs(_data["lastUpdated"].toString()) : <any>undefined;
-            this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): RecipeImage {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeImage();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["recipeId"] = this.recipeId;
-        data["sequence"] = this.sequence;
-        data["s3ObjectKey"] = this.s3ObjectKey;
-        data["lastUpdated"] = this.lastUpdated ? this.lastUpdated.toISOString() : <any>undefined;
-        data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IRecipeImage {
-    id: string;
-    recipeId: string;
-    sequence: number;
-    s3ObjectKey: string | undefined;
-    lastUpdated: dayjs.Dayjs;
-    recipe: Recipe | undefined;
-}
-
-export class RecipeIngredient implements IRecipeIngredient {
-    id!: string;
-    recipeId!: string;
-    ingredientId!: string;
-    unitOfMeasurementId!: string;
-    amount!: number;
-    optional!: boolean;
-    recipePartId!: string | undefined;
-    recipe!: Recipe | undefined;
-    part!: RecipePart | undefined;
-    ingredient!: Ingredient | undefined;
-    unitOfMeasurement!: UnitOfMeasurement | undefined;
-
-    constructor(data?: IRecipeIngredient) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                this.languageCode = _data["languageCode"];
+                this.name = _data["name"];
+                this.icon = _data["icon"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.recipeId = _data["recipeId"];
-            this.ingredientId = _data["ingredientId"];
-            this.unitOfMeasurementId = _data["unitOfMeasurementId"];
-            this.amount = _data["amount"];
-            this.optional = _data["optional"];
-            this.recipePartId = _data["recipePartId"];
-            this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
-            this.part = _data["part"] ? RecipePart.fromJS(_data["part"]) : <any>undefined;
-            this.ingredient = _data["ingredient"] ? Ingredient.fromJS(_data["ingredient"]) : <any>undefined;
-            this.unitOfMeasurement = _data["unitOfMeasurement"] ? UnitOfMeasurement.fromJS(_data["unitOfMeasurement"]) : <any>undefined;
+        static fromJS(data: any): CreateTagCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new CreateTagCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["languageCode"] = this.languageCode;
+            data["name"] = this.name;
+            data["icon"] = this.icon;
+            return data;
         }
     }
 
-    static fromJS(data: any): RecipeIngredient {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeIngredient();
-        result.init(data);
-        return result;
+    export interface ICreateTagCommand {
+        languageCode: string | undefined;
+        name: string | undefined;
+        icon: string | undefined;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["recipeId"] = this.recipeId;
-        data["ingredientId"] = this.ingredientId;
-        data["unitOfMeasurementId"] = this.unitOfMeasurementId;
-        data["amount"] = this.amount;
-        data["optional"] = this.optional;
-        data["recipePartId"] = this.recipePartId;
-        data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
-        data["part"] = this.part ? this.part.toJSON() : <any>undefined;
-        data["ingredient"] = this.ingredient ? this.ingredient.toJSON() : <any>undefined;
-        data["unitOfMeasurement"] = this.unitOfMeasurement ? this.unitOfMeasurement.toJSON() : <any>undefined;
-        return data;
-    }
-}
+    export class CreateTagCommandResponse implements ICreateTagCommandResponse {
+        id!: string;
 
-export interface IRecipeIngredient {
-    id: string;
-    recipeId: string;
-    ingredientId: string;
-    unitOfMeasurementId: string;
-    amount: number;
-    optional: boolean;
-    recipePartId: string | undefined;
-    recipe: Recipe | undefined;
-    part: RecipePart | undefined;
-    ingredient: Ingredient | undefined;
-    unitOfMeasurement: UnitOfMeasurement | undefined;
-}
-
-export class RecipeInstruction implements IRecipeInstruction {
-    id!: string;
-    number!: number;
-    instruction!: string | undefined;
-    recipeStepId!: string;
-    step!: RecipeStep | undefined;
-    translations!: RecipeInstructionTranslation[] | undefined;
-
-    constructor(data?: IRecipeInstruction) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: ICreateTagCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.number = _data["number"];
-            this.instruction = _data["instruction"];
-            this.recipeStepId = _data["recipeStepId"];
-            this.step = _data["step"] ? RecipeStep.fromJS(_data["step"]) : <any>undefined;
-            if (Array.isArray(_data["translations"])) {
-                this.translations = [] as any;
-                for (let item of _data["translations"])
-                    this.translations!.push(RecipeInstructionTranslation.fromJS(item));
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
             }
         }
-    }
 
-    static fromJS(data: any): RecipeInstruction {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeInstruction();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["number"] = this.number;
-        data["instruction"] = this.instruction;
-        data["recipeStepId"] = this.recipeStepId;
-        data["step"] = this.step ? this.step.toJSON() : <any>undefined;
-        if (Array.isArray(this.translations)) {
-            data["translations"] = [];
-            for (let item of this.translations)
-                data["translations"].push(item.toJSON());
+        static fromJS(data: any): CreateTagCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new CreateTagCommandResponse();
+            result.init(data);
+            return result;
         }
-        return data;
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            return data;
+        }
     }
-}
 
-export interface IRecipeInstruction {
-    id: string;
-    number: number;
-    instruction: string | undefined;
-    recipeStepId: string;
-    step: RecipeStep | undefined;
-    translations: RecipeInstructionTranslation[] | undefined;
-}
+    export interface ICreateTagCommandResponse {
+        id: string;
+    }
 
-export class RecipeNutrition implements IRecipeNutrition {
-    calories!: number | undefined;
-    sugar!: number | undefined;
-    fat!: number | undefined;
-    saturatedFat!: number | undefined;
-    sodium!: number | undefined;
-    protein!: number | undefined;
-    carbohydrates!: number | undefined;
-    fiber!: number | undefined;
+    export class UpdateTagCommand implements IUpdateTagCommand {
+        id!: string;
+        name!: string | undefined;
+        icon!: string | undefined;
+        hidden!: boolean;
+        promoted!: boolean;
 
-    constructor(data?: IRecipeNutrition) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IUpdateTagCommand) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.calories = _data["calories"];
-            this.sugar = _data["sugar"];
-            this.fat = _data["fat"];
-            this.saturatedFat = _data["saturatedFat"];
-            this.sodium = _data["sodium"];
-            this.protein = _data["protein"];
-            this.carbohydrates = _data["carbohydrates"];
-            this.fiber = _data["fiber"];
-        }
-    }
-
-    static fromJS(data: any): RecipeNutrition {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeNutrition();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["calories"] = this.calories;
-        data["sugar"] = this.sugar;
-        data["fat"] = this.fat;
-        data["saturatedFat"] = this.saturatedFat;
-        data["sodium"] = this.sodium;
-        data["protein"] = this.protein;
-        data["carbohydrates"] = this.carbohydrates;
-        data["fiber"] = this.fiber;
-        return data;
-    }
-}
-
-export interface IRecipeNutrition {
-    calories: number | undefined;
-    sugar: number | undefined;
-    fat: number | undefined;
-    saturatedFat: number | undefined;
-    sodium: number | undefined;
-    protein: number | undefined;
-    carbohydrates: number | undefined;
-    fiber: number | undefined;
-}
-
-export class RecipePart implements IRecipePart {
-    id!: string;
-    number!: number;
-    name!: string | undefined;
-    recipeId!: string;
-    recipe!: Recipe | undefined;
-    ingredients!: RecipeIngredient[] | undefined;
-    translations!: RecipePartTranslation[] | undefined;
-
-    constructor(data?: IRecipePart) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                this.id = _data["id"];
+                this.name = _data["name"];
+                this.icon = _data["icon"];
+                this.hidden = _data["hidden"];
+                this.promoted = _data["promoted"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.number = _data["number"];
-            this.name = _data["name"];
-            this.recipeId = _data["recipeId"];
-            this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
-            if (Array.isArray(_data["ingredients"])) {
-                this.ingredients = [] as any;
-                for (let item of _data["ingredients"])
-                    this.ingredients!.push(RecipeIngredient.fromJS(item));
-            }
-            if (Array.isArray(_data["translations"])) {
-                this.translations = [] as any;
-                for (let item of _data["translations"])
-                    this.translations!.push(RecipePartTranslation.fromJS(item));
-            }
+        static fromJS(data: any): UpdateTagCommand {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdateTagCommand();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            data["id"] = this.id;
+            data["name"] = this.name;
+            data["icon"] = this.icon;
+            data["hidden"] = this.hidden;
+            data["promoted"] = this.promoted;
+            return data;
         }
     }
 
-    static fromJS(data: any): RecipePart {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipePart();
-        result.init(data);
-        return result;
+    export interface IUpdateTagCommand {
+        id: string;
+        name: string | undefined;
+        icon: string | undefined;
+        hidden: boolean;
+        promoted: boolean;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["number"] = this.number;
-        data["name"] = this.name;
-        data["recipeId"] = this.recipeId;
-        data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
-        if (Array.isArray(this.ingredients)) {
-            data["ingredients"] = [];
-            for (let item of this.ingredients)
-                data["ingredients"].push(item.toJSON());
-        }
-        if (Array.isArray(this.translations)) {
-            data["translations"] = [];
-            for (let item of this.translations)
-                data["translations"].push(item.toJSON());
-        }
-        return data;
-    }
-}
+    export class UpdateTagCommandResponse implements IUpdateTagCommandResponse {
 
-export interface IRecipePart {
-    id: string;
-    number: number;
-    name: string | undefined;
-    recipeId: string;
-    recipe: Recipe | undefined;
-    ingredients: RecipeIngredient[] | undefined;
-    translations: RecipePartTranslation[] | undefined;
-}
-
-export class RecipePieceOfEquipment implements IRecipePieceOfEquipment {
-    equipmentId!: string;
-    amount!: number;
-    dependsOnServings!: boolean;
-    pieceOfEquipment!: PieceOfEquipment | undefined;
-
-    constructor(data?: IRecipePieceOfEquipment) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IUpdateTagCommandResponse) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.equipmentId = _data["equipmentId"];
-            this.amount = _data["amount"];
-            this.dependsOnServings = _data["dependsOnServings"];
-            this.pieceOfEquipment = _data["pieceOfEquipment"] ? PieceOfEquipment.fromJS(_data["pieceOfEquipment"]) : <any>undefined;
+        init(_data?: any) {
+        }
+
+        static fromJS(data: any): UpdateTagCommandResponse {
+            data = typeof data === 'object' ? data : {};
+            let result = new UpdateTagCommandResponse();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            return data;
         }
     }
 
-    static fromJS(data: any): RecipePieceOfEquipment {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipePieceOfEquipment();
-        result.init(data);
-        return result;
+    export interface IUpdateTagCommandResponse {
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["equipmentId"] = this.equipmentId;
-        data["amount"] = this.amount;
-        data["dependsOnServings"] = this.dependsOnServings;
-        data["pieceOfEquipment"] = this.pieceOfEquipment ? this.pieceOfEquipment.toJSON() : <any>undefined;
-        return data;
-    }
-}
+    export class CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements ICollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results!: LanguageDto[];
+        totalResults!: number;
 
-export interface IRecipePieceOfEquipment {
-    equipmentId: string;
-    amount: number;
-    dependsOnServings: boolean;
-    pieceOfEquipment: PieceOfEquipment | undefined;
-}
-
-export enum RecipeState {
-    Draft = "Draft",
-    Published = "Published",
-    Archived = "Archived",
-}
-
-export class RecipeStep implements IRecipeStep {
-    id!: string;
-    number!: number;
-    name!: string | undefined;
-    instructions!: RecipeInstruction[] | undefined;
-    readonly recipeId!: string;
-    recipe!: Recipe | undefined;
-    translations!: RecipeStepTranslation[] | undefined;
-
-    constructor(data?: IRecipeStep) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: ICollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.number = _data["number"];
-            this.name = _data["name"];
-            if (Array.isArray(_data["instructions"])) {
-                this.instructions = [] as any;
-                for (let item of _data["instructions"])
-                    this.instructions!.push(RecipeInstruction.fromJS(item));
-            }
-            (<any>this).recipeId = _data["recipeId"];
-            this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
-            if (Array.isArray(_data["translations"])) {
-                this.translations = [] as any;
-                for (let item of _data["translations"])
-                    this.translations!.push(RecipeStepTranslation.fromJS(item));
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["results"])) {
+                    this.results = [] as any;
+                    for (let item of _data["results"])
+                        this.results!.push(LanguageDto.fromJS(item));
+                }
+                this.totalResults = _data["totalResults"];
             }
         }
-    }
 
-    static fromJS(data: any): RecipeStep {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeStep();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["number"] = this.number;
-        data["name"] = this.name;
-        if (Array.isArray(this.instructions)) {
-            data["instructions"] = [];
-            for (let item of this.instructions)
-                data["instructions"].push(item.toJSON());
+        static fromJS(data: any): CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+            data = typeof data === 'object' ? data : {};
+            let result = new CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
+            result.init(data);
+            return result;
         }
-        data["recipeId"] = this.recipeId;
-        data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
-        if (Array.isArray(this.translations)) {
-            data["translations"] = [];
-            for (let item of this.translations)
-                data["translations"].push(item.toJSON());
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.results)) {
+                data["results"] = [];
+                for (let item of this.results)
+                    data["results"].push(item.toJSON());
+            }
+            data["totalResults"] = this.totalResults;
+            return data;
         }
-        return data;
     }
-}
 
-export interface IRecipeStep {
-    id: string;
-    number: number;
-    name: string | undefined;
-    instructions: RecipeInstruction[] | undefined;
-    recipeId: string;
-    recipe: Recipe | undefined;
-    translations: RecipeStepTranslation[] | undefined;
-}
+    export interface ICollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results: LanguageDto[];
+        totalResults: number;
+    }
 
-export class RecipeTag implements IRecipeTag {
-    tagId!: string;
-    recipeId!: string;
-    tag!: Tag | undefined;
-    recipe!: Recipe | undefined;
+    export class CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null implements ICollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results!: UnitOfMeasurement[];
+        totalResults!: number;
 
-    constructor(data?: IRecipeTag) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: ICollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.tagId = _data["tagId"];
-            this.recipeId = _data["recipeId"];
-            this.tag = _data["tag"] ? Tag.fromJS(_data["tag"]) : <any>undefined;
-            this.recipe = _data["recipe"] ? Recipe.fromJS(_data["recipe"]) : <any>undefined;
-        }
-    }
-
-    static fromJS(data: any): RecipeTag {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeTag();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["tagId"] = this.tagId;
-        data["recipeId"] = this.recipeId;
-        data["tag"] = this.tag ? this.tag.toJSON() : <any>undefined;
-        data["recipe"] = this.recipe ? this.recipe.toJSON() : <any>undefined;
-        return data;
-    }
-}
-
-export interface IRecipeTag {
-    tagId: string;
-    recipeId: string;
-    tag: Tag | undefined;
-    recipe: Recipe | undefined;
-}
-
-export enum RecipeType {
-    Breakfast = "Breakfast",
-    Lunch = "Lunch",
-    Dinner = "Dinner",
-    Dessert = "Dessert",
-    Snack = "Snack",
-    Drink = "Drink",
-}
-
-export enum SupportTicketStatus {
-    Open = "Open",
-    Resolved = "Resolved",
-}
-
-export class Tag implements ITag {
-    id!: string;
-    originalLanguageCode!: string | undefined;
-    name!: string | undefined;
-    hidden!: boolean;
-    promoted!: boolean;
-    icon!: string | undefined;
-    createdByUserId!: string;
-    createdOn!: dayjs.Dayjs;
-    updatedByUserId!: string | undefined;
-    updatedOn!: dayjs.Dayjs | undefined;
-    createdByUser!: User | undefined;
-    updatedByUser!: User | undefined;
-    translations!: TagTranslation[] | undefined;
-    recipes!: RecipeTag[] | undefined;
-
-    constructor(data?: ITag) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["results"])) {
+                    this.results = [] as any;
+                    for (let item of _data["results"])
+                        this.results!.push(UnitOfMeasurement.fromJS(item));
+                }
+                this.totalResults = _data["totalResults"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.originalLanguageCode = _data["originalLanguageCode"];
-            this.name = _data["name"];
-            this.hidden = _data["hidden"];
-            this.promoted = _data["promoted"];
-            this.icon = _data["icon"];
-            this.createdByUserId = _data["createdByUserId"];
-            this.createdOn = _data["createdOn"] ? dayjs(_data["createdOn"].toString()) : <any>undefined;
-            this.updatedByUserId = _data["updatedByUserId"];
-            this.updatedOn = _data["updatedOn"] ? dayjs(_data["updatedOn"].toString()) : <any>undefined;
-            this.createdByUser = _data["createdByUser"] ? User.fromJS(_data["createdByUser"]) : <any>undefined;
-            this.updatedByUser = _data["updatedByUser"] ? User.fromJS(_data["updatedByUser"]) : <any>undefined;
-            if (Array.isArray(_data["translations"])) {
-                this.translations = [] as any;
-                for (let item of _data["translations"])
-                    this.translations!.push(TagTranslation.fromJS(item));
+        static fromJS(data: any): CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null {
+            data = typeof data === 'object' ? data : {};
+            let result = new CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.results)) {
+                data["results"] = [];
+                for (let item of this.results)
+                    data["results"].push(item.toJSON());
             }
-            if (Array.isArray(_data["recipes"])) {
-                this.recipes = [] as any;
-                for (let item of _data["recipes"])
-                    this.recipes!.push(RecipeTag.fromJS(item));
-            }
+            data["totalResults"] = this.totalResults;
+            return data;
         }
     }
 
-    static fromJS(data: any): Tag {
-        data = typeof data === 'object' ? data : {};
-        let result = new Tag();
-        result.init(data);
-        return result;
+    export interface ICollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results: UnitOfMeasurement[];
+        totalResults: number;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["originalLanguageCode"] = this.originalLanguageCode;
-        data["name"] = this.name;
-        data["hidden"] = this.hidden;
-        data["promoted"] = this.promoted;
-        data["icon"] = this.icon;
-        data["createdByUserId"] = this.createdByUserId;
-        data["createdOn"] = this.createdOn ? this.createdOn.toISOString() : <any>undefined;
-        data["updatedByUserId"] = this.updatedByUserId;
-        data["updatedOn"] = this.updatedOn ? this.updatedOn.toISOString() : <any>undefined;
-        data["createdByUser"] = this.createdByUser ? this.createdByUser.toJSON() : <any>undefined;
-        data["updatedByUser"] = this.updatedByUser ? this.updatedByUser.toJSON() : <any>undefined;
-        if (Array.isArray(this.translations)) {
-            data["translations"] = [];
-            for (let item of this.translations)
-                data["translations"].push(item.toJSON());
-        }
-        if (Array.isArray(this.recipes)) {
-            data["recipes"] = [];
-            for (let item of this.recipes)
-                data["recipes"].push(item.toJSON());
-        }
-        return data;
-    }
-}
-
-export interface ITag {
-    id: string;
-    originalLanguageCode: string | undefined;
-    name: string | undefined;
-    hidden: boolean;
-    promoted: boolean;
-    icon: string | undefined;
-    createdByUserId: string;
-    createdOn: dayjs.Dayjs;
-    updatedByUserId: string | undefined;
-    updatedOn: dayjs.Dayjs | undefined;
-    createdByUser: User | undefined;
-    updatedByUser: User | undefined;
-    translations: TagTranslation[] | undefined;
-    recipes: RecipeTag[] | undefined;
-}
-
-export class AuthorLinkTranslation extends TranslationEntity implements IAuthorLinkTranslation {
-    id!: string;
-    authorLinkId!: string;
-    name!: string | undefined;
-    description!: string | undefined;
-
-    constructor(data?: IAuthorLinkTranslation) {
-        super(data);
-        this._discriminator = "AuthorLinkTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.authorLinkId = _data["authorLinkId"];
-            this.name = _data["name"];
-            this.description = _data["description"];
-        }
-    }
-
-    static override fromJS(data: any): AuthorLinkTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new AuthorLinkTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["authorLinkId"] = this.authorLinkId;
-        data["name"] = this.name;
-        data["description"] = this.description;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IAuthorLinkTranslation extends ITranslationEntity {
-    id: string;
-    authorLinkId: string;
-    name: string | undefined;
-    description: string | undefined;
-}
-
-export class AuthorTranslation extends TranslationEntity implements IAuthorTranslation {
-    id!: string;
-    authorId!: string;
-    biography!: string | undefined;
-
-    constructor(data?: IAuthorTranslation) {
-        super(data);
-        this._discriminator = "AuthorTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.authorId = _data["authorId"];
-            this.biography = _data["biography"];
-        }
-    }
-
-    static override fromJS(data: any): AuthorTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new AuthorTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["authorId"] = this.authorId;
-        data["biography"] = this.biography;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IAuthorTranslation extends ITranslationEntity {
-    id: string;
-    authorId: string;
-    biography: string | undefined;
-}
-
-export class CollectionTranslation extends TranslationEntity implements ICollectionTranslation {
-    id!: string;
-    collectionId!: string;
-    title!: string | undefined;
-
-    constructor(data?: ICollectionTranslation) {
-        super(data);
-        this._discriminator = "CollectionTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.collectionId = _data["collectionId"];
-            this.title = _data["title"];
-        }
-    }
-
-    static override fromJS(data: any): CollectionTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new CollectionTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["collectionId"] = this.collectionId;
-        data["title"] = this.title;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface ICollectionTranslation extends ITranslationEntity {
-    id: string;
-    collectionId: string;
-    title: string | undefined;
-}
-
-export class EquipmentTranslation extends TranslationEntity implements IEquipmentTranslation {
-    id!: string;
-    equipmentId!: string;
-    name!: string | undefined;
-    pluralName!: string | undefined;
-
-    constructor(data?: IEquipmentTranslation) {
-        super(data);
-        this._discriminator = "EquipmentTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.equipmentId = _data["equipmentId"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-        }
-    }
-
-    static override fromJS(data: any): EquipmentTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new EquipmentTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["equipmentId"] = this.equipmentId;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IEquipmentTranslation extends ITranslationEntity {
-    id: string;
-    equipmentId: string;
-    name: string | undefined;
-    pluralName: string | undefined;
-}
-
-export class IngredientTranslation extends TranslationEntity implements IIngredientTranslation {
-    id!: string;
-    ingredientId!: string;
-    name!: string | undefined;
-    pluralName!: string | undefined;
-
-    constructor(data?: IIngredientTranslation) {
-        super(data);
-        this._discriminator = "IngredientTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.ingredientId = _data["ingredientId"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-        }
-    }
-
-    static override fromJS(data: any): IngredientTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new IngredientTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["ingredientId"] = this.ingredientId;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IIngredientTranslation extends ITranslationEntity {
-    id: string;
-    ingredientId: string;
-    name: string | undefined;
-    pluralName: string | undefined;
-}
-
-export class RecipeInstructionTranslation extends TranslationEntity implements IRecipeInstructionTranslation {
-    id!: string;
-    recipeInstructionId!: string;
-    instruction!: string | undefined;
-
-    constructor(data?: IRecipeInstructionTranslation) {
-        super(data);
-        this._discriminator = "RecipeInstructionTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.recipeInstructionId = _data["recipeInstructionId"];
-            this.instruction = _data["instruction"];
-        }
-    }
-
-    static override fromJS(data: any): RecipeInstructionTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeInstructionTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["recipeInstructionId"] = this.recipeInstructionId;
-        data["instruction"] = this.instruction;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IRecipeInstructionTranslation extends ITranslationEntity {
-    id: string;
-    recipeInstructionId: string;
-    instruction: string | undefined;
-}
-
-export class RecipePartTranslation extends TranslationEntity implements IRecipePartTranslation {
-    id!: string;
-    recipePartId!: string;
-    name!: string | undefined;
-
-    constructor(data?: IRecipePartTranslation) {
-        super(data);
-        this._discriminator = "RecipePartTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.recipePartId = _data["recipePartId"];
-            this.name = _data["name"];
-        }
-    }
-
-    static override fromJS(data: any): RecipePartTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipePartTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["recipePartId"] = this.recipePartId;
-        data["name"] = this.name;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IRecipePartTranslation extends ITranslationEntity {
-    id: string;
-    recipePartId: string;
-    name: string | undefined;
-}
-
-export class RecipeStepTranslation extends TranslationEntity implements IRecipeStepTranslation {
-    id!: string;
-    recipeStepId!: string;
-    name!: string | undefined;
-
-    constructor(data?: IRecipeStepTranslation) {
-        super(data);
-        this._discriminator = "RecipeStepTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.recipeStepId = _data["recipeStepId"];
-            this.name = _data["name"];
-        }
-    }
-
-    static override fromJS(data: any): RecipeStepTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeStepTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["recipeStepId"] = this.recipeStepId;
-        data["name"] = this.name;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IRecipeStepTranslation extends ITranslationEntity {
-    id: string;
-    recipeStepId: string;
-    name: string | undefined;
-}
-
-export class RecipeTranslation extends TranslationEntity implements IRecipeTranslation {
-    id!: string;
-    recipeId!: string;
-    name!: string | undefined;
-    description!: string | undefined;
-
-    constructor(data?: IRecipeTranslation) {
-        super(data);
-        this._discriminator = "RecipeTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.recipeId = _data["recipeId"];
-            this.name = _data["name"];
-            this.description = _data["description"];
-        }
-    }
-
-    static override fromJS(data: any): RecipeTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new RecipeTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["recipeId"] = this.recipeId;
-        data["name"] = this.name;
-        data["description"] = this.description;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IRecipeTranslation extends ITranslationEntity {
-    id: string;
-    recipeId: string;
-    name: string | undefined;
-    description: string | undefined;
-}
-
-export class StringTranslation extends TranslationEntity implements IStringTranslation {
-    key!: string | undefined;
-    value!: string | undefined;
-
-    constructor(data?: IStringTranslation) {
-        super(data);
-        this._discriminator = "StringTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.key = _data["key"];
-            this.value = _data["value"];
-        }
-    }
-
-    static override fromJS(data: any): StringTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new StringTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["key"] = this.key;
-        data["value"] = this.value;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IStringTranslation extends ITranslationEntity {
-    key: string | undefined;
-    value: string | undefined;
-}
-
-export class TagTranslation extends TranslationEntity implements ITagTranslation {
-    id!: string;
-    tagId!: string;
-    name!: string | undefined;
-
-    constructor(data?: ITagTranslation) {
-        super(data);
-        this._discriminator = "TagTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.tagId = _data["tagId"];
-            this.name = _data["name"];
-        }
-    }
-
-    static override fromJS(data: any): TagTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new TagTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["tagId"] = this.tagId;
-        data["name"] = this.name;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface ITagTranslation extends ITranslationEntity {
-    id: string;
-    tagId: string;
-    name: string | undefined;
-}
-
-export class UnitOfMeasurementTranslation extends TranslationEntity implements IUnitOfMeasurementTranslation {
-    id!: string;
-    unitOfMeasurementId!: string;
-    name!: string | undefined;
-    pluralName!: string | undefined;
-
-    constructor(data?: IUnitOfMeasurementTranslation) {
-        super(data);
-        this._discriminator = "UnitOfMeasurementTranslation";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            this.id = _data["id"];
-            this.unitOfMeasurementId = _data["unitOfMeasurementId"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-        }
-    }
-
-    static override fromJS(data: any): UnitOfMeasurementTranslation {
-        data = typeof data === 'object' ? data : {};
-        let result = new UnitOfMeasurementTranslation();
-        result.init(data);
-        return result;
-    }
-
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["unitOfMeasurementId"] = this.unitOfMeasurementId;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IUnitOfMeasurementTranslation extends ITranslationEntity {
-    id: string;
-    unitOfMeasurementId: string;
-    name: string | undefined;
-    pluralName: string | undefined;
-}
-
-export class UnitOfMeasurement implements IUnitOfMeasurement {
-    id!: string;
-    originalLanguageCode!: string | undefined;
-    name!: string | undefined;
-    pluralName!: string | undefined;
-    abbreviation!: string | undefined;
-    type!: MeasurementType;
-    system!: MeasurementSystem | undefined;
-    representAs!: UnitOfMeasurementRepresentation;
-    translations!: UnitOfMeasurementTranslation[] | undefined;
-
-    constructor(data?: IUnitOfMeasurement) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+    export class PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results!: LogDto[];
+        totalResults!: number;
+        page!: number;
+        pageSize!: number;
+        totalPages!: number;
+
+        constructor(data?: IPagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.originalLanguageCode = _data["originalLanguageCode"];
-            this.name = _data["name"];
-            this.pluralName = _data["pluralName"];
-            this.abbreviation = _data["abbreviation"];
-            this.type = _data["type"];
-            this.system = _data["system"];
-            this.representAs = _data["representAs"];
-            if (Array.isArray(_data["translations"])) {
-                this.translations = [] as any;
-                for (let item of _data["translations"])
-                    this.translations!.push(UnitOfMeasurementTranslation.fromJS(item));
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["results"])) {
+                    this.results = [] as any;
+                    for (let item of _data["results"])
+                        this.results!.push(LogDto.fromJS(item));
+                }
+                this.totalResults = _data["totalResults"];
+                this.page = _data["page"];
+                this.pageSize = _data["pageSize"];
+                this.totalPages = _data["totalPages"];
             }
         }
-    }
 
-    static fromJS(data: any): UnitOfMeasurement {
-        data = typeof data === 'object' ? data : {};
-        let result = new UnitOfMeasurement();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["originalLanguageCode"] = this.originalLanguageCode;
-        data["name"] = this.name;
-        data["pluralName"] = this.pluralName;
-        data["abbreviation"] = this.abbreviation;
-        data["type"] = this.type;
-        data["system"] = this.system;
-        data["representAs"] = this.representAs;
-        if (Array.isArray(this.translations)) {
-            data["translations"] = [];
-            for (let item of this.translations)
-                data["translations"].push(item.toJSON());
+        static fromJS(data: any): PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+            data = typeof data === 'object' ? data : {};
+            let result = new PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
+            result.init(data);
+            return result;
         }
-        return data;
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.results)) {
+                data["results"] = [];
+                for (let item of this.results)
+                    data["results"].push(item.toJSON());
+            }
+            data["totalResults"] = this.totalResults;
+            data["page"] = this.page;
+            data["pageSize"] = this.pageSize;
+            data["totalPages"] = this.totalPages;
+            return data;
+        }
     }
-}
 
-export interface IUnitOfMeasurement {
-    id: string;
-    originalLanguageCode: string | undefined;
-    name: string | undefined;
-    pluralName: string | undefined;
-    abbreviation: string | undefined;
-    type: MeasurementType;
-    system: MeasurementSystem | undefined;
-    representAs: UnitOfMeasurementRepresentation;
-    translations: UnitOfMeasurementTranslation[] | undefined;
-}
+    export interface IPagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results: LogDto[];
+        totalResults: number;
+        page: number;
+        pageSize: number;
+        totalPages: number;
+    }
 
-export enum UnitOfMeasurementRepresentation {
-    Integer = "Integer",
-    Decimal = "Decimal",
-    Fraction = "Fraction",
-}
+    export class PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results!: SupportTicketDto[];
+        totalResults!: number;
+        page!: number;
+        pageSize!: number;
+        totalPages!: number;
 
-export class User implements IUser {
-    id!: string;
-    userName!: string | undefined;
-    normalizedUserName!: string | undefined;
-    email!: string | undefined;
-    normalizedEmail!: string | undefined;
-    emailConfirmed!: boolean;
-    passwordHash!: string | undefined;
-    securityStamp!: string | undefined;
-    concurrencyStamp!: string | undefined;
-    phoneNumber!: string | undefined;
-    phoneNumberConfirmed!: boolean;
-    twoFactorEnabled!: boolean;
-    lockoutEnd!: dayjs.Dayjs | undefined;
-    lockoutEnabled!: boolean;
-    accessFailedCount!: number;
-    lastLoggedInOn!: dayjs.Dayjs | undefined;
-    registeredOn!: dayjs.Dayjs;
-    firstName!: string | undefined;
-    deactivated!: boolean;
-
-    constructor(data?: IUser) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IPagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.userName = _data["userName"];
-            this.normalizedUserName = _data["normalizedUserName"];
-            this.email = _data["email"];
-            this.normalizedEmail = _data["normalizedEmail"];
-            this.emailConfirmed = _data["emailConfirmed"];
-            this.passwordHash = _data["passwordHash"];
-            this.securityStamp = _data["securityStamp"];
-            this.concurrencyStamp = _data["concurrencyStamp"];
-            this.phoneNumber = _data["phoneNumber"];
-            this.phoneNumberConfirmed = _data["phoneNumberConfirmed"];
-            this.twoFactorEnabled = _data["twoFactorEnabled"];
-            this.lockoutEnd = _data["lockoutEnd"] ? dayjs(_data["lockoutEnd"].toString()) : <any>undefined;
-            this.lockoutEnabled = _data["lockoutEnabled"];
-            this.accessFailedCount = _data["accessFailedCount"];
-            this.lastLoggedInOn = _data["lastLoggedInOn"] ? dayjs(_data["lastLoggedInOn"].toString()) : <any>undefined;
-            this.registeredOn = _data["registeredOn"] ? dayjs(_data["registeredOn"].toString()) : <any>undefined;
-            this.firstName = _data["firstName"];
-            this.deactivated = _data["deactivated"];
-        }
-    }
-
-    static fromJS(data: any): User {
-        data = typeof data === 'object' ? data : {};
-        let result = new User();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["userName"] = this.userName;
-        data["normalizedUserName"] = this.normalizedUserName;
-        data["email"] = this.email;
-        data["normalizedEmail"] = this.normalizedEmail;
-        data["emailConfirmed"] = this.emailConfirmed;
-        data["passwordHash"] = this.passwordHash;
-        data["securityStamp"] = this.securityStamp;
-        data["concurrencyStamp"] = this.concurrencyStamp;
-        data["phoneNumber"] = this.phoneNumber;
-        data["phoneNumberConfirmed"] = this.phoneNumberConfirmed;
-        data["twoFactorEnabled"] = this.twoFactorEnabled;
-        data["lockoutEnd"] = this.lockoutEnd ? this.lockoutEnd.toISOString() : <any>undefined;
-        data["lockoutEnabled"] = this.lockoutEnabled;
-        data["accessFailedCount"] = this.accessFailedCount;
-        data["lastLoggedInOn"] = this.lastLoggedInOn ? this.lastLoggedInOn.toISOString() : <any>undefined;
-        data["registeredOn"] = this.registeredOn ? this.registeredOn.toISOString() : <any>undefined;
-        data["firstName"] = this.firstName;
-        data["deactivated"] = this.deactivated;
-        return data;
-    }
-}
-
-export interface IUser {
-    id: string;
-    userName: string | undefined;
-    normalizedUserName: string | undefined;
-    email: string | undefined;
-    normalizedEmail: string | undefined;
-    emailConfirmed: boolean;
-    passwordHash: string | undefined;
-    securityStamp: string | undefined;
-    concurrencyStamp: string | undefined;
-    phoneNumber: string | undefined;
-    phoneNumberConfirmed: boolean;
-    twoFactorEnabled: boolean;
-    lockoutEnd: dayjs.Dayjs | undefined;
-    lockoutEnabled: boolean;
-    accessFailedCount: number;
-    lastLoggedInOn: dayjs.Dayjs | undefined;
-    registeredOn: dayjs.Dayjs;
-    firstName: string | undefined;
-    deactivated: boolean;
-}
-
-export class CreateTagCommand implements ICreateTagCommand {
-    languageCode!: string | undefined;
-    name!: string | undefined;
-    icon!: string | undefined;
-
-    constructor(data?: ICreateTagCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["results"])) {
+                    this.results = [] as any;
+                    for (let item of _data["results"])
+                        this.results!.push(SupportTicketDto.fromJS(item));
+                }
+                this.totalResults = _data["totalResults"];
+                this.page = _data["page"];
+                this.pageSize = _data["pageSize"];
+                this.totalPages = _data["totalPages"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.languageCode = _data["languageCode"];
-            this.name = _data["name"];
-            this.icon = _data["icon"];
+        static fromJS(data: any): PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+            data = typeof data === 'object' ? data : {};
+            let result = new PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.results)) {
+                data["results"] = [];
+                for (let item of this.results)
+                    data["results"].push(item.toJSON());
+            }
+            data["totalResults"] = this.totalResults;
+            data["page"] = this.page;
+            data["pageSize"] = this.pageSize;
+            data["totalPages"] = this.totalPages;
+            return data;
         }
     }
 
-    static fromJS(data: any): CreateTagCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateTagCommand();
-        result.init(data);
-        return result;
+    export interface IPagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results: SupportTicketDto[];
+        totalResults: number;
+        page: number;
+        pageSize: number;
+        totalPages: number;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["languageCode"] = this.languageCode;
-        data["name"] = this.name;
-        data["icon"] = this.icon;
-        return data;
-    }
-}
+    export class PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results!: AuthorDto[];
+        totalResults!: number;
+        page!: number;
+        pageSize!: number;
+        totalPages!: number;
 
-export interface ICreateTagCommand {
-    languageCode: string | undefined;
-    name: string | undefined;
-    icon: string | undefined;
-}
-
-export class CreateTagCommandResponse implements ICreateTagCommandResponse {
-    id!: string;
-
-    constructor(data?: ICreateTagCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IPagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-        }
-    }
-
-    static fromJS(data: any): CreateTagCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new CreateTagCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        return data;
-    }
-}
-
-export interface ICreateTagCommandResponse {
-    id: string;
-}
-
-export class UpdateTagCommand implements IUpdateTagCommand {
-    id!: string;
-    name!: string | undefined;
-    icon!: string | undefined;
-    hidden!: boolean;
-    promoted!: boolean;
-
-    constructor(data?: IUpdateTagCommand) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["results"])) {
+                    this.results = [] as any;
+                    for (let item of _data["results"])
+                        this.results!.push(AuthorDto.fromJS(item));
+                }
+                this.totalResults = _data["totalResults"];
+                this.page = _data["page"];
+                this.pageSize = _data["pageSize"];
+                this.totalPages = _data["totalPages"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.name = _data["name"];
-            this.icon = _data["icon"];
-            this.hidden = _data["hidden"];
-            this.promoted = _data["promoted"];
+        static fromJS(data: any): PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+            data = typeof data === 'object' ? data : {};
+            let result = new PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.results)) {
+                data["results"] = [];
+                for (let item of this.results)
+                    data["results"].push(item.toJSON());
+            }
+            data["totalResults"] = this.totalResults;
+            data["page"] = this.page;
+            data["pageSize"] = this.pageSize;
+            data["totalPages"] = this.totalPages;
+            return data;
         }
     }
 
-    static fromJS(data: any): UpdateTagCommand {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateTagCommand();
-        result.init(data);
-        return result;
+    export interface IPagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results: AuthorDto[];
+        totalResults: number;
+        page: number;
+        pageSize: number;
+        totalPages: number;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["icon"] = this.icon;
-        data["hidden"] = this.hidden;
-        data["promoted"] = this.promoted;
-        return data;
-    }
-}
+    export class PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results!: CollectionDto[];
+        totalResults!: number;
+        page!: number;
+        pageSize!: number;
+        totalPages!: number;
 
-export interface IUpdateTagCommand {
-    id: string;
-    name: string | undefined;
-    icon: string | undefined;
-    hidden: boolean;
-    promoted: boolean;
-}
-
-export class UpdateTagCommandResponse implements IUpdateTagCommandResponse {
-
-    constructor(data?: IUpdateTagCommandResponse) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IPagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-    }
-
-    static fromJS(data: any): UpdateTagCommandResponse {
-        data = typeof data === 'object' ? data : {};
-        let result = new UpdateTagCommandResponse();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        return data;
-    }
-}
-
-export interface IUpdateTagCommandResponse {
-}
-
-export class CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements ICollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results!: LanguageDto[];
-    totalResults!: number;
-
-    constructor(data?: ICollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["results"])) {
+                    this.results = [] as any;
+                    for (let item of _data["results"])
+                        this.results!.push(CollectionDto.fromJS(item));
+                }
+                this.totalResults = _data["totalResults"];
+                this.page = _data["page"];
+                this.pageSize = _data["pageSize"];
+                this.totalPages = _data["totalPages"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["results"])) {
-                this.results = [] as any;
-                for (let item of _data["results"])
-                    this.results!.push(LanguageDto.fromJS(item));
+        static fromJS(data: any): PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+            data = typeof data === 'object' ? data : {};
+            let result = new PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.results)) {
+                data["results"] = [];
+                for (let item of this.results)
+                    data["results"].push(item.toJSON());
             }
-            this.totalResults = _data["totalResults"];
+            data["totalResults"] = this.totalResults;
+            data["page"] = this.page;
+            data["pageSize"] = this.pageSize;
+            data["totalPages"] = this.totalPages;
+            return data;
         }
     }
 
-    static fromJS(data: any): CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-        data = typeof data === 'object' ? data : {};
-        let result = new CollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
-        result.init(data);
-        return result;
+    export interface IPagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results: CollectionDto[];
+        totalResults: number;
+        page: number;
+        pageSize: number;
+        totalPages: number;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.results)) {
-            data["results"] = [];
-            for (let item of this.results)
-                data["results"].push(item.toJSON());
-        }
-        data["totalResults"] = this.totalResults;
-        return data;
-    }
-}
+    export class PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results!: PieceOfEquipmentDto[];
+        totalResults!: number;
+        page!: number;
+        pageSize!: number;
+        totalPages!: number;
 
-export interface ICollectionResultsDto_1OfOfLanguageDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results: LanguageDto[];
-    totalResults: number;
-}
-
-export class CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null implements ICollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results!: UnitOfMeasurement[];
-    totalResults!: number;
-
-    constructor(data?: ICollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IPagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["results"])) {
-                this.results = [] as any;
-                for (let item of _data["results"])
-                    this.results!.push(UnitOfMeasurement.fromJS(item));
-            }
-            this.totalResults = _data["totalResults"];
-        }
-    }
-
-    static fromJS(data: any): CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null {
-        data = typeof data === 'object' ? data : {};
-        let result = new CollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.results)) {
-            data["results"] = [];
-            for (let item of this.results)
-                data["results"].push(item.toJSON());
-        }
-        data["totalResults"] = this.totalResults;
-        return data;
-    }
-}
-
-export interface ICollectionResultsDto_1OfOfUnitOfMeasurementAndDomainAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results: UnitOfMeasurement[];
-    totalResults: number;
-}
-
-export class PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results!: LogDto[];
-    totalResults!: number;
-    page!: number;
-    pageSize!: number;
-    totalPages!: number;
-
-    constructor(data?: IPagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["results"])) {
+                    this.results = [] as any;
+                    for (let item of _data["results"])
+                        this.results!.push(PieceOfEquipmentDto.fromJS(item));
+                }
+                this.totalResults = _data["totalResults"];
+                this.page = _data["page"];
+                this.pageSize = _data["pageSize"];
+                this.totalPages = _data["totalPages"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["results"])) {
-                this.results = [] as any;
-                for (let item of _data["results"])
-                    this.results!.push(LogDto.fromJS(item));
+        static fromJS(data: any): PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+            data = typeof data === 'object' ? data : {};
+            let result = new PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.results)) {
+                data["results"] = [];
+                for (let item of this.results)
+                    data["results"].push(item.toJSON());
             }
-            this.totalResults = _data["totalResults"];
-            this.page = _data["page"];
-            this.pageSize = _data["pageSize"];
-            this.totalPages = _data["totalPages"];
+            data["totalResults"] = this.totalResults;
+            data["page"] = this.page;
+            data["pageSize"] = this.pageSize;
+            data["totalPages"] = this.totalPages;
+            return data;
         }
     }
 
-    static fromJS(data: any): PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
-        result.init(data);
-        return result;
+    export interface IPagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results: PieceOfEquipmentDto[];
+        totalResults: number;
+        page: number;
+        pageSize: number;
+        totalPages: number;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.results)) {
-            data["results"] = [];
-            for (let item of this.results)
-                data["results"].push(item.toJSON());
-        }
-        data["totalResults"] = this.totalResults;
-        data["page"] = this.page;
-        data["pageSize"] = this.pageSize;
-        data["totalPages"] = this.totalPages;
-        return data;
-    }
-}
+    export class PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results!: IngredientDto[];
+        totalResults!: number;
+        page!: number;
+        pageSize!: number;
+        totalPages!: number;
 
-export interface IPagedResultsDto_1OfOfLogDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results: LogDto[];
-    totalResults: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-}
-
-export class PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results!: SupportTicketDto[];
-    totalResults!: number;
-    page!: number;
-    pageSize!: number;
-    totalPages!: number;
-
-    constructor(data?: IPagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IPagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["results"])) {
-                this.results = [] as any;
-                for (let item of _data["results"])
-                    this.results!.push(SupportTicketDto.fromJS(item));
-            }
-            this.totalResults = _data["totalResults"];
-            this.page = _data["page"];
-            this.pageSize = _data["pageSize"];
-            this.totalPages = _data["totalPages"];
-        }
-    }
-
-    static fromJS(data: any): PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.results)) {
-            data["results"] = [];
-            for (let item of this.results)
-                data["results"].push(item.toJSON());
-        }
-        data["totalResults"] = this.totalResults;
-        data["page"] = this.page;
-        data["pageSize"] = this.pageSize;
-        data["totalPages"] = this.totalPages;
-        return data;
-    }
-}
-
-export interface IPagedResultsDto_1OfOfSupportTicketDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results: SupportTicketDto[];
-    totalResults: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-}
-
-export class PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results!: AuthorDto[];
-    totalResults!: number;
-    page!: number;
-    pageSize!: number;
-    totalPages!: number;
-
-    constructor(data?: IPagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["results"])) {
+                    this.results = [] as any;
+                    for (let item of _data["results"])
+                        this.results!.push(IngredientDto.fromJS(item));
+                }
+                this.totalResults = _data["totalResults"];
+                this.page = _data["page"];
+                this.pageSize = _data["pageSize"];
+                this.totalPages = _data["totalPages"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["results"])) {
-                this.results = [] as any;
-                for (let item of _data["results"])
-                    this.results!.push(AuthorDto.fromJS(item));
+        static fromJS(data: any): PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+            data = typeof data === 'object' ? data : {};
+            let result = new PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.results)) {
+                data["results"] = [];
+                for (let item of this.results)
+                    data["results"].push(item.toJSON());
             }
-            this.totalResults = _data["totalResults"];
-            this.page = _data["page"];
-            this.pageSize = _data["pageSize"];
-            this.totalPages = _data["totalPages"];
+            data["totalResults"] = this.totalResults;
+            data["page"] = this.page;
+            data["pageSize"] = this.pageSize;
+            data["totalPages"] = this.totalPages;
+            return data;
         }
     }
 
-    static fromJS(data: any): PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
-        result.init(data);
-        return result;
+    export interface IPagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results: IngredientDto[];
+        totalResults: number;
+        page: number;
+        pageSize: number;
+        totalPages: number;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.results)) {
-            data["results"] = [];
-            for (let item of this.results)
-                data["results"].push(item.toJSON());
-        }
-        data["totalResults"] = this.totalResults;
-        data["page"] = this.page;
-        data["pageSize"] = this.pageSize;
-        data["totalPages"] = this.totalPages;
-        return data;
-    }
-}
+    export class PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results!: RecipeDto[];
+        totalResults!: number;
+        page!: number;
+        pageSize!: number;
+        totalPages!: number;
 
-export interface IPagedResultsDto_1OfOfAuthorDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results: AuthorDto[];
-    totalResults: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-}
-
-export class PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results!: CollectionDto[];
-    totalResults!: number;
-    page!: number;
-    pageSize!: number;
-    totalPages!: number;
-
-    constructor(data?: IPagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IPagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["results"])) {
-                this.results = [] as any;
-                for (let item of _data["results"])
-                    this.results!.push(CollectionDto.fromJS(item));
-            }
-            this.totalResults = _data["totalResults"];
-            this.page = _data["page"];
-            this.pageSize = _data["pageSize"];
-            this.totalPages = _data["totalPages"];
-        }
-    }
-
-    static fromJS(data: any): PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.results)) {
-            data["results"] = [];
-            for (let item of this.results)
-                data["results"].push(item.toJSON());
-        }
-        data["totalResults"] = this.totalResults;
-        data["page"] = this.page;
-        data["pageSize"] = this.pageSize;
-        data["totalPages"] = this.totalPages;
-        return data;
-    }
-}
-
-export interface IPagedResultsDto_1OfOfCollectionDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results: CollectionDto[];
-    totalResults: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-}
-
-export class PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results!: PieceOfEquipmentDto[];
-    totalResults!: number;
-    page!: number;
-    pageSize!: number;
-    totalPages!: number;
-
-    constructor(data?: IPagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["results"])) {
+                    this.results = [] as any;
+                    for (let item of _data["results"])
+                        this.results!.push(RecipeDto.fromJS(item));
+                }
+                this.totalResults = _data["totalResults"];
+                this.page = _data["page"];
+                this.pageSize = _data["pageSize"];
+                this.totalPages = _data["totalPages"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["results"])) {
-                this.results = [] as any;
-                for (let item of _data["results"])
-                    this.results!.push(PieceOfEquipmentDto.fromJS(item));
+        static fromJS(data: any): PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+            data = typeof data === 'object' ? data : {};
+            let result = new PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.results)) {
+                data["results"] = [];
+                for (let item of this.results)
+                    data["results"].push(item.toJSON());
             }
-            this.totalResults = _data["totalResults"];
-            this.page = _data["page"];
-            this.pageSize = _data["pageSize"];
-            this.totalPages = _data["totalPages"];
+            data["totalResults"] = this.totalResults;
+            data["page"] = this.page;
+            data["pageSize"] = this.pageSize;
+            data["totalPages"] = this.totalPages;
+            return data;
         }
     }
 
-    static fromJS(data: any): PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
-        result.init(data);
-        return result;
+    export interface IPagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results: RecipeDto[];
+        totalResults: number;
+        page: number;
+        pageSize: number;
+        totalPages: number;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.results)) {
-            data["results"] = [];
-            for (let item of this.results)
-                data["results"].push(item.toJSON());
-        }
-        data["totalResults"] = this.totalResults;
-        data["page"] = this.page;
-        data["pageSize"] = this.pageSize;
-        data["totalPages"] = this.totalPages;
-        return data;
-    }
-}
+    export class PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results!: TagDto[];
+        totalResults!: number;
+        page!: number;
+        pageSize!: number;
+        totalPages!: number;
 
-export interface IPagedResultsDto_1OfOfPieceOfEquipmentDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results: PieceOfEquipmentDto[];
-    totalResults: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-}
-
-export class PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results!: IngredientDto[];
-    totalResults!: number;
-    page!: number;
-    pageSize!: number;
-    totalPages!: number;
-
-    constructor(data?: IPagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IPagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["results"])) {
-                this.results = [] as any;
-                for (let item of _data["results"])
-                    this.results!.push(IngredientDto.fromJS(item));
-            }
-            this.totalResults = _data["totalResults"];
-            this.page = _data["page"];
-            this.pageSize = _data["pageSize"];
-            this.totalPages = _data["totalPages"];
-        }
-    }
-
-    static fromJS(data: any): PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.results)) {
-            data["results"] = [];
-            for (let item of this.results)
-                data["results"].push(item.toJSON());
-        }
-        data["totalResults"] = this.totalResults;
-        data["page"] = this.page;
-        data["pageSize"] = this.pageSize;
-        data["totalPages"] = this.totalPages;
-        return data;
-    }
-}
-
-export interface IPagedResultsDto_1OfOfIngredientDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results: IngredientDto[];
-    totalResults: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-}
-
-export class PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results!: RecipeDto[];
-    totalResults!: number;
-    page!: number;
-    pageSize!: number;
-    totalPages!: number;
-
-    constructor(data?: IPagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                if (Array.isArray(_data["results"])) {
+                    this.results = [] as any;
+                    for (let item of _data["results"])
+                        this.results!.push(TagDto.fromJS(item));
+                }
+                this.totalResults = _data["totalResults"];
+                this.page = _data["page"];
+                this.pageSize = _data["pageSize"];
+                this.totalPages = _data["totalPages"];
             }
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["results"])) {
-                this.results = [] as any;
-                for (let item of _data["results"])
-                    this.results!.push(RecipeDto.fromJS(item));
+        static fromJS(data: any): PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+            data = typeof data === 'object' ? data : {};
+            let result = new PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            if (Array.isArray(this.results)) {
+                data["results"] = [];
+                for (let item of this.results)
+                    data["results"].push(item.toJSON());
             }
-            this.totalResults = _data["totalResults"];
-            this.page = _data["page"];
-            this.pageSize = _data["pageSize"];
-            this.totalPages = _data["totalPages"];
+            data["totalResults"] = this.totalResults;
+            data["page"] = this.page;
+            data["pageSize"] = this.pageSize;
+            data["totalPages"] = this.totalPages;
+            return data;
         }
     }
 
-    static fromJS(data: any): PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
-        result.init(data);
-        return result;
+    export interface IPagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
+        results: TagDto[];
+        totalResults: number;
+        page: number;
+        pageSize: number;
+        totalPages: number;
     }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.results)) {
-            data["results"] = [];
-            for (let item of this.results)
-                data["results"].push(item.toJSON());
-        }
-        data["totalResults"] = this.totalResults;
-        data["page"] = this.page;
-        data["pageSize"] = this.pageSize;
-        data["totalPages"] = this.totalPages;
-        return data;
-    }
-}
+    export class ProblemDetails implements IProblemDetails {
+        type!: string | undefined;
+        title!: string | undefined;
+        status!: number | undefined;
+        detail!: string | undefined;
+        instance!: string | undefined;
 
-export interface IPagedResultsDto_1OfOfRecipeDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results: RecipeDto[];
-    totalResults: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-}
+        [key: string]: any;
 
-export class PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null implements IPagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results!: TagDto[];
-    totalResults!: number;
-    page!: number;
-    pageSize!: number;
-    totalPages!: number;
+        protected _discriminator: string;
 
-    constructor(data?: IPagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        constructor(data?: IProblemDetails) {
+            if (data) {
+                for (var property in data) {
+                    if (data.hasOwnProperty(property))
+                        (<any>this)[property] = (<any>data)[property];
+                }
             }
+            this._discriminator = "ProblemDetails";
         }
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["results"])) {
-                this.results = [] as any;
-                for (let item of _data["results"])
-                    this.results!.push(TagDto.fromJS(item));
-            }
-            this.totalResults = _data["totalResults"];
-            this.page = _data["page"];
-            this.pageSize = _data["pageSize"];
-            this.totalPages = _data["totalPages"];
-        }
-    }
-
-    static fromJS(data: any): PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-        data = typeof data === 'object' ? data : {};
-        let result = new PagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.results)) {
-            data["results"] = [];
-            for (let item of this.results)
-                data["results"].push(item.toJSON());
-        }
-        data["totalResults"] = this.totalResults;
-        data["page"] = this.page;
-        data["pageSize"] = this.pageSize;
-        data["totalPages"] = this.totalPages;
-        return data;
-    }
-}
-
-export interface IPagedResultsDto_1OfOfTagDtoAndAPIAnd_0AndCulture_neutralAndPublicKeyToken_null {
-    results: TagDto[];
-    totalResults: number;
-    page: number;
-    pageSize: number;
-    totalPages: number;
-}
-
-export class ProblemDetails implements IProblemDetails {
-    type!: string | undefined;
-    title!: string | undefined;
-    status!: number | undefined;
-    detail!: string | undefined;
-    instance!: string | undefined;
-
-    [key: string]: any;
-
-    protected _discriminator: string;
-
-    constructor(data?: IProblemDetails) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
+        init(_data?: any) {
+            if (_data) {
+                for (var property in _data) {
+                    if (_data.hasOwnProperty(property))
+                        this[property] = _data[property];
+                }
+                this.type = _data["type"];
+                this.title = _data["title"];
+                this.status = _data["status"];
+                this.detail = _data["detail"];
+                this.instance = _data["instance"];
             }
         }
-        this._discriminator = "ProblemDetails";
-    }
 
-    init(_data?: any) {
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
+        static fromJS(data: any): ProblemDetails {
+            data = typeof data === 'object' ? data : {};
+            if (data["$type"] === "HttpValidationProblemDetails") {
+                let result = new HttpValidationProblemDetails();
+                result.init(data);
+                return result;
             }
-            this.type = _data["type"];
-            this.title = _data["title"];
-            this.status = _data["status"];
-            this.detail = _data["detail"];
-            this.instance = _data["instance"];
+            let result = new ProblemDetails();
+            result.init(data);
+            return result;
+        }
+
+        toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            for (var property in this) {
+                if (this.hasOwnProperty(property))
+                    data[property] = this[property];
+            }
+            data["$type"] = this._discriminator;
+            data["type"] = this.type;
+            data["title"] = this.title;
+            data["status"] = this.status;
+            data["detail"] = this.detail;
+            data["instance"] = this.instance;
+            return data;
         }
     }
 
-    static fromJS(data: any): ProblemDetails {
-        data = typeof data === 'object' ? data : {};
-        if (data["$type"] === "HttpValidationProblemDetails") {
+    export interface IProblemDetails {
+        type: string | undefined;
+        title: string | undefined;
+        status: number | undefined;
+        detail: string | undefined;
+        instance: string | undefined;
+
+        [key: string]: any;
+    }
+
+    export class HttpValidationProblemDetails extends ProblemDetails implements IHttpValidationProblemDetails {
+        errors!: { [key: string]: string[]; };
+
+        [key: string]: any;
+
+        constructor(data?: IHttpValidationProblemDetails) {
+            super(data);
+            this._discriminator = "HttpValidationProblemDetails";
+        }
+
+        override init(_data?: any) {
+            super.init(_data);
+            if (_data) {
+                for (var property in _data) {
+                    if (_data.hasOwnProperty(property))
+                        this[property] = _data[property];
+                }
+                if (_data["errors"]) {
+                    this.errors = {} as any;
+                    for (let key in _data["errors"]) {
+                        if (_data["errors"].hasOwnProperty(key))
+                            (<any>this.errors)![key] = _data["errors"][key] !== undefined ? _data["errors"][key] : [];
+                    }
+                }
+            }
+        }
+
+        static override fromJS(data: any): HttpValidationProblemDetails {
+            data = typeof data === 'object' ? data : {};
             let result = new HttpValidationProblemDetails();
             result.init(data);
             return result;
         }
-        let result = new ProblemDetails();
-        result.init(data);
-        return result;
-    }
 
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
-        }
-        data["$type"] = this._discriminator;
-        data["type"] = this.type;
-        data["title"] = this.title;
-        data["status"] = this.status;
-        data["detail"] = this.detail;
-        data["instance"] = this.instance;
-        return data;
-    }
-}
-
-export interface IProblemDetails {
-    type: string | undefined;
-    title: string | undefined;
-    status: number | undefined;
-    detail: string | undefined;
-    instance: string | undefined;
-
-    [key: string]: any;
-}
-
-export class HttpValidationProblemDetails extends ProblemDetails implements IHttpValidationProblemDetails {
-    errors!: { [key: string]: string[]; };
-
-    [key: string]: any;
-
-    constructor(data?: IHttpValidationProblemDetails) {
-        super(data);
-        this._discriminator = "HttpValidationProblemDetails";
-    }
-
-    override init(_data?: any) {
-        super.init(_data);
-        if (_data) {
-            for (var property in _data) {
-                if (_data.hasOwnProperty(property))
-                    this[property] = _data[property];
+        override toJSON(data?: any) {
+            data = typeof data === 'object' ? data : {};
+            for (var property in this) {
+                if (this.hasOwnProperty(property))
+                    data[property] = this[property];
             }
-            if (_data["errors"]) {
-                this.errors = {} as any;
-                for (let key in _data["errors"]) {
-                    if (_data["errors"].hasOwnProperty(key))
-                        (<any>this.errors)![key] = _data["errors"][key] !== undefined ? _data["errors"][key] : [];
+            if (this.errors) {
+                data["errors"] = {};
+                for (let key in this.errors) {
+                    if (this.errors.hasOwnProperty(key))
+                        (<any>data["errors"])[key] = (<any>this.errors)[key];
                 }
             }
+            super.toJSON(data);
+            return data;
         }
     }
 
-    static override fromJS(data: any): HttpValidationProblemDetails {
-        data = typeof data === 'object' ? data : {};
-        let result = new HttpValidationProblemDetails();
-        result.init(data);
-        return result;
+    export interface IHttpValidationProblemDetails extends IProblemDetails {
+        errors: { [key: string]: string[]; };
+
+        [key: string]: any;
     }
 
-    override toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        for (var property in this) {
-            if (this.hasOwnProperty(property))
-                data[property] = this[property];
+    export enum LogLevel {
+        Trace = "Trace",
+        Debug = "Debug",
+        Information = "Information",
+        Warning = "Warning",
+        Error = "Error",
+        Critical = "Critical",
+        None = "None",
+    }
+
+    export interface FileParameter {
+        data: any;
+        fileName: string;
+    }
+
+    export class ApiException extends Error {
+        override message: string;
+        status: number;
+        response: string;
+        headers: { [key: string]: any; };
+        result: any;
+
+        constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
+            super();
+
+            this.message = message;
+            this.status = status;
+            this.response = response;
+            this.headers = headers;
+            this.result = result;
         }
-        if (this.errors) {
-            data["errors"] = {};
-            for (let key in this.errors) {
-                if (this.errors.hasOwnProperty(key))
-                    (<any>data["errors"])[key] = (<any>this.errors)[key];
-            }
+
+        protected isApiException = true;
+
+        static isApiException(obj: any): obj is ApiException {
+            return obj.isApiException === true;
         }
-        super.toJSON(data);
-        return data;
-    }
-}
-
-export interface IHttpValidationProblemDetails extends IProblemDetails {
-    errors: { [key: string]: string[]; };
-
-    [key: string]: any;
-}
-
-export enum LogLevel {
-    Trace = "Trace",
-    Debug = "Debug",
-    Information = "Information",
-    Warning = "Warning",
-    Error = "Error",
-    Critical = "Critical",
-    None = "None",
-}
-
-export interface FileParameter {
-    data: any;
-    fileName: string;
-}
-
-export class ApiException extends Error {
-    override message: string;
-    status: number;
-    response: string;
-    headers: { [key: string]: any; };
-    result: any;
-
-    constructor(message: string, status: number, response: string, headers: { [key: string]: any; }, result: any) {
-        super();
-
-        this.message = message;
-        this.status = status;
-        this.response = response;
-        this.headers = headers;
-        this.result = result;
     }
 
-    protected isApiException = true;
-
-    static isApiException(obj: any): obj is ApiException {
-        return obj.isApiException === true;
+    function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
+        if (result !== null && result !== undefined)
+            throw result;
+        else
+            throw new ApiException(message, status, response, headers, null);
     }
-}
 
-function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): any {
-    if (result !== null && result !== undefined)
-        throw result;
-    else
-        throw new ApiException(message, status, response, headers, null);
-}
+    function isAxiosError(obj: any): obj is AxiosError {
+        return obj && obj.isAxiosError === true;
+    }
 
-function isAxiosError(obj: any): obj is AxiosError {
-    return obj && obj.isAxiosError === true;
 }

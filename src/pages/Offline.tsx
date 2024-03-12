@@ -1,13 +1,14 @@
 import {
-    Box,
-    Container,
-    Stack,
-    Typography
+  Box,
+  Button,
+  Container,
+  Stack,
+  Typography
 } from '@mui/material';
 import { useTranslation } from "react-i18next";
-import MaintenanceLogo from 'src/assets/icons/maintenance.svg?react';
+import sleepLogo from 'src/assets/logo-sleep.svg';
 
-export default () => {
+const Offline = () => {
   const { t } = useTranslation();
 
   return (
@@ -32,15 +33,20 @@ export default () => {
             alignItems: 'center',
           }}
         >
-          <MaintenanceLogo style={{ maxWidth: 100, fill: '#dcdcdc' }} alt="foodbook" />
+          <img style={{ maxWidth: 100, }} src={sleepLogo} alt="foodbook" />
         </Box>
         <Typography variant="h3" style={{ color: 'var(--primary-colour)' }}>
-          {t('pages.maintenance.title')}
+          {t('pages.offline.title')}
         </Typography>
         <Typography textAlign="center">
-          {t('pages.maintenance.message')}
+          {t('pages.offline.message')}
         </Typography>
+        <Button sx={{ mt: 2 }} variant='contained'>
+          {t('pages.offline.components.buttons.refresh.label')}
+        </Button>
       </Stack>
     </Container>
   );
 };
+
+export default Offline;

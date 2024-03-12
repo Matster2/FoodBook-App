@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useParams } from 'react-router-dom';
 import PageLayout from 'src/layouts/PageLayout';
-import RecipesTab from 'src/tabs/Collection/Recipes';
-import DetailsTab from 'src/tabs/Collection/Details';
+import RecipesTab from 'src/tabs/collections/Recipes';
+import DetailsTab from 'src/tabs/collections/Details';
 
 const tabs = {
   info: "details",

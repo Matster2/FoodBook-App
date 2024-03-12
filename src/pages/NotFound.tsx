@@ -7,11 +7,16 @@ import {
 import { useTranslation } from "react-i18next";
 import { useNavigate } from 'react-router-dom';
 
-export default () => {
+const NotFound = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  /* Handlers */
+  const handleReturnToHomeClick = () => {
+    navigate('/');
+  }
 
+  /* Rendering */
   return (
     <Container>
       <Stack
@@ -30,10 +35,12 @@ export default () => {
         <Typography variant="h1" style={{ color: 'var(--primary-colour)' }}>
           {t('pages.notFound.404')}
         </Typography>
-        <Button sx={{ mt: 2 }} variant='contained' onClick={() => navigate('/')}>
+        <Button sx={{ mt: 2 }} variant='contained' onClick={handleReturnToHomeClick}>
           {t('pages.notFound.links.home')}
         </Button>
       </Stack>
     </Container>
   );
 };
+
+export default NotFound;
