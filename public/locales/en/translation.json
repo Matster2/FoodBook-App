@@ -976,9 +976,14 @@
     "words": {
       "actions": {
         "add": "Add",
+        "edit": "Edit",
+        "apply": "Apply",
+        "view": "View",
         "create": "Create",
         "update": "Update",
-        "delete": "Delete"
+        "delete": "Delete",
+        "search": "Search",
+        "reset": "Reset"
       },
       "no": "No",
       "yes": "Yes",

@@ -10,7 +10,6 @@ import dayjs, { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
-import useAPI from 'src/hooks/useAPI';
 import useAuth from 'src/hooks/useAuth';
 import { getDaysTranslation } from 'src/utils/translations';
 

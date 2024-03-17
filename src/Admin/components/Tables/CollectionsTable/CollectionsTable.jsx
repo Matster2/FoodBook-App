@@ -14,7 +14,7 @@ const CollectionsTable = ({
 
   const columns = [
     {
-      heading: t('types.collection.fields.name.name'),
+      heading: t('types.collection.fields.title.name'),
       identifier: 'name',
       sortable: true,
     },
@@ -26,7 +26,7 @@ const CollectionsTable = ({
       rows={collections.map((collection) => ({
         identifier: collection.id,
         data: [
-          collection.name
+          collection.title
         ],
       }))}
       loading={loading}

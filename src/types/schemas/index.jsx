@@ -48,25 +48,18 @@ export const getEquipmentScheme = () => {
   });
 }
 
-export const getTagScheme = () => {
-  return yup.object({
-    name: yup.string().required(),
-    icon: yup.string()
-  });
-}
-
 export const getAuthorScheme = () => {
   return yup.object({
     name: yup.string().required(),
     biography: yup.string(),
     links: yup.array(yup.object({
       url: yup
-      .string()
-      .matches(
-        /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-        'Enter correct url!'
-      )
-      .required(),
+        .string()
+        .matches(
+          /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+          'Enter correct url!'
+        )
+        .required(),
       name: yup.string(),
     })),
   });

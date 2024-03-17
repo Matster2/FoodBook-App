@@ -1,6 +1,9 @@
-import { API } from 'src/apiClient';
-import apiAxiosInstance from 'src/config/axios';
+import { Api } from 'src/generatedAPI';
 
-const api = new API.Client(import.meta.env.VITE_APP_API_URL, apiAxiosInstance);
+// const api = new API.Client(import.meta.env.VITE_APP_API_URL, apiAxiosInstance);
+
+const api = new Api({
+    baseURL: import.meta.env.VITE_APP_API_URL,
+});
 
 export default api;

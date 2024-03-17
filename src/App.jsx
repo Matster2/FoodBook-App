@@ -1,30 +1,29 @@
 import NiceModal from '@ebay/nice-modal-react';
+import '@fancyapps/ui/dist/fancybox/fancybox.css';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { LanguageContext } from 'src/contexts/LanguageContext';
 import { useContext, useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { RouterProvider } from 'react-router-dom';
-import apiAxiosInstance from 'src/config/axios';
+import api from 'src/api';
 import { AppContext } from 'src/contexts/AppContext';
-import useAPI from 'src/hooks/useAPI';
+import { LanguageContext } from 'src/contexts/LanguageContext';
 import useAuth from 'src/hooks/useAuth';
 import router from 'src/router';
-
-import '@fancyapps/ui/dist/fancybox/fancybox.css';
-import { useQuery } from '@tanstack/react-query';
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
 
 const App = () => {
   const { authenticated, tokens, refreshTokens, logout } = useAuth();
   const { currentLanguage } = useContext(LanguageContext);
-  const api = useAPI();
 
   const { initialized, setInitialized, maintenance, setMaintenance } = useContext(AppContext);
 
   useEffect(() => {
-    apiAxiosInstance.defaults.headers.common.Authorization = `Bearer ${tokens?.accessToken}`;
-    apiAxiosInstance.defaults.headers.common.Language = currentLanguage;
+    api.instance.defaults.headers.common.Authorization = `Bearer ${tokens?.accessToken}`;
+    api.instance.defaults.headers.common.Language = currentLanguage;
   }, [tokens]);
 
   let isRefreshing = false;
@@ -42,7 +41,7 @@ const App = () => {
     failedQueue = [];
   };
 
-  axios.interceptors.response.use(
+  api.instance.interceptors.response.use(
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
@@ -84,14 +83,13 @@ const App = () => {
 
   useQuery({
     queryKey: ["system"],
-    queryFn: () => api.getSystem()
-      .then(({ data }) => data),
+    queryFn: () => api.getSystem(),
     onSuccess: () => setMaintenance(false)
   });
 
   useQuery({
     queryKey: ["languages"],
-    queryFn: () => api.getSupportedLanguages()
+    queryFn: () => api.getLanguages()
       .then(({ data }) => data.results),
   });
 
@@ -103,8 +101,7 @@ const App = () => {
 
   useQuery({
     queryKey: ["profile"],
-    queryFn: () => api.getMe()
-      .then(({ data }) => data),
+    queryFn: () => api.getMe(),
     enabled: authenticated,
   });
 
@@ -152,6 +149,10 @@ const App = () => {
       primary: {
         main: '#fb6b1c',
         contrastText: '#fff',
+      },
+      secondary: {
+        main: '#ffffff',
+        contrastText: '#141414',
       },
     },
     components: {

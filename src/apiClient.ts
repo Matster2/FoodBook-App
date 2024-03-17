@@ -11,7 +11,7 @@
 import axios, { AxiosError } from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
 
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 export module API {
 
@@ -11599,7 +11599,6 @@ export module API {
     }
 
     export class UpdateTagCommand implements IUpdateTagCommand {
-        id!: string;
         name!: string | undefined;
         icon!: string | undefined;
         hidden!: boolean;
@@ -11616,7 +11615,6 @@ export module API {
 
         init(_data?: any) {
             if (_data) {
-                this.id = _data["id"];
                 this.name = _data["name"];
                 this.icon = _data["icon"];
                 this.hidden = _data["hidden"];
@@ -11633,7 +11631,6 @@ export module API {
 
         toJSON(data?: any) {
             data = typeof data === 'object' ? data : {};
-            data["id"] = this.id;
             data["name"] = this.name;
             data["icon"] = this.icon;
             data["hidden"] = this.hidden;
@@ -11643,7 +11640,6 @@ export module API {
     }
 
     export interface IUpdateTagCommand {
-        id: string;
         name: string | undefined;
         icon: string | undefined;
         hidden: boolean;

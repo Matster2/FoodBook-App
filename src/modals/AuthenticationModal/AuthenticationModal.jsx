@@ -3,9 +3,9 @@ import { Close as CloseIcon } from '@mui/icons-material';
 import { Dialog, DialogTitle, IconButton } from '@mui/material';
 import { useState } from 'react';
 
-import ForgottenPassword from 'src/pages/ForgottenPassword';
-import Register from 'src/pages/Register';
-import SignIn from 'src/pages/SignIn';
+import ForgottenPassword from 'src/pages/authentication/ForgottenPassword';
+import Register from 'src/pages/authentication/Register';
+import SignIn from 'src/pages/authentication/SignIn';
 
 import styles from './AuthenticationModal.module.css';
 
@@ -46,7 +46,7 @@ export default NiceModal.create(() => {
     <Dialog
       fullScreen
       open={modal.visible}
-      onClose={() => {}}
+      onClose={() => { }}
       // TransitionComponent={Transition}
       PaperProps={{
         style: {

@@ -12,8 +12,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import uuid from 'react-uuid';
-import AuthorLink from "src/Admin/components/AuthorLink";
-import useAPI from 'src/hooks/useAPI';
+import AuthorLink from "src/admin/components/AuthorLink";
 import { getAuthorScheme } from "src/types/schemas";
 import FormModes from 'src/utils/formModes';
 import { isUndefined } from "src/utils/utils";
@@ -35,13 +34,13 @@ export default ({ author: initialValues, onSubmit, admin }) => {
   const [updating, setUpdating] = useState(false);
 
   const mode = !initialValues?.id ? FormModes.Create : FormModes.Update;
-  
+
   const [originalAuthor] = useState({
     ...getDefaultAuthor(),
     ...initialValues,
     languageCode: i18n.resolvedLanguage
   });
-  
+
 
   const formik = useFormik({
     initialValues: {
@@ -59,7 +58,7 @@ export default ({ author: initialValues, onSubmit, admin }) => {
   });
 
   const { handleSubmit, values: author, setValues: setAuthor, handleChange, errors, touched, resetForm } = formik;
-  
+
   const handleCreateAuthor = async (newAuthor) => {
     setUpdating(true);
 
@@ -88,7 +87,7 @@ export default ({ author: initialValues, onSubmit, admin }) => {
 
     setUpdating(false);
   }
-  
+
   const handleUpdateAuthor = async (newAuthor) => {
     setUpdating(true);
 
@@ -100,7 +99,7 @@ export default ({ author: initialValues, onSubmit, admin }) => {
       if (!isUndefined(profilePictureFile)) {
         await api.uploadAuthorProfilePicture(newAuthor.id, profilePictureFile);
       }
-      
+
       toast.success(t("requests.authors.update.success"));
       onSubmit({
         ...newAuthor,
@@ -147,7 +146,7 @@ export default ({ author: initialValues, onSubmit, admin }) => {
     }));
     setProfilePictureFile(file);
   };
-  
+
   const handleAddLink = () => {
     const authorLink = {
       id: uuid(),
@@ -166,8 +165,8 @@ export default ({ author: initialValues, onSubmit, admin }) => {
   };
 
   /* Rendering */
-  return (    
-    <form onSubmit={handleSubmit}> 
+  return (
+    <form onSubmit={handleSubmit}>
       <Stack sx={{ mb: 2 }} direction="column" display="flex" alignItems="center" justifyContent="center">
         <Avatar sx={{ mb: 2, height: 80, width: 80 }} src={author.profilePictureUrl} />
         <input type="file" onChange={handleUploadProfilePicture} />
@@ -221,7 +220,7 @@ export default ({ author: initialValues, onSubmit, admin }) => {
           </Button>
         </Box>
       </Box>
-      
+
       <Box
         sx={{
           marginBottom: 4,

@@ -8,7 +8,6 @@ import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 import dayjs, { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
 import { useTranslation } from "react-i18next";
-import useAPI from 'src/hooks/useAPI';
 import { toISOLocal } from 'src/utils/utils';
 
 import styles from './IngredientListDateDialog.module.css';

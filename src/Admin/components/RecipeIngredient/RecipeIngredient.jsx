@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
-import useUnitOfMeasurementsQuery from "src/hooks/Queries/useUnitOfMeasurementsQuery";
+import useUnitOfMeasurementsQuery from "src/hooks/queries/useUnitOfMeasurementsQuery";
 
 const RecipeIngredient = ({ recipeIngredient, onChange, onDelete, optionalDisabled }) => {
   const { t } = useTranslation();

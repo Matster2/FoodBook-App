@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableRow, TableSortLabel } from
 export default ({
   columns = [],
   rows = [],
-  onRowClick = () => {},
+  onRowClick = () => { },
   loading = false,
   sortBy = '',
   sortDescending = false,
@@ -15,9 +15,9 @@ export default ({
         {columns.map((column) => (
           <TableCell>
             <TableSortLabel
-              // active={orderBy === headCell.id}
-              // direction={orderBy === headCell.id ? order : 'asc'}
-              // onClick={createSortHandler(headCell.id)}
+            // active={orderBy === headCell.id}
+            // direction={orderBy === headCell.id ? order : 'asc'}
+            // onClick={createSortHandler(headCell.id)}
             >
               {column.heading}
             </TableSortLabel>
@@ -26,12 +26,15 @@ export default ({
       </TableRow>
     </TableHead>
     <TableBody>
-      {rows.map((row) => (          
+      {rows.map((row) => (
         <TableRow
           selected={selectedIds.includes(row.identifier)}
           hover
           key={row.identifier}
-          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+          sx={{
+            cursor: "pointer",
+            '&:last-child td, &:last-child th': { border: 0 }
+          }}
           onClick={() => onRowClick(row.identifier)}
         >
           {row.data.map((field, index) => (

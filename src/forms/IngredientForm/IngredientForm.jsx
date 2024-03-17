@@ -11,13 +11,12 @@ import { Field, Form, Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
-import useAPI from 'src/hooks/useAPI';
+import useUnitOfMeasurementsQuery from "src/hooks/queries/useUnitOfMeasurementsQuery";
 import usePrevious from 'src/hooks/usePrevious';
 import { getIngredientScheme } from 'src/types/schemas';
 import FormModes from 'src/utils/formModes';
 import { capitaliseEachWord } from "src/utils/stringUtils";
 import { isUndefined } from 'src/utils/utils';
-import useUnitOfMeasurementsQuery from "src/hooks/Queries/useUnitOfMeasurementsQuery";
 
 const initialIngredientValue = {
   name: '',

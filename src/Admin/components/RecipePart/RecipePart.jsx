@@ -1,23 +1,22 @@
 import { useModal } from '@ebay/nice-modal-react';
 import {
-    Clear as ClearIcon,
-    DragIndicator as DragIcon
+  Clear as ClearIcon,
+  DragIndicator as DragIcon
 } from '@mui/icons-material';
 import {
-    Autocomplete,
-    Box,
-    IconButton,
-    Stack,
-    TextField,
-    Typography
+  Autocomplete,
+  Box,
+  IconButton,
+  Stack,
+  TextField,
+  Typography
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { forwardRef, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import uuid from 'react-uuid';
-import RecipeIngredient from 'src/Admin/components/RecipeIngredient';
+import RecipeIngredient from 'src/admin/components/RecipeIngredient';
 import NewPersonalIngredientDialog from 'src/dialogs/NewPersonalIngredientDialog';
-import useAPI from 'src/hooks/useAPI';
 import useSearch from 'src/hooks/useSearch';
 import { isNullOrEmpty, isUndefined } from 'src/utils/utils';
 import styles from './RecipePart.module.css';
@@ -25,18 +24,18 @@ import styles from './RecipePart.module.css';
 const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps, ...props }, ref) => {
   const { t } = useTranslation();
   const api = useAPI();
-  
+
   const newPersonalIngredientDialog = useModal(NewPersonalIngredientDialog);
-  
+
   const [showAddIngredientButton, setShowAddIngredientButton] = useState(false);
-  
+
   const [ingredientSearch, setIngredientSearch, ingredientSearchResults, searchingIngredients] = useSearch(async () => {
     const { data: { results, totalResults } } = await api.getIngredients({ search: ingredientSearch, pageSize: 50, sortBy: 'name' });
-    
+
     if (!isNullOrEmpty(ingredientSearch) && (totalResults === 0 || !results.some(x => x.name.toLowerCase() === ingredientSearch.toLowerCase() || x.pluralName.toLowerCase() === ingredientSearch.toLowerCase()))) {
       setShowAddIngredientButton(true);
     }
-    
+
     return results;
   }, { delay: 1000 })
 
@@ -46,7 +45,7 @@ const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps
       [e.target.name]: e.target.value,
     });
   };
-  
+
   const handleAddIngredient = (ingredient) => {
     var existingIngredient = recipePart.ingredients.find(x => x.ingredient.id === ingredient.id)
 
@@ -54,7 +53,7 @@ const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps
       id: uuid(),
       ingredient: ingredient,
       amount: undefined,
-      optional: existingIngredient ? !existingIngredient.optional: false,
+      optional: existingIngredient ? !existingIngredient.optional : false,
       unitOfMeasurement: {
         id: ingredient.defaultUnitOfMeasurement.id,
       },
@@ -68,9 +67,9 @@ const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps
       ingredients: newRecipeIngredients,
     });
   };
-  
+
   const handleRecipeIngredientChange = (newRecipeIngredient) => {
-    const newRecipeIngredients = [ ...recipePart.ingredients];
+    const newRecipeIngredients = [...recipePart.ingredients];
 
     const index = newRecipeIngredients.findIndex((x) => x.id === newRecipeIngredient.id && x.optional === newRecipeIngredient.optional);
 
@@ -94,18 +93,18 @@ const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps
   };
 
   const handleAddingNewIngredient = (name) => {
-    newPersonalIngredientDialog.show({ 
-        open: true,
-        ingredient: {
-          name,
-          pluralName: name
-        },
-        onClose: () => newPersonalIngredientDialog.remove(),
-        onComplete: (newIngredient) => {
-          newPersonalIngredientDialog.remove();
-          handleAddIngredient(newIngredient);
-        }
-      });
+    newPersonalIngredientDialog.show({
+      open: true,
+      ingredient: {
+        name,
+        pluralName: name
+      },
+      onClose: () => newPersonalIngredientDialog.remove(),
+      onComplete: (newIngredient) => {
+        newPersonalIngredientDialog.remove();
+        handleAddIngredient(newIngredient);
+      }
+    });
   }
 
   return (
@@ -121,7 +120,7 @@ const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps
           <DragIcon className={styles.dragIcon} />
         </Box>
 
-        <Stack direction="row" gap={10} display="flex" justifyContent="space-between" alignItems="center">        
+        <Stack direction="row" gap={10} display="flex" justifyContent="space-between" alignItems="center">
           <TextField
             fullWidth
             required
@@ -131,12 +130,12 @@ const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps
             value={recipePart.name}
             onChange={handleChange}
           />
-          
+
           <IconButton onClick={() => onDelete(recipePart)}>
             <ClearIcon />
           </IconButton>
         </Stack>
-      </Stack>     
+      </Stack>
 
       <Box sx={{ mt: 1 }}>
         <Box>
@@ -160,7 +159,7 @@ const RecipePart = forwardRef(({ recipePart, onChange, onDelete, dragHandleProps
               const newOptions = options
                 .filter(
                   (ingredient) =>
-                  recipePart.ingredients.filter(
+                    recipePart.ingredients.filter(
                       (recipeIngredient) => recipeIngredient.id === ingredient.id
                     ).length < 2
                 )

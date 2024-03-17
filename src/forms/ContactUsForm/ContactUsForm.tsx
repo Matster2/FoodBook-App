@@ -1,45 +1,27 @@
-import { Button } from '@mui/material';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { LoadingButton } from "@mui/lab";
 import { useMutation } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import api from 'src/api';
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { API } from 'src/apiClient';
 import FormTextField from 'src/components/form-components/FormTextField';
+import * as yup from "yup";
 
 interface FormValues {
-    email: string
-    message: string
+    email: string;
+    message: string;
 }
 
 interface ContactUsFormProps {
-    onSuccess: () => void
+    onSuccess: () => void;
 }
 
 const ContactUsForm = ({
     onSuccess = () => { }
 }: ContactUsFormProps) => {
     const { t } = useTranslation();
-
-    const {
-        mutate: contactUs
-    } = useMutation({
-        mutationFn: (data: {
-            body: API.ContactUsDto
-        }) => {
-            return api.contactUs(data.body)
-        },
-        onSuccess: () => {
-            toast.success(t('requests.support.contactUs.success'));
-            onSuccess();
-            reset();
-        },
-        onError: () => {
-            toast.error(t('requests.support.contactUs.error'));
-        }
-    })
 
     const schema = yup.object().shape({
         email: yup.string()
@@ -56,9 +38,27 @@ const ContactUsForm = ({
         },
         resolver: yupResolver(schema),
     });
-    const { handleSubmit, reset } = methods;
+    const { handleSubmit, formState: { isDirty, isValid }, reset } = methods;
 
-    const onSubmitHandler: SubmitHandler<FormValues> = (data: any) => {
+    const {
+        mutate: contactUs,
+    } = useMutation({
+        mutationFn: (data: {
+            body: API.ContactUsDto
+        }) => {
+            return api.contactUs.contactUs(data.body)
+        },
+        onSuccess: () => {
+            toast.success(t('requests.support.contactUs.success'));
+            onSuccess();
+            reset();
+        },
+        onError: () => {
+            toast.error(t('requests.support.contactUs.error'));
+        }
+    })
+
+    const onSubmitHandler: SubmitHandler<FormValues> = (data: FormValues) => {
         contactUs({
             body: new API.ContactUsDto({
                 email: data.email,
@@ -72,18 +72,13 @@ const ContactUsForm = ({
             <form onSubmit={handleSubmit(onSubmitHandler)}>
                 <FormTextField
                     required
-                    id="email"
                     name="email"
-                    margin='normal'
                     fullWidth
                     label={t('forms.contactUs.inputs.email.label')}
                 />
-
                 <FormTextField
                     required
-                    id="message"
                     name="message"
-                    margin='normal'
                     fullWidth
                     label={t('forms.contactUs.inputs.message.label')}
                     multiline
@@ -91,14 +86,15 @@ const ContactUsForm = ({
                     maxRows={5}
                 />
 
-                <Button
+                <LoadingButton
                     sx={{ mt: 2 }}
                     type="submit"
                     fullWidth
                     variant="contained"
+                    disabled={!isDirty || !isValid}
                 >
                     {t('forms.contactUs.buttons.submit.label')}
-                </Button>
+                </LoadingButton>
             </form>
         </FormProvider>
     )

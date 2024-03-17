@@ -7,7 +7,6 @@ import { Field, Form, Formik } from 'formik';
 import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
-import useAPI from 'src/hooks/useAPI';
 import usePrevious from 'src/hooks/usePrevious';
 import { getEquipmentScheme } from 'src/types/schemas';
 import FormModes from 'src/utils/formModes';
@@ -28,7 +27,7 @@ export default ({ pieceOfEquipment: initialValues, onSubmit, admin }) => {
   const [updating, setUpdating] = useState(false);
 
   const mode = !initialValues?.id ? FormModes.Create : FormModes.Update;
-  
+
   const originalPieceOfEquipment = {
     ...initialPieceOfEquipmentValue,
     ...initialValues,
@@ -66,7 +65,7 @@ export default ({ pieceOfEquipment: initialValues, onSubmit, admin }) => {
 
     setUpdating(false);
   }
-  
+
   const handleUpdatePieceOfEquipment = async (newPieceOfEquipment) => {
     setUpdating(true);
 
@@ -86,7 +85,7 @@ export default ({ pieceOfEquipment: initialValues, onSubmit, admin }) => {
 
     setUpdating(false);
   }
-  
+
   /* Rendering */
   return (
     <Formik

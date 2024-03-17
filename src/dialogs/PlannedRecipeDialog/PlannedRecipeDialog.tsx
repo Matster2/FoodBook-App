@@ -16,7 +16,6 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from "react-i18next";
 import RecipeImage from 'src/components/RecipeImage';
-import useAPI from 'src/hooks/useAPI';
 import { getDayName, getMonthName } from 'src/utils/translations';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';

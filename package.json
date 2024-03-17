@@ -6,7 +6,8 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "generate-api": "node ./scripts/generate-api.js"
   },
   "dependencies": {
     "@ebay/nice-modal-react": "^1.2.9",
@@ -50,6 +51,7 @@
     "react-uuid": "^2.0.0",
     "sort-by": "^1.2.0",
     "styled-components": "^5.3.8",
+    "swagger-typescript-api": "^13.0.3",
     "swiper": "^9.1.1",
     "vite": "^5.0.12",
     "vite-plugin-svgr": "^4.2.0",
@@ -74,6 +76,7 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "html-webpack-plugin": "^5.5.3",
     "i18next-scanner": "^4.2.0",
+    "openapi-typescript": "^6.7.5",
     "typescript": "^5.2.2",
     "vite": "^5.0.11",
     "vite-plugin-html": "^3.2.2",
