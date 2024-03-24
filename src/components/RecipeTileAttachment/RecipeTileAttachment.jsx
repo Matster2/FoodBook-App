@@ -1,5 +1,5 @@
 import {
-    Box
+  Box
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -13,7 +13,7 @@ const RecipeTileAttachment = ({ type, ...props }) => {
     { type: "favourite", icon: <HeartIcon />, backgroundColor: '#F46273' },
     { type: "personal", icon: <PersonalIcon />, backgroundColor: '#259fd5' }
   ];
-  
+
   const [variant] = useState(() => {
     var x = variants.find(x => x.type === type);
 
@@ -28,10 +28,10 @@ const RecipeTileAttachment = ({ type, ...props }) => {
     <Box
       display="flex"
       justifyContent="center"
-      alignItems="center"      
+      alignItems="center"
       {...props}
       className={styles.box}
-      sx={{ 
+      sx={{
         background: `${variant.backgroundColor}`,
         stroke: `${variant.backgroundColor}`
       }}
@@ -49,7 +49,7 @@ RecipeTileAttachment.defaultProps = {
   width: 30,
   disabled: false,
   favourited: false,
-  onClick: () => {},
+  onClick: () => { },
 };
 
 export default RecipeTileAttachment;

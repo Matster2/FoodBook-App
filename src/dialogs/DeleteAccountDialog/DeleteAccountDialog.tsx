@@ -18,7 +18,7 @@ const DeleteAccountDialog = ({
     const { t } = useTranslation();
 
     const {
-        isFetching: isDeletingAccount,
+        isPending: isDeletingAccount,
         mutate: deleteAccount
     } = useMutation({
         mutationFn: () => api.me.deleteAccount(),

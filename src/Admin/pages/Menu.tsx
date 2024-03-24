@@ -1,13 +1,15 @@
-import { Container, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import Header from 'src/components/Header';
+import { List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import { Link } from 'react-router-dom';
+import PageLayout from 'src/layouts/PageLayout';
 
-export default () => {
-  const navigate = useNavigate();
-
+const Menu = () => {
   return (
-    <Container>
-      <Header title="Admin" onBackClick={() => navigate(-1)} />
+    <PageLayout
+      breadcrumbs={[
+        <Link to="/admin">Admin</Link>,
+      ]}
+      title="Admin"
+    >
 
       <List>
         <ListItem disablePadding>
@@ -53,6 +55,8 @@ export default () => {
           </ListItemButton>
         </ListItem>
       </List>
-    </Container>
+    </PageLayout>
   );
 };
+
+export default Menu;

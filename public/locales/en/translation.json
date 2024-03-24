@@ -461,180 +461,6 @@
       }
     }
   },
-  "requests": {
-    "auth": {
-      "register": {
-        "success": "Account Created.",
-        "emailAlreadyUsed": "Email is already used",
-        "error": "Unable to register account. Please try again later."
-      },
-      "signIn": {
-        "success": "Signed In Successfully.",
-        "invalid": "Invalid login. Please check your credentials.",
-        "error": "Unable to sign in. Please try again later."
-      },
-      "forgottenPassword": {
-        "success": "A reset link has been sent to your email address.",
-        "error": "Unable to send recovery email. Please try again later."
-      },
-      "changeEmail": {
-        "success": "Your email has been changed.",
-        "emailAlreadyTaken": "This email address is already registered to another account.",
-        "invalid": "Please check your credentials.",
-        "error": "Unable to change email. Please try again later."
-      },
-      "changePassword": {
-        "success": "Your password has been changed.",
-        "invalid": "Please check your credentials.",
-        "error": "Unable to change password. Please try again later."
-      },
-      "resetPassword": {
-        "success": "Your password has been changed.",
-        "error": "Unable to change password. Please try again later."
-      },
-      "logout": {
-        "success": "You have been logged out",
-        "error": ""
-      }
-    },
-    "accounts": {
-      "delete": {
-        "success": "Your account has been deleted.",
-        "error": ""
-      }
-    },
-    "support": {
-      "contactUs": {
-        "success": "Message sent",
-        "error": "Unable to send message. Please try again later."
-      },
-      "resolve": {
-        "success": "Support ticket has been resolved",
-        "error": "Unable to resolve support ticket"
-      }
-    },
-    "favourites": {
-      "favourite": {
-        "success": "Recipe favourited.",
-        "error": "Unable to favourite recipe. Please try again later."
-      },
-      "unfavourite": {
-        "success": "Recipe unfavourited.",
-        "error": "Unable to unfavourite recipe. Please try again later."
-      }
-    },
-    "rating": {
-      "rate": {
-        "success": "Recipe rated.",
-        "error": "Unable to rate recipe. Please try again later."
-      }
-    },
-    "planner": {
-      "planRecipe": {
-        "success": "Recipe added to planner.",
-        "error": "Unable to add recipe to planner. Please try again later."
-      },
-      "updatePlannedRecipe": {
-        "success": "Planner updated.",
-        "error": "Unable update planned. Please try again later."
-      },
-      "removePlannedRecipe": {
-        "success": "Recipe removed from planner.",
-        "error": "Unable remove recipe from planner. Please try again later."
-      }
-    },
-    "recipes": {
-      "create": {
-        "success": "Recipe has been created.",
-        "error": "Unable to create recipe. Please try again later."
-      },
-      "update": {
-        "success": "Recipe has been updated.",
-        "error": "Unable to update recipe. Please try again later."
-      },
-      "delete": {
-        "success": "Recipe has been deleted.",
-        "error": "Unable to delete recipe. Please try again later."
-      },
-      "publish": {
-        "success": "Recipe has been published.",
-        "error": "Unable to publish recipe. Please try again later."
-      },
-      "ingredients": {
-        "error": "Unable to retrieve recipe's ingredients."
-      }
-    },
-    "ingredients": {
-      "create": {
-        "validation": {
-          "nameExistsAlready": "An ingredient already exists with this name"
-        },
-        "success": "Ingredient has been created.",
-        "error": "Unable to create ingredient. Please try again later."
-      },
-      "update": {
-        "success": "Ingredient has been updated.",
-        "error": "Unable to update ingredient. Please try again later."
-      }
-    },
-    "equipment": {
-      "create": {
-        "validation": {
-          "nameExistsAlready": "A piece of equipment already exists with this name"
-        },
-        "success": "Piece of equipment has been created.",
-        "error": "Unable to create piece of equipment. Please try again later."
-      },
-      "update": {
-        "success": "Piece of equipment has been updated.",
-        "error": "Unable to update piece of equipment. Please try again later."
-      }
-    },
-    "tags": {
-      "create": {
-        "validation": {
-          "nameExistsAlready": "An tag already exists with this name"
-        },
-        "success": "Tag has been created.",
-        "error": "Unable to create tag. Please try again later."
-      },
-      "update": {
-        "success": "Tag has been updated.",
-        "error": "Unable to update tag. Please try again later."
-      }
-    },
-    "collections": {
-      "create": {
-        "validation": {
-          "titleExistsAlready": "An collection already exists with this title"
-        },
-        "success": "Collection has been created.",
-        "error": "Unable to create collection. Please try again later."
-      },
-      "update": {
-        "success": "Collection has been updated.",
-        "error": "Unable to update collection. Please try again later."
-      },
-      "addRecipeToCollection": {
-        "success": "Recipe has been added to the collection.",
-        "error": "Unable to add recipe to the collection. Please try again later."
-      },
-      "removeRecipeFromCollection": {
-        "success": "Recipe has been remove from the collection.",
-        "error": "Unable to remove recipe from the collection. Please try again later."
-      }
-    },
-    "authors": {
-      "create": {
-        "success": "Author has been created.",
-        "error": "Unable to create author. Please try again later."
-      },
-      "update": {
-        "success": "Author has been updated.",
-        "error": "Unable to update author. Please try again later."
-      }
-    }
-  },
   "types": {
     "unitOfMeasurement": {
       "measurementSystems": {
@@ -643,13 +469,20 @@
       }
     },
     "log": {
+      "name": "Log",
+      "pluralName": "Logs",
       "fields": {
         "message": {
           "name": "Message"
+        },
+        "createdOn": {
+          "name": "Date Created"
         }
       }
     },
     "supportTicket": {
+      "name": "Support Ticket",
+      "pluralName": "Support Tickets",
       "fields": {
         "from": {
           "name": "From"
@@ -688,7 +521,7 @@
     },
     "collection": {
       "name": "Collection",
-      "pluralName": "Collection",
+      "pluralName": "Collections",
       "fields": {
         "title": {
           "name": "Title",
@@ -766,7 +599,7 @@
         }
       }
     },
-    "equipment": {
+    "pieceOfEquipment": {
       "name": "Piece Of Equipment",
       "pluralName": "Equipment",
       "fields": {
@@ -969,6 +802,180 @@
         "referenceUrl": {
           "name": "Reference URL"
         }
+      }
+    }
+  },
+  "requests": {
+    "auth": {
+      "register": {
+        "success": "Account Created.",
+        "emailAlreadyUsed": "Email is already used",
+        "error": "Unable to register account. Please try again later."
+      },
+      "signIn": {
+        "success": "Signed In Successfully.",
+        "invalid": "Invalid login. Please check your credentials.",
+        "error": "Unable to sign in. Please try again later."
+      },
+      "forgottenPassword": {
+        "success": "A reset link has been sent to your email address.",
+        "error": "Unable to send recovery email. Please try again later."
+      },
+      "changeEmail": {
+        "success": "Your email has been changed.",
+        "emailAlreadyTaken": "This email address is already registered to another account.",
+        "invalid": "Please check your credentials.",
+        "error": "Unable to change email. Please try again later."
+      },
+      "changePassword": {
+        "success": "Your password has been changed.",
+        "invalid": "Please check your credentials.",
+        "error": "Unable to change password. Please try again later."
+      },
+      "resetPassword": {
+        "success": "Your password has been changed.",
+        "error": "Unable to change password. Please try again later."
+      },
+      "logout": {
+        "success": "You have been logged out",
+        "error": ""
+      }
+    },
+    "accounts": {
+      "delete": {
+        "success": "Your account has been deleted.",
+        "error": ""
+      }
+    },
+    "support": {
+      "contactUs": {
+        "success": "Message sent",
+        "error": "Unable to send message. Please try again later."
+      },
+      "resolve": {
+        "success": "Support ticket has been resolved",
+        "error": "Unable to resolve support ticket"
+      }
+    },
+    "favourites": {
+      "favourite": {
+        "success": "Recipe favourited.",
+        "error": "Unable to favourite recipe. Please try again later."
+      },
+      "unfavourite": {
+        "success": "Recipe unfavourited.",
+        "error": "Unable to unfavourite recipe. Please try again later."
+      }
+    },
+    "rating": {
+      "rate": {
+        "success": "Recipe rated.",
+        "error": "Unable to rate recipe. Please try again later."
+      }
+    },
+    "planner": {
+      "planRecipe": {
+        "success": "Recipe added to planner.",
+        "error": "Unable to add recipe to planner. Please try again later."
+      },
+      "updatePlannedRecipe": {
+        "success": "Planner updated.",
+        "error": "Unable update planned. Please try again later."
+      },
+      "removePlannedRecipe": {
+        "success": "Recipe removed from planner.",
+        "error": "Unable remove recipe from planner. Please try again later."
+      }
+    },
+    "recipes": {
+      "create": {
+        "success": "Recipe has been created.",
+        "error": "Unable to create recipe. Please try again later."
+      },
+      "update": {
+        "success": "Recipe has been updated.",
+        "error": "Unable to update recipe. Please try again later."
+      },
+      "delete": {
+        "success": "Recipe has been deleted.",
+        "error": "Unable to delete recipe. Please try again later."
+      },
+      "publish": {
+        "success": "Recipe has been published.",
+        "error": "Unable to publish recipe. Please try again later."
+      },
+      "ingredients": {
+        "error": "Unable to retrieve recipe's ingredients."
+      }
+    },
+    "ingredients": {
+      "create": {
+        "validation": {
+          "nameAlreadyExists": "An ingredient already exists with this name"
+        },
+        "success": "Ingredient has been created.",
+        "error": "Unable to create ingredient. Please try again later."
+      },
+      "update": {
+        "success": "Ingredient has been updated.",
+        "error": "Unable to update ingredient. Please try again later."
+      }
+    },
+    "equipment": {
+      "create": {
+        "validation": {
+          "nameAlreadyExists": "A piece of equipment already exists with this name"
+        },
+        "success": "Piece of equipment has been created.",
+        "error": "Unable to create piece of equipment. Please try again later."
+      },
+      "update": {
+        "success": "Piece of equipment has been updated.",
+        "error": "Unable to update piece of equipment. Please try again later."
+      }
+    },
+    "tags": {
+      "create": {
+        "validation": {
+          "nameAlreadyExists": "An tag already exists with this name"
+        },
+        "success": "Tag has been created.",
+        "error": "Unable to create tag. Please try again later."
+      },
+      "update": {
+        "success": "Tag has been updated.",
+        "error": "Unable to update tag. Please try again later."
+      }
+    },
+    "collections": {
+      "create": {
+        "validation": {
+          "titleExistsAlready": "An collection already exists with this title"
+        },
+        "success": "Collection has been created.",
+        "error": "Unable to create collection. Please try again later."
+      },
+      "update": {
+        "success": "Collection has been updated.",
+        "error": "Unable to update collection. Please try again later."
+      },
+      "addRecipeToCollection": {
+        "success": "Recipe has been added to the collection.",
+        "error": "Unable to add recipe to the collection. Please try again later."
+      },
+      "removeRecipeFromCollection": {
+        "success": "Recipe has been remove from the collection.",
+        "error": "Unable to remove recipe from the collection. Please try again later."
+      }
+    },
+    "authors": {
+      "create": {
+        "success": "Author has been created.",
+        "error": "Unable to create author. Please try again later."
+      },
+      "update": {
+        "success": "Author has been updated.",
+        "error": "Unable to update author. Please try again later."
       }
     }
   },

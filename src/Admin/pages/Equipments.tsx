@@ -1,14 +1,15 @@
-import {
-  Button, TextField
-} from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
+import EquipmentTable from 'src/admin/components/tables/EquipmentTable';
 import api from 'src/api';
 import useFilters from 'src/hooks/useFilters';
 import useInput from 'src/hooks/useInput';
 import CollectionPageLayout from 'src/layouts/CollectionPageLayout';
 
 const Equipment = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const { value: search, onChange: onSearchChange } = useInput('');
@@ -21,23 +22,13 @@ const Equipment = () => {
   });
   const { setFilter } = filter;
 
-  const callback = async (_filters) => {
-    return await api.getEquipment(
-      _filters.search,
-      _filters.sortBy,
-      _filters.sortDesc,
-      _filters.page,
-      _filters.pageSize)
-  }
-  /* Handlers */
-  const handleAddClick = () => {
-    navigate("/admin/equipment/add")
+  const callback = async (_filters: any) => {
+    return await api.admin.admin_GetEquipment({
+      ..._filters
+    });
   }
 
-  const handleRowClick = (id) => {
-    navigate(`/admin/equipment/${id}`);
-  }
-
+  /* Effects */
   useEffect(() => {
     const delayDebounce = setTimeout(async () => {
       setFilter('search', search);
@@ -46,9 +37,23 @@ const Equipment = () => {
     return () => clearTimeout(delayDebounce);
   }, [search]);
 
+
+  /* Handlers */
+  const handleAddClick = () => {
+    navigate("/admin/equipment/add")
+  }
+
+  const handleRowClick = (id: string) => {
+    navigate(`/admin/equipment/${id}`);
+  }
+
   /* Rendering */
   return (
     <CollectionPageLayout
+      breadcrumbs={[
+        <Link to="/admin">Admin</Link>,
+        <Link to="/admin/equipment">{t("types.pieceOfEquipment.pluralName")}</Link>
+      ]}
       title={t("types.pieceOfEquipment.pluralName")}
       type={{
         name: t("types.pieceOfEquipment.name"),
@@ -57,13 +62,12 @@ const Equipment = () => {
       callback={callback}
       filter={filter}
       renderFilters={
-        <Stack sx={{ flexWrap: "wrap" }} direction="row" gap={1} useFlexGap>
-          <TextField
-            placeholder={t("common.words.actions.search")}
-            value={search}
-            onChange={onSearchChange}
-          />
-        </Stack>
+        <TextField
+          fullWidth
+          placeholder={t("common.words.actions.search")}
+          value={search}
+          onChange={onSearchChange}
+        />
       }
       renderActions={
         <Button

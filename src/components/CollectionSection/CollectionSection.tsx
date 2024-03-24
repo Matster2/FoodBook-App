@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import uuid from 'react-uuid';
 import api from 'src/api';
+import CardSection from 'src/components/CardSection';
 import RecipeTile from 'src/components/RecipeTile';
-import Section from 'src/components/Section';
 import { includeResizeQueryParameters } from 'src/utils/imageUtils';
 
 const CollectionSection = ({ collection }) => {
@@ -80,14 +80,13 @@ const CollectionSection = ({ collection }) => {
   );
 
   return (
-    <Section
+    <CardSection
       title={collection.title}
-      showSeeAll={recipes.length < totalRecipes}
       loading={loadingRecipes}
       onSeeAllClick={handleSeeAllClick}
     >
       {recipes.map((recipe) => renderRecipeTile(recipe))}
-    </Section>
+    </CardSection>
   )
 }
 

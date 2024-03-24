@@ -1,6 +1,6 @@
 
-import { useFormContext, Controller } from 'react-hook-form';
-import { MenuItem, Select, FormControlLabelProps, FormControl, InputLabel } from "@mui/material";
+import { FormControl, FormControlLabelProps, InputLabel, MenuItem, Select } from "@mui/material";
+import { Controller, useFormContext } from 'react-hook-form';
 
 interface DropdownOption {
     value: string;
@@ -11,12 +11,15 @@ interface FormDropdownProps extends Omit<FormControlLabelProps, 'control'> {
     name: string;
     options: DropdownOption[];
     label: string;
+    fullWidth?: boolean;
 }
 
 const FormDropdown = ({
     name,
     options,
     label,
+    fullWidth,
+    ...props
 }: FormDropdownProps) => {
     const { control } = useFormContext();
 
@@ -29,13 +32,22 @@ const FormDropdown = ({
     };
 
     return (
-        <FormControl size={"small"}>
-            <InputLabel>{label}</InputLabel>
+        <FormControl
+            margin="normal"
+            fullWidth={fullWidth}
+            {...props}
+        >
+            <InputLabel id={name}>{label}</InputLabel>
             <Controller
                 name={name}
                 control={control}
                 render={({ field: { onChange, value } }) => (
-                    <Select onChange={onChange} value={value} >
+                    <Select
+                        label={label}
+                        onChange={onChange}
+                        value={value}
+
+                    >
                         {options.map((option) => generateOption(option))}
                     </Select>
                 )}

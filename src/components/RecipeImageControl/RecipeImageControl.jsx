@@ -10,9 +10,9 @@ const RecipeImageControl = ({ src, onClick, onLongClick, onDeleteClick, alwaysSh
     shouldPreventDefault: true,
     delay: 500,
   };
-  
+
   const [errored, setErrored] = useState(false);
-  
+
   const onError = () => {
     setErrored(true);
   }
@@ -40,12 +40,12 @@ const RecipeImageControl = ({ src, onClick, onLongClick, onDeleteClick, alwaysSh
         </Box>
       )
     }
-  
+
     return (
       <img
         className={styles.image}
         src={src}
-        alt="recipe" 
+        alt="recipe"
         onError={onError}
         {...longPressEvent}
       />
@@ -59,7 +59,7 @@ const RecipeImageControl = ({ src, onClick, onLongClick, onDeleteClick, alwaysSh
         onClick={handleDeleteClick}
       >
         <DeleteIcon
-          style={ alwaysShowDelete ? { visibility: 'visible' } : { visibility: 'hidden' }}
+          style={alwaysShowDelete ? { visibility: 'visible' } : { visibility: 'hidden' }}
         />
       </div>
 

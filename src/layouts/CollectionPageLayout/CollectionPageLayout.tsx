@@ -1,7 +1,9 @@
+import { ReactNode } from "react";
 import PageLayout from "src/layouts/PageLayout";
 import TableLayout from "src/layouts/TableLayout";
 
-interface CollectionPageLayoutProps {
+export interface CollectionPageLayoutProps {
+  breadcrumbs?: ReactNode[]
   title?: string;
   type: {
     name: string;
@@ -9,12 +11,15 @@ interface CollectionPageLayoutProps {
   };
   filter: any;
   callback: (filters: any) => any;
-  renderFilters: React.ReactNode;
-  renderActions: React.ReactNode;
+  renderFilters?: React.ReactNode;
+  renderActions?: React.ReactNode;
   table: any;
+  onRowClick: (id: string) => void;
+  onReset?: () => void;
 }
 
 const CollectionPageLayout = ({
+  breadcrumbs = [],
   title,
   type,
   filter,
@@ -22,9 +27,13 @@ const CollectionPageLayout = ({
   renderFilters,
   renderActions,
   table,
+  onRowClick = () => { },
+  onReset = () => { },
+  ...props
 }: CollectionPageLayoutProps) => {
   return (
     <PageLayout
+      breadcrumbs={breadcrumbs}
       title={title}
     >
       {renderActions}
@@ -35,6 +44,9 @@ const CollectionPageLayout = ({
         filter={filter}
         renderFilters={renderFilters}
         table={table}
+        onRowClick={onRowClick}
+        onReset={onReset}
+        {...props}
       />
     </PageLayout>
   )

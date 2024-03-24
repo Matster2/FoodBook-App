@@ -1,37 +1,45 @@
-import { Stack, Button, TextField } from '@mui/material';
+import { Button, Grid, SelectChangeEvent, TextField } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from "react-i18next";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import LogsTable from 'src/admin/components/Tables/LogsTable';
 import api from 'src/api';
+import Dropdown from 'src/components/Dropdown';
+import { LogLevel } from 'src/generatedAPI';
 import useFilters from 'src/hooks/useFilters';
 import useInput from 'src/hooks/useInput';
 import CollectionPageLayout from 'src/layouts/CollectionPageLayout';
-import Dropdown from 'src/components/Dropdown';
-import LogsTable from 'src/admin/components/Tables/LogsTable';
 
 const Logs = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const { value: search, onChange: onSearchChange } = useInput('');
   const filter = useFilters({
     search: '',
-    levels: ['error'],
-    sortBy: 'datecreated',
+    levels: [LogLevel.Error],
+    sortBy: 'createdOn',
     sortDesc: false,
     pageSize: 50,
     page: 1,
   });
   const { filters, setFilter } = filter;
 
-  const callback = async (_filters) => {
-    return await api.getLogs(
-      _filters.search,
-      _filters.sortBy,
-      _filters.sortDesc,
-      _filters.page,
-      _filters.pageSize)
+  const callback = async (_filters: any) => {
+    return await api.admin.admin_GetLogs({
+      ..._filters
+    });
   }
+
+  /* Effects */
+  useEffect(() => {
+    const delayDebounce = setTimeout(async () => {
+      setFilter('search', search);
+    }, 1000);
+
+    return () => clearTimeout(delayDebounce);
+  }, [search]);
+
   /* Handlers */
   const handleAddClick = () => {
     navigate("/admin/logs/add")
@@ -41,21 +49,17 @@ const Logs = () => {
     navigate(`/admin/logs/${id}`);
   }
 
-  const handleLevelFilterChange = (event) => {
+  const handleLevelFilterChange = (event: SelectChangeEvent<unknown>) => {
     setFilter("levels", [event.target.value]);
   };
-
-  useEffect(() => {
-    const delayDebounce = setTimeout(async () => {
-      setFilter('search', search);
-    }, 1000);
-
-    return () => clearTimeout(delayDebounce);
-  }, [search]);
 
   /* Rendering */
   return (
     <CollectionPageLayout
+      breadcrumbs={[
+        <Link to="/admin">Admin</Link>,
+        <Link to="/admin/logs">{t("types.log.pluralName")}</Link>,
+      ]}
       title={t("types.log.pluralName")}
       type={{
         name: t("types.log.name"),
@@ -64,45 +68,29 @@ const Logs = () => {
       callback={callback}
       filter={filter}
       renderFilters={
-        <Stack sx={{ flexWrap: "wrap" }} direction="row" gap={1} useFlexGap>
-          <TextField
-            placeholder={t("common.words.actions.search")}
-            value={search}
-            onChange={onSearchChange}
-          />
-
-          <Dropdown
-            label="Level"
-            options={[
-              {
-                value: "trace",
-                label: "Trace",
-              },
-              {
-                value: "debug",
-                label: "Debug",
-              },
-              {
-                value: "information",
-                label: "Information",
-              },
-              {
-                value: "warning",
-                label: "Warning",
-              },
-              {
-                value: "error",
-                label: "Error",
-              },
-              {
-                value: "critical",
-                label: "Critical",
-              }
-            ]}
-            value={filters.levels.length > 0 ? filters.levels[0] : undefined}
-            onChange={handleLevelFilterChange}
-          />
-        </Stack>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              sx={{ minWidth: '400px' }}
+              fullWidth
+              placeholder={t("common.words.actions.search")}
+              value={search}
+              onChange={onSearchChange}
+            />
+          </Grid>
+          <Grid item xs={6} sm={3}>
+            <Dropdown
+              sx={{ minWidth: '200px' }}
+              label="Level"
+              options={Object.values(LogLevel).map((value) => ({
+                value: value,
+                label: value
+              }))}
+              value={filters.levels.length > 0 ? filters.levels[0] : undefined}
+              onChange={handleLevelFilterChange}
+            />
+          </Grid>
+        </Grid>
       }
       renderActions={
         <Button

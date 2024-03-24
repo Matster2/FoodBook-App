@@ -30,7 +30,7 @@ await generateApi({
         onFormatRouteName: (routeInfo, templateRouteName) => {
             return routeInfo.operationId.charAt(0).toLowerCase() + routeInfo.operationId.slice(1);
         },
-    }
+    },
 });
 
 process.exit()

@@ -6,8 +6,8 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from 'react-router-dom';
 import api from 'src/api';
 import AuthorLink from 'src/components/AuthorLink';
+import CardSection from 'src/components/CardSection';
 import RecipeTile from 'src/components/RecipeTile';
-import Section from 'src/components/Section';
 import PageLayout from 'src/layouts/PageLayout';
 import { includeResizeQueryParameters } from 'src/utils/imageUtils';
 import { truncateText } from 'src/utils/stringUtils';
@@ -135,7 +135,7 @@ const Author = () => {
       )}
 
       {recipes.length > 0 && (
-        <Section
+        <CardSection
           sx={{ mt: 2 }}
           title={t('pages.author.sections.authorRecipes')}
           loading={loadingRecipes}
@@ -157,7 +157,7 @@ const Author = () => {
               />
             ))}
           </Masonry>
-        </Section>
+        </CardSection>
       )}
 
     </PageLayout >

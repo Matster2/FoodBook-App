@@ -9,11 +9,11 @@ import PullToRefresh from 'react-simple-pull-to-refresh';
 import uuid from 'react-uuid';
 import api from 'src/api';
 import SearchIcon from 'src/assets/icons/search.svg?react';
-import CategoryChip from 'src/components/CategoryChip';
+import CardSection from 'src/components/CardSection';
 import CollectionSection from 'src/components/CollectionSection/CollectionSection';
 import FilterButton from 'src/components/FilterButton';
 import RecipeTile from 'src/components/RecipeTile';
-import Section from 'src/components/Section';
+import TagChip from 'src/components/TagChip';
 import { UserContext } from 'src/contexts/UserContext';
 import { RecipeState } from 'src/generatedAPI';
 import useAuth from 'src/hooks/useAuth';
@@ -40,10 +40,7 @@ const Homepage = () => {
       random: true,
       pageSize: 100
     })
-      .then(({ data }) => {
-        console.log(data);
-        return data.results;
-      }),
+      .then(({ data }) => data.results),
     initialData: []
   });
 
@@ -301,15 +298,15 @@ const Homepage = () => {
           </Box>
 
           {tags.length > 0 && (
-            <Section
+            <CardSection
               sx={{ mb: 0.5 }}
               title={t('pages.home.sections.categories')}
               loading={loadingTags}
             >
-              {tags.map((category) => (
-                <CategoryChip key={category.id} sx={{ mb: 1.5 }} category={category} onClick={handleCategoryClick} />
+              {tags.map((tag) => (
+                <TagChip key={tag.id} sx={{ mb: 1.5 }} tag={tag} onClick={handleCategoryClick} />
               ))}
-            </Section>
+            </CardSection>
           )}
 
 
@@ -321,12 +318,12 @@ const Homepage = () => {
           ))}
 
           {recommendedRecipes.length > 0 && (
-            <Section
+            <CardSection
               title={t('pages.home.sections.recommended')}
               loading={loadingRecommendedRecipes}
             >
               {recommendedRecipes.map((recipe) => renderRecipeTile(recipe))}
-            </Section>
+            </CardSection>
           )}
 
           {collections.map(collection => (
@@ -336,7 +333,7 @@ const Homepage = () => {
           ))}
 
           {recentlyAddedRecipes.length > 0 && (
-            <Section
+            <CardSection
               title={t('pages.home.sections.recentlyAdded')}
               showSeeAll
               onSeeAllClick={() => {
@@ -353,27 +350,27 @@ const Homepage = () => {
               loading={loadingRecentlyAddedRecipes}
             >
               {recentlyAddedRecipes.map((recipe) => renderRecipeTile(recipe))}
-            </Section>
+            </CardSection>
           )}
 
           {favouriteRecipes.length > 0 && (
-            <Section
+            <CardSection
               title={t('pages.home.sections.favourites')}
               loading={loadingFavouriteRecipes}
               showSeeAll
               onSeeAllClick={() => navigate('/favourites')}
             >
               {favouriteRecipes.map((recipe) => renderRecipeTile(recipe))}
-            </Section>
+            </CardSection>
           )}
 
           {personalRecipes.length > 0 && (
-            <Section
+            <CardSection
               title={t('pages.home.sections.personal')}
               loading={loadingPersonalRecipes}
             >
               {personalRecipes.map((recipe) => renderRecipeTile(recipe))}
-            </Section>
+            </CardSection>
           )}
 
           {isLoading() && (

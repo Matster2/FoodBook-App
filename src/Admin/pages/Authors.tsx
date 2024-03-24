@@ -1,14 +1,15 @@
-import {
-  Button, TextField
-} from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
+import AuthorsTable from 'src/admin/components/tables/AuthorsTable';
 import api from 'src/api';
 import useFilters from 'src/hooks/useFilters';
 import useInput from 'src/hooks/useInput';
 import CollectionPageLayout from 'src/layouts/CollectionPageLayout';
 
 const Authors = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const { value: search, onChange: onSearchChange } = useInput('');
@@ -21,23 +22,13 @@ const Authors = () => {
   });
   const { setFilter } = filter;
 
-  const callback = async (_filters) => {
-    return await api.getAuthors(
-      _filters.search,
-      _filters.sortBy,
-      _filters.sortDesc,
-      _filters.page,
-      _filters.pageSize)
-  }
-  /* Handlers */
-  const handleAddClick = () => {
-    navigate("/admin/authors/add")
+  const callback = async (_filters: any) => {
+    return await api.admin.admin_GetAuthors({
+      ..._filters
+    });
   }
 
-  const handleRowClick = (id) => {
-    navigate(`/admin/authors/${id}`);
-  }
-
+  /* Effects */
   useEffect(() => {
     const delayDebounce = setTimeout(async () => {
       setFilter('search', search);
@@ -46,9 +37,22 @@ const Authors = () => {
     return () => clearTimeout(delayDebounce);
   }, [search]);
 
+  /* Handlers */
+  const handleAddClick = () => {
+    navigate("/admin/authors/add")
+  }
+
+  const handleRowClick = (id: string) => {
+    navigate(`/admin/authors/${id}`);
+  }
+
   /* Rendering */
   return (
     <CollectionPageLayout
+      breadcrumbs={[
+        <Link to="/admin">Admin</Link>,
+        <Link to="/admin/authors">{t("types.author.pluralName")}</Link>
+      ]}
       title={t("types.author.pluralName")}
       type={{
         name: t("types.author.name"),
@@ -57,13 +61,12 @@ const Authors = () => {
       callback={callback}
       filter={filter}
       renderFilters={
-        <Stack sx={{ flexWrap: "wrap" }} direction="row" gap={1} useFlexGap>
-          <TextField
-            placeholder={t("common.words.actions.search")}
-            value={search}
-            onChange={onSearchChange}
-          />
-        </Stack>
+        <TextField
+          fullWidth
+          placeholder={t("common.words.actions.search")}
+          value={search}
+          onChange={onSearchChange}
+        />
       }
       renderActions={
         <Button

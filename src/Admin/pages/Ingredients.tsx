@@ -1,14 +1,15 @@
-import {
-  Button, TextField
-} from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
+import IngredientsTable from 'src/admin/components/tables/IngredientsTable';
 import api from 'src/api';
 import useFilters from 'src/hooks/useFilters';
 import useInput from 'src/hooks/useInput';
 import CollectionPageLayout from 'src/layouts/CollectionPageLayout';
 
 const Ingredients = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const { value: search, onChange: onSearchChange } = useInput('');
@@ -21,23 +22,13 @@ const Ingredients = () => {
   });
   const { setFilter } = filter;
 
-  const callback = async (_filters) => {
-    return await api.getIngredients(
-      _filters.search,
-      _filters.sortBy,
-      _filters.sortDesc,
-      _filters.page,
-      _filters.pageSize)
-  }
-  /* Handlers */
-  const handleAddClick = () => {
-    navigate("/admin/ingredients/add")
+  const callback = async (_filters: any) => {
+    return await api.admin.admin_GetIngredients({
+      ..._filters
+    });
   }
 
-  const handleRowClick = (id) => {
-    navigate(`/admin/ingredients/${id}`);
-  }
-
+  /* Effects */
   useEffect(() => {
     const delayDebounce = setTimeout(async () => {
       setFilter('search', search);
@@ -46,9 +37,22 @@ const Ingredients = () => {
     return () => clearTimeout(delayDebounce);
   }, [search]);
 
+  /* Handlers */
+  const handleAddClick = () => {
+    navigate("/admin/ingredients/add")
+  }
+
+  const handleRowClick = (id: string) => {
+    navigate(`/admin/ingredients/${id}`);
+  }
+
   /* Rendering */
   return (
     <CollectionPageLayout
+      breadcrumbs={[
+        <Link to="/admin">Admin</Link>,
+        <Link to="/admin/ingredients">{t("types.ingredient.pluralName")}</Link>,
+      ]}
       title={t("types.ingredient.pluralName")}
       type={{
         name: t("types.ingredient.name"),
@@ -57,13 +61,12 @@ const Ingredients = () => {
       callback={callback}
       filter={filter}
       renderFilters={
-        <Stack sx={{ flexWrap: "wrap" }} direction="row" gap={1} useFlexGap>
-          <TextField
-            placeholder={t("common.words.actions.search")}
-            value={search}
-            onChange={onSearchChange}
-          />
-        </Stack>
+        <TextField
+          fullWidth
+          placeholder={t("common.words.actions.search")}
+          value={search}
+          onChange={onSearchChange}
+        />
       }
       renderActions={
         <Button

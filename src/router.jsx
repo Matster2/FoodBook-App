@@ -150,7 +150,7 @@ export default createBrowserRouter([
         element: <Author />,
       },
       {
-        path: '/admin/settings',
+        path: '/admin',
         element: (
           <AdminRoute>
             <AdminMenu />

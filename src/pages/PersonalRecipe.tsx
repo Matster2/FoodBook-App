@@ -6,8 +6,8 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import RecipeForm from 'src/admin/forms/RecipeForm';
 import Header from 'src/components/Header';
-import RecipeForm from 'src/forms/RecipeForm';
 import { RecipeState } from 'src/types';
 import { includeResizeQueryParameters } from 'src/utils/imageUtils';
 

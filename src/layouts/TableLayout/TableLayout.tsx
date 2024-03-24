@@ -7,7 +7,7 @@ import Dropdown from 'src/components/Dropdown';
 const _defaultPageSize: number = 25;
 const _pageSizeOptions: number[] = [25, 50, 100]
 
-interface TableLayoutProps {
+export interface TableLayoutProps {
   sx?: SxProps;
   title?: string;
   type: {
@@ -22,7 +22,9 @@ interface TableLayoutProps {
   showPageSizeSelector?: boolean;
   showResultsText?: boolean;
 
-  selectedIds?: number[] | string[]
+  selectedIds?: string[];
+  onRowClick?: (id: string) => void;
+  onReset?: () => void;
 
   table: any;
   children?: React.ReactNode;
@@ -44,6 +46,8 @@ const TableLayout = ({
 
   table,
   selectedIds = [],
+  onRowClick = () => { },
+  onReset = () => { },
   ...props
 }: TableLayoutProps) => {
   const { t } = useTranslation();
@@ -65,6 +69,10 @@ const TableLayout = ({
   const Table = table;
 
   /* Handlers */
+  const handleResetClick = () => {
+    onReset();
+  }
+
   const handlePageChange = (_event: ChangeEvent<unknown>, value: number) => {
     setFilter('page', value);
   };
@@ -94,6 +102,7 @@ const TableLayout = ({
           <Button
             variant="contained"
             color="secondary"
+            onClick={handleResetClick}
           >
             {t("common.words.actions.reset")}
           </Button>
@@ -105,9 +114,7 @@ const TableLayout = ({
           {response.totalResults > 0 && (
             <Stack direction="row" justifyContent="space-between" alignItems="end" gap={1}>
               <Typography>
-                {showResultsText
-                  ? getResultsText(response.page, filters.pageSize ?? _defaultPageSize, response.totalResults)
-                  : ""}
+                {showResultsText && getResultsText(response.page, filters.pageSize ?? _defaultPageSize, response.totalResults)}
               </Typography>
 
               {showPageSizeSelector && (
@@ -129,6 +136,7 @@ const TableLayout = ({
                 loading={loading}
                 rows={response?.results ?? []}
                 selectedIds={selectedIds}
+                onRowClick={onRowClick}
                 {...props}
               />
             </TableContainer>

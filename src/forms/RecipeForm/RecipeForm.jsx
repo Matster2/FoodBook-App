@@ -51,7 +51,6 @@ import FormModes from 'src/utils/formModes';
 import { includeResizeQueryParameters } from 'src/utils/imageUtils';
 import { lowercaseFirstLetter } from 'src/utils/stringUtils';
 import { isNull, isNullOrEmpty, isNullOrUndefined, isUndefined, reorder } from 'src/utils/utils';
-import styles from './RecipeForm.module.css';
 
 const getDefaultRecipe = () => {
   return {

@@ -1,13 +1,13 @@
 import NiceModal from '@ebay/nice-modal-react';
 import {
-    Box,
-    Dialog,
-    DialogTitle
+  Box,
+  Dialog,
+  DialogTitle
 } from '@mui/material';
 import { useTranslation } from "react-i18next";
 import IngredientForm from 'src/forms/IngredientForm';
 
-export default NiceModal.create(({ open, ingredient, onClose, onComplete, transitionComponent }) => {  
+export default NiceModal.create(({ open, ingredient, onClose, onComplete, transitionComponent }) => {
   const { t } = useTranslation();
   return (
     <Dialog
@@ -24,7 +24,7 @@ export default NiceModal.create(({ open, ingredient, onClose, onComplete, transi
       <DialogTitle sx={{ mt: 2 }}>
         {`${t("common.words.actions.create")} ${t("types.ingredient.name")}`}
       </DialogTitle>
-      
+
       <Box sx={{ px: 4 }}>
         <IngredientForm
           ingredient={{

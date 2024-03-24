@@ -32,7 +32,7 @@ const LogsTable = ({
       rows={logs.map((log) => ({
         identifier: log.id,
         data: [
-          log.createdOn.format("HH:mm DD/MM/YYYY"),
+          log.createdOn,
           log.message
         ],
       }))}

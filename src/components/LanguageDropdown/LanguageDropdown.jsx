@@ -63,7 +63,7 @@ const LanguageDropdown = ({ languages, value, onChange, ...props }) => {
       onChange={handleChange}
     >
       {languages
-        .sort((a,b) => (a.iso639 > b.iso639) ? 1 : ((b.iso639 > a.iso639) ? -1 : 0))
+        .sort((a, b) => (a.iso639 > b.iso639) ? 1 : ((b.iso639 > a.iso639) ? -1 : 0))
         .map((language) => renderOption(language))}
     </Select>
   );

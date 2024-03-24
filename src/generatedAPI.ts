@@ -9,9 +9,172 @@
  * ---------------------------------------------------------------
  */
 
+export interface AddRecipeToPlannerCommand {
+  /** @format uuid */
+  userId: string;
+  /** @format uuid */
+  recipeId: string;
+  dates?: string[] | null;
+  /** @format int32 */
+  servings: number;
+}
+
+export interface AddRecipeToPlannerCommandResponse {
+  plannedRecipes?: AddRecipeToPlannerCommandResponsePlannedRecipe[] | null;
+}
+
+export interface AddRecipeToPlannerCommandResponsePlannedRecipe {
+  /** @format uuid */
+  id: string;
+}
+
+export interface Author {
+  /** @format uuid */
+  id: string;
+  originalLanguageCode?: string | null;
+  state: AuthorState;
+  name?: string | null;
+  biography?: string | null;
+  links?: AuthorLink[] | null;
+  translations?: AuthorTranslation[] | null;
+}
+
+export interface AuthorLink {
+  /** @format uuid */
+  id: string;
+  originalLanguageCode?: string | null;
+  /** @format uuid */
+  authorId: string;
+  name?: string | null;
+  url?: string | null;
+  author?: Author | null;
+  translations?: AuthorLinkTranslation[] | null;
+}
+
+export type AuthorLinkTranslation = TranslationEntity & {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  authorLinkId: string;
+  name?: string | null;
+};
+
 export enum AuthorState {
   Published = "Published",
   Archived = "Archived",
+}
+
+export type AuthorTranslation = TranslationEntity & {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  authorId: string;
+  biography?: string | null;
+};
+
+export interface ChangeEmailCommand {
+  /** @format uuid */
+  userId: string;
+  newEmail?: string | null;
+  password?: string | null;
+  language?: string | null;
+}
+
+export type ChangeEmailCommandResponse = object;
+
+export interface ChangePasswordCommand {
+  /** @format uuid */
+  userId: string;
+  currentPassword?: string | null;
+  newPassword?: string | null;
+  language?: string | null;
+}
+
+export type ChangePasswordCommandResponse = object;
+
+export interface Collection {
+  /** @format uuid */
+  id: string;
+  originalLanguageCode?: string | null;
+  title?: string | null;
+  hidden: boolean;
+  promoted: boolean;
+  /** @format uuid */
+  createdByUserId: string;
+  /** @format date-time */
+  createdOn: Date;
+  /** @format uuid */
+  updatedByUserId?: string | null;
+  /** @format date-time */
+  updatedOn?: Date | null;
+  createdByUser?: User | null;
+  updatedByUser?: User | null;
+  translations?: CollectionTranslation[] | null;
+  recipes?: CollectionRecipe[] | null;
+}
+
+export interface CollectionRecipe {
+  /** @format uuid */
+  collectionId: string;
+  /** @format uuid */
+  recipeId: string;
+  collection?: Collection | null;
+  recipe?: Recipe | null;
+}
+
+export type CollectionTranslation = TranslationEntity & {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  collectionId: string;
+  title?: string | null;
+};
+
+export interface CreateIngredientCommand {
+  languageCode?: string | null;
+  name?: string | null;
+  pluralName?: string | null;
+  /** @format uuid */
+  defaultUnitOfMeasurementId: string;
+  personal: boolean;
+}
+
+export interface CreateIngredientCommandResponse {
+  /** @format uuid */
+  id: string;
+}
+
+export interface CreatePieceOfEquipmentCommand {
+  languageCode?: string | null;
+  name?: string | null;
+  pluralName?: string | null;
+  personal: boolean;
+}
+
+export interface CreatePieceOfEquipmentCommandResponse {
+  /** @format uuid */
+  id: string;
+}
+
+export type DeleteAccountCommandResponse = object;
+
+export type EquipmentTranslation = TranslationEntity & {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  equipmentId: string;
+  name?: string | null;
+  pluralName?: string | null;
+};
+
+export interface FavouritedRecipe {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  recipeId: string;
+  /** @format uuid */
+  userId: string;
+  recipe?: Recipe | null;
 }
 
 export interface FoodBookAPICommonReadControllersQueryEmailResponse {
@@ -463,7 +626,7 @@ export interface FoodBookAPICommonWriteModelsRecipesRecipeCreationDtoStep {
   /** @format int32 */
   number: number;
   name: string;
-  instructions: FoodBookDomainEntitiesRecipeInstruction[];
+  instructions: RecipeInstruction[];
 }
 
 export interface FoodBookAPICommonWriteModelsRecipesRecipeCreationDtoTag {
@@ -533,7 +696,7 @@ export interface FoodBookAPICommonWriteModelsRecipesRecipeUpdateDtoNutrition {
 
 export interface FoodBookAPICommonWriteModelsRecipesRecipeUpdateDtoPart {
   name: string;
-  ingredients: FoodBookAPICommonWriteModelsRecipesRecipeCreationDtoIngredient[];
+  ingredients: FoodBookAPICommonWriteModelsRecipesRecipeUpdateDtoIngredient[];
 }
 
 export interface FoodBookAPICommonWriteModelsRecipesRecipeUpdateDtoPieceOfEquipment {
@@ -548,7 +711,7 @@ export interface FoodBookAPICommonWriteModelsRecipesRecipeUpdateDtoStep {
   /** @format int32 */
   number: number;
   name: string;
-  instructions: FoodBookDomainEntitiesRecipeInstruction[];
+  instructions: RecipeInstruction[];
 }
 
 export type FoodBookCommandsFavouriteRecipeCommandResponse = object;
@@ -566,663 +729,6 @@ export type FoodBookCommandsRateRecipeCommandResponse = object;
 
 export type FoodBookCommandsUnfavouriteRecipeCommandResponse = object;
 
-export interface FoodBookDomainAuthorsCommandsCreateAuthorCommand {
-  languageCode?: string | null;
-  name?: string | null;
-  biography?: string | null;
-  links?: FoodBookDomainAuthorsCommandsCreateAuthorCommandLink[] | null;
-}
-
-export interface FoodBookDomainAuthorsCommandsCreateAuthorCommandResponse {
-  /** @format uuid */
-  id: string;
-}
-
-export interface FoodBookDomainAuthorsCommandsCreateAuthorCommandLink {
-  name?: string | null;
-  description?: string | null;
-  url?: string | null;
-}
-
-export interface FoodBookDomainAuthorsCommandsUpdateAuthorCommand {
-  /** @format uuid */
-  id: string;
-  languageCode?: string | null;
-  name?: string | null;
-  biography?: string | null;
-  links?: FoodBookDomainAuthorsCommandsUpdateAuthorCommandLink[] | null;
-}
-
-export type FoodBookDomainAuthorsCommandsUpdateAuthorCommandResponse = object;
-
-export interface FoodBookDomainAuthorsCommandsUpdateAuthorCommandLink {
-  name?: string | null;
-  description?: string | null;
-  url?: string | null;
-}
-
-export type FoodBookDomainCollectionsCommandsAddRecipeToCollectionCommandResponse = object;
-
-export interface FoodBookDomainCollectionsCommandsCreateCollectionCommand {
-  /** @minLength 1 */
-  languageCode: string;
-  /** @minLength 1 */
-  title: string;
-}
-
-export interface FoodBookDomainCollectionsCommandsCreateCollectionCommandResponse {
-  /** @format uuid */
-  id: string;
-}
-
-export type FoodBookDomainCollectionsCommandsRemoveRecipeFromCollectionCommandResponse = object;
-
-export interface FoodBookDomainCollectionsCommandsUpdateCollectionCommand {
-  /** @format uuid */
-  id: string;
-  title?: string | null;
-  hidden: boolean;
-  promoted: boolean;
-}
-
-export type FoodBookDomainCollectionsCommandsUpdateCollectionCommandResponse = object;
-
-export interface FoodBookDomainCommandsAuthChangeEmailCommand {
-  /** @format uuid */
-  userId: string;
-  newEmail?: string | null;
-  password?: string | null;
-  language?: string | null;
-}
-
-export type FoodBookDomainCommandsAuthChangeEmailCommandResponse = object;
-
-export interface FoodBookDomainCommandsAuthChangePasswordCommand {
-  /** @format uuid */
-  userId: string;
-  currentPassword?: string | null;
-  newPassword?: string | null;
-  language?: string | null;
-}
-
-export type FoodBookDomainCommandsAuthChangePasswordCommandResponse = object;
-
-export type FoodBookDomainCommandsAuthDeleteAccountCommandResponse = object;
-
-export interface FoodBookDomainCommandsAuthForgotPasswordCommand {
-  email?: string | null;
-  language?: string | null;
-}
-
-export type FoodBookDomainCommandsAuthForgotPasswordCommandResponse = object;
-
-export interface FoodBookDomainCommandsAuthLoginCommand {
-  email?: string | null;
-  password?: string | null;
-}
-
-export interface FoodBookDomainCommandsAuthLoginCommandResponse {
-  accessToken?: string | null;
-  refreshToken?: string | null;
-}
-
-export interface FoodBookDomainCommandsAuthRefreshTokensCommand {
-  accessToken?: string | null;
-  refreshToken?: string | null;
-}
-
-export interface FoodBookDomainCommandsAuthRefreshTokensCommandResponse {
-  accessToken?: string | null;
-  refreshToken?: string | null;
-}
-
-export interface FoodBookDomainCommandsAuthRegisterUserCommand {
-  email?: string | null;
-  password?: string | null;
-  language?: string | null;
-}
-
-export interface FoodBookDomainCommandsAuthRegisterUserCommandResponse {
-  /** @format uuid */
-  id: string;
-}
-
-export interface FoodBookDomainCommandsAuthResetPasswordCommand {
-  email?: string | null;
-  resetToken?: string | null;
-  newPassword?: string | null;
-  language?: string | null;
-}
-
-export type FoodBookDomainCommandsAuthResetPasswordCommandResponse = object;
-
-export interface FoodBookDomainCommandsEquipmentCreateEquipmentCommand {
-  languageCode?: string | null;
-  name?: string | null;
-  pluralName?: string | null;
-  personal: boolean;
-}
-
-export interface FoodBookDomainCommandsEquipmentCreateEquipmentCommandResponse {
-  /** @format uuid */
-  id: string;
-}
-
-export interface FoodBookDomainCommandsEquipmentUpdateEquipmentCommand {
-  /** @format uuid */
-  id: string;
-  name?: string | null;
-  pluralName?: string | null;
-}
-
-export type FoodBookDomainCommandsEquipmentUpdateEquipmentCommandResponse = object;
-
-export interface FoodBookDomainCommandsIngredientsCreateIngredientCommand {
-  languageCode?: string | null;
-  name?: string | null;
-  pluralName?: string | null;
-  /** @format uuid */
-  defaultUnitOfMeasurementId: string;
-  personal: boolean;
-}
-
-export interface FoodBookDomainCommandsIngredientsCreateIngredientCommandResponse {
-  /** @format uuid */
-  id: string;
-}
-
-export interface FoodBookDomainCommandsIngredientsUpdateIngredientCommand {
-  /** @format uuid */
-  id: string;
-  name?: string | null;
-  pluralName?: string | null;
-  /** @format uuid */
-  defaultUnitOfMeasurementId: string;
-}
-
-export type FoodBookDomainCommandsIngredientsUpdateIngredientCommandResponse = object;
-
-export interface FoodBookDomainCommandsPlannerAddRecipeToPlannerCommand {
-  /** @format uuid */
-  userId: string;
-  /** @format uuid */
-  recipeId: string;
-  dates?: string[] | null;
-  /** @format int32 */
-  servings: number;
-}
-
-export interface FoodBookDomainCommandsPlannerAddRecipeToPlannerCommandResponse {
-  plannedRecipes?: FoodBookDomainCommandsPlannerAddRecipeToPlannerCommandResponsePlannedRecipe[] | null;
-}
-
-export interface FoodBookDomainCommandsPlannerAddRecipeToPlannerCommandResponsePlannedRecipe {
-  /** @format uuid */
-  id: string;
-}
-
-export type FoodBookDomainCommandsPlannerRemovePlannedRecipeCommandResponse = object;
-
-export interface FoodBookDomainCommandsPlannerUpdatePlannedRecipeCommand {
-  /** @format uuid */
-  id: string;
-  /** @format int32 */
-  servings: number;
-}
-
-export type FoodBookDomainCommandsPlannerUpdatePlannedRecipeCommandResponse = object;
-
-export interface FoodBookDomainEntitiesAuthor {
-  /** @format uuid */
-  id: string;
-  originalLanguageCode?: string | null;
-  state: AuthorState;
-  name?: string | null;
-  biography?: string | null;
-  links?: FoodBookDomainEntitiesAuthorLink[] | null;
-  translations?: FoodBookDomainEntitiesTranslationsAuthorTranslation[] | null;
-}
-
-export interface FoodBookDomainEntitiesAuthorLink {
-  /** @format uuid */
-  id: string;
-  originalLanguageCode?: string | null;
-  /** @format uuid */
-  authorId: string;
-  name?: string | null;
-  url?: string | null;
-  author?: FoodBookDomainEntitiesAuthor | null;
-  translations?: FoodBookDomainEntitiesTranslationsAuthorLinkTranslation[] | null;
-}
-
-export interface FoodBookDomainEntitiesCollection {
-  /** @format uuid */
-  id: string;
-  originalLanguageCode?: string | null;
-  title?: string | null;
-  hidden: boolean;
-  promoted: boolean;
-  /** @format uuid */
-  createdByUserId: string;
-  /** @format date-time */
-  createdOn: Date;
-  /** @format uuid */
-  updatedByUserId?: string | null;
-  /** @format date-time */
-  updatedOn?: Date | null;
-  createdByUser?: FoodBookDomainEntitiesUser | null;
-  updatedByUser?: FoodBookDomainEntitiesUser | null;
-  translations?: FoodBookDomainEntitiesTranslationsCollectionTranslation[] | null;
-  recipes?: FoodBookDomainEntitiesCollectionRecipe[] | null;
-}
-
-export interface FoodBookDomainEntitiesCollectionRecipe {
-  /** @format uuid */
-  collectionId: string;
-  /** @format uuid */
-  recipeId: string;
-  collection?: FoodBookDomainEntitiesCollection | null;
-  recipe?: FoodBookDomainEntitiesRecipe | null;
-}
-
-export interface FoodBookDomainEntitiesCoreTranslationEntity {
-  languageCode?: string | null;
-}
-
-export interface FoodBookDomainEntitiesFavouritedRecipe {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  recipeId: string;
-  /** @format uuid */
-  userId: string;
-  recipe?: FoodBookDomainEntitiesRecipe | null;
-}
-
-export interface FoodBookDomainEntitiesIngredient {
-  /** @format uuid */
-  id: string;
-  originalLanguageCode?: string | null;
-  name?: string | null;
-  pluralName?: string | null;
-  /** @format uuid */
-  defaultUnitOfMeasurementId: string;
-  personal: boolean;
-  /** @format uuid */
-  createdByUserId: string;
-  /** @format date-time */
-  createdOn: Date;
-  /** @format uuid */
-  updatedByUserId?: string | null;
-  /** @format date-time */
-  updatedOn?: Date | null;
-  createdByUser?: FoodBookDomainEntitiesUser | null;
-  updatedByUser?: FoodBookDomainEntitiesUser | null;
-  translations?: FoodBookDomainEntitiesTranslationsIngredientTranslation[] | null;
-  defaultUnitOfMeasurement?: FoodBookDomainEntitiesUnitOfMeasurement | null;
-}
-
-export interface FoodBookDomainEntitiesPieceOfEquipment {
-  /** @format uuid */
-  id: string;
-  originalLanguageCode?: string | null;
-  name?: string | null;
-  pluralName?: string | null;
-  personal: boolean;
-  /** @format uuid */
-  createdByUserId: string;
-  /** @format date-time */
-  createdOn: Date;
-  /** @format uuid */
-  updatedByUserId?: string | null;
-  /** @format date-time */
-  updatedOn?: Date | null;
-  createdByUser?: FoodBookDomainEntitiesUser | null;
-  updatedByUser?: FoodBookDomainEntitiesUser | null;
-  translations?: FoodBookDomainEntitiesTranslationsEquipmentTranslation[] | null;
-}
-
-export interface FoodBookDomainEntitiesRecipe {
-  /** @format uuid */
-  id: string;
-  originalLanguageCode?: string | null;
-  name?: string | null;
-  description?: string | null;
-  state: RecipeState;
-  /** @format uuid */
-  authorId?: string | null;
-  /** @format date-time */
-  publishedOn?: Date | null;
-  personal: boolean;
-  type: RecipeType;
-  difficulty: RecipeDifficulty;
-  /** @format int32 */
-  prepTime: number;
-  /** @format int32 */
-  cookTime: number;
-  /** @format int32 */
-  totalTime: number;
-  /** @format int32 */
-  servings: number;
-  containsAlcohol: boolean;
-  referenceUrl?: string | null;
-  /** @format uuid */
-  descendantOfRecipeId?: string | null;
-  nutrition?: FoodBookDomainEntitiesRecipeNutrition | null;
-  parts?: FoodBookDomainEntitiesRecipePart[] | null;
-  ingredients?: FoodBookDomainEntitiesRecipeIngredient[] | null;
-  equipment?: FoodBookDomainEntitiesRecipePieceOfEquipment[] | null;
-  steps?: FoodBookDomainEntitiesRecipeStep[] | null;
-  /** @format double */
-  rating: number;
-  /** @format uuid */
-  createdByUserId: string;
-  /** @format date-time */
-  createdOn: Date;
-  /** @format uuid */
-  updatedByUserId?: string | null;
-  /** @format date-time */
-  updatedOn?: Date | null;
-  createdByUser?: FoodBookDomainEntitiesUser | null;
-  updatedByUser?: FoodBookDomainEntitiesUser | null;
-  translations?: FoodBookDomainEntitiesTranslationsRecipeTranslation[] | null;
-  author?: FoodBookDomainEntitiesAuthor | null;
-  tags?: FoodBookDomainEntitiesRecipeTag[] | null;
-  favouriteds?: FoodBookDomainEntitiesFavouritedRecipe[] | null;
-  images?: FoodBookDomainEntitiesRecipeImage[] | null;
-  collections?: FoodBookDomainEntitiesCollectionRecipe[] | null;
-}
-
-export interface FoodBookDomainEntitiesRecipeImage {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  recipeId: string;
-  /** @format int32 */
-  sequence: number;
-  s3ObjectKey?: string | null;
-  /** @format date-time */
-  lastUpdatedOn: Date;
-  recipe?: FoodBookDomainEntitiesRecipe | null;
-}
-
-export interface FoodBookDomainEntitiesRecipeIngredient {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  recipeId: string;
-  /** @format uuid */
-  ingredientId: string;
-  /** @format uuid */
-  unitOfMeasurementId: string;
-  /** @format double */
-  amount: number;
-  optional: boolean;
-  /** @format uuid */
-  recipePartId?: string | null;
-  recipe?: FoodBookDomainEntitiesRecipe | null;
-  part?: FoodBookDomainEntitiesRecipePart | null;
-  ingredient?: FoodBookDomainEntitiesIngredient | null;
-  unitOfMeasurement?: FoodBookDomainEntitiesUnitOfMeasurement | null;
-}
-
-export interface FoodBookDomainEntitiesRecipeInstruction {
-  /** @format uuid */
-  id: string;
-  /** @format int32 */
-  number: number;
-  instruction?: string | null;
-  /** @format uuid */
-  recipeStepId: string;
-  step?: FoodBookDomainEntitiesRecipeStep | null;
-  translations?: FoodBookDomainEntitiesTranslationsRecipeInstructionTranslation[] | null;
-}
-
-export interface FoodBookDomainEntitiesRecipeNutrition {
-  /** @format int32 */
-  calories?: number | null;
-  /** @format double */
-  sugar?: number | null;
-  /** @format double */
-  fat?: number | null;
-  /** @format double */
-  saturatedFat?: number | null;
-  /** @format double */
-  sodium?: number | null;
-  /** @format double */
-  protein?: number | null;
-  /** @format double */
-  carbohydrates?: number | null;
-  /** @format double */
-  fiber?: number | null;
-}
-
-export interface FoodBookDomainEntitiesRecipePart {
-  /** @format uuid */
-  id: string;
-  /** @format int32 */
-  number: number;
-  name?: string | null;
-  /** @format uuid */
-  recipeId: string;
-  recipe?: FoodBookDomainEntitiesRecipe | null;
-  ingredients?: FoodBookDomainEntitiesRecipeIngredient[] | null;
-  translations?: FoodBookDomainEntitiesTranslationsRecipePartTranslation[] | null;
-}
-
-export interface FoodBookDomainEntitiesRecipePieceOfEquipment {
-  /** @format uuid */
-  equipmentId: string;
-  /** @format int32 */
-  amount: number;
-  dependsOnServings: boolean;
-  pieceOfEquipment?: FoodBookDomainEntitiesPieceOfEquipment | null;
-}
-
-export interface FoodBookDomainEntitiesRecipeStep {
-  /** @format uuid */
-  id: string;
-  /** @format int32 */
-  number: number;
-  name?: string | null;
-  instructions?: FoodBookDomainEntitiesRecipeInstruction[] | null;
-  /** @format uuid */
-  recipeId: string;
-  recipe?: FoodBookDomainEntitiesRecipe | null;
-  translations?: FoodBookDomainEntitiesTranslationsRecipeStepTranslation[] | null;
-}
-
-export interface FoodBookDomainEntitiesRecipeTag {
-  /** @format uuid */
-  tagId: string;
-  /** @format uuid */
-  recipeId: string;
-  tag?: FoodBookDomainEntitiesTag | null;
-  recipe?: FoodBookDomainEntitiesRecipe | null;
-}
-
-export interface FoodBookDomainEntitiesTag {
-  /** @format uuid */
-  id: string;
-  originalLanguageCode?: string | null;
-  name?: string | null;
-  hidden: boolean;
-  promoted: boolean;
-  icon?: string | null;
-  /** @format uuid */
-  createdByUserId: string;
-  /** @format date-time */
-  createdOn: Date;
-  /** @format uuid */
-  updatedByUserId?: string | null;
-  /** @format date-time */
-  updatedOn?: Date | null;
-  createdByUser?: FoodBookDomainEntitiesUser | null;
-  updatedByUser?: FoodBookDomainEntitiesUser | null;
-  translations?: FoodBookDomainEntitiesTranslationsTagTranslation[] | null;
-  recipes?: FoodBookDomainEntitiesRecipeTag[] | null;
-}
-
-export type FoodBookDomainEntitiesTranslationsAuthorLinkTranslation = FoodBookDomainEntitiesCoreTranslationEntity & {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  authorLinkId: string;
-  name?: string | null;
-  description?: string | null;
-};
-
-export type FoodBookDomainEntitiesTranslationsAuthorTranslation = FoodBookDomainEntitiesCoreTranslationEntity & {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  authorId: string;
-  biography?: string | null;
-};
-
-export type FoodBookDomainEntitiesTranslationsCollectionTranslation = FoodBookDomainEntitiesCoreTranslationEntity & {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  collectionId: string;
-  title?: string | null;
-};
-
-export type FoodBookDomainEntitiesTranslationsEquipmentTranslation = FoodBookDomainEntitiesCoreTranslationEntity & {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  equipmentId: string;
-  name?: string | null;
-  pluralName?: string | null;
-};
-
-export type FoodBookDomainEntitiesTranslationsIngredientTranslation = FoodBookDomainEntitiesCoreTranslationEntity & {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  ingredientId: string;
-  name?: string | null;
-  pluralName?: string | null;
-};
-
-export type FoodBookDomainEntitiesTranslationsRecipeInstructionTranslation =
-  FoodBookDomainEntitiesCoreTranslationEntity & {
-    /** @format uuid */
-    id: string;
-    /** @format uuid */
-    recipeInstructionId: string;
-    instruction?: string | null;
-  };
-
-export type FoodBookDomainEntitiesTranslationsRecipePartTranslation = FoodBookDomainEntitiesCoreTranslationEntity & {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  recipePartId: string;
-  name?: string | null;
-};
-
-export type FoodBookDomainEntitiesTranslationsRecipeStepTranslation = FoodBookDomainEntitiesCoreTranslationEntity & {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  recipeStepId: string;
-  name?: string | null;
-};
-
-export type FoodBookDomainEntitiesTranslationsRecipeTranslation = FoodBookDomainEntitiesCoreTranslationEntity & {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  recipeId: string;
-  name?: string | null;
-  description?: string | null;
-};
-
-export type FoodBookDomainEntitiesTranslationsStringTranslation = FoodBookDomainEntitiesCoreTranslationEntity & {
-  key?: string | null;
-  value?: string | null;
-};
-
-export type FoodBookDomainEntitiesTranslationsTagTranslation = FoodBookDomainEntitiesCoreTranslationEntity & {
-  /** @format uuid */
-  id: string;
-  /** @format uuid */
-  tagId: string;
-  name?: string | null;
-};
-
-export type FoodBookDomainEntitiesTranslationsUnitOfMeasurementTranslation =
-  FoodBookDomainEntitiesCoreTranslationEntity & {
-    /** @format uuid */
-    id: string;
-    /** @format uuid */
-    unitOfMeasurementId: string;
-    name?: string | null;
-    pluralName?: string | null;
-  };
-
-export interface FoodBookDomainEntitiesUnitOfMeasurement {
-  /** @format uuid */
-  id: string;
-  originalLanguageCode?: string | null;
-  name?: string | null;
-  pluralName?: string | null;
-  abbreviation?: string | null;
-  type: MeasurementType;
-  system?: MeasurementSystem | null;
-  representAs: UnitOfMeasurementRepresentation;
-  translations?: FoodBookDomainEntitiesTranslationsUnitOfMeasurementTranslation[] | null;
-}
-
-export interface FoodBookDomainEntitiesUser {
-  /** @format uuid */
-  id: string;
-  userName?: string | null;
-  normalizedUserName?: string | null;
-  email?: string | null;
-  normalizedEmail?: string | null;
-  emailConfirmed: boolean;
-  passwordHash?: string | null;
-  securityStamp?: string | null;
-  concurrencyStamp?: string | null;
-  phoneNumber?: string | null;
-  phoneNumberConfirmed: boolean;
-  twoFactorEnabled: boolean;
-  /** @format date-time */
-  lockoutEnd?: Date | null;
-  lockoutEnabled: boolean;
-  /** @format int32 */
-  accessFailedCount: number;
-  /** @format date-time */
-  lastLoggedInOn?: Date | null;
-  /** @format date-time */
-  registeredOn: Date;
-  firstName?: string | null;
-  deactivated: boolean;
-}
-
-export interface FoodBookDomainTagsCommandsCreateTagCommand {
-  languageCode?: string | null;
-  name?: string | null;
-  icon?: string | null;
-}
-
-export interface FoodBookDomainTagsCommandsCreateTagCommandResponse {
-  /** @format uuid */
-  id: string;
-}
-
-export interface FoodBookDomainTagsCommandsUpdateTagCommand {
-  name?: string | null;
-  icon?: string | null;
-  hidden: boolean;
-  promoted: boolean;
-}
-
-export type FoodBookDomainTagsCommandsUpdateTagCommandResponse = object;
-
 export interface FoodBookServicesAPIModelsCollectionResultsDto1FoodBookAPICommonReadModelsLanguagesLanguageDto {
   results: FoodBookAPICommonReadModelsLanguagesLanguageDto[];
   /** @format int32 */
@@ -1230,7 +736,7 @@ export interface FoodBookServicesAPIModelsCollectionResultsDto1FoodBookAPICommon
 }
 
 export interface FoodBookServicesAPIModelsCollectionResultsDto1FoodBookDomainEntitiesUnitOfMeasurement {
-  results: FoodBookDomainEntitiesUnitOfMeasurement[];
+  results: UnitOfMeasurement[];
   /** @format int32 */
   totalResults: number;
 }
@@ -1403,6 +909,45 @@ export interface FoodBookServicesAPIModelsPagedResultsDto1FoodBookAPICommonReadM
   totalPages: number;
 }
 
+export interface ForgotPasswordCommand {
+  email?: string | null;
+  language?: string | null;
+}
+
+export type ForgotPasswordCommandResponse = object;
+
+export interface Ingredient {
+  /** @format uuid */
+  id: string;
+  originalLanguageCode?: string | null;
+  name?: string | null;
+  pluralName?: string | null;
+  /** @format uuid */
+  defaultUnitOfMeasurementId: string;
+  personal: boolean;
+  /** @format uuid */
+  createdByUserId: string;
+  /** @format date-time */
+  createdOn: Date;
+  /** @format uuid */
+  updatedByUserId?: string | null;
+  /** @format date-time */
+  updatedOn?: Date | null;
+  createdByUser?: User | null;
+  updatedByUser?: User | null;
+  translations?: IngredientTranslation[] | null;
+  defaultUnitOfMeasurement?: UnitOfMeasurement | null;
+}
+
+export type IngredientTranslation = TranslationEntity & {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  ingredientId: string;
+  name?: string | null;
+  pluralName?: string | null;
+};
+
 export enum LogLevel {
   Trace = "Trace",
   Debug = "Debug",
@@ -1411,6 +956,16 @@ export enum LogLevel {
   Error = "Error",
   Critical = "Critical",
   None = "None",
+}
+
+export interface LoginCommand {
+  email?: string | null;
+  password?: string | null;
+}
+
+export interface LoginCommandResponse {
+  accessToken?: string | null;
+  refreshToken?: string | null;
 }
 
 export enum MeasurementSystem {
@@ -1439,6 +994,77 @@ export interface MicrosoftAspNetCoreMvcProblemDetails {
   [key: string]: any;
 }
 
+export interface PieceOfEquipment {
+  /** @format uuid */
+  id: string;
+  originalLanguageCode?: string | null;
+  name?: string | null;
+  pluralName?: string | null;
+  personal: boolean;
+  /** @format uuid */
+  createdByUserId: string;
+  /** @format date-time */
+  createdOn: Date;
+  /** @format uuid */
+  updatedByUserId?: string | null;
+  /** @format date-time */
+  updatedOn?: Date | null;
+  createdByUser?: User | null;
+  updatedByUser?: User | null;
+  translations?: EquipmentTranslation[] | null;
+}
+
+export interface Recipe {
+  /** @format uuid */
+  id: string;
+  originalLanguageCode?: string | null;
+  name?: string | null;
+  description?: string | null;
+  state: RecipeState;
+  /** @format uuid */
+  authorId?: string | null;
+  /** @format date-time */
+  publishedOn?: Date | null;
+  personal: boolean;
+  type: RecipeType;
+  difficulty: RecipeDifficulty;
+  /** @format int32 */
+  prepTime: number;
+  /** @format int32 */
+  cookTime: number;
+  /** @format int32 */
+  totalTime: number;
+  /** @format int32 */
+  servings: number;
+  containsAlcohol: boolean;
+  referenceUrl?: string | null;
+  /** @format uuid */
+  descendantOfRecipeId?: string | null;
+  nutrition?: RecipeNutrition | null;
+  parts?: RecipePart[] | null;
+  ingredients?: RecipeIngredient[] | null;
+  equipment?: RecipePieceOfEquipment[] | null;
+  steps?: RecipeStep[] | null;
+  /** @format double */
+  rating: number;
+  /** @format uuid */
+  createdByUserId: string;
+  /** @format date-time */
+  createdOn: Date;
+  /** @format uuid */
+  updatedByUserId?: string | null;
+  /** @format date-time */
+  updatedOn?: Date | null;
+  createdByUser?: User | null;
+  updatedByUser?: User | null;
+  translations?: RecipeTranslation[] | null;
+  author?: Author | null;
+  tags?: RecipeTag[] | null;
+  favouriteds?: FavouritedRecipe[] | null;
+  images?: RecipeImage[] | null;
+  collections?: CollectionRecipe[] | null;
+}
+
 export enum RecipeDifficulty {
   VeryEasy = "VeryEasy",
   Easy = "Easy",
@@ -1447,11 +1073,152 @@ export enum RecipeDifficulty {
   VeryDifficult = "VeryDifficult",
 }
 
+export interface RecipeImage {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  recipeId: string;
+  /** @format int32 */
+  sequence: number;
+  s3ObjectKey?: string | null;
+  /** @format date-time */
+  lastUpdatedOn: Date;
+  recipe?: Recipe | null;
+}
+
+export interface RecipeIngredient {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  recipeId: string;
+  /** @format uuid */
+  ingredientId: string;
+  /** @format uuid */
+  unitOfMeasurementId: string;
+  /** @format double */
+  amount: number;
+  optional: boolean;
+  /** @format uuid */
+  recipePartId?: string | null;
+  recipe?: Recipe | null;
+  part?: RecipePart | null;
+  ingredient?: Ingredient | null;
+  unitOfMeasurement?: UnitOfMeasurement | null;
+}
+
+export interface RecipeInstruction {
+  /** @format uuid */
+  id: string;
+  /** @format int32 */
+  number: number;
+  instruction?: string | null;
+  /** @format uuid */
+  recipeStepId: string;
+  step?: RecipeStep | null;
+  translations?: RecipeInstructionTranslation[] | null;
+}
+
+export type RecipeInstructionTranslation = TranslationEntity & {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  recipeInstructionId: string;
+  instruction?: string | null;
+};
+
+export interface RecipeNutrition {
+  /** @format int32 */
+  calories?: number | null;
+  /** @format double */
+  sugar?: number | null;
+  /** @format double */
+  fat?: number | null;
+  /** @format double */
+  saturatedFat?: number | null;
+  /** @format double */
+  sodium?: number | null;
+  /** @format double */
+  protein?: number | null;
+  /** @format double */
+  carbohydrates?: number | null;
+  /** @format double */
+  fiber?: number | null;
+}
+
+export interface RecipePart {
+  /** @format uuid */
+  id: string;
+  /** @format int32 */
+  number: number;
+  name?: string | null;
+  /** @format uuid */
+  recipeId: string;
+  recipe?: Recipe | null;
+  ingredients?: RecipeIngredient[] | null;
+  translations?: RecipePartTranslation[] | null;
+}
+
+export type RecipePartTranslation = TranslationEntity & {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  recipePartId: string;
+  name?: string | null;
+};
+
+export interface RecipePieceOfEquipment {
+  /** @format uuid */
+  equipmentId: string;
+  /** @format int32 */
+  amount: number;
+  dependsOnServings: boolean;
+  pieceOfEquipment?: PieceOfEquipment | null;
+}
+
 export enum RecipeState {
   Draft = "Draft",
   Published = "Published",
   Archived = "Archived",
 }
+
+export interface RecipeStep {
+  /** @format uuid */
+  id: string;
+  /** @format int32 */
+  number: number;
+  name?: string | null;
+  instructions?: RecipeInstruction[] | null;
+  /** @format uuid */
+  recipeId: string;
+  recipe?: Recipe | null;
+  translations?: RecipeStepTranslation[] | null;
+}
+
+export type RecipeStepTranslation = TranslationEntity & {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  recipeStepId: string;
+  name?: string | null;
+};
+
+export interface RecipeTag {
+  /** @format uuid */
+  tagId: string;
+  /** @format uuid */
+  recipeId: string;
+  tag?: Tag | null;
+  recipe?: Recipe | null;
+}
+
+export type RecipeTranslation = TranslationEntity & {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  recipeId: string;
+  name?: string | null;
+  description?: string | null;
+};
 
 export enum RecipeType {
   Breakfast = "Breakfast",
@@ -1462,15 +1229,144 @@ export enum RecipeType {
   Drink = "Drink",
 }
 
+export interface RefreshTokensCommand {
+  accessToken?: string | null;
+  refreshToken?: string | null;
+}
+
+export interface RefreshTokensCommandResponse {
+  accessToken?: string | null;
+  refreshToken?: string | null;
+}
+
+export interface RegisterUserCommand {
+  email?: string | null;
+  password?: string | null;
+  language?: string | null;
+}
+
+export interface RegisterUserCommandResponse {
+  /** @format uuid */
+  id: string;
+}
+
+export type RemovePlannedRecipeCommandResponse = object;
+
+export interface ResetPasswordCommand {
+  email?: string | null;
+  resetToken?: string | null;
+  newPassword?: string | null;
+  language?: string | null;
+}
+
+export type ResetPasswordCommandResponse = object;
+
+export type StringTranslation = TranslationEntity & {
+  key?: string | null;
+  value?: string | null;
+};
+
 export enum SupportTicketStatus {
   Open = "Open",
   Resolved = "Resolved",
+}
+
+export interface Tag {
+  /** @format uuid */
+  id: string;
+  originalLanguageCode?: string | null;
+  name?: string | null;
+  hidden: boolean;
+  promoted: boolean;
+  icon?: string | null;
+  /** @format uuid */
+  createdByUserId: string;
+  /** @format date-time */
+  createdOn: Date;
+  /** @format uuid */
+  updatedByUserId?: string | null;
+  /** @format date-time */
+  updatedOn?: Date | null;
+  createdByUser?: User | null;
+  updatedByUser?: User | null;
+  translations?: TagTranslation[] | null;
+  recipes?: RecipeTag[] | null;
+}
+
+export type TagTranslation = TranslationEntity & {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  tagId: string;
+  name?: string | null;
+};
+
+export interface TranslationEntity {
+  languageCode?: string | null;
+}
+
+export interface UnitOfMeasurement {
+  /** @format uuid */
+  id: string;
+  originalLanguageCode?: string | null;
+  name?: string | null;
+  pluralName?: string | null;
+  abbreviation?: string | null;
+  type: MeasurementType;
+  system?: MeasurementSystem | null;
+  representAs: UnitOfMeasurementRepresentation;
+  translations?: UnitOfMeasurementTranslation[] | null;
 }
 
 export enum UnitOfMeasurementRepresentation {
   Integer = "Integer",
   Decimal = "Decimal",
   Fraction = "Fraction",
+}
+
+export type UnitOfMeasurementTranslation = TranslationEntity & {
+  /** @format uuid */
+  id: string;
+  /** @format uuid */
+  unitOfMeasurementId: string;
+  name?: string | null;
+  pluralName?: string | null;
+};
+
+export interface UpdatePlannedRecipeCommand {
+  /** @format uuid */
+  id: string;
+  /** @format int32 */
+  servings: number;
+}
+
+export type UpdatePlannedRecipeCommandResponse = object;
+
+export interface User {
+  /** @format uuid */
+  id: string;
+  userName?: string | null;
+  normalizedUserName?: string | null;
+  email?: string | null;
+  normalizedEmail?: string | null;
+  emailConfirmed: boolean;
+  passwordHash?: string | null;
+  securityStamp?: string | null;
+  concurrencyStamp?: string | null;
+  phoneNumber?: string | null;
+  phoneNumberConfirmed: boolean;
+  twoFactorEnabled: boolean;
+  /** @format date-time */
+  lockoutEnd?: Date | null;
+  lockoutEnabled: boolean;
+  /** @format int32 */
+  accessFailedCount: number;
+  /** @format date-time */
+  lastLoggedInOn?: Date | null;
+  /** @format date-time */
+  registeredOn: Date;
+  firstName?: string | null;
+  deactivated: boolean;
 }
 
 export interface AdminAuthorDto {
@@ -1494,6 +1390,159 @@ export type AdminCollectionDto = FoodBookAPICommonReadModelsCollectionReferenceD
   hidden: boolean;
   promoted: boolean;
 };
+
+export interface AdminCreateAuthorDto {
+  /** @minLength 1 */
+  name: string;
+  biography: string;
+  links: AdminCreateAuthorDtoLink[];
+}
+
+export interface AdminCreateAuthorDtoLink {
+  name: string;
+  url: string;
+}
+
+export interface AdminCreateAuthorResponseDto {
+  /** @format uuid */
+  id: string;
+}
+
+export interface AdminCreateCollectionDto {
+  /** @minLength 1 */
+  title: string;
+}
+
+export interface AdminCreateCollectionResponseDto {
+  /** @format uuid */
+  id: string;
+}
+
+export interface AdminCreateIngredientDto {
+  /** @minLength 1 */
+  name: string;
+  /** @minLength 1 */
+  pluralName: string;
+  /** @format uuid */
+  defaultUnitOfMeasurementId: string;
+}
+
+export interface AdminCreateIngredientResponseDto {
+  /** @format uuid */
+  id: string;
+}
+
+export interface AdminCreatePieceOfEquipmentDto {
+  /** @minLength 1 */
+  name: string;
+  /** @minLength 1 */
+  pluralName: string;
+}
+
+export interface AdminCreatePieceOfEquipmentResponseDto {
+  /** @format uuid */
+  id: string;
+}
+
+export interface AdminCreateRecipeDto {
+  languageCode: string;
+  /** @minLength 1 */
+  name: string;
+  description: string;
+  type: RecipeType;
+  difficulty: RecipeDifficulty;
+  personal: boolean;
+  /** @format int32 */
+  prepTime: number;
+  /** @format int32 */
+  cookTime: number;
+  /** @format int32 */
+  totalTime: number;
+  /** @format int32 */
+  servings: number;
+  containsAlcohol: boolean;
+  /** @format uuid */
+  authorId?: string | null;
+  referenceUrl?: string | null;
+  /** @format uuid */
+  descendantOfRecipeId?: string | null;
+  parts: AdminCreateRecipeDtoPart[];
+  steps: AdminCreateRecipeDtoStep[];
+  ingredients: AdminCreateRecipeDtoIngredient[];
+  equipment: AdminCreateRecipeDtoPieceOfEquipment[];
+  nutrition: AdminCreateRecipeDtoNutrition;
+  tags: AdminCreateRecipeDtoTag[];
+}
+
+export interface AdminCreateRecipeDtoIngredient {
+  /** @format uuid */
+  ingredientId: string;
+  /** @format uuid */
+  unitOfMeasurementId: string;
+  /** @format double */
+  amount: number;
+  optional: boolean;
+}
+
+export interface AdminCreateRecipeDtoNutrition {
+  /** @format int32 */
+  calories?: number | null;
+  /** @format double */
+  sugar?: number | null;
+  /** @format double */
+  fat?: number | null;
+  /** @format double */
+  saturatedFat?: number | null;
+  /** @format double */
+  sodium?: number | null;
+  /** @format double */
+  protein?: number | null;
+  /** @format double */
+  carbohydrates?: number | null;
+  /** @format double */
+  fiber?: number | null;
+}
+
+export interface AdminCreateRecipeDtoPart {
+  name: string;
+  ingredients: AdminCreateRecipeDtoIngredient[];
+}
+
+export interface AdminCreateRecipeDtoPieceOfEquipment {
+  /** @format uuid */
+  equipmentId: string;
+  /** @format int32 */
+  amount: number;
+  dependsOnServings: boolean;
+}
+
+export interface AdminCreateRecipeDtoStep {
+  /** @format int32 */
+  number: number;
+  name: string;
+  instructions: RecipeInstruction[];
+}
+
+export interface AdminCreateRecipeDtoTag {
+  /** @format uuid */
+  id: string;
+}
+
+export interface AdminCreateRecipeResponseDto {
+  /** @format uuid */
+  id: string;
+}
+
+export interface AdminCreateTagDto {
+  /** @minLength 1 */
+  name: string;
+  icon: string;
+}
+
+export interface AdminCreateTagResponseDto {
+  /** @format uuid */
+  id: string;
+}
 
 export type AdminIngredientDto = FoodBookAPICommonReadModelsIngredientReferenceDto & {
   defaultUnitOfMeasurement:
@@ -1589,6 +1638,135 @@ export type AdminTagDto = FoodBookAPICommonReadModelsTagReferenceDto & {
   promoted: boolean;
 };
 
+export interface AdminUpdateAuthorDto {
+  /** @minLength 1 */
+  name: string;
+  biography: string;
+  links: AdminUpdateAuthorDtoLink[];
+}
+
+export interface AdminUpdateAuthorDtoLink {
+  name: string;
+  url: string;
+}
+
+export type AdminUpdateAuthorResponseDto = object;
+
+export interface AdminUpdateCollectionDto {
+  /** @minLength 1 */
+  title: string;
+  hidden: boolean;
+  promoted: boolean;
+}
+
+export type AdminUpdateCollectionResponseDto = object;
+
+export interface AdminUpdateIngredientDto {
+  /** @minLength 1 */
+  name: string;
+  /** @minLength 1 */
+  pluralName: string;
+  /** @format uuid */
+  defaultUnitOfMeasurementId: string;
+}
+
+export type AdminUpdateIngredientResponseDto = object;
+
+export interface AdminUpdatePieceOfEquipmentDto {
+  /** @minLength 1 */
+  name: string;
+  /** @minLength 1 */
+  pluralName: string;
+}
+
+export type AdminUpdatePieceOfEquipmentResponseDto = object;
+
+export interface AdminUpdateRecipeDto {
+  /** @minLength 1 */
+  name: string;
+  description: string;
+  type: RecipeType;
+  difficulty: RecipeDifficulty;
+  /** @format int32 */
+  prepTime: number;
+  /** @format int32 */
+  cookTime: number;
+  /** @format int32 */
+  totalTime: number;
+  /** @format int32 */
+  servings: number;
+  containsAlcohol: boolean;
+  /** @format uuid */
+  authorId?: string | null;
+  referenceUrl?: string | null;
+  parts: AdminUpdateRecipeDtoPart[];
+  steps: AdminUpdateRecipeDtoStep[];
+  ingredients: AdminUpdateRecipeDtoIngredient[];
+  equipment: AdminUpdateRecipeDtoPieceOfEquipment[];
+  nutrition: AdminUpdateRecipeDtoNutrition;
+}
+
+export interface AdminUpdateRecipeDtoIngredient {
+  /** @format uuid */
+  ingredientId: string;
+  /** @format uuid */
+  unitOfMeasurementId: string;
+  /** @format double */
+  amount: number;
+  optional: boolean;
+}
+
+export interface AdminUpdateRecipeDtoNutrition {
+  /** @format int32 */
+  calories?: number | null;
+  /** @format double */
+  sugar?: number | null;
+  /** @format double */
+  fat?: number | null;
+  /** @format double */
+  saturatedFat?: number | null;
+  /** @format double */
+  sodium?: number | null;
+  /** @format double */
+  protein?: number | null;
+  /** @format double */
+  carbohydrates?: number | null;
+  /** @format double */
+  fiber?: number | null;
+}
+
+export interface AdminUpdateRecipeDtoPart {
+  name: string;
+  ingredients: AdminUpdateRecipeDtoIngredient[];
+}
+
+export interface AdminUpdateRecipeDtoPieceOfEquipment {
+  /** @format uuid */
+  equipmentId: string;
+  /** @format int32 */
+  amount: number;
+  dependsOnServings: boolean;
+}
+
+export interface AdminUpdateRecipeDtoStep {
+  /** @format int32 */
+  number: number;
+  name: string;
+  instructions: RecipeInstruction[];
+}
+
+export type AdminUpdateRecipeResponseDto = object;
+
+export interface AdminUpdateTagDto {
+  /** @minLength 1 */
+  name: string;
+  icon: string;
+  hidden: boolean;
+  promoted: boolean;
+}
+
+export type AdminUpdateTagResponseDto = object;
+
 export namespace Auth {
   /**
    * No description
@@ -1600,9 +1778,9 @@ export namespace Auth {
   export namespace Login {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsAuthLoginCommand;
+    export type RequestBody = LoginCommand;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsAuthLoginCommandResponse;
+    export type ResponseBody = LoginCommandResponse;
   }
   /**
    * No description
@@ -1614,9 +1792,9 @@ export namespace Auth {
   export namespace RefreshTokens {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsAuthRefreshTokensCommand;
+    export type RequestBody = RefreshTokensCommand;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsAuthRefreshTokensCommandResponse;
+    export type ResponseBody = RefreshTokensCommandResponse;
   }
 }
 
@@ -1631,9 +1809,9 @@ export namespace ForgotPassword {
   export namespace ForgotPassword {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsAuthForgotPasswordCommand;
+    export type RequestBody = ForgotPasswordCommand;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsAuthForgotPasswordCommandResponse;
+    export type ResponseBody = ForgotPasswordCommandResponse;
   }
 }
 
@@ -1648,9 +1826,9 @@ export namespace ResetPassword {
   export namespace ResetPassword {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsAuthResetPasswordCommand;
+    export type RequestBody = ResetPasswordCommand;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsAuthResetPasswordCommandResponse;
+    export type ResponseBody = ResetPasswordCommandResponse;
   }
 }
 
@@ -1668,9 +1846,9 @@ export namespace Users {
       userId: string;
     };
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsAuthChangeEmailCommand;
+    export type RequestBody = ChangeEmailCommand;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsAuthChangeEmailCommandResponse;
+    export type ResponseBody = ChangeEmailCommandResponse;
   }
   /**
    * No description
@@ -1685,9 +1863,9 @@ export namespace Users {
       userId: string;
     };
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsAuthChangePasswordCommand;
+    export type RequestBody = ChangePasswordCommand;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsAuthChangePasswordCommandResponse;
+    export type ResponseBody = ChangePasswordCommandResponse;
   }
   /**
    * No description
@@ -1701,9 +1879,9 @@ export namespace Users {
       userId: string;
     };
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsPlannerAddRecipeToPlannerCommand;
+    export type RequestBody = AddRecipeToPlannerCommand;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsPlannerAddRecipeToPlannerCommandResponse;
+    export type ResponseBody = AddRecipeToPlannerCommandResponse;
   }
   /**
    * No description
@@ -1844,9 +2022,9 @@ export namespace Admin {
   export namespace AdminCreateAuthor {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainAuthorsCommandsCreateAuthorCommand;
+    export type RequestBody = AdminCreateAuthorDto;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainAuthorsCommandsCreateAuthorCommandResponse;
+    export type ResponseBody = AdminCreateAuthorResponseDto;
   }
   /**
    * No description
@@ -1884,9 +2062,9 @@ export namespace Admin {
       id: string;
     };
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainAuthorsCommandsUpdateAuthorCommand;
+    export type RequestBody = AdminUpdateAuthorDto;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainAuthorsCommandsUpdateAuthorCommandResponse;
+    export type ResponseBody = AdminUpdateAuthorResponseDto;
   }
   /**
    * No description
@@ -1935,9 +2113,9 @@ export namespace Admin {
   export namespace AdminCreateCollection {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCollectionsCommandsCreateCollectionCommand;
+    export type RequestBody = AdminCreateCollectionDto;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCollectionsCommandsCreateCollectionCommandResponse;
+    export type ResponseBody = AdminCreateCollectionResponseDto;
   }
   /**
    * No description
@@ -1978,9 +2156,9 @@ export namespace Admin {
       id: string;
     };
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCollectionsCommandsUpdateCollectionCommand;
+    export type RequestBody = AdminUpdateCollectionDto;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCollectionsCommandsUpdateCollectionCommandResponse;
+    export type ResponseBody = AdminUpdateCollectionResponseDto;
   }
   /**
    * No description
@@ -2016,7 +2194,7 @@ export namespace Admin {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCollectionsCommandsAddRecipeToCollectionCommandResponse;
+    export type ResponseBody = void;
   }
   /**
    * No description
@@ -2035,58 +2213,21 @@ export namespace Admin {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCollectionsCommandsRemoveRecipeFromCollectionCommandResponse;
-  }
-  /**
-   * No description
-   * @tags ContactUs
-   * @name AdminResolveSupportTicket
-   * @request POST:/admin/support-tickets/{id}/resolve
-   * @secure
-   */
-  export namespace AdminResolveSupportTicket {
-    export type RequestParams = {
-      /** @format uuid */
-      id: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
     export type ResponseBody = void;
   }
   /**
    * No description
    * @tags Equipment
-   * @name AdminUpdatePieceOfEquipment
-   * @request PUT:/admin/equipment/{id}
+   * @name AdminCreatePieceOfEquipment
+   * @request POST:/admin/equipment
    * @secure
    */
-  export namespace AdminUpdatePieceOfEquipment {
-    export type RequestParams = {
-      /** @format uuid */
-      id: string;
-    };
+  export namespace AdminCreatePieceOfEquipment {
+    export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsEquipmentUpdateEquipmentCommand;
+    export type RequestBody = AdminCreatePieceOfEquipmentDto;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsEquipmentUpdateEquipmentCommandResponse;
-  }
-  /**
-   * No description
-   * @tags Equipment
-   * @name AdminGetPieceOfEquipment
-   * @request GET:/admin/equipment/{id}
-   * @secure
-   */
-  export namespace AdminGetPieceOfEquipment {
-    export type RequestParams = {
-      /** @format uuid */
-      id: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = AdminPieceOfEquipmentDto;
+    export type ResponseBody = AdminCreatePieceOfEquipmentResponseDto;
   }
   /**
    * No description
@@ -2114,29 +2255,29 @@ export namespace Admin {
   }
   /**
    * No description
-   * @tags Ingredient
-   * @name AdminUpdateIngredient
-   * @request PUT:/admin/ingredients/{id}
+   * @tags Equipment
+   * @name AdminUpdatePieceOfEquipment
+   * @request PUT:/admin/equipment/{id}
    * @secure
    */
-  export namespace AdminUpdateIngredient {
+  export namespace AdminUpdatePieceOfEquipment {
     export type RequestParams = {
       /** @format uuid */
       id: string;
     };
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsIngredientsUpdateIngredientCommand;
+    export type RequestBody = AdminUpdatePieceOfEquipmentDto;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsIngredientsUpdateIngredientCommandResponse;
+    export type ResponseBody = AdminUpdatePieceOfEquipmentResponseDto;
   }
   /**
    * No description
-   * @tags Ingredient
-   * @name AdminGetIngredient
-   * @request GET:/admin/ingredients/{id}
+   * @tags Equipment
+   * @name AdminGetPieceOfEquipment
+   * @request GET:/admin/equipment/{id}
    * @secure
    */
-  export namespace AdminGetIngredient {
+  export namespace AdminGetPieceOfEquipment {
     export type RequestParams = {
       /** @format uuid */
       id: string;
@@ -2144,7 +2285,21 @@ export namespace Admin {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = AdminIngredientDto;
+    export type ResponseBody = AdminPieceOfEquipmentDto;
+  }
+  /**
+   * No description
+   * @tags Ingredient
+   * @name AdminCreateIngredient
+   * @request POST:/admin/ingredients
+   * @secure
+   */
+  export namespace AdminCreateIngredient {
+    export type RequestParams = {};
+    export type RequestQuery = {};
+    export type RequestBody = AdminCreateIngredientDto;
+    export type RequestHeaders = {};
+    export type ResponseBody = AdminCreateIngredientResponseDto;
   }
   /**
    * No description
@@ -2170,6 +2325,40 @@ export namespace Admin {
     export type RequestHeaders = {};
     export type ResponseBody =
       FoodBookServicesAPIModelsPagedResultsDto1FoodBookAPIAdminReadModelsIngredientsIngredientDto;
+  }
+  /**
+   * No description
+   * @tags Ingredient
+   * @name AdminUpdateIngredient
+   * @request PUT:/admin/ingredients/{id}
+   * @secure
+   */
+  export namespace AdminUpdateIngredient {
+    export type RequestParams = {
+      /** @format uuid */
+      id: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = AdminUpdateIngredientDto;
+    export type RequestHeaders = {};
+    export type ResponseBody = AdminUpdateIngredientResponseDto;
+  }
+  /**
+   * No description
+   * @tags Ingredient
+   * @name AdminGetIngredient
+   * @request GET:/admin/ingredients/{id}
+   * @secure
+   */
+  export namespace AdminGetIngredient {
+    export type RequestParams = {
+      /** @format uuid */
+      id: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = AdminIngredientDto;
   }
   /**
    * No description
@@ -2213,36 +2402,16 @@ export namespace Admin {
   /**
    * No description
    * @tags Recipe
-   * @name AdminPublishRecipe
-   * @request POST:/admin/recipes/{id}/publish
+   * @name AdminCreateRecipe
+   * @request POST:/admin/recipes
    * @secure
    */
-  export namespace AdminPublishRecipe {
-    export type RequestParams = {
-      /** @format uuid */
-      id: string;
-    };
+  export namespace AdminCreateRecipe {
+    export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = never;
+    export type RequestBody = AdminCreateRecipeDto;
     export type RequestHeaders = {};
-    export type ResponseBody = void;
-  }
-  /**
-   * No description
-   * @tags Recipe
-   * @name AdminGetRecipe
-   * @request GET:/admin/recipes/{id}
-   * @secure
-   */
-  export namespace AdminGetRecipe {
-    export type RequestParams = {
-      /** @format uuid */
-      id: string;
-    };
-    export type RequestQuery = {};
-    export type RequestBody = never;
-    export type RequestHeaders = {};
-    export type ResponseBody = AdminRecipeDto;
+    export type ResponseBody = AdminCreateRecipeResponseDto;
   }
   /**
    * No description
@@ -2289,6 +2458,129 @@ export namespace Admin {
     export type RequestBody = never;
     export type RequestHeaders = {};
     export type ResponseBody = FoodBookServicesAPIModelsPagedResultsDto1FoodBookAPIAdminReadModelsRecipesRecipeDto;
+  }
+  /**
+   * No description
+   * @tags Recipe
+   * @name AdminUpdateRecipe
+   * @request PUT:/admin/recipes/{id}
+   * @secure
+   */
+  export namespace AdminUpdateRecipe {
+    export type RequestParams = {
+      /** @format uuid */
+      id: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = AdminUpdateRecipeDto;
+    export type RequestHeaders = {};
+    export type ResponseBody = AdminUpdateRecipeResponseDto;
+  }
+  /**
+   * No description
+   * @tags Recipe
+   * @name AdminDeleteRecipe
+   * @request DELETE:/admin/recipes/{id}
+   * @secure
+   */
+  export namespace AdminDeleteRecipe {
+    export type RequestParams = {
+      /** @format uuid */
+      id: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+  /**
+   * No description
+   * @tags Recipe
+   * @name AdminGetRecipe
+   * @request GET:/admin/recipes/{id}
+   * @secure
+   */
+  export namespace AdminGetRecipe {
+    export type RequestParams = {
+      /** @format uuid */
+      id: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = AdminRecipeDto;
+  }
+  /**
+   * No description
+   * @tags Recipe
+   * @name AdminTagRecipe
+   * @request POST:/admin/recipes/{recipeId}/tags/{tagId}
+   * @secure
+   */
+  export namespace AdminTagRecipe {
+    export type RequestParams = {
+      /** @format uuid */
+      recipeId: string;
+      /** @format uuid */
+      tagId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+  /**
+   * No description
+   * @tags Recipe
+   * @name AdminUntagRecipe
+   * @request DELETE:/admin/recipes/{recipeId}/tags/{tagId}
+   * @secure
+   */
+  export namespace AdminUntagRecipe {
+    export type RequestParams = {
+      /** @format uuid */
+      recipeId: string;
+      /** @format uuid */
+      tagId: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+  /**
+   * No description
+   * @tags Recipe
+   * @name AdminPublishRecipe
+   * @request POST:/admin/recipes/{id}/publish
+   * @secure
+   */
+  export namespace AdminPublishRecipe {
+    export type RequestParams = {
+      /** @format uuid */
+      id: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
+  }
+  /**
+   * No description
+   * @tags SupportTicket
+   * @name AdminResolveSupportTicket
+   * @request POST:/admin/support-tickets/{id}/resolve
+   * @secure
+   */
+  export namespace AdminResolveSupportTicket {
+    export type RequestParams = {
+      /** @format uuid */
+      id: string;
+    };
+    export type RequestQuery = {};
+    export type RequestBody = never;
+    export type RequestHeaders = {};
+    export type ResponseBody = void;
   }
   /**
    * No description
@@ -2340,9 +2632,9 @@ export namespace Admin {
   export namespace AdminCreateTag {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainTagsCommandsCreateTagCommand;
+    export type RequestBody = AdminCreateTagDto;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainTagsCommandsCreateTagCommandResponse;
+    export type ResponseBody = AdminCreateTagResponseDto;
   }
   /**
    * No description
@@ -2382,9 +2674,9 @@ export namespace Admin {
       id: string;
     };
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainTagsCommandsUpdateTagCommand;
+    export type RequestBody = AdminUpdateTagDto;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainTagsCommandsUpdateTagCommandResponse;
+    export type ResponseBody = AdminUpdateTagResponseDto;
   }
   /**
    * No description
@@ -2479,9 +2771,9 @@ export namespace Equipment {
   export namespace CreatePieceOfRequipment {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsEquipmentCreateEquipmentCommand;
+    export type RequestBody = CreatePieceOfEquipmentCommand;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsEquipmentCreateEquipmentCommandResponse;
+    export type ResponseBody = CreatePieceOfEquipmentCommandResponse;
   }
   /**
    * No description
@@ -2869,9 +3161,9 @@ export namespace Ingredients {
   export namespace CreateIngredient {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsIngredientsCreateIngredientCommand;
+    export type RequestBody = CreateIngredientCommand;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsIngredientsCreateIngredientCommandResponse;
+    export type ResponseBody = CreateIngredientCommandResponse;
   }
   /**
    * No description
@@ -2949,9 +3241,9 @@ export namespace PlannedRecipes {
       id: string;
     };
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsPlannerUpdatePlannedRecipeCommand;
+    export type RequestBody = UpdatePlannedRecipeCommand;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsPlannerUpdatePlannedRecipeCommandResponse;
+    export type ResponseBody = UpdatePlannedRecipeCommandResponse;
   }
   /**
    * No description
@@ -2968,7 +3260,7 @@ export namespace PlannedRecipes {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsPlannerRemovePlannedRecipeCommandResponse;
+    export type ResponseBody = RemovePlannedRecipeCommandResponse;
   }
 }
 
@@ -3142,9 +3434,9 @@ export namespace Register {
   export namespace RegisterUser {
     export type RequestParams = {};
     export type RequestQuery = {};
-    export type RequestBody = FoodBookDomainCommandsAuthRegisterUserCommand;
+    export type RequestBody = RegisterUserCommand;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsAuthRegisterUserCommandResponse;
+    export type ResponseBody = RegisterUserCommandResponse;
   }
 }
 
@@ -3161,7 +3453,7 @@ export namespace Me {
     export type RequestQuery = {};
     export type RequestBody = never;
     export type RequestHeaders = {};
-    export type ResponseBody = FoodBookDomainCommandsAuthDeleteAccountCommandResponse;
+    export type ResponseBody = DeleteAccountCommandResponse;
   }
 }
 
@@ -3313,8 +3605,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/auth/login
      * @secure
      */
-    login: (data: FoodBookDomainCommandsAuthLoginCommand, params: RequestParams = {}) =>
-      this.request<FoodBookDomainCommandsAuthLoginCommandResponse, any>({
+    login: (data: LoginCommand, params: RequestParams = {}) =>
+      this.request<LoginCommandResponse, any>({
         path: `/auth/login`,
         method: "POST",
         body: data,
@@ -3332,8 +3624,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/auth/tokens/refresh
      * @secure
      */
-    refreshTokens: (data: FoodBookDomainCommandsAuthRefreshTokensCommand, params: RequestParams = {}) =>
-      this.request<FoodBookDomainCommandsAuthRefreshTokensCommandResponse, any>({
+    refreshTokens: (data: RefreshTokensCommand, params: RequestParams = {}) =>
+      this.request<RefreshTokensCommandResponse, any>({
         path: `/auth/tokens/refresh`,
         method: "POST",
         body: data,
@@ -3352,8 +3644,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/forgot-password
      * @secure
      */
-    forgotPassword: (data: FoodBookDomainCommandsAuthForgotPasswordCommand, params: RequestParams = {}) =>
-      this.request<FoodBookDomainCommandsAuthForgotPasswordCommandResponse, any>({
+    forgotPassword: (data: ForgotPasswordCommand, params: RequestParams = {}) =>
+      this.request<ForgotPasswordCommandResponse, any>({
         path: `/forgot-password`,
         method: "POST",
         body: data,
@@ -3372,8 +3664,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/reset-password
      * @secure
      */
-    resetPassword: (data: FoodBookDomainCommandsAuthResetPasswordCommand, params: RequestParams = {}) =>
-      this.request<FoodBookDomainCommandsAuthResetPasswordCommandResponse, any>({
+    resetPassword: (data: ResetPasswordCommand, params: RequestParams = {}) =>
+      this.request<ResetPasswordCommandResponse, any>({
         path: `/reset-password`,
         method: "POST",
         body: data,
@@ -3392,8 +3684,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/users/{userId}/change-email
      * @secure
      */
-    changeEmail: (userId: string, data: FoodBookDomainCommandsAuthChangeEmailCommand, params: RequestParams = {}) =>
-      this.request<FoodBookDomainCommandsAuthChangeEmailCommandResponse, any>({
+    changeEmail: (userId: string, data: ChangeEmailCommand, params: RequestParams = {}) =>
+      this.request<ChangeEmailCommandResponse, any>({
         path: `/users/${userId}/change-email`,
         method: "POST",
         body: data,
@@ -3411,12 +3703,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/users/{userId}/change-password
      * @secure
      */
-    changePassword: (
-      userId: string,
-      data: FoodBookDomainCommandsAuthChangePasswordCommand,
-      params: RequestParams = {},
-    ) =>
-      this.request<FoodBookDomainCommandsAuthChangePasswordCommandResponse, any>({
+    changePassword: (userId: string, data: ChangePasswordCommand, params: RequestParams = {}) =>
+      this.request<ChangePasswordCommandResponse, any>({
         path: `/users/${userId}/change-password`,
         method: "POST",
         body: data,
@@ -3434,12 +3722,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/users/{userId}/planner
      * @secure
      */
-    addRecipeToPlanner: (
-      userId: string,
-      data: FoodBookDomainCommandsPlannerAddRecipeToPlannerCommand,
-      params: RequestParams = {},
-    ) =>
-      this.request<FoodBookDomainCommandsPlannerAddRecipeToPlannerCommandResponse, any>({
+    addRecipeToPlanner: (userId: string, data: AddRecipeToPlannerCommand, params: RequestParams = {}) =>
+      this.request<AddRecipeToPlannerCommandResponse, any>({
         path: `/users/${userId}/planner`,
         method: "POST",
         body: data,
@@ -3606,8 +3890,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/admin/authors
      * @secure
      */
-    admin_CreateAuthor: (data: FoodBookDomainAuthorsCommandsCreateAuthorCommand, params: RequestParams = {}) =>
-      this.request<FoodBookDomainAuthorsCommandsCreateAuthorCommandResponse, any>({
+    admin_CreateAuthor: (data: AdminCreateAuthorDto, params: RequestParams = {}) =>
+      this.request<AdminCreateAuthorResponseDto, any>({
         path: `/admin/authors`,
         method: "POST",
         body: data,
@@ -3655,12 +3939,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/admin/authors/{id}
      * @secure
      */
-    admin_UpdateAuthor: (
-      id: string,
-      data: FoodBookDomainAuthorsCommandsUpdateAuthorCommand,
-      params: RequestParams = {},
-    ) =>
-      this.request<FoodBookDomainAuthorsCommandsUpdateAuthorCommandResponse, any>({
+    admin_UpdateAuthor: (id: string, data: AdminUpdateAuthorDto, params: RequestParams = {}) =>
+      this.request<AdminUpdateAuthorResponseDto, any>({
         path: `/admin/authors/${id}`,
         method: "PUT",
         body: data,
@@ -3723,11 +4003,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/admin/collections
      * @secure
      */
-    admin_CreateCollection: (
-      data: FoodBookDomainCollectionsCommandsCreateCollectionCommand,
-      params: RequestParams = {},
-    ) =>
-      this.request<FoodBookDomainCollectionsCommandsCreateCollectionCommandResponse, any>({
+    admin_CreateCollection: (data: AdminCreateCollectionDto, params: RequestParams = {}) =>
+      this.request<AdminCreateCollectionResponseDto, any>({
         path: `/admin/collections`,
         method: "POST",
         body: data,
@@ -3777,12 +4054,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/admin/collections/{id}
      * @secure
      */
-    admin_UpdateCollection: (
-      id: string,
-      data: FoodBookDomainCollectionsCommandsUpdateCollectionCommand,
-      params: RequestParams = {},
-    ) =>
-      this.request<FoodBookDomainCollectionsCommandsUpdateCollectionCommandResponse, any>({
+    admin_UpdateCollection: (id: string, data: AdminUpdateCollectionDto, params: RequestParams = {}) =>
+      this.request<AdminUpdateCollectionResponseDto, any>({
         path: `/admin/collections/${id}`,
         method: "PUT",
         body: data,
@@ -3821,11 +4094,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     admin_AddRecipeToCollection: (collectionId: string, recipeId: string, params: RequestParams = {}) =>
-      this.request<FoodBookDomainCollectionsCommandsAddRecipeToCollectionCommandResponse, any>({
+      this.request<void, any>({
         path: `/admin/collections/${collectionId}/recipes/${recipeId}`,
         method: "POST",
         secure: true,
-        format: "json",
         ...params,
       }),
 
@@ -3838,27 +4110,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     admin_RemoveRecipeFromCollection: (collectionId: string, recipeId: string, params: RequestParams = {}) =>
-      this.request<FoodBookDomainCollectionsCommandsRemoveRecipeFromCollectionCommandResponse, any>({
+      this.request<void, any>({
         path: `/admin/collections/${collectionId}/recipes/${recipeId}`,
         method: "DELETE",
         secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags ContactUs
-     * @name AdminResolveSupportTicket
-     * @request POST:/admin/support-tickets/{id}/resolve
-     * @secure
-     */
-    admin_ResolveSupportTicket: (id: string, params: RequestParams = {}) =>
-      this.request<void, any>({
-        path: `/admin/support-tickets/${id}/resolve`,
-        method: "POST",
-        secure: true,
         ...params,
       }),
 
@@ -3866,41 +4121,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Equipment
-     * @name AdminUpdatePieceOfEquipment
-     * @request PUT:/admin/equipment/{id}
+     * @name AdminCreatePieceOfEquipment
+     * @request POST:/admin/equipment
      * @secure
      */
-    admin_UpdatePieceOfEquipment: (
-      id: string,
-      data: FoodBookDomainCommandsEquipmentUpdateEquipmentCommand,
-      params: RequestParams = {},
-    ) =>
-      this.request<FoodBookDomainCommandsEquipmentUpdateEquipmentCommandResponse, any>({
-        path: `/admin/equipment/${id}`,
-        method: "PUT",
+    admin_CreatePieceOfEquipment: (data: AdminCreatePieceOfEquipmentDto, params: RequestParams = {}) =>
+      this.request<AdminCreatePieceOfEquipmentResponseDto, any>({
+        path: `/admin/equipment`,
+        method: "POST",
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Equipment
-     * @name AdminGetPieceOfEquipment
-     * @request GET:/admin/equipment/{id}
-     * @secure
-     */
-    admin_GetPieceOfEquipment: (id: string, params: RequestParams = {}) =>
-      this.request<
-        AdminPieceOfEquipmentDto,
-        MicrosoftAspNetCoreMvcProblemDetails | MicrosoftAspNetCoreHttpHttpValidationProblemDetails
-      >({
-        path: `/admin/equipment/${id}`,
-        method: "GET",
-        secure: true,
         format: "json",
         ...params,
       }),
@@ -3941,18 +4172,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Ingredient
-     * @name AdminUpdateIngredient
-     * @request PUT:/admin/ingredients/{id}
+     * @tags Equipment
+     * @name AdminUpdatePieceOfEquipment
+     * @request PUT:/admin/equipment/{id}
      * @secure
      */
-    admin_UpdateIngredient: (
-      id: string,
-      data: FoodBookDomainCommandsIngredientsUpdateIngredientCommand,
-      params: RequestParams = {},
-    ) =>
-      this.request<FoodBookDomainCommandsIngredientsUpdateIngredientCommandResponse, any>({
-        path: `/admin/ingredients/${id}`,
+    admin_UpdatePieceOfEquipment: (id: string, data: AdminUpdatePieceOfEquipmentDto, params: RequestParams = {}) =>
+      this.request<AdminUpdatePieceOfEquipmentResponseDto, any>({
+        path: `/admin/equipment/${id}`,
         method: "PUT",
         body: data,
         secure: true,
@@ -3964,19 +4191,38 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Ingredient
-     * @name AdminGetIngredient
-     * @request GET:/admin/ingredients/{id}
+     * @tags Equipment
+     * @name AdminGetPieceOfEquipment
+     * @request GET:/admin/equipment/{id}
      * @secure
      */
-    admin_GetIngredient: (id: string, params: RequestParams = {}) =>
+    admin_GetPieceOfEquipment: (id: string, params: RequestParams = {}) =>
       this.request<
-        AdminIngredientDto,
+        AdminPieceOfEquipmentDto,
         MicrosoftAspNetCoreMvcProblemDetails | MicrosoftAspNetCoreHttpHttpValidationProblemDetails
       >({
-        path: `/admin/ingredients/${id}`,
+        path: `/admin/equipment/${id}`,
         method: "GET",
         secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Ingredient
+     * @name AdminCreateIngredient
+     * @request POST:/admin/ingredients
+     * @secure
+     */
+    admin_CreateIngredient: (data: AdminCreateIngredientDto, params: RequestParams = {}) =>
+      this.request<AdminCreateIngredientResponseDto, any>({
+        path: `/admin/ingredients`,
+        method: "POST",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
@@ -4007,6 +4253,45 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/admin/ingredients`,
         method: "GET",
         query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Ingredient
+     * @name AdminUpdateIngredient
+     * @request PUT:/admin/ingredients/{id}
+     * @secure
+     */
+    admin_UpdateIngredient: (id: string, data: AdminUpdateIngredientDto, params: RequestParams = {}) =>
+      this.request<AdminUpdateIngredientResponseDto, any>({
+        path: `/admin/ingredients/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Ingredient
+     * @name AdminGetIngredient
+     * @request GET:/admin/ingredients/{id}
+     * @secure
+     */
+    admin_GetIngredient: (id: string, params: RequestParams = {}) =>
+      this.request<
+        AdminIngredientDto,
+        MicrosoftAspNetCoreMvcProblemDetails | MicrosoftAspNetCoreHttpHttpValidationProblemDetails
+      >({
+        path: `/admin/ingredients/${id}`,
+        method: "GET",
         secure: true,
         format: "json",
         ...params,
@@ -4062,34 +4347,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Recipe
-     * @name AdminPublishRecipe
-     * @request POST:/admin/recipes/{id}/publish
+     * @name AdminCreateRecipe
+     * @request POST:/admin/recipes
      * @secure
      */
-    admin_PublishRecipe: (id: string, params: RequestParams = {}) =>
-      this.request<void, MicrosoftAspNetCoreMvcProblemDetails | MicrosoftAspNetCoreHttpHttpValidationProblemDetails>({
-        path: `/admin/recipes/${id}/publish`,
+    admin_CreateRecipe: (data: AdminCreateRecipeDto, params: RequestParams = {}) =>
+      this.request<AdminCreateRecipeResponseDto, any>({
+        path: `/admin/recipes`,
         method: "POST",
+        body: data,
         secure: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Recipe
-     * @name AdminGetRecipe
-     * @request GET:/admin/recipes/{id}
-     * @secure
-     */
-    admin_GetRecipe: (id: string, params: RequestParams = {}) =>
-      this.request<
-        AdminRecipeDto,
-        MicrosoftAspNetCoreMvcProblemDetails | MicrosoftAspNetCoreHttpHttpValidationProblemDetails
-      >({
-        path: `/admin/recipes/${id}`,
-        method: "GET",
-        secure: true,
+        type: ContentType.Json,
         format: "json",
         ...params,
       }),
@@ -4144,6 +4412,125 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         query: query,
         secure: true,
         format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Recipe
+     * @name AdminUpdateRecipe
+     * @request PUT:/admin/recipes/{id}
+     * @secure
+     */
+    admin_UpdateRecipe: (id: string, data: AdminUpdateRecipeDto, params: RequestParams = {}) =>
+      this.request<AdminUpdateRecipeResponseDto, any>({
+        path: `/admin/recipes/${id}`,
+        method: "PUT",
+        body: data,
+        secure: true,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Recipe
+     * @name AdminDeleteRecipe
+     * @request DELETE:/admin/recipes/{id}
+     * @secure
+     */
+    admin_DeleteRecipe: (id: string, params: RequestParams = {}) =>
+      this.request<void, MicrosoftAspNetCoreMvcProblemDetails | MicrosoftAspNetCoreHttpHttpValidationProblemDetails>({
+        path: `/admin/recipes/${id}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Recipe
+     * @name AdminGetRecipe
+     * @request GET:/admin/recipes/{id}
+     * @secure
+     */
+    admin_GetRecipe: (id: string, params: RequestParams = {}) =>
+      this.request<
+        AdminRecipeDto,
+        MicrosoftAspNetCoreMvcProblemDetails | MicrosoftAspNetCoreHttpHttpValidationProblemDetails
+      >({
+        path: `/admin/recipes/${id}`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Recipe
+     * @name AdminTagRecipe
+     * @request POST:/admin/recipes/{recipeId}/tags/{tagId}
+     * @secure
+     */
+    admin_TagRecipe: (recipeId: string, tagId: string, params: RequestParams = {}) =>
+      this.request<void, MicrosoftAspNetCoreMvcProblemDetails | MicrosoftAspNetCoreHttpHttpValidationProblemDetails>({
+        path: `/admin/recipes/${recipeId}/tags/${tagId}`,
+        method: "POST",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Recipe
+     * @name AdminUntagRecipe
+     * @request DELETE:/admin/recipes/{recipeId}/tags/{tagId}
+     * @secure
+     */
+    admin_UntagRecipe: (recipeId: string, tagId: string, params: RequestParams = {}) =>
+      this.request<void, MicrosoftAspNetCoreMvcProblemDetails | MicrosoftAspNetCoreHttpHttpValidationProblemDetails>({
+        path: `/admin/recipes/${recipeId}/tags/${tagId}`,
+        method: "DELETE",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Recipe
+     * @name AdminPublishRecipe
+     * @request POST:/admin/recipes/{id}/publish
+     * @secure
+     */
+    admin_PublishRecipe: (id: string, params: RequestParams = {}) =>
+      this.request<void, MicrosoftAspNetCoreMvcProblemDetails | MicrosoftAspNetCoreHttpHttpValidationProblemDetails>({
+        path: `/admin/recipes/${id}/publish`,
+        method: "POST",
+        secure: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags SupportTicket
+     * @name AdminResolveSupportTicket
+     * @request POST:/admin/support-tickets/{id}/resolve
+     * @secure
+     */
+    admin_ResolveSupportTicket: (id: string, params: RequestParams = {}) =>
+      this.request<void, any>({
+        path: `/admin/support-tickets/${id}/resolve`,
+        method: "POST",
+        secure: true,
         ...params,
       }),
 
@@ -4207,8 +4594,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/admin/tags
      * @secure
      */
-    admin_CreateTag: (data: FoodBookDomainTagsCommandsCreateTagCommand, params: RequestParams = {}) =>
-      this.request<FoodBookDomainTagsCommandsCreateTagCommandResponse, any>({
+    admin_CreateTag: (data: AdminCreateTagDto, params: RequestParams = {}) =>
+      this.request<AdminCreateTagResponseDto, any>({
         path: `/admin/tags`,
         method: "POST",
         body: data,
@@ -4258,8 +4645,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/admin/tags/{id}
      * @secure
      */
-    admin_UpdateTag: (id: string, data: FoodBookDomainTagsCommandsUpdateTagCommand, params: RequestParams = {}) =>
-      this.request<FoodBookDomainTagsCommandsUpdateTagCommandResponse, any>({
+    admin_UpdateTag: (id: string, data: AdminUpdateTagDto, params: RequestParams = {}) =>
+      this.request<AdminUpdateTagResponseDto, any>({
         path: `/admin/tags/${id}`,
         method: "PUT",
         body: data,
@@ -4370,11 +4757,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/equipment
      * @secure
      */
-    createPieceOfRequipment: (
-      data: FoodBookDomainCommandsEquipmentCreateEquipmentCommand,
-      params: RequestParams = {},
-    ) =>
-      this.request<FoodBookDomainCommandsEquipmentCreateEquipmentCommandResponse, any>({
+    createPieceOfRequipment: (data: CreatePieceOfEquipmentCommand, params: RequestParams = {}) =>
+      this.request<CreatePieceOfEquipmentCommandResponse, any>({
         path: `/equipment`,
         method: "POST",
         body: data,
@@ -4803,8 +5187,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/ingredients
      * @secure
      */
-    createIngredient: (data: FoodBookDomainCommandsIngredientsCreateIngredientCommand, params: RequestParams = {}) =>
-      this.request<FoodBookDomainCommandsIngredientsCreateIngredientCommandResponse, any>({
+    createIngredient: (data: CreateIngredientCommand, params: RequestParams = {}) =>
+      this.request<CreateIngredientCommandResponse, any>({
         path: `/ingredients`,
         method: "POST",
         body: data,
@@ -4892,12 +5276,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PUT:/planned-recipes/{id}
      * @secure
      */
-    updatePlannedRecipe: (
-      id: string,
-      data: FoodBookDomainCommandsPlannerUpdatePlannedRecipeCommand,
-      params: RequestParams = {},
-    ) =>
-      this.request<FoodBookDomainCommandsPlannerUpdatePlannedRecipeCommandResponse, any>({
+    updatePlannedRecipe: (id: string, data: UpdatePlannedRecipeCommand, params: RequestParams = {}) =>
+      this.request<UpdatePlannedRecipeCommandResponse, any>({
         path: `/planned-recipes/${id}`,
         method: "PUT",
         body: data,
@@ -4916,7 +5296,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     removePlannedRecipe: (id: string, params: RequestParams = {}) =>
-      this.request<FoodBookDomainCommandsPlannerRemovePlannedRecipeCommandResponse, any>({
+      this.request<RemovePlannedRecipeCommandResponse, any>({
         path: `/planned-recipes/${id}`,
         method: "DELETE",
         secure: true,
@@ -5113,8 +5493,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/register
      * @secure
      */
-    registerUser: (data: FoodBookDomainCommandsAuthRegisterUserCommand, params: RequestParams = {}) =>
-      this.request<FoodBookDomainCommandsAuthRegisterUserCommandResponse, any>({
+    registerUser: (data: RegisterUserCommand, params: RequestParams = {}) =>
+      this.request<RegisterUserCommandResponse, any>({
         path: `/register`,
         method: "POST",
         body: data,
@@ -5134,7 +5514,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @secure
      */
     deleteAccount: (params: RequestParams = {}) =>
-      this.request<FoodBookDomainCommandsAuthDeleteAccountCommandResponse, any>({
+      this.request<DeleteAccountCommandResponse, any>({
         path: `/me`,
         method: "DELETE",
         secure: true,

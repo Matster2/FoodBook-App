@@ -4,8 +4,10 @@ import api from 'src/api';
 const useUnitOfMeasurementsQuery = () => {
     return useQuery({
         queryKey: ["unit-of-measurements"],
-        queryFn: () => api.getUnitOfMeasurements()
-            .then((data) => data.results),
+        queryFn: () => api.unitOfMeasurements.getUnitOfMeasurements({
+            sortBy: "name"
+        })
+            .then(({ data }) => data.results),
         initialData: []
     });
 }

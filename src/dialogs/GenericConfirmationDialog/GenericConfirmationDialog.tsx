@@ -34,12 +34,11 @@ const GenericConfirmationDialog = ({
             maxWidth="sm"
             open={open}
             onClose={onClose}
-            aria-describedby="alert-dialog-slide-description"
         >
             <DialogTitle>{title}</DialogTitle>
             <DialogContent>
                 {description && (
-                    <DialogContentText sx={{ mb: 1 }} id="alert-dialog-slide-description">{description}</DialogContentText>
+                    <DialogContentText sx={{ mb: 1 }}>{description}</DialogContentText>
                 )}
 
                 {loading && (

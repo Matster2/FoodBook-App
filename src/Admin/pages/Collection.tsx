@@ -2,7 +2,7 @@ import { Tab, Tabs } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import DetailsTab from 'src/admin/tabs/collections/Details';
 import RecipesTab from 'src/admin/tabs/collections/Recipes';
 import api from 'src/api';
@@ -41,7 +41,8 @@ const Collection = () => {
     data: collection
   } = useQuery({
     queryKey: ["collection", id],
-    queryFn: () => api.collections.getCollection(id!),
+    queryFn: () => api.admin.admin_GetCollection(id!)
+      .then(({ data }) => data),
     enabled: !isUndefined(id)
   })
 
@@ -54,6 +55,10 @@ const Collection = () => {
   /* Rendering */
   return (
     <PageLayout
+      breadcrumbs={[
+        <Link to="/admin">Admin</Link>,
+        <Link to="/admin/collections">{t("types.collection.pluralName")}</Link>
+      ]}
       title={`${mode === Operation.Create ? t("common.words.actions.add") : t("common.words.actions.update")} ${t("types.collection.name")}`}
       loading={loadingCollection}
     >

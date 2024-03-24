@@ -1,6 +1,9 @@
+import { Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useTranslation } from "react-i18next";
 import Table from 'src/components/Table';
+import TagIcon from 'src/components/TagIcon/TagIcon';
+import styles from './styles.module.css';
 
 const TagsTable = ({
   rows: tags,
@@ -26,7 +29,10 @@ const TagsTable = ({
       rows={tags.map((tag) => ({
         identifier: tag.id,
         data: [
-          tag.name
+          <Stack direction="row" alignItems="center" gap={1}>
+            <TagIcon className={styles.icon} icon={tag.icon} alt={tag.name} />
+            <Typography>{tag.name}</Typography>
+          </Stack>
         ],
       }))}
       loading={loading}

@@ -65,7 +65,7 @@ export default () => {
 
           {authenticated && claims?.role === 'Administrator' && (
             <ListItem disablePadding>
-              <ListItemButton component={Link} to="/admin/settings">
+              <ListItemButton component={Link} to="/admin">
                 <ListItemText primary={t('pages.settings.options.admin')} />
               </ListItemButton>
             </ListItem>

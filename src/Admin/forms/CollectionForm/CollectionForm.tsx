@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import api from 'src/api';
 import FormCheckbox from 'src/components/form-components/FormCheckbox';
 import FormTextField from 'src/components/form-components/FormTextField';
-import { CreateCollectionCommand, UpdateCollectionCommand } from "src/generatedAPI";
+import { AdminCreateCollectionDto, AdminUpdateCollectionDto } from "src/generatedAPI";
 import { Operation } from 'src/types';
 import { isUndefined } from "src/utils/utils";
 import * as yup from "yup";
@@ -55,7 +55,7 @@ const CollectionForm = ({
     mutate: createCollection,
   } = useMutation({
     mutationFn: async (data: {
-      body: CreateCollectionCommand
+      body: AdminCreateCollectionDto
     }) => {
       return api.admin.admin_CreateCollection(data.body)
     },
@@ -75,7 +75,7 @@ const CollectionForm = ({
   } = useMutation({
     mutationFn: (data: {
       id: string,
-      body: UpdateCollectionCommand
+      body: AdminUpdateCollectionDto
     }) => {
       return api.admin.admin_UpdateCollection(data.id, data.body)
     },
@@ -91,9 +91,7 @@ const CollectionForm = ({
 
   const onSubmitHandler: SubmitHandler<FormValues> = async (data: FormValues) => {
     const { title } = data;
-    const { data: { results } } = await api.collections.getCollections({
-      hidden: false,
-      promoted: false,
+    const { data: { results } } = await api.admin.admin_GetCollections({
       search: title
     });
 
@@ -105,7 +103,6 @@ const CollectionForm = ({
     if (mode === Operation.Create) {
       createCollection({
         body: {
-          languageCode: "en",
           title: data.title,
         }
       })
@@ -113,7 +110,6 @@ const CollectionForm = ({
       updateCollection({
         id: collection.id,
         body: {
-          id: collection.id,
           title: data.title,
           hidden: data.hidden,
           promoted: data.promoted,
@@ -127,9 +123,11 @@ const CollectionForm = ({
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmitHandler)}>
         <FormTextField
+          required
           name="title"
           fullWidth
           label={t("types.collection.fields.title.name")}
+          capitalizeFirstLetter
         />
 
         {mode === Operation.Update && (
@@ -148,7 +146,7 @@ const CollectionForm = ({
         )}
 
         <LoadingButton
-          sx={{ mt: 2 }}
+          sx={{ mt: 5 }}
           type="submit"
           fullWidth
           variant="contained"

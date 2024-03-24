@@ -1,5 +1,4 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectProps, SxProps } from "@mui/material";
-import uuid from "react-uuid";
 
 export interface DropdownOption {
     value: string | ReadonlyArray<string> | number | undefined;
@@ -21,17 +20,26 @@ const Dropdown = ({
     value,
     label,
     ...props
-}: DropdownProps) => (
-    <FormControl fullWidth={fullWidth} sx={{ ...sx }}>
-        <InputLabel>{label}</InputLabel>
-        <Select
-            {...props}
-        >
-            {options.map(((option) => (
-                <MenuItem key={uuid()} value={option.value}>{option.label}</MenuItem>
-            )))}
-        </Select>
-    </FormControl>
-);
+}: DropdownProps) => {
+    const generateOption = (option: DropdownOption) => {
+        return (
+            <MenuItem key={option.value} value={option.value}>
+                {option.label}
+            </MenuItem>
+        );
+    };
+
+    return (
+        <FormControl fullWidth={fullWidth} sx={{ ...sx }}>
+            <InputLabel>{label}</InputLabel>
+            <Select
+                label={label}
+                {...props}
+            >
+                {options.map(((option) => generateOption(option)))}
+            </Select>
+        </FormControl>
+    );
+}
 
 export default Dropdown;
